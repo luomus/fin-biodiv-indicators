@@ -1,0 +1,28 @@
+Package: indicators
+Title: Functions for calculating biodiversity indicators
+Version: 0.1.0.9000
+Authors@R: c(
+    person(given = "Finnish Museum of Natural History - Luomus",
+           role = "cph"),
+    person(given = "William K.",
+           family = "Morris",
+           role = c("aut", "cre"),
+           email = "willi@mmorris.email",
+           comment = c(ORCID = "0000-0002-8686-4154"))
+    )
+Description: Functions for calculating biodiversity indicators.
+Imports:
+    blob,
+    DBI,
+    dbplyr,
+    dplyr,
+    graphics,
+    grDevices,
+    lubridate,
+    rlang,
+    RPostgres,
+    svglite
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
