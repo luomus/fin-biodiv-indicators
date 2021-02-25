@@ -29,7 +29,7 @@ services:
       - "LETSENCRYPT_EMAIL=${EMAIL}"
   nginxproxy:
     image: jwilder/nginx-proxy
-    container_name: fin_biodiv_indicators_proxy
+    container_name: finbiodivindicators_proxy
     restart: always
     ports:
       - "80:80"
