@@ -4,12 +4,10 @@
 \alias{get_from_cache}
 \title{Get data from cache}
 \usage{
-get_from_cache(table, ...)
+get_from_cache(hash)
 }
 \arguments{
-\item{table}{Name of table.}
-
-\item{...}{Column names and data to check in the cache}
+\item{hash}{Hash of input}
 }
 \description{
 Get cached data from a database.

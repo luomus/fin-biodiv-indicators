@@ -1,49 +1,82 @@
-#' Set cache
+#' @import dbplyr
+#' @import rlang
+NULL
+
+#' Create a cache
 #'
-#' Cache data in a database.
+#' Create a database cache if it doesn't already exist.
 #'
-#' @param table Name of table.
-#' @param ... Column names and data to set in the cache.
-#'
-#' @importFrom RPostgres dbAppendTable Postgres
+#' @importFrom RPostgres dbExistsTable dbWriteTable Postgres
 #' @importFrom DBI dbConnect dbDisconnect
 #' @export
 
-set_cache <- function(table, ...) {
+create_cache <- function() {
 
   db <- DBI::dbConnect(RPostgres::Postgres())
 
   on.exit(DBI::dbDisconnect(db))
 
-  df <- data.frame(time = Sys.time(), ...)
+  df <- structure(
+    list(
+      time = as.POSIXct(integer(), origin = "1970-01-01"),
+      hash = character(),
+      data = list()
+    ),
+    class = "data.frame"
+  )
 
-  RPostgres::dbAppendTable(db, table, df)
+  if (!RPostgres::dbExistsTable(db, "cache")) {
+
+    RPostgres::dbWriteTable(db, "cache", df)
+
+  }
 
 }
 
-#' @import dbplyr
-NULL
+#' Set cache
+#'
+#' Cache data in a database.
+#'
+#' @param hash Hash of input
+#' @param data Raw data.
+#'
+#' @importFrom blob blob
+#' @importFrom DBI dbConnect dbDisconnect
+#' @importFrom RPostgres dbAppendTable Postgres
+
+#' @export
+
+set_cache <- function(hash, data) {
+
+  db <- DBI::dbConnect(RPostgres::Postgres())
+
+  on.exit(DBI::dbDisconnect(db))
+
+  df <- data.frame(time = Sys.time(), hash = hash, data = blob::blob(data))
+
+  RPostgres::dbAppendTable(db, "cache", df)
+
+}
 
 #' Get data from cache
 #'
 #' Get cached data from a database.
 #'
-#' @param table Name of table.
-#' @param ... Column names and data to check in the cache
+#' @param hash Hash of input
 #'
 #' @importFrom RPostgres Postgres
 #' @importFrom DBI dbConnect dbDisconnect
 #' @importFrom dplyr collect filter tbl
 #' @export
 
-get_from_cache <- function(table, ...) {
+get_from_cache <- function(hash) {
 
   db <- DBI::dbConnect(RPostgres::Postgres())
 
   on.exit(DBI::dbDisconnect(db))
 
-  x <- dplyr::tbl(db, table)
-  x <- dplyr::filter(x, ...)
+  x <- dplyr::tbl(db, "cache")
+  x <- dplyr::filter(x, hash == !!hash)
   dplyr::collect(x)
 
 }

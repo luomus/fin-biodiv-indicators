@@ -4,12 +4,12 @@
 \alias{set_cache}
 \title{Set cache}
 \usage{
-set_cache(table, ...)
+set_cache(hash, data)
 }
 \arguments{
-\item{table}{Name of table.}
+\item{hash}{Hash of input}
 
-\item{...}{Column names and data to set in the cache.}
+\item{data}{Raw data.}
 }
 \description{
 Cache data in a database.
