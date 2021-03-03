@@ -14,28 +14,33 @@ cors <- function(req, res) {
   }
 }
 
-#* Return population estimate
-#* @param year Year
+#* Return single species index as json
 #* @param sp Species
-#* @get /pop
-function(year, sp) {
-  list(mean = 100, sd = 25)
-}
-
-#* Return indicator
 #* @param year Year
-#* @param type Indicator type
-#* @get /ind
-function(year, type) {
-  list(mean = 100, sd = 25)
+#* @param base Base year of index
+#* @get /sp-index/json
+function(sp = "skylark", year, base) {
+  sp_index(sp, year, base)
 }
 
-#* Return a graph
-#* @param year Year range
-#* @param type Indicator type
-#* @get /graph
-function(year = paste0("2000:", format(Sys.Date(), "%Y")), type, res) {
-  res$body <- indicator_svg(year, type)
+#* Return single species index as csv
+#* @param sp Species
+#* @param year Year
+#* @param base Base year of index
+#* @serializer csv
+#* @get /sp-index/csv
+function(sp = "skylark", year, base) {
+  sp_index(sp, year, base)
+}
+
+
+#* Return a plot
+#* @param sp Species
+#* @param year Year
+#* @param base Base year of index
+#* @get /sp-plot
+function(sp = "skylark", year, base, res) {
+  res$body <- svg_index(sp, year, base)
   res$setHeader("Content-Type", "image/svg+xml")
   res$setHeader("Content-Encoding", "gzip")
   res$setHeader("Content-Disposition", "inline")
