@@ -11,16 +11,20 @@ Authors@R: c(
            comment = c(ORCID = "0000-0002-8686-4154"))
     )
 Description: Functions for calculating biodiversity indicators.
+LazyData: true
+Depends: R (>= 3.5.0)
 Imports:
     blob,
     DBI,
     dbplyr,
+    digest,
     dplyr,
     graphics,
     grDevices,
     lubridate,
     rlang,
     RPostgres,
+    rtrim,
     svglite
 License: MIT + file LICENSE
 Encoding: UTF-8
