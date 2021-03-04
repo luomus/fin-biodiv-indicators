@@ -48,6 +48,9 @@ FINBIF_ACCESS_TOKEN=<token> EMAIL=<email> HOST=localhost PGUSER=<user> PGPASSWOR
 ]
 ```
 
+### CSV
+[http://api.localhost/sp-index/csv?sp=skylark&year=1985:1988](http://api.localhost/sp-index/csv?sp=skylark&year=1985:1988)
+
 ### Graphics
 [http://api.localhost/sp-plot?sp=skylark](http://api.localhost/sp-plot?sp=skylark)
 
