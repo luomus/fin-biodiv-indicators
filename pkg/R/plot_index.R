@@ -27,12 +27,28 @@ plot_index <- function(data) {
 #' @param base Base year of index
 #' @importFrom digest digest
 #' @importFrom grDevices dev.off
+#' @importFrom promises is.promise then
 #' @importFrom svglite svglite
 #' @export
 
 svg_index <- function(sp, year, base) {
 
   data <- sp_index(sp, year, base)
+
+  if (promises::is.promise(data)) {
+
+    promises::then(data, svg_data)
+
+  } else {
+
+    svg_data(data)
+
+  }
+
+}
+
+svg_data <- function(data) {
+
   hash <- digest::digest(data)
 
   cached_data <- get_from_cache(hash)

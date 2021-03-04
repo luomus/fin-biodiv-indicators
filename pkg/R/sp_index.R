@@ -6,7 +6,6 @@
 #' @param year Year
 #' @param base Base year of index
 #' @importFrom digest digest
-#' @importFrom rtrim index trim
 #' @export
 
 sp_index <- function(sp = "skylark", year, base) {
@@ -37,12 +36,33 @@ sp_index <- function(sp = "skylark", year, base) {
 
   if (is_cached(cached_data)) {
 
-    ans <- unserialize(unlist(cached_data[["data"]]))
+    unserialize(unlist(cached_data[["data"]]))
 
   } else {
 
-    ans <- index(
-      trim(count ~ site + year, data = data, model = 3L), base = base
+    calc_index(sp, year, base)
+
+  }
+
+}
+
+#' @importFrom promises future_promise
+#' @importFrom digest digest
+#' @importFrom rtrim index trim
+#'
+calc_index <- function(sp, year, base) {
+
+  force(sp)
+  force(year)
+  force(base)
+
+  data <- switch(sp, skylark = skylark)
+
+  hash <- digest::digest(list(sp, year, base))
+
+  promises::future_promise({
+    ans <- rtrim::index(
+      rtrim::trim(count ~ site + year, data = data, model = 3L), base = base
     )
     rownames(ans) <- ans[["time"]]
     names(ans) <- c("year", "index", "sd")
@@ -52,8 +72,9 @@ sp_index <- function(sp = "skylark", year, base) {
 
     set_cache(hash, serialize(ans, NULL))
 
-  }
-
-  ans
+    ans},
+    globals = c("data", "base", "year", "hash"),
+    packages = c("rtrim", "indicators")
+  )
 
 }

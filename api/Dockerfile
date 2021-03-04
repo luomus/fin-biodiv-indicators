@@ -34,8 +34,9 @@ RUN  R -e "install.packages('bspm')" \
 
 RUN  echo "deb http://deb.debian.org/debian unstable main contrib" > /etc/apt/sources.list \
   && echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections \
-  && install_packages ttf-mscorefonts-installer \
-  && R -e "bspm::disable(); install.packages('svglite')"
+  && install_packages ttf-mscorefonts-installer
+
+RUN  R -e "bspm::disable(); install.packages(c('svglite', 'fastmap', 'future', 'promises'))"
 
 COPY init.R init.R
 

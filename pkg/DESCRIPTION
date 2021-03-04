@@ -19,12 +19,14 @@ Imports:
     dbplyr,
     digest,
     dplyr,
+    future,
     graphics,
     grDevices,
     lubridate,
     rlang,
     RPostgres,
     rtrim,
+    promises,
     svglite
 License: MIT + file LICENSE
 Encoding: UTF-8

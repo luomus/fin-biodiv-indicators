@@ -40,9 +40,27 @@ function(sp = "skylark", year, base) {
 #* @param base Base year of index
 #* @get /sp-plot
 function(sp = "skylark", year, base, res) {
-  res$body <- svg_index(sp, year, base)
+
   res$setHeader("Content-Type", "image/svg+xml")
   res$setHeader("Content-Encoding", "gzip")
   res$setHeader("Content-Disposition", "inline")
-  res
+
+  svg <- svg_index(sp, year, base)
+
+  if (promises::is.promise(svg)) {
+
+    res_body <- function(svg) {
+      res$body <- svg
+      res
+    }
+
+    promises::then(svg, res_body)
+
+  } else {
+
+    res$body <- svg
+    res
+
+  }
+
 }
