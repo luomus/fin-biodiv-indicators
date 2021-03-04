@@ -22,6 +22,6 @@ FINBIF_ACCESS_TOKEN=<token> EMAIL=<email> HOST=localhost PGUSER=<user> PGPASSWOR
 
 ## Usage
 
-[https://api.localhost/graph?type=test](http://api.localhost/plot?sp=skylark)
+[http://api.localhost/sp-plot?sp=skylark)](http://api.localhost/sp-plot?sp=skylark)
 
 ![](pkg/man/figures/graph.svg)

@@ -30,7 +30,7 @@ RUN  echo "PGHOST='postgres'" >> /usr/lib/R/etc/Renviron.site \
 
 RUN  R -e "install.packages('bspm')" \
   && echo "bspm::enable()" >> /etc/R/Rprofile.site \
-  && R -e "install.packages(c('dbplyr', 'finbif', 'plumber', 'remotes', 'readr', 'rlang', 'RPostgres', 'rtrim'))"
+  && R -e "install.packages(c('dbplyr', 'finbif', 'ggplot2', 'plumber', 'remotes', 'readr', 'rlang', 'RPostgres', 'rtrim'))"
 
 RUN  echo "deb http://deb.debian.org/debian unstable main contrib" > /etc/apt/sources.list \
   && echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections \

@@ -3,19 +3,24 @@
 #' Create a plot of an index
 #'
 #' @param data Data to plot
-#' @importFrom graphics plot
+#' @importFrom ggplot2 aes ggplot geom_ribbon geom_line theme_minimal xlab ylab
 #' @importFrom lubridate parse_date_time
 #' @export
 
 plot_index <- function(data) {
-  graphics::plot(
-    lubridate::parse_date_time(data[["year"]], "Y"),
-    data[["index"]],
-    type = "b",
-    las = 1,
-    xlab = 'Year',
-    ylab = "Index"
-  )
+  gg <- ggplot2::ggplot(data) +
+    ggplot2::aes(
+      x = lubridate::parse_date_time(year, "Y"),
+      y = index,
+      ymin = index - sd,
+      ymax = index + sd
+    ) +
+    ggplot2::geom_ribbon(alpha = .2) +
+    ggplot2::geom_line() +
+    ggplot2::ylab(NULL) +
+    ggplot2::xlab(NULL) +
+    ggplot2::theme_minimal()
+  print(gg)
 }
 
 #' Index svg
