@@ -14,10 +14,10 @@ git clone https://github.com/luomus/fin-biodiv-indicators.git
 ```
 
 ## Run
-To run on [https://api.localhost](http://api.localhost) 
+To run on [http://api.localhost](http://api.localhost) 
 ```{bash}
 cd fin-biodiv-indicators
-FINBIF_ACCESS_TOKEN=<token> EMAIL=<email> HOST=localhost PGUSER=<user> PGPASSWORD=<password> docker-compose up --build -d
+FINBIF_ACCESS_TOKEN=<token> HOST=localhost PGUSER=<user> PGPASSWORD=<password> docker-compose up --build -d
 ```
 
 ## Usage
