@@ -14,15 +14,15 @@ git clone https://github.com/luomus/fin-biodiv-indicators.git
 ```
 
 ## Run
-To run on [http://api.localhost](http://api.localhost) 
+To run on [http://localhost:8000](http://localhost:8000) 
 ```{bash}
 cd fin-biodiv-indicators
-FINBIF_ACCESS_TOKEN=<token> HOST=localhost PGUSER=<user> PGPASSWORD=<password> docker-compose up --build -d
+FINBIF_ACCESS_TOKEN=<token> PGUSER=<user> PGPASSWORD=<password> docker-compose up --build -d
 ```
 
 ## Usage
 ### JSON
-[http://api.localhost/sp-index/json?sp=skylark&year=1985:1988](http://api.localhost/sp-index/json?sp=skylark&year=1985:1988)
+[http://localhost:8000/sp-index/json?sp=skylark&year=1985:1988](http://localhost:8000/sp-index/json?sp=skylark&year=1985:1988)
 ```{javascript}
 [
   {
@@ -49,9 +49,9 @@ FINBIF_ACCESS_TOKEN=<token> HOST=localhost PGUSER=<user> PGPASSWORD=<password> d
 ```
 
 ### CSV
-[http://api.localhost/sp-index/csv?sp=skylark&year=1985:1988](http://api.localhost/sp-index/csv?sp=skylark&year=1985:1988)
+[http://localhost:8000/sp-index/csv?sp=skylark&year=1985:1988](http://localhost:8000/sp-index/csv?sp=skylark&year=1985:1988)
 
 ### Graphics
-[http://api.localhost/sp-plot?sp=skylark](http://api.localhost/sp-plot?sp=skylark)
+[http://localhost:8000/sp-plot?sp=skylark](http://localhost:8000/sp-plot?sp=skylark)
 
 ![](pkg/man/figures/graph.svg)
