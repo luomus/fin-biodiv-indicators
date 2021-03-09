@@ -1,5 +1,3 @@
-remotes::install_local("indicators", dependencies = FALSE, upgrade = "never")
-
 library("indicators")
 
 create_cache()

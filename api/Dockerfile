@@ -52,6 +52,8 @@ RUN  chgrp -R 0 /home/user \
 
 WORKDIR /home/user
 
+RUN  R -e "remotes::install_local('indicators', dependencies = FALSE, upgrade = 'never')"
+
 EXPOSE 8000
 
 ENTRYPOINT ["./entrypoint.sh"]
