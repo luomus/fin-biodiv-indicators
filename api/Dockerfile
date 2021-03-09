@@ -42,6 +42,7 @@ RUN mkdir -p /home/user/tmpsvgs
 
 ENV HOME /home/user
 
+COPY entrypoint.sh /home/user/entrypoint.sh
 COPY init.R /home/user/init.R
 COPY api.R /home/user/api.R
 COPY pkg /home/user/indicators
@@ -53,4 +54,4 @@ WORKDIR /home/user
 
 EXPOSE 8000
 
-ENTRYPOINT ["Rscript", "init.R"]
+ENTRYPOINT ["./entrypoint.sh"]
