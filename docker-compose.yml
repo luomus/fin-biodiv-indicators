@@ -18,40 +18,10 @@ services:
         - "PGPASSWORD=${PGPASSWORD}"
         - "FINBIF_ACCESS_TOKEN=${FINBIF_ACCESS_TOKEN}"
     restart: always
-    volumes:
-      - "./api/api.R:/api.R"
-      - "./pkg:/indicators"
     tmpfs:
       - "/tmpsvgs"
-    environment:
-      - "VIRTUAL_HOST=api.${HOST}"
-      - "LETSENCRYPT_HOST=api.${HOST}"
-      - "LETSENCRYPT_EMAIL=${EMAIL}"
-  nginxproxy:
-    image: jwilder/nginx-proxy
-    container_name: finbiodivindicators_proxy
-    restart: always
     ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - "certs:/etc/nginx/certs:ro"
-      - "vhostd:/etc/nginx/vhost.d"
-      - "html:/usr/share/nginx/html"
-      - "/var/run/docker.sock:/tmp/docker.sock:ro"
-  letsencrypt-nginx-proxy-companion:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    environment:
-      - "NGINX_PROXY_CONTAINER=finbiodivindicators_proxy"
-    volumes:
-      - "certs:/etc/nginx/certs:rw"
-      - "vhostd:/etc/nginx/vhost.d"
-      - "html:/usr/share/nginx/html"
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    restart: always
+      - "8000:8000"
 
 volumes:
-  certs:
-  html:
-  vhostd:
   postgres:
