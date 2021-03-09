@@ -38,9 +38,11 @@ RUN  echo "deb http://deb.debian.org/debian unstable main contrib" > /etc/apt/so
 
 RUN  R -e "bspm::disable(); install.packages(c('svglite', 'fastmap', 'future', 'promises'))"
 
-COPY init.R init.R
-
 RUN mkdir tmpsvgs
+
+COPY init.R init.R
+COPY api.R api.R
+COPY pkg indicators
 
 EXPOSE 8000
 ENTRYPOINT ["Rscript", "init.R"]
