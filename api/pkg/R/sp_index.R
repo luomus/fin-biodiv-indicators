@@ -62,7 +62,10 @@ calc_index <- function(sp, year, base) {
 
   promises::future_promise({
     ans <- rtrim::index(
-      rtrim::trim(count ~ site + year, data = data, model = 3L), base = base
+      rtrim::trim(
+        count ~ site + year, data = data, model = 2, changepoints = "all"
+      ),
+      base = base
     )
     rownames(ans) <- ans[["time"]]
     names(ans) <- c("year", "index", "sd")
