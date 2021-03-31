@@ -1,6 +1,6 @@
 library("indicators")
 
-create_cache()
+create_output_cache()
 
 library("promises")
 library("future")

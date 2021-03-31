@@ -2,15 +2,15 @@
 #' @import rlang
 NULL
 
-#' Create a cache
+#' Create an output cache
 #'
-#' Create a database cache if it doesn't already exist.
+#' Create a database output cache if it doesn't already exist.
 #'
 #' @importFrom RPostgres dbExistsTable dbWriteTable Postgres
 #' @importFrom DBI dbConnect dbDisconnect
 #' @export
 
-create_cache <- function() {
+create_ouput_cache <- function() {
 
   db <- DBI::dbConnect(RPostgres::Postgres())
 
@@ -25,17 +25,17 @@ create_cache <- function() {
     class = "data.frame"
   )
 
-  if (!RPostgres::dbExistsTable(db, "cache")) {
+  if (!RPostgres::dbExistsTable(db, "output_cache")) {
 
-    RPostgres::dbWriteTable(db, "cache", df)
+    RPostgres::dbWriteTable(db, "output_cache", df)
 
   }
 
 }
 
-#' Set cache
+#' Set output cache
 #'
-#' Cache data in a database.
+#' Cache output data in a database.
 #'
 #' @param hash Hash of input
 #' @param data Raw data.
@@ -46,7 +46,7 @@ create_cache <- function() {
 
 #' @export
 
-set_cache <- function(hash, data) {
+set_output_cache <- function(hash, data) {
 
   db <- DBI::dbConnect(RPostgres::Postgres())
 
@@ -54,7 +54,7 @@ set_cache <- function(hash, data) {
 
   df <- data.frame(time = Sys.time(), hash = hash, data = blob::blob(data))
 
-  RPostgres::dbAppendTable(db, "cache", df)
+  RPostgres::dbAppendTable(db, "output_cache", df)
 
 }
 
@@ -69,14 +69,14 @@ set_cache <- function(hash, data) {
 #' @importFrom dplyr collect filter tbl
 #' @export
 
-get_from_cache <- function(hash) {
+get_from_output_cache <- function(hash) {
 
   db <- DBI::dbConnect(RPostgres::Postgres())
 
   on.exit(DBI::dbDisconnect(db))
 
-  x <- dplyr::tbl(db, "cache")
-  x <- dplyr::filter(x, hash == !!hash)
+  x <- dplyr::tbl(db, "output_cache")
+  x <- dplyr::filter(x, .data[["hash"]] == !!hash)
   dplyr::collect(x)
 
 }
@@ -89,7 +89,7 @@ get_from_cache <- function(hash) {
 #'
 #' @export
 
-is_cached <- function(cache) {
+is_output_cached <- function(cache) {
   nrow(cache) > 0L
 }
 
@@ -98,9 +98,10 @@ is_cached <- function(cache) {
 #' Check if the cache is newer than the last modification time.
 #'
 #' @param cache Cached data.
+#' @param last_mod_time Last time data was modified.
 #'
 #' @export
 
-cache_valid <- function(cache, last_mod_time) {
+output_cache_valid <- function(cache, last_mod_time) {
   cache[, "time"] > last_mod_time
 }

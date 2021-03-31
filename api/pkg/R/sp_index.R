@@ -32,9 +32,9 @@ sp_index <- function(sp = "skylark", year, base) {
 
   hash <- digest::digest(list(sp, year, base))
 
-  cached_data <- get_from_cache(hash)
+  cached_data <- get_from_output_cache(hash)
 
-  if (is_cached(cached_data)) {
+  if (is_output_cached(cached_data)) {
 
     unserialize(unlist(cached_data[["data"]]))
 
@@ -73,7 +73,7 @@ calc_index <- function(sp, year, base) {
     ans[["year"]] <- as.integer(year)
     rownames(ans) <- NULL
 
-    set_cache(hash, serialize(ans, NULL))
+    set_output_cache(hash, serialize(ans, NULL))
 
     ans},
     globals = c("data", "base", "year", "hash"),
