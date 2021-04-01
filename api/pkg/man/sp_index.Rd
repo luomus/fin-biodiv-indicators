@@ -4,7 +4,7 @@
 \alias{sp_index}
 \title{Population indicator}
 \usage{
-sp_index(sp = "skylark", year, base)
+sp_index(sp, year, base)
 }
 \arguments{
 \item{sp}{Species}

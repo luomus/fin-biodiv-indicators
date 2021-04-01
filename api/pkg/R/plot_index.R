@@ -56,9 +56,9 @@ svg_data <- function(data) {
 
   hash <- digest::digest(data)
 
-  cached_data <- get_from_cache(hash)
+  cached_data <- get_from_output_cache(hash)
 
-  if (is_cached(cached_data)) {
+  if (is_output_cached(cached_data)) {
 
     unlist(cached_data[["data"]])
 
@@ -73,7 +73,7 @@ svg_data <- function(data) {
 
     svg <- readBin(tmp, "raw", n = file.info(tmp)[["size"]])
 
-    set_cache(hash, svg)
+    set_output_cache(hash, svg)
 
     svg
 

@@ -19,7 +19,7 @@ cors <- function(req, res) {
 #* @param year Year
 #* @param base Base year of index
 #* @get /sp-index/json
-function(sp = "skylark", year, base) {
+function(sp, year, base) {
   sp_index(sp, year, base)
 }
 
@@ -29,7 +29,7 @@ function(sp = "skylark", year, base) {
 #* @param base Base year of index
 #* @serializer csv
 #* @get /sp-index/csv
-function(sp = "skylark", year, base) {
+function(sp, year, base) {
   sp_index(sp, year, base)
 }
 
@@ -39,7 +39,7 @@ function(sp = "skylark", year, base) {
 #* @param year Year
 #* @param base Base year of index
 #* @get /sp-plot
-function(sp = "skylark", year, base, res) {
+function(sp, year, base, res) {
 
   res$setHeader("Content-Type", "image/svg+xml")
   res$setHeader("Content-Encoding", "gzip")

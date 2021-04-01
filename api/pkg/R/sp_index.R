@@ -8,26 +8,32 @@
 #' @importFrom digest digest
 #' @export
 
-sp_index <- function(sp = "skylark", year, base) {
+sp_index <- function(sp, year, base) {
 
-  sp <- match.arg(sp)
-
-  data <- switch(sp, skylark = skylark)
+  data <- get_sp_data(sp, "winter_birds")
 
   datayear <- sort(unique(data[["year"]]))
 
   if (missing(year)) {
+
     year <- datayear
+
   } else {
+
     year <- parse_int_range(year)
+
   }
 
   year <- as.character(year)
 
   if (missing(base) || !base %in% datayear) {
+
     base <- 1L
+
   } else {
+
     base <- which(datayear == as.character(base))
+
   }
 
   hash <- digest::digest(list(sp, year, base))
@@ -56,7 +62,7 @@ calc_index <- function(sp, year, base) {
   force(year)
   force(base)
 
-  data <- switch(sp, skylark = skylark)
+  data <- get_sp_data(sp, "winter_birds")
 
   hash <- digest::digest(list(sp, year, base))
 

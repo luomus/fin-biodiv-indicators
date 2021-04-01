@@ -19,16 +19,18 @@ Imports:
     dbplyr,
     digest,
     dplyr,
+    finbif,
     future,
     ggplot2,
-    graphics,
     grDevices,
     lubridate,
+    promises,
     rlang,
     RPostgres,
     rtrim,
-    promises,
-    svglite
+    svglite,
+    tidyr,
+    tidyselect
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

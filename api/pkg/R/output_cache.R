@@ -10,7 +10,7 @@ NULL
 #' @importFrom DBI dbConnect dbDisconnect
 #' @export
 
-create_ouput_cache <- function() {
+create_output_cache <- function() {
 
   db <- DBI::dbConnect(RPostgres::Postgres())
 

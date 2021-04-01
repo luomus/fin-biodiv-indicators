@@ -1,4 +1,8 @@
 library("indicators")
+options(
+  finbif_cache_path = "tmpsvgs",
+  finbif_warehouse_query = "warehouse/query/"
+)
 
 create_output_cache()
 
