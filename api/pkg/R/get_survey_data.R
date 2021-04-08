@@ -1,30 +1,46 @@
-#' @importFrom dplyr filter
+#' Get survey data
+#'
+#' Get survey data from finbif.
+#'
+#' @param name Name of input.
+#' @param fltr Filter.
+#' @param slct Column selection.
+#'
+#' @importFrom digest digest
 #' @importFrom finbif finbif_occurrence
+#' @importFrom promises future_promise promise_resolve
 
-get_survey_data <- function(fltr) {
+get_survey_data <- function(name, fltr, slct) {
 
-  cached <- is_input_cached(fltr)
+  force(name)
+  force(fltr)
+  force(slct)
 
-  if (cached && input_cache_valid(fltr)) {
+  hash <- digest::digest(list(name, fltr, slct))
 
-    get_from_input_cache(fltr)
+  cached <- is_input_cached(hash)
+
+  if (cached && input_cache_valid(hash)) {
+
+    promises::promise_resolve(get_from_input_cache(hash))
 
   } else {
 
-    slct <- c("event_id", "location_id", "date_time")
+    promises::future_promise({
 
-    n <- finbif::finbif_records(
-      filter = fltr, select = slct, aggregate = "events", count_only = TRUE
+      n <- finbif::finbif_occurrence(
+        filter = fltr, select = slct, aggregate = "events", count_only = TRUE
+      )
+
+      surveys <- finbif::finbif_occurrence(
+        filter = fltr, select = slct, aggregate = "events", n = n
+      )
+
+      set_input_cache(name, surveys, hash)},
+      globals = c("name", "fltr", "hash", "slct"),
+      packages = c("finbif", "indicators"),
+      seed = TRUE
     )
-
-    surveys <- finbif::finbif_occurrence(
-      filter = fltr, select = slct, aggregate = "events", n = n$content$total,
-      quiet = TRUE
-    )
-
-    surveys <- dplyr::filter(surveys, !is.na(.data[["location_id"]]))
-
-    set_input_cache(surveys)
 
   }
 

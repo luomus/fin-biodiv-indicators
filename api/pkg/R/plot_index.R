@@ -3,12 +3,18 @@
 #' Create a plot of an index
 #'
 #' @param data Data to plot
+#'
 #' @importFrom ggplot2 aes ggplot geom_ribbon geom_line theme_minimal xlab ylab
 #' @importFrom lubridate parse_date_time
 #' @export
 
 plot_index <- function(data) {
-  gg <- ggplot2::ggplot(data) +
+
+  year <- data[["year"]]
+  index <- data[["index"]]
+  sd <- data[["sd"]]
+
+  gg <- ggplot2::ggplot() +
     ggplot2::aes(
       x = lubridate::parse_date_time(year, "Y"),
       y = index,
@@ -30,6 +36,7 @@ plot_index <- function(data) {
 #' @param sp Species
 #' @param year Year
 #' @param base Base year of index
+#'
 #' @importFrom digest digest
 #' @importFrom grDevices dev.off
 #' @importFrom promises is.promise then

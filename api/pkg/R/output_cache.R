@@ -102,6 +102,6 @@ is_output_cached <- function(cache) {
 #'
 #' @export
 
-output_cache_valid <- function(cache, last_mod_time) {
+output_cache_valid <- function(cache, last_mod_time = as.Date("1970-01-01")) {
   cache[, "time"] > last_mod_time
 }

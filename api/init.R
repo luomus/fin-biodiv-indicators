@@ -5,6 +5,7 @@ options(
 )
 
 create_output_cache()
+create_input_cache_index()
 
 library("promises")
 library("future")

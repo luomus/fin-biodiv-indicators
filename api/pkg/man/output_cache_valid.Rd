@@ -4,7 +4,7 @@
 \alias{output_cache_valid}
 \title{Check cache validity}
 \usage{
-output_cache_valid(cache, last_mod_time)
+output_cache_valid(cache, last_mod_time = as.Date("1970-01-01"))
 }
 \arguments{
 \item{cache}{Cached data.}

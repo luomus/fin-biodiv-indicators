@@ -1,19 +1,30 @@
+#' Get species observation data
+#'
+#' Get species observation data from finbif.
+#'
+#' @param sp Species.
+#' @param type Survey type.
+#'
+#' @importFrom digest digest
 #' @importFrom dplyr arrange first left_join matches mutate select
 #' @importFrom finbif finbif_occurrence
 #' @importFrom lubridate day month today quarter
+#' @importFrom promises future_promise promise_resolve then
 #' @importFrom rlang .data
 #' @importFrom tidyr replace_na pivot_longer pivot_wider
 #' @importFrom tidyselect all_of
 
 get_sp_data <- function(sp, type) {
 
-  x <- list(sp, type)
+  force(sp)
 
-  cached <- is_input_cached(x)
+  hash <- digest::digest(list(sp, type))
 
-  if (cached && input_cache_valid(x)) {
+  cached <- is_input_cached(hash)
 
-    get_from_input_cache(x)
+  if (cached && input_cache_valid(hash)) {
+
+    promises::promise_resolve(get_from_input_cache(hash, sp, type))
 
   } else {
 
@@ -28,52 +39,75 @@ get_sp_data <- function(sp, type) {
     fltr <- list(
       date_range_ymd = list(begin_date, end_date),
       date_range_md = c("12-01", "01-31"),
-      collection = "Winter Bird Census"
+      collection = "Winter Bird Census",
+      quality_issues = "both"
     )
 
-    surveys <- get_survey_data(fltr)
-    surveys <- dplyr::mutate(
+    surveys <- get_survey_data(
+      paste0(type, "_surveys"),
+      fltr, c("event_id", "location_id", "date_time")
+    )
+
+    surveys <- promises::then(
       surveys,
-      year = floor(lubridate::quarter(.data[["date_time"]], TRUE, 12L))
+      ~{
+        dplyr::mutate(
+          ., year = floor(lubridate::quarter(.data[["date_time"]], TRUE, 12L))
+        )
+      }
     )
 
     slct <- c("event_id", "taxon_id", "abundance")
 
-    n <- finbif::finbif_records(
-      filter = c(fltr, taxon_id = sp), select = slct, count_only = TRUE
+    sp_data <- promises::future_promise({
+      n <- finbif::finbif_occurrence(
+        sp, filter = fltr, select = slct, count_only = TRUE
+      )
+
+      finbif::finbif_occurrence(sp, filter = fltr, select = slct, n = n)
+      },
+      globals = c("sp", "fltr", "slct"),
+      packages = "finbif",
+      seed = TRUE
     )
 
-    counts <- finbif::finbif_occurrence(
-      sp, filter = fltr, select = slct, n = n$content$total, quiet = TRUE
-    )
-    counts <- dplyr::left_join(surveys, counts, by = "event_id")
-    counts <- dplyr::arrange(counts, .data[["date_time"]])
-    counts <- dplyr::mutate(
-      counts, taxon_id = tidyr::replace_na(.data[["taxon_id"]], "NO_TAXA")
-    )
-    counts <- tidyr::pivot_wider(
-      counts, tidyselect::all_of(c("year", "location_id")),
-      names_from = .data[["taxon_id"]],
-      values_from = .data[["abundance"]], values_fill = 0,
-      values_fn = dplyr::first
-    )
-    counts <- dplyr::select(counts, dplyr::matches("[^NO_TAXA]"))
-    counts <- tidyr::pivot_wider(
-      counts, .data[["year"]], names_from = .data[["location_id"]],
-      values_from = !tidyselect::all_of(c("year", "location_id"))
-    )
-    counts <- dplyr::select(counts, .data[["year"]], where(max_gt_zero))
-    counts <- tidyr::pivot_longer(
-      counts, !.data[["year"]], names_to = "site", values_to = "count",
-      values_drop_na = TRUE
-    )
+    all_data <- promises::promise_all(surveys = surveys, sp_data = sp_data)
 
-    set_input_cache(counts)
+    then(
+      all_data,
+      ~{
+        counts <- dplyr::left_join(
+          .[["surveys"]], .[["sp_data"]], by = "event_id"
+        )
+        counts <- dplyr::arrange(counts, .data[["date_time"]])
+        counts <- dplyr::mutate(
+          counts, taxon_id = tidyr::replace_na(.data[["taxon_id"]], "NO_TAXA")
+        )
+        counts <- tidyr::pivot_wider(
+          counts, tidyselect::all_of(c("year", "location_id")),
+          names_from = .data[["taxon_id"]],
+          values_from = .data[["abundance"]], values_fill = 0L,
+          values_fn = dplyr::first
+        )
+        counts <- dplyr::select(counts, dplyr::matches("[^NO_TAXA]"))
+        counts <- tidyr::pivot_wider(
+          counts, .data[["year"]], names_from = .data[["location_id"]],
+          values_from = !tidyselect::all_of(c("year", "location_id"))
+        )
+        counts <- dplyr::select(counts, .data[["year"]], where(max_gt_zero))
+        counts <- tidyr::pivot_longer(
+          counts, !.data[["year"]], names_to = "site", values_to = "count",
+          values_drop_na = TRUE
+        )
 
+        set_input_cache(paste0(type, "_counts"), counts, hash, sp)
+      }
+    )
   }
-
 }
+
 #' @importFrom tidyselect vars_select_helpers
+
 where <- tidyselect::vars_select_helpers[["where"]]
 
 max_gt_zero <- function(x) max(x, na.rm = TRUE) > 0

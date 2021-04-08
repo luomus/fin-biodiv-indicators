@@ -6,53 +6,65 @@
 #' @param year Year
 #' @param base Base year of index
 #' @importFrom digest digest
+#' @importFrom promises then
+#'
 #' @export
 
 sp_index <- function(sp, year, base) {
 
+  if (missing(year)) year <- NULL
+  if (missing(base)) base <- NULL
+
   data <- get_sp_data(sp, "winter_birds")
 
-  datayear <- sort(unique(data[["year"]]))
+  promises::then(
+    data, ~{
 
-  if (missing(year)) {
+      datayear <- sort(unique(.[["year"]]))
 
-    year <- datayear
+      if (is.null(year)) {
 
-  } else {
+        year <- datayear
 
-    year <- parse_int_range(year)
+      } else {
 
-  }
+        year <- parse_int_range(year)
 
-  year <- as.character(year)
+      }
 
-  if (missing(base) || !base %in% datayear) {
+      year <- as.character(year)
 
-    base <- 1L
+      if (is.null(base) || !base %in% datayear) {
 
-  } else {
+        base <- 1L
 
-    base <- which(datayear == as.character(base))
+      } else {
 
-  }
+        base <- which(datayear == as.character(base))
 
-  hash <- digest::digest(list(sp, year, base))
+      }
 
-  cached_data <- get_from_output_cache(hash)
+      hash <- digest::digest(list(sp, year, base))
 
-  if (is_output_cached(cached_data)) {
+      cached_data <- get_from_output_cache(hash)
 
-    unserialize(unlist(cached_data[["data"]]))
+      if (is_output_cached(cached_data)) {
 
-  } else {
+        unserialize(unlist(cached_data[["data"]]))
 
-    calc_index(sp, year, base)
+      } else {
 
-  }
+        calc_index(sp, year, base)
+
+      }
+
+    }
+
+  )
 
 }
 
-#' @importFrom promises future_promise
+#' @importFrom promises future_promise then
 #' @importFrom digest digest
 #' @importFrom rtrim index trim
 #'
@@ -62,28 +74,33 @@ calc_index <- function(sp, year, base) {
   force(year)
   force(base)
 
-  data <- get_sp_data(sp, "winter_birds")
-
   hash <- digest::digest(list(sp, year, base))
 
-  promises::future_promise({
-    ans <- rtrim::index(
-      rtrim::trim(
-        count ~ site + year, data = data, model = 2, changepoints = "all"
-      ),
-      base = base
-    )
-    rownames(ans) <- ans[["time"]]
-    names(ans) <- c("year", "index", "sd")
-    ans <- ans[year, ]
-    ans[["year"]] <- as.integer(year)
-    rownames(ans) <- NULL
+  data <- get_sp_data(sp, "winter_birds")
 
-    set_output_cache(hash, serialize(ans, NULL))
+  promises::then(
+    data,
+    ~{
+      df <- .
+      promises::future_promise({
+        ans <- rtrim::index(
+          rtrim::trim(
+            count ~ site + year, data = df, model = 2, changepoints = "all"
+          ),
+          base = base
+        )
+        rownames(ans) <- ans[["time"]]
+        names(ans) <- c("year", "index", "sd")
+        ans <- ans[year, ]
+        ans[["year"]] <- as.integer(year)
+        rownames(ans) <- NULL
 
-    ans},
-    globals = c("data", "base", "year", "hash"),
-    packages = c("rtrim", "indicators")
+        set_output_cache(hash, serialize(ans, NULL))
+
+        ans},
+        globals = c("base", "df", "year", "hash"),
+        packages = c("rtrim", "indicators")
+      )
+    }
   )
-
 }
