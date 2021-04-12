@@ -22,7 +22,7 @@ FINBIF_ACCESS_TOKEN=<token> PGUSER=<user> PGPASSWORD=<password> docker-compose u
 
 ## Usage
 ### JSON
-[http://localhost:8000/sp-index/json?sp=skylark&year=1985:1988](http://localhost:8000/sp-index/json?sp=skylark&year=1985:1988)
+[http://localhost:8000/sp-index/json?sp=SURULU&year=1985:1988](http://localhost:8000/sp-index/json?sp=SURULU&year=1985:1988)
 ```{javascript}
 [
   {
@@ -49,9 +49,9 @@ FINBIF_ACCESS_TOKEN=<token> PGUSER=<user> PGPASSWORD=<password> docker-compose u
 ```
 
 ### CSV
-[http://localhost:8000/sp-index/csv?sp=skylark&year=1985:1988](http://localhost:8000/sp-index/csv?sp=skylark&year=1985:1988)
+[http://localhost:8000/sp-index/csv?sp=SURULU&year=1985:1988](http://localhost:8000/sp-index/csv?sp=SURULU&year=1985:1988)
 
 ### Graphics
-[http://localhost:8000/sp-plot?sp=skylark](http://localhost:8000/sp-plot?sp=skylark)
+[http://localhost:8000/sp-plot?sp=SURULU](http://localhost:8000/sp-plot?sp=SURULU)
 
 ![](pkg/man/figures/graph.svg)
