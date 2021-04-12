@@ -57,8 +57,6 @@ function(sp, year, base, res) {
 
   svg <- svg_index(sp, year, base)
 
-  log_message("Sending plot")
-
   if (promises::is.promise(svg)) {
 
     res_body <- function(svg) {

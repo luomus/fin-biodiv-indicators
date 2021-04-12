@@ -15,8 +15,6 @@ sp_index <- function(sp, year, base) {
   if (missing(year)) year <- NULL
   if (missing(base)) base <- NULL
 
-  log_message("Getting ", sp, " winter bird data")
-
   data <- get_sp_data(sp, "winter_birds")
 
   promises::then(
