@@ -111,7 +111,7 @@ get_sp_data <- function(sp, type) {
           values_drop_na = TRUE
         )
 
-        set_input_cache(paste0(type, "counts"), counts, hash, sp)
+        set_input_cache(paste0(type, "_counts"), counts, hash, sp)
       }
     )
   }
