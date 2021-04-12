@@ -6,10 +6,6 @@ RUN  apt-get update \
   && apt-get install -y \
        libpaper1
 
-RUN  rm /var/lib/dpkg/info/libpaper1* \
-  && dpkg --configure -D 777 libpaper1 \
-  && apt-get -f install
-
 RUN  apt-get update \
   && apt-get install -y \
        libfontconfig1-dev \
