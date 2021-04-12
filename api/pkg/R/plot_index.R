@@ -10,6 +10,8 @@
 
 plot_index <- function(data) {
 
+  log_message("Creating a plot")
+
   year <- data[["year"]]
   index <- data[["index"]]
   sd <- data[["sd"]]
@@ -26,7 +28,9 @@ plot_index <- function(data) {
     ggplot2::ylab(NULL) +
     ggplot2::xlab(NULL) +
     ggplot2::theme_minimal()
+
   print(gg)
+
 }
 
 #' Index svg
@@ -63,9 +67,13 @@ svg_data <- function(data) {
 
   hash <- digest::digest(data)
 
+  log_message("Checking output cache for plot data")
+
   cached_data <- get_from_output_cache(hash)
 
   if (is_output_cached(cached_data)) {
+
+    log_message("Getting plot data from output cache")
 
     unlist(cached_data[["data"]])
 

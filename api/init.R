@@ -1,7 +1,8 @@
 library("indicators")
 options(
   finbif_cache_path = "tmpsvgs",
-  finbif_warehouse_query = "warehouse/query/"
+  finbif_warehouse_query = "warehouse/query/",
+  indicator_logging = TRUE
 )
 
 create_output_cache()

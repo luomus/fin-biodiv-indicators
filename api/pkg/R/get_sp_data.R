@@ -20,9 +20,13 @@ get_sp_data <- function(sp, type) {
 
   hash <- digest::digest(list(sp, type))
 
+  log_message("Checking if ", sp, "'s ", type, " data is cached")
+
   cached <- is_input_cached(hash)
 
   if (cached && input_cache_valid(hash)) {
+
+    log_message("Getting ", sp, "'s ", type, " data from input cache")
 
     promises::promise_resolve(get_from_input_cache(hash, sp, type))
 
@@ -43,6 +47,8 @@ get_sp_data <- function(sp, type) {
       quality_issues = "both"
     )
 
+    log_message("Getting ", type, " survey data")
+
     surveys <- get_survey_data(
       paste0(type, "_surveys"),
       fltr, c("event_id", "location_id", "date_time")
@@ -59,12 +65,17 @@ get_sp_data <- function(sp, type) {
 
     slct <- c("event_id", "taxon_id", "abundance")
 
+
+    log_message("Getting ", sp, " count data from FinBIF")
+
     sp_data <- promises::future_promise({
       n <- finbif::finbif_occurrence(
         sp, filter = fltr, select = slct, count_only = TRUE
       )
 
-      finbif::finbif_occurrence(sp, filter = fltr, select = slct, n = n)
+      finbif::finbif_occurrence(
+        sp, filter = fltr, select = slct, n = n, quiet = TRUE
+      )
       },
       globals = c("sp", "fltr", "slct"),
       packages = "finbif",
@@ -100,7 +111,7 @@ get_sp_data <- function(sp, type) {
           values_drop_na = TRUE
         )
 
-        set_input_cache(paste0(type, "_counts"), counts, hash, sp)
+        set_input_cache(paste0(type, "counts"), counts, hash, sp)
       }
     )
   }

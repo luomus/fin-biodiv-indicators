@@ -15,6 +15,8 @@ sp_index <- function(sp, year, base) {
   if (missing(year)) year <- NULL
   if (missing(base)) base <- NULL
 
+  log_message("Getting ", sp, " winter bird data")
+
   data <- get_sp_data(sp, "winter_birds")
 
   promises::then(
@@ -46,9 +48,13 @@ sp_index <- function(sp, year, base) {
 
       hash <- digest::digest(list(sp, year, base))
 
+      log_message("Checking output cache for index data")
+
       cached_data <- get_from_output_cache(hash)
 
       if (is_output_cached(cached_data)) {
+
+        log_message("Getting index data from output cache")
 
         unserialize(unlist(cached_data[["data"]]))
 
@@ -67,7 +73,7 @@ sp_index <- function(sp, year, base) {
 #' @importFrom promises future_promise then
 #' @importFrom digest digest
 #' @importFrom rtrim index trim
-#'
+
 calc_index <- function(sp, year, base) {
 
   force(sp)
@@ -76,7 +82,11 @@ calc_index <- function(sp, year, base) {
 
   hash <- digest::digest(list(sp, year, base))
 
+  log_message("Getting ", sp, " winter bird data")
+
   data <- get_sp_data(sp, "winter_birds")
+
+  log_message("Calculating index for ", sp)
 
   promises::then(
     data,

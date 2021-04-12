@@ -20,7 +20,11 @@ cors <- function(req, res) {
 #* @param base Base year of index
 #* @get /sp-index/json
 function(sp, year, base) {
+  log_message("===New Request===")
+  log_message("Request made for index of ", sp)
+  log_message("Sending json data")
   sp_index(sp, year, base)
+
 }
 
 #* Return single species index as csv
@@ -30,6 +34,9 @@ function(sp, year, base) {
 #* @serializer csv
 #* @get /sp-index/csv
 function(sp, year, base) {
+  log_message("===New Request===")
+  log_message("Request made for index of ", sp)
+  log_message("Sending csv")
   sp_index(sp, year, base)
 }
 
@@ -41,11 +48,16 @@ function(sp, year, base) {
 #* @get /sp-plot
 function(sp, year, base, res) {
 
+  log_message("===New Request===")
+  log_message("Request made for plot of ", sp)
+
   res$setHeader("Content-Type", "image/svg+xml")
   res$setHeader("Content-Encoding", "gzip")
   res$setHeader("Content-Disposition", "inline")
 
   svg <- svg_index(sp, year, base)
+
+  log_message("Sending plot")
 
   if (promises::is.promise(svg)) {
 
