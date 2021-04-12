@@ -4,10 +4,6 @@ RUN  echo 'APT::Install-Recommends "false";' > /etc/apt/apt.conf.d/90local-no-re
 
 RUN  apt-get update \
   && apt-get install -y \
-       libpaper1
-
-RUN  apt-get update \
-  && apt-get install -y \
        libfontconfig1-dev \
        libpoppler-cpp-dev \
        libpq-dev \
