@@ -5,12 +5,13 @@
 #' @param name Name of input.
 #' @param fltr Filter.
 #' @param slct Column selection.
+#' @param id Request ID for logging.
 #'
 #' @importFrom digest digest
 #' @importFrom finbif finbif_occurrence
 #' @importFrom promises future_promise promise_resolve
 
-get_survey_data <- function(name, fltr, slct) {
+get_survey_data <- function(name, fltr, slct, id) {
 
   force(name)
   force(fltr)
@@ -18,19 +19,23 @@ get_survey_data <- function(name, fltr, slct) {
 
   hash <- digest::digest(list(name, fltr, slct))
 
-  log_message("Checking if ", name, " survey data is cached")
+  log_message(id, "Checking if ", name, " survey data is cached")
 
   cached <- is_input_cached(hash)
 
   if (cached && input_cache_valid(hash)) {
 
-    log_message("Getting ", name, " survey data from cache")
+    log_message(id, "Getting ", name, " survey data from cache")
 
     promises::promise_resolve(get_from_input_cache(hash))
 
   } else {
 
-    log_message("Getting ", name, " survey data from FinBIF")
+    log_message(id, "Setting ", name, " in cache index")
+
+    set_input_cache_index(name, hash, FALSE)
+
+    log_message(id, "Getting ", name, " survey data from FinBIF")
 
     promises::future_promise({
 

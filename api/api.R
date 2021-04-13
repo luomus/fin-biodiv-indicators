@@ -20,10 +20,13 @@ cors <- function(req, res) {
 #* @param base Base year of index
 #* @get /sp-index/json
 function(sp, year, base) {
-  log_message("===New Request===")
-  log_message("Request made for index of ", sp)
-  log_message("Sending json data")
-  sp_index(sp, year, base)
+
+  id <- digest::digest(req)
+
+  log_message(id, "===New Request===")
+  log_message(id, "JSON request made for index of ", sp)
+
+  sp_index(sp, year, base, id)
 
 }
 
@@ -34,10 +37,14 @@ function(sp, year, base) {
 #* @serializer csv
 #* @get /sp-index/csv
 function(sp, year, base) {
-  log_message("===New Request===")
-  log_message("Request made for index of ", sp)
-  log_message("Sending csv")
-  sp_index(sp, year, base)
+
+  id <- digest::digest(req)
+
+  log_message(id, "===New Request===")
+  log_message(id, "CSV request made for index of ", sp)
+
+  sp_index(sp, year, base, id)
+
 }
 
 
@@ -46,16 +53,18 @@ function(sp, year, base) {
 #* @param year Year
 #* @param base Base year of index
 #* @get /sp-plot
-function(sp, year, base, res) {
+function(sp, year, base, res, req) {
 
-  log_message("===New Request===")
-  log_message("Request made for plot of ", sp)
+  id <- digest::digest(req)
+
+  log_message(id, "===New Request===")
+  log_message(id, "Request made for plot of ", sp)
 
   res$setHeader("Content-Type", "image/svg+xml")
   res$setHeader("Content-Encoding", "gzip")
   res$setHeader("Content-Disposition", "inline")
 
-  svg <- svg_index(sp, year, base)
+  svg <- svg_index(sp, year, base, id)
 
   if (promises::is.promise(svg)) {
 

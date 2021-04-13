@@ -17,7 +17,8 @@ create_input_cache_index <- function() {
     list(
       time = as.POSIXct(integer(), origin = "1970-01-01"),
       hash = character(),
-      name = character()
+      name = character(),
+      available = logical()
     ),
     class = "data.frame"
   )
@@ -93,12 +94,44 @@ input_cache_valid <- function(hash, last_mod_time = as.Date("1970-01-01")) {
 #' Cache input data in a database.
 #'
 #' @param name Name of input.
+#' @param hash Hash of input.
+#' @param available Is the data available?
+#'
+#' @importFrom DBI dbConnect dbDisconnect
+#' @importFrom RPostgres dbAppendTable Postgres
+#'
+#' @export
+
+set_input_cache_index <- function(name, hash, available) {
+
+  db <- DBI::dbConnect(RPostgres::Postgres())
+
+  on.exit(DBI::dbDisconnect(db))
+
+  RPostgres::dbAppendTable(
+    db, "input_cache_index",
+    data.frame(
+      time = Sys.time(), hash = hash, name = name, available = available
+    )
+  )
+
+  invisible(NULL)
+
+}
+
+
+
+#' Set input cache
+#'
+#' Cache input data in a database.
+#'
+#' @param name Name of input.
 #' @param data Data.
 #' @param hash Hash of input.
 #' @param sp  Species.
 #'
 #' @importFrom DBI dbConnect dbDisconnect
-#' @importFrom RPostgres dbAppendTable dbExistsTable dbWriteTable Postgres
+#' @importFrom RPostgres dbAppendTable dbExecute dbExistsTable dbWriteTable Postgres
 #'
 #' @export
 
@@ -107,11 +140,6 @@ set_input_cache <- function(name, data, hash, sp = NULL) {
   db <- DBI::dbConnect(RPostgres::Postgres())
 
   on.exit(DBI::dbDisconnect(db))
-
-  RPostgres::dbAppendTable(
-    db, "input_cache_index",
-    data.frame(time = Sys.time(), hash = hash, name = name)
-  )
 
   df <- as.data.frame(c(sp = sp, data))
 
@@ -125,6 +153,12 @@ set_input_cache <- function(name, data, hash, sp = NULL) {
 
   }
 
+  DBI::dbExecute(
+    db, sprintf("DELETE FROM input_cache_index WHERE hash = '%s'", hash)
+  )
+
+  set_input_cache_index(name, hash, TRUE)
+
   data
 
 }
@@ -133,7 +167,7 @@ set_input_cache <- function(name, data, hash, sp = NULL) {
 #'
 #' Get cached data from a database.
 #'
-#' @param hash Hash of input
+#' @param hash Hash of input.
 #' @param sp Species.
 #' @param type Survey type.
 #'

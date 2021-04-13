@@ -4,6 +4,7 @@
 #'
 #' @param sp Species.
 #' @param type Survey type.
+#' @param id Request ID for logging.
 #'
 #' @importFrom digest digest
 #' @importFrom dplyr arrange first left_join matches mutate select
@@ -14,23 +15,27 @@
 #' @importFrom tidyr replace_na pivot_longer pivot_wider
 #' @importFrom tidyselect all_of
 
-get_sp_data <- function(sp, type) {
+get_sp_data <- function(sp, type, id) {
 
   force(sp)
 
   hash <- digest::digest(list(sp, type))
 
-  log_message("Checking if ", sp, "'s ", type, " data is cached")
+  log_message(id, "Checking if ", sp, "'s ", type, " data is cached")
 
   cached <- is_input_cached(hash)
 
   if (cached && input_cache_valid(hash)) {
 
-    log_message("Getting ", sp, "'s ", type, " data from input cache")
+    log_message(id, "Getting ", sp, "'s ", type, " data from input cache")
 
     promises::promise_resolve(get_from_input_cache(hash, sp, type))
 
   } else {
+
+    log_message(id, "Setting ", sp, " ", type, " count data in cache index")
+
+    set_input_cache_index(paste0(type, "_counts"), hash, FALSE)
 
     sp <- species[[type]][[sp]]
 
@@ -47,11 +52,12 @@ get_sp_data <- function(sp, type) {
       quality_issues = "both"
     )
 
-    log_message("Getting ", type, " survey data")
+    log_message(id, "Getting ", type, " survey data")
 
     surveys <- get_survey_data(
       paste0(type, "_surveys"),
-      fltr, c("event_id", "location_id", "date_time")
+      fltr, c("event_id", "location_id", "date_time"),
+      id
     )
 
     surveys <- promises::then(
@@ -65,8 +71,7 @@ get_sp_data <- function(sp, type) {
 
     slct <- c("event_id", "taxon_id", "abundance")
 
-
-    log_message("Getting ", sp, " count data from FinBIF")
+    log_message(id, "Getting ", sp, " count data from FinBIF")
 
     sp_data <- promises::future_promise({
       n <- finbif::finbif_occurrence(

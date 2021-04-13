@@ -2,20 +2,22 @@
 #'
 #' Create a population indicator.
 #'
-#' @param sp Species
-#' @param year Year
-#' @param base Base year of index
+#' @param sp Species.
+#' @param year Year.
+#' @param base Base year of index.
+#' @param id Request ID for logging.
+#'
 #' @importFrom digest digest
 #' @importFrom promises then
 #'
 #' @export
 
-sp_index <- function(sp, year, base) {
+sp_index <- function(sp, year, base, id) {
 
   if (missing(year)) year <- NULL
   if (missing(base)) base <- NULL
 
-  data <- get_sp_data(sp, "winter_birds")
+  data <- get_sp_data(sp, "winter_birds", id)
 
   promises::then(
     data, ~{
@@ -46,19 +48,19 @@ sp_index <- function(sp, year, base) {
 
       hash <- digest::digest(list(sp, year, base))
 
-      log_message("Checking output cache for index data")
+      log_message(id, "Checking output cache for index data")
 
       cached_data <- get_from_output_cache(hash)
 
       if (is_output_cached(cached_data)) {
 
-        log_message("Getting index data from output cache")
+        log_message(id, "Getting index data from output cache")
 
         unserialize(unlist(cached_data[["data"]]))
 
       } else {
 
-        calc_index(sp, year, base)
+        calc_index(sp, year, base, id)
 
       }
 
@@ -72,7 +74,7 @@ sp_index <- function(sp, year, base) {
 #' @importFrom digest digest
 #' @importFrom rtrim index trim
 
-calc_index <- function(sp, year, base) {
+calc_index <- function(sp, year, base, id) {
 
   force(sp)
   force(year)
@@ -80,11 +82,11 @@ calc_index <- function(sp, year, base) {
 
   hash <- digest::digest(list(sp, year, base))
 
-  log_message("Getting ", sp, " winter bird data")
+  log_message(id, "Getting ", sp, " winter bird data")
 
-  data <- get_sp_data(sp, "winter_birds")
+  data <- get_sp_data(sp, "winter_birds", id)
 
-  log_message("Calculating index for ", sp)
+  log_message(id, "Calculating index for ", sp)
 
   promises::then(
     data,

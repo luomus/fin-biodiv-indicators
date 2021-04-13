@@ -2,15 +2,15 @@
 #'
 #' Create a plot of an index
 #'
-#' @param data Data to plot
+#' @param data Data to plot.
 #'
 #' @importFrom ggplot2 aes ggplot geom_ribbon geom_line theme_minimal xlab ylab
 #' @importFrom lubridate parse_date_time
 #' @export
 
-plot_index <- function(data) {
+plot_index <- function(data, id) {
 
-  log_message("Creating a plot")
+  log_message(id, "Creating a plot")
 
   year <- data[["year"]]
   index <- data[["index"]]
@@ -37,9 +37,10 @@ plot_index <- function(data) {
 #'
 #' Create an svg from an indicator plot.
 #'
-#' @param sp Species
-#' @param year Year
-#' @param base Base year of index
+#' @param sp Species.
+#' @param year Year.
+#' @param base Base year of index.
+#' @param id Request ID for logging.
 #'
 #' @importFrom digest digest
 #' @importFrom grDevices dev.off
@@ -47,9 +48,9 @@ plot_index <- function(data) {
 #' @importFrom svglite svglite
 #' @export
 
-svg_index <- function(sp, year, base) {
+svg_index <- function(sp, year, base, id) {
 
-  data <- sp_index(sp, year, base)
+  data <- sp_index(sp, year, base, id)
 
   if (promises::is.promise(data)) {
 
@@ -57,23 +58,23 @@ svg_index <- function(sp, year, base) {
 
   } else {
 
-    svg_data(data)
+    svg_data(data, id)
 
   }
 
 }
 
-svg_data <- function(data) {
+svg_data <- function(data, id) {
 
   hash <- digest::digest(data)
 
-  log_message("Checking output cache for plot data")
+  log_message(id, "Checking output cache for plot data")
 
   cached_data <- get_from_output_cache(hash)
 
   if (is_output_cached(cached_data)) {
 
-    log_message("Getting plot data from output cache")
+    log_message(id, "Getting plot data from output cache")
 
     unlist(cached_data[["data"]])
 
@@ -83,7 +84,7 @@ svg_data <- function(data) {
     on.exit(unlink(tmp))
 
     svglite::svglite(tmp)
-    plot_index(data)
+    plot_index(data, id)
     grDevices::dev.off()
 
     svg <- readBin(tmp, "raw", n = file.info(tmp)[["size"]])
