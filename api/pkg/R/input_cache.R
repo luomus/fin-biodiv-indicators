@@ -50,7 +50,7 @@ get_from_input_cache_index <- function(hash) {
 
   input_cache_index <- dplyr::tbl(db, "input_cache_index")
 
-  ans <- dplyr::filter(input_cache_index, rlang::.data[["hash"]] == !!hash)
+  ans <- dplyr::filter(input_cache_index, .data[["hash"]] == !!hash)
 
   dplyr::collect(ans)
 
@@ -232,7 +232,7 @@ get_from_input_cache <- function(hash, sp, type) {
 
     if (!missing(sp) && !missing(type)) {
 
-      data <- dplyr::filter(data, rlang::.data[["sp"]] == !!sp)
+      data <- dplyr::filter(data, .data[["sp"]] == !!sp)
       data <- dplyr::select(data, -dplyr::any_of(c("sp", "hash")))
 
     }
@@ -288,7 +288,7 @@ clean_input_cache <- function() {
 
   for (i in caches) {
 
-    rows  <- dplyr::filter(index, rlang::.data[["name"]] == !!i)
+    rows  <- dplyr::filter(index, .data[["name"]] == !!i)
 
     nrows <- dplyr::count(rows)
     nrows <- dplyr::pull(nrows, "n")
@@ -306,9 +306,9 @@ clean_input_cache <- function() {
     cache <- dplyr::tbl(db, i)
 
     unindexed_hashes <- dplyr::filter(
-      cache, !rlang::.data[["hash"]] %in% !!indexed_hashes
+      cache, !.data[["hash"]] %in% !!indexed_hashes
     )
-    unindexed_hashes <- dplyr::distinct(cache, rlang::.data[["hash"]])
+    unindexed_hashes <- dplyr::distinct(cache, .data[["hash"]])
     unindexed_hashes <- dplyr::pull(unindexed_hashes, "hash")
 
     for (j in unindexed_hashes) {

@@ -83,10 +83,7 @@ get_sp_data <- function(sp, type, id) {
       surveys,
       ~{
         dplyr::mutate(
-          .,
-          year = floor(
-            lubridate::quarter(rlang::.data[["date_time"]], TRUE, 12L)
-          )
+          ., year = floor(lubridate::quarter(.data[["date_time"]], TRUE, 12L))
         )
       }
     )
@@ -117,28 +114,23 @@ get_sp_data <- function(sp, type, id) {
         counts <- dplyr::left_join(
           .[["surveys"]], .[["sp_data"]], by = "event_id"
         )
-        counts <- dplyr::arrange(counts, rlang::.data[["date_time"]])
+        counts <- dplyr::arrange(counts, .data[["date_time"]])
         counts <- dplyr::mutate(
-          counts,
-          taxon_id = tidyr::replace_na(rlang::.data[["taxon_id"]], "NO_TAXA")
+          counts, taxon_id = tidyr::replace_na(.data[["taxon_id"]], "NO_TAXA")
         )
         counts <- tidyr::pivot_wider(
           counts, tidyselect::all_of(c("year", "location_id")),
-          names_from = rlang::.data[["taxon_id"]],
-          values_from = rlang::.data[["abundance"]], values_fill = 0L,
-          values_fn = dplyr::first
+          names_from = .data[["taxon_id"]], values_from = .data[["abundance"]],
+          values_fill = 0L, values_fn = dplyr::first
         )
         counts <- dplyr::select(counts, dplyr::matches("[^NO_TAXA]"))
         counts <- tidyr::pivot_wider(
-          counts, rlang::.data[["year"]],
-          names_from = rlang::.data[["location_id"]],
+          counts, .data[["year"]], names_from = .data[["location_id"]],
           values_from = !tidyselect::all_of(c("year", "location_id"))
         )
-        counts <- dplyr::select(
-          counts, rlang::.data[["year"]], where(max_gt_zero)
-        )
+        counts <- dplyr::select(counts, .data[["year"]], where(max_gt_zero))
         counts <- tidyr::pivot_longer(
-          counts, !rlang::.data[["year"]], names_tocache_name = "site",
+          counts, !.data[["year"]], names_tocache_name = "site",
           values_to = "count", values_drop_na = TRUE
         )
 

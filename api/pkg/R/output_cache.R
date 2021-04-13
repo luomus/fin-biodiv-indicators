@@ -79,7 +79,7 @@ get_from_output_cache <- function(hash) {
   on.exit(DBI::dbDisconnect(db))
 
   x <- dplyr::tbl(db, "output_cache")
-  x <- dplyr::filter(x, rlang::.data[["hash"]] == !!hash)
+  x <- dplyr::filter(x, .data[["hash"]] == !!hash)
   dplyr::collect(x)
 
 }
