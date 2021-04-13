@@ -130,8 +130,8 @@ get_sp_data <- function(sp, type, id) {
         )
         counts <- dplyr::select(counts, .data[["year"]], where(max_gt_zero))
         counts <- tidyr::pivot_longer(
-          counts, !.data[["year"]], names_tocache_name = "site",
-          values_to = "count", values_drop_na = TRUE
+          counts, !.data[["year"]], names_to = "site", values_to = "count",
+          values_drop_na = TRUE
         )
 
         set_input_cache(cache_name, counts, hash, sp)
