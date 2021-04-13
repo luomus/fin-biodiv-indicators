@@ -42,7 +42,7 @@ get_sp_data <- function(sp, type, id) {
       promises::future_promise({
         wait_for_input_cache_available(hash)
         get_from_input_cache(hash, sp, type)},
-        globals = "hash",
+        globals = c("hash", "sp", "type"),
         packages = "indicators"
       )
 
