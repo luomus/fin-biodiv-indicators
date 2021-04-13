@@ -62,6 +62,8 @@ get_survey_data <- function(name, fltr, slct, id) {
         filter = fltr, select = slct, aggregate = "events", n = n, quiet = TRUE
       )
 
+      surveys[["n_events"]] <- NULL
+
       set_input_cache(name, surveys, hash)},
       globals = c("name", "fltr", "hash", "slct"),
       packages = c("finbif", "indicators"),
