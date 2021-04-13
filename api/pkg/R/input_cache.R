@@ -158,8 +158,6 @@ set_input_cache_index <- function(name, hash, available) {
 
 }
 
-
-
 #' Set input cache
 #'
 #' Cache input data in a database.
@@ -180,7 +178,7 @@ set_input_cache <- function(name, data, hash, sp = NULL) {
 
   on.exit(DBI::dbDisconnect(db))
 
-  df <- as.data.frame(c(sp = sp, data))
+  df <- as.data.frame(c(hash = hash, sp = sp, data))
 
   if (!RPostgres::dbExistsTable(db, name)) {
 
