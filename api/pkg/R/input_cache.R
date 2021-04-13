@@ -84,6 +84,8 @@ input_cache_available <- function(hash) {
 #' @param hash Hash of input.
 #' @param wait How long to wait between checking availability.
 #' @param time_out How many cycles to wait before timing out.
+#'
+#' @export
 
 wait_for_input_cache_available <- function(hash, wait = 10L, time_out = 60L) {
 
