@@ -55,7 +55,7 @@ svg_index <- function(sp, year, base, id) {
 
   if (promises::is.promise(data)) {
 
-    promises::then(data, svg_data)
+    promises::then(data, ~{svg_data(., id)})
 
   } else {
 
