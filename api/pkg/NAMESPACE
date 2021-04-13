@@ -2,6 +2,7 @@
 
 export(create_input_cache_index)
 export(create_output_cache)
+export(get_from_input_cache)
 export(get_from_output_cache)
 export(is_output_cached)
 export(log_message)
