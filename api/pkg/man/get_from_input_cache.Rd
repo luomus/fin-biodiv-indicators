@@ -7,7 +7,7 @@
 get_from_input_cache(hash, sp, type)
 }
 \arguments{
-\item{hash}{Hash of input}
+\item{hash}{Hash of input.}
 
 \item{sp}{Species.}
 

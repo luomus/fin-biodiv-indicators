@@ -4,10 +4,12 @@
 \alias{log_message}
 \title{Log message}
 \usage{
-log_message(...)
+log_message(id, ...)
 }
 \arguments{
-\item{...}{Message components}
+\item{id}{Request ID for logging.}
+
+\item{...}{Message components.}
 }
 \description{
 Create a log message.

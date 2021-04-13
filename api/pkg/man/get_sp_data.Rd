@@ -4,12 +4,14 @@
 \alias{get_sp_data}
 \title{Get species observation data}
 \usage{
-get_sp_data(sp, type)
+get_sp_data(sp, type, id)
 }
 \arguments{
 \item{sp}{Species.}
 
 \item{type}{Survey type.}
+
+\item{id}{Request ID for logging.}
 }
 \description{
 Get species observation data from finbif.

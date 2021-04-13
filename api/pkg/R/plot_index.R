@@ -3,6 +3,7 @@
 #' Create a plot of an index
 #'
 #' @param data Data to plot.
+#' @param id Request ID for logging.
 #'
 #' @importFrom ggplot2 aes ggplot geom_ribbon geom_line theme_minimal xlab ylab
 #' @importFrom lubridate parse_date_time

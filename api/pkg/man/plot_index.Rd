@@ -4,10 +4,12 @@
 \alias{plot_index}
 \title{Plot index}
 \usage{
-plot_index(data)
+plot_index(data, id)
 }
 \arguments{
-\item{data}{Data to plot}
+\item{data}{Data to plot.}
+
+\item{id}{Request ID for logging.}
 }
 \description{
 Create a plot of an index

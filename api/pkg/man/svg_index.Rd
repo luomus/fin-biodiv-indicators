@@ -4,14 +4,16 @@
 \alias{svg_index}
 \title{Index svg}
 \usage{
-svg_index(sp, year, base)
+svg_index(sp, year, base, id)
 }
 \arguments{
-\item{sp}{Species}
+\item{sp}{Species.}
 
-\item{year}{Year}
+\item{year}{Year.}
 
-\item{base}{Base year of index}
+\item{base}{Base year of index.}
+
+\item{id}{Request ID for logging.}
 }
 \description{
 Create an svg from an indicator plot.

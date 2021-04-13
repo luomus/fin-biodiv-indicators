@@ -4,7 +4,7 @@
 \alias{get_survey_data}
 \title{Get survey data}
 \usage{
-get_survey_data(name, fltr, slct)
+get_survey_data(name, fltr, slct, id)
 }
 \arguments{
 \item{name}{Name of input.}
@@ -12,6 +12,8 @@ get_survey_data(name, fltr, slct)
 \item{fltr}{Filter.}
 
 \item{slct}{Column selection.}
+
+\item{id}{Request ID for logging.}
 }
 \description{
 Get survey data from finbif.
