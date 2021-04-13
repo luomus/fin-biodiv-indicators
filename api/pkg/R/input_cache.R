@@ -230,7 +230,7 @@ get_from_input_cache <- function(hash, sp, type) {
 
     if (!missing(sp) && !missing(type)) {
 
-      data <- dplyr::filter(data, sp == !!species[[type]][[sp]])
+      data <- dplyr::filter(data, sp == !!sp)
       data <- dplyr::select(data, -dplyr::any_of(c("sp", "hash")))
 
     }
