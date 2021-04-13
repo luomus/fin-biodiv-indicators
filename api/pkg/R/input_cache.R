@@ -211,6 +211,8 @@ set_input_cache <- function(name, data, hash, sp = NULL) {
 #' @importFrom RPostgres Postgres
 #' @importFrom DBI dbConnect dbDisconnect
 #' @importFrom dplyr collect filter tbl
+#'
+#' @export
 
 get_from_input_cache <- function(hash, sp, type) {
 
