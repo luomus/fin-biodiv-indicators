@@ -54,7 +54,7 @@ get_sp_data <- function(sp, type, id) {
 
     set_input_cache_index(paste0(type, "_counts"), hash, FALSE)
 
-    sp <- species[[type]][[sp]]
+    sp_id <- species[[type]][[sp]]
 
     begin_date <- "1958-12-01"
 
@@ -92,14 +92,14 @@ get_sp_data <- function(sp, type, id) {
 
     sp_data <- promises::future_promise({
       n <- finbif::finbif_occurrence(
-        sp, filter = fltr, select = slct, count_only = TRUE
+        sp_id, filter = fltr, select = slct, count_only = TRUE
       )
 
       finbif::finbif_occurrence(
-        sp, filter = fltr, select = slct, n = n, quiet = TRUE
+        sp_id, filter = fltr, select = slct, n = n, quiet = TRUE
       )
       },
-      globals = c("sp", "fltr", "slct"),
+      globals = c("sp_id", "fltr", "slct"),
       packages = "finbif",
       seed = TRUE
     )
