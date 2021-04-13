@@ -37,9 +37,10 @@ create_input_cache_index <- function() {
 #'
 #' @param hash Hash of input.
 #'
-#' @importFrom RPostgres Postgres
 #' @importFrom DBI dbConnect dbDisconnect
 #' @importFrom dplyr collect filter tbl
+#' @importFrom rlang .data
+#' @importFrom RPostgres Postgres
 
 get_from_input_cache_index <- function(hash) {
 
@@ -49,7 +50,7 @@ get_from_input_cache_index <- function(hash) {
 
   input_cache_index <- dplyr::tbl(db, "input_cache_index")
 
-  ans <- dplyr::filter(input_cache_index, .data[["hash"]] == !!hash)
+  ans <- dplyr::filter(input_cache_index, rlang::.data[["hash"]] == !!hash)
 
   dplyr::collect(ans)
 
@@ -208,9 +209,10 @@ set_input_cache <- function(name, data, hash, sp = NULL) {
 #' @param sp Species.
 #' @param type Survey type.
 #'
-#' @importFrom RPostgres Postgres
 #' @importFrom DBI dbConnect dbDisconnect
 #' @importFrom dplyr collect filter tbl
+#' @importFrom rlang .data
+#' @importFrom RPostgres Postgres
 #'
 #' @export
 
@@ -230,7 +232,7 @@ get_from_input_cache <- function(hash, sp, type) {
 
     if (!missing(sp) && !missing(type)) {
 
-      data <- dplyr::filter(data, sp == !!sp)
+      data <- dplyr::filter(data, rlang::.data[["sp"]] == !!sp)
       data <- dplyr::select(data, -dplyr::any_of(c("sp", "hash")))
 
     }
@@ -240,6 +242,80 @@ get_from_input_cache <- function(hash, sp, type) {
   } else {
 
     invisible(NULL)
+
+  }
+
+}
+
+#' Clean input cache
+#'
+#' Remove any unavailable caches from index and any unindexed data.
+#'
+#' @param ... Name components.
+
+input_cache_name <- function(...) {
+
+  paste("cached_input", ..., sep = "_")
+
+}
+
+#' Clean input cache
+#'
+#' Remove any unavailable caches from index and any unindexed data.
+#'
+
+#' @importFrom DBI dbConnect dbDisconnect dbExecute
+#' @importFrom dplyr count filter pull tbl
+#' @importFrom rlang .data
+#' @importFrom RPostgres  dbListTables dbRemoveTable Postgres
+#'
+#' @export
+
+clean_input_cache <- function() {
+
+  db <- DBI::dbConnect(RPostgres::Postgres())
+
+  on.exit(DBI::dbDisconnect(db))
+
+  DBI::dbExecute(
+    db, "DELETE FROM input_cache_index WHERE available IS NOT TRUE"
+  )
+
+  index <- dplyr::tbl(db, "input_cache_index")
+
+  caches <- RPostgres::dbListTables(db)
+  caches <- grep("^cached_input", caches, value = TRUE)
+
+  for (i in caches) {
+
+    rows  <- dplyr::filter(index, rlang::.data[["name"]] == !!i)
+
+    nrows <- dplyr::count(rows)
+    nrows <- dplyr::pull(nrows, "n")
+
+    if (identical(nrows, 0L)) {
+
+      RPostgres::dbRemoveTable(db, i)
+
+      next
+
+    }
+
+    indexed_hashes <- dplyr::pull(rows, "hash")
+
+    cache <- dplyr::tbl(db, i)
+
+    unindexed_hashes <- dplyr::filter(
+      cache, !rlang::.data[["hash"]] %in% !!indexed_hashes
+    )
+    unindexed_hashes <- dplyr::distinct(cache, rlang::.data[["hash"]])
+    unindexed_hashes <- dplyr::pull(unindexed_hashes, "hash")
+
+    for (j in unindexed_hashes) {
+
+      DBI::dbExecute(db, sprintf("DELETE FROM %s WHERE hash = '%s'", i, j))
+
+    }
 
   }
 

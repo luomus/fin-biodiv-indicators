@@ -64,9 +64,12 @@ set_output_cache <- function(hash, data) {
 #'
 #' @param hash Hash of input
 #'
-#' @importFrom RPostgres Postgres
+
 #' @importFrom DBI dbConnect dbDisconnect
 #' @importFrom dplyr collect filter tbl
+#' @importFrom rlang .data
+#' @importFrom RPostgres Postgres
+#'
 #' @export
 
 get_from_output_cache <- function(hash) {
@@ -76,7 +79,7 @@ get_from_output_cache <- function(hash) {
   on.exit(DBI::dbDisconnect(db))
 
   x <- dplyr::tbl(db, "output_cache")
-  x <- dplyr::filter(x, .data[["hash"]] == !!hash)
+  x <- dplyr::filter(x, rlang::.data[["hash"]] == !!hash)
   dplyr::collect(x)
 
 }

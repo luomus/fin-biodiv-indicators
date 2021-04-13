@@ -7,6 +7,7 @@ options(
 
 create_output_cache()
 create_input_cache_index()
+clean_input_cache()
 
 library("promises")
 library("future")

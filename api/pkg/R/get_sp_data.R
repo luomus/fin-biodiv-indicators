@@ -52,7 +52,9 @@ get_sp_data <- function(sp, type, id) {
 
     log_message(id, "Setting ", sp, " ", type, " count data in cache index")
 
-    set_input_cache_index(paste0(type, "_counts"), hash, FALSE)
+    cache_name <- input_cache_name(type, "counts")
+
+    set_input_cache_index(cache_name, hash, FALSE)
 
     sp_id <- species[[type]][[sp]]
 
@@ -72,7 +74,7 @@ get_sp_data <- function(sp, type, id) {
     log_message(id, "Getting ", type, " survey data")
 
     surveys <- get_survey_data(
-      paste0(type, "_surveys"),
+      input_cache_name(type, "surveys"),
       fltr, c("event_id", "location_id", "date_time"),
       id
     )
@@ -81,7 +83,10 @@ get_sp_data <- function(sp, type, id) {
       surveys,
       ~{
         dplyr::mutate(
-          ., year = floor(lubridate::quarter(.data[["date_time"]], TRUE, 12L))
+          .,
+          year = floor(
+            lubridate::quarter(rlang::.data[["date_time"]], TRUE, 12L)
+          )
         )
       }
     )
@@ -112,28 +117,32 @@ get_sp_data <- function(sp, type, id) {
         counts <- dplyr::left_join(
           .[["surveys"]], .[["sp_data"]], by = "event_id"
         )
-        counts <- dplyr::arrange(counts, .data[["date_time"]])
+        counts <- dplyr::arrange(counts, rlang::.data[["date_time"]])
         counts <- dplyr::mutate(
-          counts, taxon_id = tidyr::replace_na(.data[["taxon_id"]], "NO_TAXA")
+          counts,
+          taxon_id = tidyr::replace_na(rlang::.data[["taxon_id"]], "NO_TAXA")
         )
         counts <- tidyr::pivot_wider(
           counts, tidyselect::all_of(c("year", "location_id")),
-          names_from = .data[["taxon_id"]],
-          values_from = .data[["abundance"]], values_fill = 0L,
+          names_from = rlang::.data[["taxon_id"]],
+          values_from = rlang::.data[["abundance"]], values_fill = 0L,
           values_fn = dplyr::first
         )
         counts <- dplyr::select(counts, dplyr::matches("[^NO_TAXA]"))
         counts <- tidyr::pivot_wider(
-          counts, .data[["year"]], names_from = .data[["location_id"]],
+          counts, rlang::.data[["year"]],
+          names_from = rlang::.data[["location_id"]],
           values_from = !tidyselect::all_of(c("year", "location_id"))
         )
-        counts <- dplyr::select(counts, .data[["year"]], where(max_gt_zero))
+        counts <- dplyr::select(
+          counts, rlang::.data[["year"]], where(max_gt_zero)
+        )
         counts <- tidyr::pivot_longer(
-          counts, !.data[["year"]], names_to = "site", values_to = "count",
-          values_drop_na = TRUE
+          counts, !rlang::.data[["year"]], names_tocache_name = "site",
+          values_to = "count", values_drop_na = TRUE
         )
 
-        set_input_cache(paste0(type, "_counts"), counts, hash, sp)
+        set_input_cache(cache_name, counts, hash, sp)
       }
     )
   }
