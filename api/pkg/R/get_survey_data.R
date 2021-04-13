@@ -27,7 +27,22 @@ get_survey_data <- function(name, fltr, slct, id) {
 
     log_message(id, "Getting ", name, " survey data from cache")
 
-    promises::promise_resolve(get_from_input_cache(hash))
+    if (input_cache_available(hash)) {
+
+      promises::promise_resolve(get_from_input_cache(hash))
+
+    } else {
+
+      log_message(id, "Waiting for ", name, " survey cache to be available")
+
+      promises::future_promise({
+        wait_for_input_cache_available(hash)
+        get_from_input_cache(hash)},
+        globals = "hash",
+        packages = "indicators"
+      )
+
+    }
 
   } else {
 

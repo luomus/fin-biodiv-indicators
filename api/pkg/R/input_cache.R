@@ -66,6 +66,43 @@ is_input_cached <- function(hash) {
   identical(nrow(ans), 1L)
 }
 
+#' Check if input cache is available
+#'
+#' Check if the cached input data is available.
+#'
+#' @param hash Hash of input.
+
+input_cache_available <- function(hash) {
+  ans <- get_from_input_cache_index(hash)
+  isTRUE(ans[["available"]])
+}
+
+#' Wait for input cache
+#'
+#' Wait for cached input data to become available.
+#'
+#' @param hash Hash of input.
+#' @param wait How long to wait between checking availability.
+#' @param time_out How many cycles to wait before timing out.
+
+wait_for_input_cache_available <- function(hash, wait = 10L, time_out = 60L) {
+
+  stopifnot(time_out > 0L)
+
+  available <- input_cache_available(hash)
+
+  if (!available) {
+
+    Sys.sleep(wait)
+
+    wait_for_input_cache_available(hash, wait, time_out - 1L)
+
+  }
+
+  invisible(NULL)
+
+}
+
 #' Check input cache validity
 #'
 #' Check if the input cache is newer than the last modification time.

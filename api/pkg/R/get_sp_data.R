@@ -29,7 +29,24 @@ get_sp_data <- function(sp, type, id) {
 
     log_message(id, "Getting ", sp, "'s ", type, " data from input cache")
 
-    promises::promise_resolve(get_from_input_cache(hash, sp, type))
+    if (input_cache_available(hash)) {
+
+      promises::promise_resolve(get_from_input_cache(hash, sp, type))
+
+    } else {
+
+      log_message(
+        id, "Waiting for ", sp, "'s ", type, " survey cache to be available"
+      )
+
+      promises::future_promise({
+        wait_for_input_cache_available(hash)
+        get_from_input_cache(hash, sp, type)},
+        globals = "hash",
+        packages = "indicators"
+      )
+
+    }
 
   } else {
 
