@@ -1,6 +1,6 @@
 library("indicators")
 options(
-  finbif_cache_path = "tmpsvgs",
+  finbif_use_cache = FALSE,
   finbif_warehouse_query = "warehouse/private-query/",
   finbif_email = Sys.getenv("FINBIF_EMAIL"),
   indicator_logging = TRUE
