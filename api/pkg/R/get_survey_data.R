@@ -35,10 +35,13 @@ get_survey_data <- function(name, fltr, slct, id) {
 
       log_message(id, "Waiting for ", name, " survey cache to be available")
 
+      op <- options()
+
       promises::future_promise({
+        options(op)
         wait_for_input_cache_available(hash)
         get_from_input_cache(hash)},
-        globals = "hash",
+        globals = c("hash", "op"),
         packages = "indicators"
       )
 
@@ -52,7 +55,11 @@ get_survey_data <- function(name, fltr, slct, id) {
 
     log_message(id, "Getting ", name, " survey data from FinBIF")
 
+    op <- options()
+
     promises::future_promise({
+
+      options(op)
 
       n <- finbif::finbif_occurrence(
         filter = fltr, select = slct, aggregate = "events", count_only = TRUE
@@ -65,7 +72,7 @@ get_survey_data <- function(name, fltr, slct, id) {
       surveys[["n_events"]] <- NULL
 
       set_input_cache(name, surveys, hash)},
-      globals = c("name", "fltr", "hash", "slct"),
+      globals = c("name", "fltr", "hash", "slct", "op"),
       packages = c("finbif", "indicators"),
       seed = TRUE
     )

@@ -39,10 +39,13 @@ get_sp_data <- function(sp, type, id) {
         id, "Waiting for ", sp, "'s ", type, " survey cache to be available"
       )
 
+      op <- options()
+
       promises::future_promise({
+        options(op)
         wait_for_input_cache_available(hash)
         get_from_input_cache(hash, sp, type)},
-        globals = c("hash", "sp", "type"),
+        globals = c("hash", "sp", "type", "op"),
         packages = "indicators"
       )
 
@@ -92,7 +95,11 @@ get_sp_data <- function(sp, type, id) {
 
     log_message(id, "Getting ", sp, " count data from FinBIF")
 
+    op <- options()
+
     sp_data <- promises::future_promise({
+      options(op)
+
       n <- finbif::finbif_occurrence(
         sp_id, filter = fltr, select = slct, count_only = TRUE
       )
@@ -101,8 +108,8 @@ get_sp_data <- function(sp, type, id) {
         sp_id, filter = fltr, select = slct, n = n, quiet = TRUE
       )
       },
-      globals = c("sp_id", "fltr", "slct"),
-      packages = "finbif",
+      globals = c("sp_id", "fltr", "slct", "op"),
+      packages = c("finbif", "indicators"),
       seed = TRUE
     )
 

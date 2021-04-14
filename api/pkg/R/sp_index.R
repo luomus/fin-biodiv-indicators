@@ -92,7 +92,9 @@ calc_index <- function(sp, year, base, id) {
     data,
     ~{
       df <- .
+      op <- options()
       promises::future_promise({
+        options(op)
         ans <- rtrim::index(
           rtrim::trim(
             count ~ site + year, data = df, model = 2, changepoints = "all"
@@ -108,7 +110,7 @@ calc_index <- function(sp, year, base, id) {
         set_output_cache(hash, serialize(ans, NULL))
 
         ans},
-        globals = c("base", "df", "year", "hash"),
+        globals = c("base", "df", "year", "hash", "op"),
         packages = c("rtrim", "indicators")
       )
     }
