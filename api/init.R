@@ -1,7 +1,8 @@
 library("indicators")
 options(
   finbif_cache_path = "tmpsvgs",
-  finbif_warehouse_query = "warehouse/query/",
+  finbif_warehouse_query = "warehouse/private-query/",
+  finbif_email = getOption("FINBIF_EMAIL"),
   indicator_logging = TRUE
 )
 

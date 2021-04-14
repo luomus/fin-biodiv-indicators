@@ -22,11 +22,13 @@ ENV LANG en_US.UTF-8
 ARG PGUSER
 ARG PGPASSWORD
 ARG FINBIF_ACCESS_TOKEN
+ARG FINBIF_EMAIL
 
 RUN  echo "PGHOST='postgres'" >> /usr/lib/R/etc/Renviron.site \
   && echo "PGUSER='${PGUSER}'" >> /usr/lib/R/etc/Renviron.site \
   && echo "PGPASSWORD='${PGPASSWORD}'" >> /usr/lib/R/etc/Renviron.site \
-  && echo "FINBIF_ACCESS_TOKEN='${FINBIF_ACCESS_TOKEN}'" >> /usr/lib/R/etc/Renviron.site
+  && echo "FINBIF_ACCESS_TOKEN='${FINBIF_ACCESS_TOKEN}'" >> /usr/lib/R/etc/Renviron.site \
+  && echo "FINBIF_EMAIL='${FINBIF_EMAIL}'" >> /usr/lib/R/etc/Renviron.site
 
 RUN  R -e "install.packages('bspm')" \
   && echo "bspm::enable()" >> /etc/R/Rprofile.site \
