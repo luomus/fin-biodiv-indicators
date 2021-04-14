@@ -17,6 +17,7 @@ services:
         - "PGUSER=${PGUSER}"
         - "PGPASSWORD=${PGPASSWORD}"
         - "FINBIF_ACCESS_TOKEN=${FINBIF_ACCESS_TOKEN}"
+        - "FINBIF_EMAIL=${FINBIF_EMAIL}"
     restart: always
     tmpfs:
       - "/tmpsvgs"
