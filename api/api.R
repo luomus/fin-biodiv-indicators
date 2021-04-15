@@ -19,7 +19,7 @@ cors <- function(req, res) {
 #* @param year Year
 #* @param base Base year of index
 #* @get /sp-index/json
-function(sp, year, base) {
+function(sp, year, base, req) {
 
   id <- digest::digest(req)
 
@@ -36,7 +36,7 @@ function(sp, year, base) {
 #* @param base Base year of index
 #* @serializer csv
 #* @get /sp-index/csv
-function(sp, year, base) {
+function(sp, year, base, req) {
 
   id <- digest::digest(req)
 
@@ -46,7 +46,6 @@ function(sp, year, base) {
   sp_index(sp, year, base, id)
 
 }
-
 
 #* Return a plot
 #* @param sp Species
