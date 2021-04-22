@@ -308,12 +308,24 @@ clean_input_cache <- function() {
     unindexed_hashes <- dplyr::filter(
       cache, !.data[["hash"]] %in% !!indexed_hashes
     )
-    unindexed_hashes <- dplyr::distinct(cache, .data[["hash"]])
+    unindexed_hashes <- dplyr::distinct(unindexed_hashes, .data[["hash"]])
     unindexed_hashes <- dplyr::pull(unindexed_hashes, "hash")
 
     for (j in unindexed_hashes) {
 
       DBI::dbExecute(db, sprintf("DELETE FROM %s WHERE hash = '%s'", i, j))
+
+    }
+
+    missing_indexes <- dplyr::anti_join(rows, cache, "hash")
+
+    missing_indexes <- dplyr::pull(missing_indexes, "hash")
+
+    for (k in missing_indexes) {
+
+      DBI::dbExecute(
+        db, sprintf("DELETE FROM input_cache_index WHERE hash = '%s'", k)
+      )
 
     }
 
