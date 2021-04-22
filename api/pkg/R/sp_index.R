@@ -48,7 +48,7 @@ sp_index <- function(sp, year, base, id) {
 
       hash <- digest::digest(list(sp, year, base))
 
-      log_message(id, "Checking output cache for index data")
+      log_message(id, "Checking output cache for index data: ", hash)
 
       cached_data <- get_from_output_cache(hash)
 
@@ -86,7 +86,7 @@ calc_index <- function(sp, year, base, id) {
 
   data <- get_sp_data(sp, "winter_birds", id)
 
-  log_message(id, "Calculating index for ", sp)
+  log_message(id, "Calculating index for ", sp, ": ", hash)
 
   promises::then(
     data,
