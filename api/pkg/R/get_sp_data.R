@@ -46,7 +46,8 @@ get_sp_data <- function(sp, type, id) {
         wait_for_input_cache_available(hash)
         get_from_input_cache(hash, sp, type)},
         globals = c("hash", "sp", "type", "op"),
-        packages = "indicators"
+        packages = "indicators",
+        seed = TRUE
       )
 
     }

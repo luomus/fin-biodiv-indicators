@@ -111,7 +111,8 @@ calc_index <- function(sp, year, base, id) {
 
         ans},
         globals = c("base", "df", "year", "hash", "op"),
-        packages = c("rtrim", "indicators")
+        packages = c("rtrim", "indicators"),
+        seed = TRUE
       )
     }
   )

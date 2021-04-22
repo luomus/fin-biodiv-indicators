@@ -42,7 +42,8 @@ get_survey_data <- function(name, fltr, slct, id) {
         wait_for_input_cache_available(hash)
         get_from_input_cache(hash)},
         globals = c("hash", "op"),
-        packages = "indicators"
+        packages = "indicators",
+        seed = TRUE
       )
 
     }
