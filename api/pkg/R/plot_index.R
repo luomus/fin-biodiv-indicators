@@ -1,40 +1,33 @@
-#' Plot index
+#' Multi-species index svg
 #'
-#' Create a plot of an index
+#' Create an svg from a multispecies indicator plot.
 #'
-#' @param data Data to plot.
+#' @param index Which index?
 #' @param id Request ID for logging.
 #'
-#' @importFrom ggplot2 aes ggplot geom_ribbon geom_line theme_minimal xlab ylab
-#' @importFrom lubridate parse_date_time
+#' @importFrom digest digest
+#' @importFrom grDevices dev.off
+#' @importFrom promises is.promise then
+#' @importFrom svglite svglite
 #' @export
 
-plot_index <- function(data, id) {
+svg_ms_index <- function(index, id) {
 
-  log_message(id, "Creating a plot")
+  data <- ms_index(index, id)
 
-  year <- data[["year"]]
-  index <- data[["index"]]
-  sd <- data[["sd"]]
+  if (promises::is.promise(data)) {
 
-  gg <- ggplot2::ggplot() +
-    ggplot2::aes(
-      x = lubridate::parse_date_time(year, "Y"),
-      y = index,
-      ymin = index - sd,
-      ymax = index + sd
-    ) +
-    ggplot2::geom_ribbon(alpha = .2) +
-    ggplot2::geom_line() +
-    ggplot2::ylab(NULL) +
-    ggplot2::xlab(NULL) +
-    ggplot2::theme_minimal()
+    promises::then(data, ~{svg_data(., id)})
 
-  print(gg)
+  } else {
+
+    svg_data(data, id)
+
+  }
 
 }
 
-#' Index svg
+#' Species index svg
 #'
 #' Create an svg from an indicator plot.
 #'
@@ -49,7 +42,7 @@ plot_index <- function(data, id) {
 #' @importFrom svglite svglite
 #' @export
 
-svg_index <- function(sp, year, base, id) {
+svg_sp_index <- function(sp, year, base, id) {
 
   data <- sp_index(sp, year, base, id)
 
@@ -95,5 +88,41 @@ svg_data <- function(data, id) {
     svg
 
   }
+
+}
+
+#' Plot index
+#'
+#' Create a plot of an index
+#'
+#' @param data Data to plot.
+#' @param id Request ID for logging.
+#'
+#' @importFrom ggplot2 aes ggplot geom_ribbon geom_line theme_minimal xlab ylab
+#' @importFrom lubridate parse_date_time
+#' @export
+
+plot_index <- function(data, id) {
+
+  log_message(id, "Creating a plot")
+
+  year <- data[["year"]]
+  index <- data[["index"]]
+  sd <- data[["sd"]]
+
+  gg <- ggplot2::ggplot() +
+    ggplot2::aes(
+      x = lubridate::parse_date_time(year, "Y"),
+      y = index,
+      ymin = index - sd,
+      ymax = index + sd
+    ) +
+    ggplot2::geom_ribbon(alpha = .2) +
+    ggplot2::geom_line() +
+    ggplot2::ylab(NULL) +
+    ggplot2::xlab(NULL) +
+    ggplot2::theme_minimal()
+
+  print(gg)
 
 }

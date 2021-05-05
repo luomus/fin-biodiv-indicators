@@ -25,12 +25,16 @@ Imports:
     grDevices,
     lubridate,
     promises,
+    purrr,
     rlang,
     RPostgres,
     rtrim,
+    stats,
     svglite,
+    tibble,
     tidyr,
-    tidyselect
+    tidyselect,
+    utils
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -60,7 +60,7 @@ sp_index <- function(sp, year, base, id) {
 
       } else {
 
-        calc_index(sp, year, base, id)
+        calc_sp_index(sp, year, base, id)
 
       }
 
@@ -74,7 +74,7 @@ sp_index <- function(sp, year, base, id) {
 #' @importFrom digest digest
 #' @importFrom rtrim index trim
 
-calc_index <- function(sp, year, base, id) {
+calc_sp_index <- function(sp, year, base, id) {
 
   force(sp)
   force(year)

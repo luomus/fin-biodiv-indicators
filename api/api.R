@@ -14,7 +14,36 @@ cors <- function(req, res) {
   }
 }
 
-#* Return single species index as json
+#* Return multi-species index as json
+#* @param index Which index to return
+#* @get /ms-index/json
+function(index, req) {
+
+  id <- digest::digest(req)
+
+  log_message(id, "===New Request===")
+  log_message(id, "JSON request made for multi-species index of ", index)
+
+  ms_index(species(index, "spcode"), id)
+
+}
+
+#* Return multi-species index as csv
+#* @param index Which index to return
+#* @serializer csv
+#* @get /ms-index/csv
+function(index, req) {
+
+  id <- digest::digest(req)
+
+  log_message(id, "===New Request===")
+  log_message(id, "CSV request made for multi-species index of ", index)
+
+  ms_index(species(index, "spcode"), id)
+
+}
+
+#* Return single-species index as json
 #* @param sp Species
 #* @param year Year
 #* @param base Base year of index
@@ -47,7 +76,41 @@ function(sp, year, base, req) {
 
 }
 
-#* Return a plot
+#* Return a multi-species index plot
+#* @param index Which index to return.
+#* @get /ms-plot
+function(index, res, req) {
+
+  id <- digest::digest(req)
+
+  log_message(id, "===New Request===")
+  log_message(id, "Request made for plot of ", index)
+
+  res$setHeader("Content-Type", "image/svg+xml")
+  res$setHeader("Content-Encoding", "gzip")
+  res$setHeader("Content-Disposition", "inline")
+
+  svg <- svg_ms_index(species(index, "spcode"), id)
+
+  if (promises::is.promise(svg)) {
+
+    res_body <- function(svg) {
+      res$body <- svg
+      res
+    }
+
+    promises::then(svg, res_body)
+
+  } else {
+
+    res$body <- svg
+    res
+
+  }
+
+}
+
+#* Return single-species index plot
 #* @param sp Species
 #* @param year Year
 #* @param base Base year of index
@@ -63,7 +126,7 @@ function(sp, year, base, res, req) {
   res$setHeader("Content-Encoding", "gzip")
   res$setHeader("Content-Disposition", "inline")
 
-  svg <- svg_index(sp, year, base, id)
+  svg <- svg_sp_index(sp, year, base, id)
 
   if (promises::is.promise(svg)) {
 

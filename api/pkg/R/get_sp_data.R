@@ -60,7 +60,7 @@ get_sp_data <- function(sp, type, id) {
 
     set_input_cache_index(cache_name, hash, FALSE)
 
-    sp_id <- species[[type]][[sp]]
+    sp_id <- species(type)[[sp]]
 
     begin_date <- "1958-12-01"
 
