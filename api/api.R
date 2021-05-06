@@ -1,7 +1,10 @@
 #* @apiTitle Finnish Biodiversity Indicators
 #* @apiDescription Tracking biodiversity trends in Finland
+#* @apiVersion 0.1.0.9000
+#* @apiLicense list(name = "MIT", url = "https://opensource.org/licenses/MIT")
 #* @apiTag Indices Get a biodiversity index
 #* @apiTag Plots Get a plot of a biodiversity index
+#* @apiTag Lists List available indices
 
 #* @filter cors
 cors <- function(req, res) {
@@ -17,6 +20,35 @@ cors <- function(req, res) {
   } else {
     plumber::forward()
   }
+}
+
+#* Return list of available indices
+#* @tag Lists
+#* @get /list/indices
+function(req) {
+
+  id <- digest::digest(req)
+
+  log_message(id, "===New Request===")
+  log_message(id, "JSON request made for list of indices")
+
+  "winter_birds"
+
+}
+
+#* Return list of species for an index
+#* @param index Which index to return
+#* @tag Lists
+#* @get /list/sp
+function(index, req) {
+
+  id <- digest::digest(req)
+
+  log_message(id, "===New Request===")
+  log_message(id, "JSON request made for list of species", index)
+
+  species(index, "spcode")
+
 }
 
 #* Return multi-species index as json

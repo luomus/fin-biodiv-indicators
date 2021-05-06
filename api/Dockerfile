@@ -31,14 +31,13 @@ RUN  echo "PGHOST='postgres'" >> /usr/lib/R/etc/Renviron.site \
   && echo "FINBIF_EMAIL='${FINBIF_EMAIL}'" >> /usr/lib/R/etc/Renviron.site
 
 RUN  R -e "install.packages('bspm')" \
-  && echo "bspm::enable()" >> /etc/R/Rprofile.site \
-  && R -e "install.packages(c('dbplyr', 'ggplot2', 'finbif', 'plumber', 'remotes', 'readr', 'rlang', 'RPostgres', 'rtrim', 'tidyr'))"
+  && R -e "bspm::enable(); install.packages(c('dbplyr', 'curl', 'ggplot2', 'remotes', 'readr', 'rlang', 'RPostgres', 'rtrim', 'sodium', 'tidyr'))"
 
 RUN  echo "deb http://deb.debian.org/debian unstable main contrib" > /etc/apt/sources.list \
   && echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections \
   && install_packages ttf-mscorefonts-installer
 
-RUN  R -e "bspm::disable(); install.packages(c('svglite', 'fastmap', 'future', 'promises'))"
+RUN  R -e "install.packages(c('fastmap', 'future', 'httr', 'lutz', 'plumber', 'promises', 'svglite'))"
 
 RUN mkdir -p /home/user/tmpsvgs
 
