@@ -1,3 +1,8 @@
+#* @apiTitle Finnish Biodiversity Indicators
+#* @apiDescription Tracking biodiversity trends in Finland
+#* @apiTag Indices Get a biodiversity index
+#* @apiTag Plots Get a plot of a biodiversity index
+
 #* @filter cors
 cors <- function(req, res) {
   res$setHeader("Access-Control-Allow-Origin", "*")
@@ -16,6 +21,7 @@ cors <- function(req, res) {
 
 #* Return multi-species index as json
 #* @param index Which index to return
+#* @tag Indices
 #* @get /ms-index/json
 function(index, req) {
 
@@ -31,6 +37,7 @@ function(index, req) {
 #* Return multi-species index as csv
 #* @param index Which index to return
 #* @serializer csv
+#* @tag Indices
 #* @get /ms-index/csv
 function(index, req) {
 
@@ -47,6 +54,7 @@ function(index, req) {
 #* @param sp Species
 #* @param year Year
 #* @param base Base year of index
+#* @tag Indices
 #* @get /sp-index/json
 function(sp, year, base, req) {
 
@@ -64,7 +72,9 @@ function(sp, year, base, req) {
 #* @param year Year
 #* @param base Base year of index
 #* @serializer csv
+#* @tag Indices
 #* @get /sp-index/csv
+
 function(sp, year, base, req) {
 
   id <- digest::digest(req)
@@ -77,7 +87,8 @@ function(sp, year, base, req) {
 }
 
 #* Return a multi-species index plot
-#* @param index Which index to return.
+#* @param index Which index to return
+#* @tag Plots
 #* @get /ms-plot
 function(index, res, req) {
 
@@ -114,6 +125,7 @@ function(index, res, req) {
 #* @param sp Species
 #* @param year Year
 #* @param base Base year of index
+#* @tag Plots
 #* @get /sp-plot
 function(sp, year, base, res, req) {
 
