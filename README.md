@@ -54,4 +54,4 @@ FINBIF_ACCESS_TOKEN=<token> PGUSER=<user> PGPASSWORD=<password> docker-compose u
 ### Graphics
 [http://localhost:8000/sp-plot?sp=SURULU](http://localhost:8000/sp-plot?sp=SURULU)
 
-![](pkg/man/figures/graph.svg)
+![](api/pkg/man/figures/graph.svg)
