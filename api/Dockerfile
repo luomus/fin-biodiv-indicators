@@ -23,12 +23,14 @@ ARG PGUSER
 ARG PGPASSWORD
 ARG FINBIF_ACCESS_TOKEN
 ARG FINBIF_EMAIL
+ARG FINBIF_WAREHOUSE_QUERY="warehouse/query/"
 
 RUN  echo "PGHOST='postgres'" >> /usr/lib/R/etc/Renviron.site \
   && echo "PGUSER='${PGUSER}'" >> /usr/lib/R/etc/Renviron.site \
   && echo "PGPASSWORD='${PGPASSWORD}'" >> /usr/lib/R/etc/Renviron.site \
   && echo "FINBIF_ACCESS_TOKEN='${FINBIF_ACCESS_TOKEN}'" >> /usr/lib/R/etc/Renviron.site \
-  && echo "FINBIF_EMAIL='${FINBIF_EMAIL}'" >> /usr/lib/R/etc/Renviron.site
+  && echo "FINBIF_EMAIL='${FINBIF_EMAIL}'" >> /usr/lib/R/etc/Renviron.site \
+  && echo "FINBIF_WAREHOUSE_QUERY='${FINBIF_WAREHOUSE_QUERY}'" >> /usr/lib/R/etc/Renviron.site
 
 RUN  R -e "install.packages('bspm')" \
   && R -e "bspm::enable(); install.packages(c('dbplyr', 'curl', 'ggplot2', 'remotes', 'readr', 'rlang', 'RPostgres', 'rtrim', 'sodium', 'tidyr'))"

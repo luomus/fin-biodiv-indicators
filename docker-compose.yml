@@ -18,6 +18,7 @@ services:
         - "PGPASSWORD=${PGPASSWORD}"
         - "FINBIF_ACCESS_TOKEN=${FINBIF_ACCESS_TOKEN}"
         - "FINBIF_EMAIL=${FINBIF_EMAIL}"
+        - "FINBIF_WAREHOUSE_QUERY=${FINBIF_WAREHOUSE_QUERY}"
     restart: always
     tmpfs:
       - "/tmpsvgs"

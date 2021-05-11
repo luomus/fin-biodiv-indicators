@@ -1,7 +1,7 @@
 library("indicators")
 options(
   finbif_use_cache = FALSE,
-  finbif_warehouse_query = "warehouse/private-query/",
+  finbif_warehouse_query = Sys.getenv("FINBIF_WAREHOUSE_QUERY"),
   finbif_email = Sys.getenv("FINBIF_EMAIL"),
   indicator_logging = TRUE
 )
