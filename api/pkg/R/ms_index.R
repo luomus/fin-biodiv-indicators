@@ -2,16 +2,17 @@
 #'
 #' Create a multi-species population indicator.
 #'
-#' @param sp Species.
+#' @param index Which index.
 #' @param id Request ID for logging.
 #'
 #' @importFrom digest digest
+#' @importFrom promises promise_resolve
 #'
 #' @export
 
-ms_index <- function(sp, id) {
+ms_index <- function(index, id) {
 
-  hash <- digest::digest(sp)
+  hash <- digest::digest(index)
 
   log_message(id, "Checking output cache for multi-species index data: ", hash)
 
@@ -21,11 +22,11 @@ ms_index <- function(sp, id) {
 
     log_message(id, "Getting multi-species index data from output cache")
 
-    unserialize(unlist(cached_data[["data"]]))
+    promises::promise_resolve(unserialize(unlist(cached_data[["data"]])))
 
   } else {
 
-    calc_ms_index(sp, hash = hash, id = id)
+    calc_ms_index(index, hash = hash, id = id)
 
   }
 
@@ -42,15 +43,19 @@ ms_index <- function(sp, id) {
 #' @importFrom utils head
 
 calc_ms_index <- function(
-  sp, n = 1000L, maxcv = 3, minindex = .01, trunc = 10, hash, id
+  index, n = 1000L, maxcv = 3, minindex = .01, trunc = 10, hash, id
 ) {
 
-  df <- promises::promise_all(.list = purrr::map(sp, ~sp_index(.x, id = id)))
+  spp <- species(index, "spcode")
+
+  df <- promises::promise_all(
+    .list = purrr::map(spp, ~sp_index(index = index, .x, id = id))
+  )
 
   promises::then(
     df,
     ~{
-      df <- tibble::tibble(sp, data = .)
+      df <- tibble::tibble(sp = spp, data = .)
       df <- tidyr::unnest(df, data)
       df <- dplyr::right_join(
         df,

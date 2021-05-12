@@ -2,8 +2,8 @@
 #'
 #' Get species observation data from finbif.
 #'
+#' @param index Which index.
 #' @param sp Species.
-#' @param type Survey type.
 #' @param id Request ID for logging.
 #'
 #' @importFrom digest digest
@@ -15,28 +15,28 @@
 #' @importFrom tidyr replace_na pivot_longer pivot_wider
 #' @importFrom tidyselect all_of
 
-get_sp_data <- function(sp, type, id) {
+get_sp_data <- function(index, sp, id) {
 
   force(sp)
 
-  hash <- digest::digest(list(sp, type))
+  hash <- digest::digest(list(index, sp))
 
-  log_message(id, "Checking if ", sp, "'s ", type, " data is cached")
+  log_message(id, "Checking if ", sp, "'s ", index, " data is cached")
 
   cached <- is_input_cached(hash)
 
   if (cached && input_cache_valid(hash)) {
 
-    log_message(id, "Getting ", sp, "'s ", type, " data from input cache")
+    log_message(id, "Getting ", sp, "'s ", index, " data from input cache")
 
     if (input_cache_available(hash)) {
 
-      promises::promise_resolve(get_from_input_cache(hash, sp, type))
+      promises::promise_resolve(get_from_input_cache(hash, sp, index))
 
     } else {
 
       log_message(
-        id, "Waiting for ", sp, "'s ", type, " survey cache to be available"
+        id, "Waiting for ", sp, "'s ", index, " survey cache to be available"
       )
 
       op <- options()
@@ -44,8 +44,8 @@ get_sp_data <- function(sp, type, id) {
       promises::future_promise({
         options(op)
         wait_for_input_cache_available(hash)
-        get_from_input_cache(hash, sp, type)},
-        globals = c("hash", "sp", "type", "op"),
+        get_from_input_cache(hash, sp, index)},
+        globals = c("hash", "sp", "index", "op"),
         packages = "indicators",
         seed = TRUE
       )
@@ -54,13 +54,13 @@ get_sp_data <- function(sp, type, id) {
 
   } else {
 
-    log_message(id, "Setting ", sp, " ", type, " count data in cache index")
+    log_message(id, "Setting ", sp, " ", index, " count data in cache index")
 
-    cache_name <- input_cache_name(type, "counts")
+    cache_name <- input_cache_name(index, "counts")
 
     set_input_cache_index(cache_name, hash, FALSE)
 
-    sp_id <- species(type)[[sp]]
+    sp_id <- species(index)[[sp]]
 
     begin_date <- "1958-12-01"
 
@@ -75,10 +75,10 @@ get_sp_data <- function(sp, type, id) {
       quality_issues = "both"
     )
 
-    log_message(id, "Getting ", type, " survey data")
+    log_message(id, "Getting ", index, " survey data")
 
     surveys <- get_survey_data(
-      input_cache_name(type, "surveys"),
+      input_cache_name(index, "surveys"),
       fltr, c("event_id", "location_id", "date_time"),
       id
     )

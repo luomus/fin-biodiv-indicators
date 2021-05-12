@@ -4,7 +4,7 @@
 \alias{species}
 \title{Species list}
 \usage{
-species(index = "winter_birds", which = c("mx", "spcode"))
+species(index, which = c("mx", "spcode"))
 }
 \arguments{
 \item{index}{Which index to get species list from?}

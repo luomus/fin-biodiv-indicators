@@ -4,12 +4,12 @@
 \alias{get_sp_data}
 \title{Get species observation data}
 \usage{
-get_sp_data(sp, type, id)
+get_sp_data(index, sp, id)
 }
 \arguments{
-\item{sp}{Species.}
+\item{index}{Which index.}
 
-\item{type}{Survey type.}
+\item{sp}{Species.}
 
 \item{id}{Request ID for logging.}
 }

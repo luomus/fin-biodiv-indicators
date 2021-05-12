@@ -4,14 +4,12 @@
 \alias{svg_sp_index}
 \title{Species index svg}
 \usage{
-svg_sp_index(sp, year, base, id)
+svg_sp_index(index, sp, id)
 }
 \arguments{
+\item{index}{Which index?}
+
 \item{sp}{Species.}
-
-\item{year}{Year.}
-
-\item{base}{Base year of index.}
 
 \item{id}{Request ID for logging.}
 }

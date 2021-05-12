@@ -4,10 +4,10 @@
 \alias{ms_index}
 \title{Multi-species population indicator}
 \usage{
-ms_index(sp, id)
+ms_index(index, id)
 }
 \arguments{
-\item{sp}{Species.}
+\item{index}{Which index.}
 
 \item{id}{Request ID for logging.}
 }

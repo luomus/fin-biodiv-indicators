@@ -15,15 +15,7 @@ svg_ms_index <- function(index, id) {
 
   data <- ms_index(index, id)
 
-  if (promises::is.promise(data)) {
-
-    promises::then(data, ~{svg_data(., id)})
-
-  } else {
-
-    svg_data(data, id)
-
-  }
+  promises::then(data, ~{svg_data(., id)})
 
 }
 
@@ -31,9 +23,8 @@ svg_ms_index <- function(index, id) {
 #'
 #' Create an svg from an indicator plot.
 #'
+#' @param index Which index?
 #' @param sp Species.
-#' @param year Year.
-#' @param base Base year of index.
 #' @param id Request ID for logging.
 #'
 #' @importFrom digest digest
@@ -42,19 +33,11 @@ svg_ms_index <- function(index, id) {
 #' @importFrom svglite svglite
 #' @export
 
-svg_sp_index <- function(sp, year, base, id) {
+svg_sp_index <- function(index, sp, id) {
 
-  data <- sp_index(sp, year, base, id)
+  data <- sp_index(index, sp, id)
 
-  if (promises::is.promise(data)) {
-
-    promises::then(data, ~{svg_data(., id)})
-
-  } else {
-
-    svg_data(data, id)
-
-  }
+  promises::then(data, ~{svg_data(., id)})
 
 }
 

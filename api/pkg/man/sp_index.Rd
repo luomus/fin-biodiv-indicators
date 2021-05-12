@@ -4,14 +4,12 @@
 \alias{sp_index}
 \title{Population indicator}
 \usage{
-sp_index(sp, year, base, id)
+sp_index(index, sp, id)
 }
 \arguments{
+\item{index}{Which index.}
+
 \item{sp}{Species.}
-
-\item{year}{Year.}
-
-\item{base}{Base year of index.}
 
 \item{id}{Request ID for logging.}
 }

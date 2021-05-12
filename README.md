@@ -22,36 +22,27 @@ FINBIF_ACCESS_TOKEN=<token> PGUSER=<user> PGPASSWORD=<password> docker-compose u
 
 ## Usage
 ### JSON
-[http://localhost:8000/sp-index/json?sp=SURULU&year=1985:1988](http://localhost:8000/sp-index/json?sp=SURULU&year=1985:1988)
+[http://localhost:8000/sp-index/json?index=wb&sp=surulu](http://localhost:8000/sp-index/json?index=wb&sp=surulu)
 ```{javascript}
 [
   {
-    "year": 1985,
-    "index": 0.7096,
-    "sd": 0.0771
+    "year": 1959,
+    "index": 1,
+    "sd": 0
   },
   {
-    "year": 1986,
-    "index": 0.841,
-    "sd": 0.078
+    "year": 1960,
+    "index": 0.7512,
+    "sd": 0.0704
   },
-  {
-    "year": 1987,
-    "index": 0.829,
-    "sd": 0.0773
-  },
-  {
-    "year": 1988,
-    "index": 0.9182,
-    "sd": 0.084
-  }
-]
+
+...
 ```
 
 ### CSV
-[http://localhost:8000/sp-index/csv?sp=SURULU&year=1985:1988](http://localhost:8000/sp-index/csv?sp=SURULU&year=1985:1988)
+[http://localhost:8000/sp-index/csv?sp=SURULU](http://localhost:8000/sp-index/csv?index=wb&sp=surulu)
 
 ### Graphics
-[http://localhost:8000/sp-plot?sp=SURULU](http://localhost:8000/sp-plot?sp=SURULU)
+[http://localhost:8000/sp-plot?sp=SURULU](http://localhost:8000/sp-plot?index=wb&sp=surulu)
 
 ![](api/pkg/man/figures/graph.svg)

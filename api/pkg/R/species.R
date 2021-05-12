@@ -7,28 +7,28 @@
 #'
 #' @export
 
-species <- function(index = "winter_birds", which = c("mx", "spcode")) {
+species <- function(index, which = c("mx", "spcode")) {
 
   which <- match.arg(which)
 
   species <- list(
-    winter_birds = c(
-      POEMON = "MX.34535",
-      REGREG = "MX.33954",
-      LOPCRI = "MX.34553",
-      BONBON = "MX.26931",
-      TETURO = "MX.26928",
-      TETRIX = "MX.26926",
-      CERFAM = "MX.34616",
-      DRYMAR = "MX.30504",
-      LOXCUR = "MX.36358",
-      GLAPAS = "MX.29011",
-      PINENU = "MX.36351",
-      PICTRI = "MX.30453",
-      LOXPYT = "MX.36356",
-      SURULU = "MX.29008",
-      POECIN = "MX.34542",
-      PERINF = "MX.37095"
+    wb = c(
+      poemon = "MX.34535",
+      regreg = "MX.33954",
+      lopcri = "MX.34553",
+      bonbon = "MX.26931",
+      teturo = "MX.26928",
+      tetrix = "MX.26926",
+      cerfam = "MX.34616",
+      drymar = "MX.30504",
+      loxcur = "MX.36358",
+      glapas = "MX.29011",
+      pinenu = "MX.36351",
+      pictri = "MX.30453",
+      loxpyt = "MX.36356",
+      surulu = "MX.29008",
+      poecin = "MX.34542",
+      perinf = "MX.37095"
     )
   )
 
@@ -40,4 +40,21 @@ species <- function(index = "winter_birds", which = c("mx", "spcode")) {
     spcode = names(ans)
   )
 
+}
+
+#' Check species
+#'
+#' Check if a species is available
+#'
+#' @param index Which index to check if species is available for.
+#' @param sp Which species to check.
+#'
+#' @export
+
+check_sp <- function(index, sp) {
+  index <- check_index(index)
+  sp <- tolower(sp)
+  spp <- species(index, "spcode")
+  stopifnot(sp %in% spp)
+  sp
 }
