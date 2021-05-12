@@ -4,13 +4,13 @@
 \alias{output_cache_valid}
 \title{Check cache validity}
 \usage{
-output_cache_valid(cache, last_mod_time = as.Date("1970-01-01"))
+output_cache_valid(cache, index)
 }
 \arguments{
 \item{cache}{Cached data.}
 
-\item{last_mod_time}{Last time data was modified.}
+\item{index}{Which index.}
 }
 \description{
-Check if the cache is newer than the last modification time.
+Check if the cache is newer than the last modification time of the index data.
 }

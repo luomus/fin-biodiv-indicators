@@ -15,7 +15,7 @@ svg_ms_index <- function(index, id) {
 
   data <- ms_index(index, id)
 
-  promises::then(data, ~{svg_data(., id)})
+  promises::then(data, ~{svg_data(., index, id)})
 
 }
 
@@ -37,11 +37,11 @@ svg_sp_index <- function(index, sp, id) {
 
   data <- sp_index(index, sp, id)
 
-  promises::then(data, ~{svg_data(., id)})
+  promises::then(data, ~{svg_data(., index, id)})
 
 }
 
-svg_data <- function(data, id) {
+svg_data <- function(data, index, id) {
 
   hash <- digest::digest(data)
 
@@ -49,7 +49,7 @@ svg_data <- function(data, id) {
 
   cached_data <- get_from_output_cache(hash)
 
-  if (is_output_cached(cached_data)) {
+  if (output_cache_valid(cached_data)) {
 
     log_message(id, "Getting plot data from output cache")
 

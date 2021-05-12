@@ -9,7 +9,7 @@
 #' @importFrom digest digest
 #' @importFrom dplyr arrange first left_join matches mutate select
 #' @importFrom finbif finbif_occurrence
-#' @importFrom lubridate day month today quarter
+#' @importFrom lubridate quarter
 #' @importFrom promises future_promise promise_resolve then
 #' @importFrom rlang .data
 #' @importFrom tidyr replace_na pivot_longer pivot_wider
@@ -25,7 +25,11 @@ get_sp_data <- function(index, sp, id) {
 
   cached <- is_input_cached(hash)
 
-  if (cached && input_cache_valid(hash)) {
+  fltr <- filter_gen(index)
+
+  last_mod_time <- last_modified(fltr)
+
+  if (cached && input_cache_valid(hash, last_mod_time)) {
 
     log_message(id, "Getting ", sp, "'s ", index, " data from input cache")
 
@@ -62,24 +66,13 @@ get_sp_data <- function(index, sp, id) {
 
     sp_id <- species(index)[[sp]]
 
-    begin_date <- "1958-12-01"
-
-    end_date <- lubridate::today()
-    lubridate::month(end_date) <- 1L
-    lubridate::day(end_date) <- 31L
-
-    fltr <- list(
-      date_range_ymd = list(begin_date, end_date),
-      date_range_md = c("12-01", "01-31"),
-      collection = "Winter Bird Census",
-      quality_issues = "both"
-    )
-
     log_message(id, "Getting ", index, " survey data")
 
     surveys <- get_survey_data(
       input_cache_name(index, "surveys"),
-      fltr, c("event_id", "location_id", "date_time"),
+      fltr,
+      c("event_id", "location_id", "date_time"),
+      last_mod_time,
       id
     )
 

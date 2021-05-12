@@ -98,13 +98,23 @@ is_output_cached <- function(cache) {
 
 #' Check cache validity
 #'
-#' Check if the cache is newer than the last modification time.
+#' Check if the cache is newer than the last modification time of the index data.
 #'
 #' @param cache Cached data.
-#' @param last_mod_time Last time data was modified.
+#' @param index Which index.
 #'
 #' @export
 
-output_cache_valid <- function(cache, last_mod_time = as.Date("1970-01-01")) {
-  cache[, "time"] > last_mod_time
+output_cache_valid <- function(cache, index) {
+
+  is_cached <- is_output_cached(cache)
+
+  if (missing(index)) {
+
+    return(is_cached)
+
+  }
+
+  is_cached && unlist(cache[, "time"]) > last_modified(filter_gen(index))
+
 }

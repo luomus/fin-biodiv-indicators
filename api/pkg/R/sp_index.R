@@ -19,7 +19,7 @@ sp_index <- function(index, sp, id) {
 
   cached_data <- get_from_output_cache(hash)
 
-  if (is_output_cached(cached_data)) {
+  if (output_cache_valid(cached_data, index)) {
 
     log_message(id, "Getting index data from output cache")
 

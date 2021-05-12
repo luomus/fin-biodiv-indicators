@@ -5,13 +5,14 @@
 #' @param name Name of input.
 #' @param fltr Filter.
 #' @param slct Column selection.
+#' @param last_mod_time Last time upstream data was modified.
 #' @param id Request ID for logging.
 #'
 #' @importFrom digest digest
 #' @importFrom finbif finbif_occurrence
 #' @importFrom promises future_promise promise_resolve
 
-get_survey_data <- function(name, fltr, slct, id) {
+get_survey_data <- function(name, fltr,  slct, last_mod_time, id) {
 
   force(name)
   force(fltr)
@@ -23,7 +24,7 @@ get_survey_data <- function(name, fltr, slct, id) {
 
   cached <- is_input_cached(hash)
 
-  if (cached && input_cache_valid(hash)) {
+  if (cached && input_cache_valid(hash, last_mod_time)) {
 
     log_message(id, "Getting ", name, " survey data from cache")
 

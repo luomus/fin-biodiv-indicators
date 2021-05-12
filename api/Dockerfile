@@ -33,7 +33,7 @@ RUN  echo "PGHOST='postgres'" >> /usr/lib/R/etc/Renviron.site \
   && echo "FINBIF_WAREHOUSE_QUERY='${FINBIF_WAREHOUSE_QUERY}'" >> /usr/lib/R/etc/Renviron.site
 
 RUN  R -e "install.packages('bspm')" \
-  && R -e "bspm::enable(); install.packages(c('dbplyr', 'curl', 'ggplot2', 'remotes', 'readr', 'rlang', 'RPostgres', 'rtrim', 'sodium', 'tidyr'))"
+  && R -e "bspm::enable(); install.packages(c('dbplyr', 'curl', 'ggplot2', 'memoise', 'remotes', 'readr', 'rlang', 'RPostgres', 'rtrim', 'sodium', 'tidyr'))"
 
 RUN  echo "deb http://deb.debian.org/debian unstable main contrib" > /etc/apt/sources.list \
   && echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections \
