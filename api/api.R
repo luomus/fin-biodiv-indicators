@@ -95,8 +95,7 @@ function(index, req) {
 #* @get /sp-index/json
 function(index, sp, req) {
 
-  index <- check_index(index)
-  sp <- check_sp(sp)
+  sp <- check_sp(index, sp)
 
   id <- digest::digest(req)
 
@@ -115,8 +114,7 @@ function(index, sp, req) {
 #* @get /sp-index/csv
 function(index, sp, req) {
 
-  index <- check_index(index)
-  sp <- check_sp(sp)
+  sp <- check_sp(index, sp)
 
   id <- digest::digest(req)
 
@@ -160,8 +158,7 @@ function(index, res, req) {
 #* @get /sp-plot
 function(index, sp, res, req) {
 
-  index <- check_index(index)
-  sp <- check_sp(sp)
+  sp <- check_sp(index, sp)
 
   id <- digest::digest(req)
 
