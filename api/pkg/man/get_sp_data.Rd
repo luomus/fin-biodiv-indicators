@@ -4,12 +4,14 @@
 \alias{get_sp_data}
 \title{Get species observation data}
 \usage{
-get_sp_data(index, sp, id)
+get_sp_data(index, sp, use_cache, id)
 }
 \arguments{
 \item{index}{Which index.}
 
 \item{sp}{Species.}
+
+\item{use_cache}{Whether to use cached data.}
 
 \item{id}{Request ID for logging.}
 }

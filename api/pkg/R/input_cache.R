@@ -113,7 +113,7 @@ wait_for_input_cache_available <- function(hash, wait = 10L, time_out = 60L) {
 #' @param hash  Hash of input.
 #' @param last_mod_time Last time data was modified.
 
-input_cache_valid <- function(hash, last_mod_time = as.Date("1970-01-01")) {
+input_cache_valid <- function(hash, last_mod_time) {
 
   ind <- get_from_input_cache_index(hash)
 

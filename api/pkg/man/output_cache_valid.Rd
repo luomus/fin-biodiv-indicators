@@ -4,10 +4,12 @@
 \alias{output_cache_valid}
 \title{Check cache validity}
 \usage{
-output_cache_valid(cache, index)
+output_cache_valid(cache, use_cache, index)
 }
 \arguments{
 \item{cache}{Cached data.}
+
+\item{use_cache}{Whether to use cached data.}
 
 \item{index}{Which index.}
 }

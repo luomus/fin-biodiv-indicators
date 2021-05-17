@@ -4,6 +4,7 @@
 #'
 #' @param index Which index.
 #' @param sp Species.
+#' @param use_cache Whether to use cached data.
 #' @param id Request ID for logging.
 #'
 #' @importFrom digest digest
@@ -15,7 +16,7 @@
 #' @importFrom tidyr replace_na pivot_longer pivot_wider
 #' @importFrom tidyselect all_of
 
-get_sp_data <- function(index, sp, id) {
+get_sp_data <- function(index, sp, use_cache, id) {
 
   force(sp)
 
@@ -27,7 +28,15 @@ get_sp_data <- function(index, sp, id) {
 
   fltr <- filter_gen(index)
 
-  last_mod_time <- last_modified(fltr)
+  if (use_cache) {
+
+    last_mod_time <- as.Date("1970-01-01")
+
+  } else {
+
+    last_mod_time <- last_modified(fltr)
+
+  }
 
   if (cached && input_cache_valid(hash, last_mod_time)) {
 

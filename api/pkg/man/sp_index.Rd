@@ -4,12 +4,14 @@
 \alias{sp_index}
 \title{Population indicator}
 \usage{
-sp_index(index, sp, id)
+sp_index(index, sp, use_cache, id)
 }
 \arguments{
 \item{index}{Which index.}
 
 \item{sp}{Species.}
+
+\item{use_cache}{Whether to use cached data.}
 
 \item{id}{Request ID for logging.}
 }

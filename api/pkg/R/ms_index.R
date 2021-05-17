@@ -3,6 +3,7 @@
 #' Create a multi-species population indicator.
 #'
 #' @param index Which index.
+#' @param use_cache Whether to use cached data.
 #' @param id Request ID for logging.
 #'
 #' @importFrom digest digest
@@ -10,7 +11,7 @@
 #'
 #' @export
 
-ms_index <- function(index, id) {
+ms_index <- function(index, use_cache, id) {
 
   hash <- digest::digest(index)
 
@@ -18,7 +19,7 @@ ms_index <- function(index, id) {
 
   cached_data <- get_from_output_cache(hash)
 
-  if (output_cache_valid(cached_data, index)) {
+  if (output_cache_valid(cached_data, use_cache, index)) {
 
     log_message(id, "Getting multi-species index data from output cache")
 
@@ -26,7 +27,7 @@ ms_index <- function(index, id) {
 
   } else {
 
-    calc_ms_index(index, hash = hash, id = id)
+    calc_ms_index(index, use_cache, hash, id)
 
   }
 
@@ -43,13 +44,13 @@ ms_index <- function(index, id) {
 #' @importFrom utils head
 
 calc_ms_index <- function(
-  index, n = 1000L, maxcv = 3, minindex = .01, trunc = 10, hash, id
+  index, use_cache, hash, id, n = 1000L, maxcv = 3, minindex = .01, trunc = 10
 ) {
 
   spp <- species(index, "spcode")
 
   df <- promises::promise_all(
-    .list = purrr::map(spp, ~sp_index(index = index, .x, id = id))
+    .list = purrr::map(spp, ~sp_index(index, .x, use_cache, id))
   )
 
   promises::then(

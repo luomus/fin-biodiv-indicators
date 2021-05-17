@@ -4,6 +4,7 @@
 #'
 #' @param index Which index.
 #' @param sp Species.
+#' @param use_cache Whether to use cached data.
 #' @param id Request ID for logging.
 #'
 #' @importFrom digest digest
@@ -11,7 +12,7 @@
 #'
 #' @export
 
-sp_index <- function(index, sp, id) {
+sp_index <- function(index, sp, use_cache, id) {
 
   hash <- digest::digest(list(index, sp))
 
@@ -19,7 +20,7 @@ sp_index <- function(index, sp, id) {
 
   cached_data <- get_from_output_cache(hash)
 
-  if (output_cache_valid(cached_data, index)) {
+  if (output_cache_valid(cached_data, use_cache, index)) {
 
     log_message(id, "Getting index data from output cache")
 
@@ -27,7 +28,7 @@ sp_index <- function(index, sp, id) {
 
   } else {
 
-    calc_sp_index(index, sp, id)
+    calc_sp_index(index, sp, use_cache, id)
 
   }
 
@@ -37,7 +38,7 @@ sp_index <- function(index, sp, id) {
 #' @importFrom digest digest
 #' @importFrom rtrim index trim
 
-calc_sp_index <- function(index, sp, id) {
+calc_sp_index <- function(index, sp, use_cache, id) {
 
   force(sp)
 
@@ -45,7 +46,7 @@ calc_sp_index <- function(index, sp, id) {
 
   log_message(id, "Getting ", sp, " ", index, " data")
 
-  data <- get_sp_data(index, sp, id)
+  data <- get_sp_data(index, sp, use_cache, id)
 
   log_message(id, "Calculating index for ", sp, " from ", index, ": ", hash)
 

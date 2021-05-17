@@ -4,7 +4,7 @@
 \alias{input_cache_valid}
 \title{Check input cache validity}
 \usage{
-input_cache_valid(hash, last_mod_time = as.Date("1970-01-01"))
+input_cache_valid(hash, last_mod_time)
 }
 \arguments{
 \item{hash}{Hash of input.}

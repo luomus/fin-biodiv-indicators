@@ -4,10 +4,12 @@
 \alias{svg_ms_index}
 \title{Multi-species index svg}
 \usage{
-svg_ms_index(index, id)
+svg_ms_index(index, use_cache, id)
 }
 \arguments{
 \item{index}{Which index?}
+
+\item{use_cache}{Whether to use cached data.}
 
 \item{id}{Request ID for logging.}
 }

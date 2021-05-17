@@ -55,9 +55,13 @@ function(index, req) {
 
 #* Return multi-species index as json
 #* @param index Which index to return
+#* @param cache Whether to use cached data
 #* @tag Indices
 #* @get /ms-index/json
-function(index, req) {
+function(index, cache = "true", req) {
+
+  cache <- match.arg(cache, c("true", "false"))
+  use_cache <- switch(cache, true = TRUE, false = FALSE)
 
   index <- check_index(index)
 
@@ -66,16 +70,20 @@ function(index, req) {
   log_message(id, "===New Request===")
   log_message(id, "JSON request made for multi-species index of ", index)
 
-  ms_index(index, id)
+  ms_index(index, use_cache, id)
 
 }
 
 #* Return multi-species index as csv
 #* @param index Which index to return
+#* @param cache Whether to use cached data
 #* @serializer csv
 #* @tag Indices
 #* @get /ms-index/csv
-function(index, req) {
+function(index, cache = "true", req) {
+
+  cache <- match.arg(cache, c("true", "false"))
+  use_cache <- switch(cache, true = TRUE, false = FALSE)
 
   index <- check_index(index)
 
@@ -84,16 +92,20 @@ function(index, req) {
   log_message(id, "===New Request===")
   log_message(id, "CSV request made for multi-species index of ", index)
 
-  ms_index(index, id)
+  ms_index(index, use_cache, id)
 
 }
 
 #* Return single-species index as json
 #* @param index Which index to return
 #* @param sp Species
+#* @param cache Whether to use cached data
 #* @tag Indices
 #* @get /sp-index/json
-function(index, sp, req) {
+function(index, sp, cache = "true", req) {
+
+  cache <- match.arg(cache, c("true", "false"))
+  use_cache <- switch(cache, true = TRUE, false = FALSE)
 
   sp <- check_sp(index, sp)
 
@@ -102,17 +114,21 @@ function(index, sp, req) {
   log_message(id, "===New Request===")
   log_message(id, "JSON request made for index of ", sp, " from ", index)
 
-  sp_index(index, sp, id)
+  sp_index(index, sp, use_cache, id)
 
 }
 
 #* Return single species index as csv
 #* @param index Which index to return
 #* @param sp Species
+#* @param cache Whether to use cached data
 #* @serializer csv
 #* @tag Indices
 #* @get /sp-index/csv
-function(index, sp, req) {
+function(index, sp, cache = "true", req) {
+
+  cache <- match.arg(cache, c("true", "false"))
+  use_cache <- switch(cache, true = TRUE, false = FALSE)
 
   sp <- check_sp(index, sp)
 
@@ -121,15 +137,19 @@ function(index, sp, req) {
   log_message(id, "===New Request===")
   log_message(id, "CSV request made for index of ", sp, " from ", index)
 
-  sp_index(index, sp, id)
+  sp_index(index, sp, use_cache, id)
 
 }
 
 #* Return a multi-species index plot
 #* @param index Which index to return
+#* @param cache Whether to use cached data
 #* @tag Plots
 #* @get /ms-plot
-function(index, res, req) {
+function(index, cache = "true", res, req) {
+
+  cache <- match.arg(cache, c("true", "false"))
+  use_cache <- switch(cache, true = TRUE, false = FALSE)
 
   index <- check_index(index)
 
@@ -142,7 +162,7 @@ function(index, res, req) {
   res$setHeader("Content-Encoding", "gzip")
   res$setHeader("Content-Disposition", "inline")
 
-  svg <- svg_ms_index(index, id)
+  svg <- svg_ms_index(index, use_cache, id)
 
   promises::then(svg, ~{
     res$body <- .
@@ -154,9 +174,13 @@ function(index, res, req) {
 #* Return single-species index plot
 #* @param index Which index to return
 #* @param sp Species
+#* @param cache Whether to use cached data
 #* @tag Plots
 #* @get /sp-plot
-function(index, sp, res, req) {
+function(index, sp, cache = "true", res, req) {
+
+  cache <- match.arg(cache, c("true", "false"))
+  use_cache <- switch(cache, true = TRUE, false = FALSE)
 
   sp <- check_sp(index, sp)
 
@@ -169,7 +193,7 @@ function(index, sp, res, req) {
   res$setHeader("Content-Encoding", "gzip")
   res$setHeader("Content-Disposition", "inline")
 
-  svg <- svg_sp_index(index, sp, id)
+  svg <- svg_sp_index(index, sp, use_cache, id)
 
   promises::then(svg, ~{
     res$body <- .

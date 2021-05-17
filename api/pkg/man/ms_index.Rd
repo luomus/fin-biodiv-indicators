@@ -4,10 +4,12 @@
 \alias{ms_index}
 \title{Multi-species population indicator}
 \usage{
-ms_index(index, id)
+ms_index(index, use_cache, id)
 }
 \arguments{
 \item{index}{Which index.}
+
+\item{use_cache}{Whether to use cached data.}
 
 \item{id}{Request ID for logging.}
 }

@@ -12,7 +12,7 @@
 #' @importFrom finbif finbif_occurrence
 #' @importFrom promises future_promise promise_resolve
 
-get_survey_data <- function(name, fltr,  slct, last_mod_time, id) {
+get_survey_data <- function(name, fltr, slct, last_mod_time, id) {
 
   force(name)
   force(fltr)

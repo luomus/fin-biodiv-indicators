@@ -3,6 +3,7 @@
 #' Create an svg from a multispecies indicator plot.
 #'
 #' @param index Which index?
+#' @param use_cache Whether to use cached data.
 #' @param id Request ID for logging.
 #'
 #' @importFrom digest digest
@@ -11,9 +12,9 @@
 #' @importFrom svglite svglite
 #' @export
 
-svg_ms_index <- function(index, id) {
+svg_ms_index <- function(index, use_cache, id) {
 
-  data <- ms_index(index, id)
+  data <- ms_index(index, use_cache, id)
 
   promises::then(data, ~{svg_data(., index, id)})
 
@@ -25,6 +26,7 @@ svg_ms_index <- function(index, id) {
 #'
 #' @param index Which index?
 #' @param sp Species.
+#' @param use_cache Whether to use cached data.
 #' @param id Request ID for logging.
 #'
 #' @importFrom digest digest
@@ -33,9 +35,9 @@ svg_ms_index <- function(index, id) {
 #' @importFrom svglite svglite
 #' @export
 
-svg_sp_index <- function(index, sp, id) {
+svg_sp_index <- function(index, sp, use_cache, id) {
 
-  data <- sp_index(index, sp, id)
+  data <- sp_index(index, sp, use_cache, id)
 
   promises::then(data, ~{svg_data(., index, id)})
 

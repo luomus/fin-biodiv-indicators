@@ -4,12 +4,14 @@
 \alias{svg_sp_index}
 \title{Species index svg}
 \usage{
-svg_sp_index(index, sp, id)
+svg_sp_index(index, sp, use_cache, id)
 }
 \arguments{
 \item{index}{Which index?}
 
 \item{sp}{Species.}
+
+\item{use_cache}{Whether to use cached data.}
 
 \item{id}{Request ID for logging.}
 }
