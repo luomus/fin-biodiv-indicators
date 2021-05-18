@@ -20,13 +20,14 @@ RUN  echo "PGHOST='postgres'" >> ${R_HOME}/etc/Renviron.site \
 
 COPY pkg indicators
 
-RUN  install2.r readr \
+RUN  install2.r readr plumber \
   && R -e "remotes::install_github('luomus/finbif@dev')" \
   && R -e "remotes::install_local('indicators')"
 
 RUN mkdir -p /home/user/tmpsvgs
 
 ENV HOME /home/user
+ENV OPENBLAS_NUM_THREADS 1
 
 COPY entrypoint.sh /home/user/entrypoint.sh
 COPY init.R /home/user/init.R
