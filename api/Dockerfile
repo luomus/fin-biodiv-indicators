@@ -20,7 +20,8 @@ RUN  echo "PGHOST='postgres'" >> ${R_HOME}/etc/Renviron.site \
 
 COPY pkg indicators
 
-RUN  install2.r readr plumber \
+RUN  install2.r readr \
+  && R -e "remotes::install_github('wkmor1/plumber')" \
   && R -e "remotes::install_github('luomus/finbif@dev')" \
   && R -e "remotes::install_local('indicators')"
 
