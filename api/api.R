@@ -1,4 +1,4 @@
-#* @apiTitle Finnish Biodiversity Indicators REST API
+#* @apiTitle Finnish Biodiversity Indicators HTTP API
 #* @apiDescription Tracking biodiversity trends in Finland using single- and multi-species population index based indicators.
 #* @apiTOS https://laji.fi/en/about/845
 #* @apiContact list(name = "laji.fi support", email = "helpdesk@laji.fi")
