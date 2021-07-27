@@ -22,7 +22,7 @@ COPY pkg indicators
 
 RUN  install2.r readr \
   && R -e "remotes::install_github('wkmor1/plumber')" \
-  && R -e "remotes::install_github('luomus/finbif@dev')" \
+  && R -e "remotes::install_github('luomus/finbif@71713b3')" \
   && R -e "remotes::install_local('indicators')"
 
 RUN mkdir -p /home/user/tmpsvgs
