@@ -9,8 +9,10 @@
 #' @param id Request ID for logging.
 #'
 #' @importFrom digest digest
+#' @importFrom dplyr arrange
 #' @importFrom finbif finbif_occurrence
 #' @importFrom promises future_promise promise_resolve
+#' @importFrom rlang .data
 
 get_survey_data <- function(name, fltr, slct, last_mod_time, id) {
 
@@ -72,6 +74,10 @@ get_survey_data <- function(name, fltr, slct, last_mod_time, id) {
       )
 
       surveys[["n_events"]] <- NULL
+
+      surveys <- dplyr::arrange(
+        surveys, .data[["year"]], .data[["month"]], .data[["day"]]
+      )
 
       set_input_cache(name, surveys, hash)},
       globals = c("name", "fltr", "hash", "slct", "op"),
