@@ -80,21 +80,16 @@ get_sp_data <- function(index, sp, use_cache, id) {
     surveys <- get_survey_data(
       input_cache_name(index, "surveys"),
       fltr,
-      c("event_id", "location_id", "date_time"),
+      c("document_id", "location_id", "year", "month", "day"),
       last_mod_time,
       id
     )
 
-    surveys <- promises::then(
-      surveys,
-      ~{
-        dplyr::mutate(
-          ., year = floor(lubridate::quarter(.data[["date_time"]], TRUE, 12L))
-        )
-      }
-    )
+    process_surveys <- get_process_surveys_fun(index)
 
-    slct <- c("event_id", "taxon_id", "abundance")
+    surveys <- promises::then(surveys, ~process_surveys(.))
+
+    slct <- c("document_id", "section", "abundance")
 
     log_message(id, "Getting ", sp, " count data from FinBIF")
 
@@ -118,35 +113,19 @@ get_sp_data <- function(index, sp, use_cache, id) {
 
     all_data <- promises::promise_all(surveys = surveys, sp_data = sp_data)
 
-    then(
+    process_counts <- get_process_counts_fun(index)
+
+    promises::then(
       all_data,
       ~{
-        counts <- dplyr::left_join(
-          .[["surveys"]], .[["sp_data"]], by = "event_id"
-        )
-        counts <- dplyr::arrange(counts, .data[["date_time"]])
-        counts <- dplyr::mutate(
-          counts, taxon_id = tidyr::replace_na(.data[["taxon_id"]], "NO_TAXA")
-        )
-        counts <- tidyr::pivot_wider(
-          counts, tidyselect::all_of(c("year", "location_id")),
-          names_from = .data[["taxon_id"]], values_from = .data[["abundance"]],
-          values_fill = 0L, values_fn = dplyr::first
-        )
-        counts <- dplyr::select(counts, dplyr::matches("[^NO_TAXA]"))
-        counts <- tidyr::pivot_wider(
-          counts, .data[["year"]], names_from = .data[["location_id"]],
-          values_from = !tidyselect::all_of(c("year", "location_id"))
-        )
-        counts <- dplyr::select(counts, .data[["year"]], where(max_gt_zero))
-        counts <- tidyr::pivot_longer(
-          counts, !.data[["year"]], names_to = "site", values_to = "count",
-          values_drop_na = TRUE
-        )
+
+        counts <- process_counts(.)
 
         set_input_cache(cache_name, counts, hash, sp)
+
       }
     )
+
   }
 }
 
