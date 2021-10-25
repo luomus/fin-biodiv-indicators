@@ -29,6 +29,9 @@ species <- function(index, which = c("mx", "spcode")) {
       surulu = "MX.29008",
       poecin = "MX.34542",
       perinf = "MX.37095"
+    ),
+    bf = c(
+      thylin = "MX.60749"
     )
   )
 

@@ -5,7 +5,7 @@
 #' @export
 
 indices <- function() {
-  c(`Winter Bird Census` = "wb")
+  c(`Winter Bird Census` = "wb", `butterflies` = "bf")
 }
 
 
