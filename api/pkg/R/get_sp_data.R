@@ -26,7 +26,7 @@ get_sp_data <- function(index, sp, use_cache, id) {
 
   cached <- is_input_cached(hash)
 
-  fltr <- filter_gen(index)
+  fltr <- get_filter(index)
 
   if (use_cache) {
 
