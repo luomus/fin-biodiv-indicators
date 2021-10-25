@@ -116,6 +116,6 @@ output_cache_valid <- function(cache, use_cache, index) {
 
   }
 
-  unlist(cache[, "time"]) > last_modified(filter_gen(index))
+  unlist(cache[, "time"]) > last_modified(get_filter(index))
 
 }
