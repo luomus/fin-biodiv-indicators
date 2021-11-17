@@ -9,8 +9,33 @@ HEALTHCHECK --interval=1m --timeout=10s \
   CMD curl -sfI -o /dev/null 0.0.0.0:8000/healthz || exit 1
 
 RUN  install2.r \
+       askpass \
+       blob \
+       crayon \
+       DBI \
+       dbplyr \
+       digest \
+       dplyr \
+       future \
+       ggplot2 \
+       glue \
+       httr \
+       lubridate \
+       lutz \
+       memoise \
+       openssl \
+       promises \
+       purrr \
        rapidoc \
-       readr
+       readr \
+       rlang \
+       RPostgres \
+       rtrim \
+       svglite \
+       sys \
+       tibble \
+       tidyr \
+       tidyselect
 
 RUN  R -e "remotes::install_github('luomus/finbif@43bc598e')"
 
@@ -24,7 +49,7 @@ ENV OPENBLAS_NUM_THREADS 1
 
 WORKDIR /home/user
 
-RUN  R -e "remotes::install_local('indicators')" \
+RUN  R -e "remotes::install_local('indicators', NULL, FALSE, 'never')" \
   && mkdir -p \
        /home/user/tmp \
        /home/user/logs \
