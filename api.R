@@ -263,7 +263,7 @@ function(pr) {
       example_csv <- "year,index,sd\n1990,1,0\n1991,1.1,0.1\n1992,1.2,0.3"
 
       example_svg <- readr::read_file(
-        readr::read_file("/indicators/man/figures/graph.svg")
+        readr::read_file("indicators/man/figures/graph.svg")
       )
 
       set_200_only("/list/indices")
