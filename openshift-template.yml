@@ -161,7 +161,7 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: ${LOG}:${TAG}
+        name: ${LOG}:main
     source:
       type: Git
       git:
