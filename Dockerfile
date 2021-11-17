@@ -24,6 +24,8 @@ RUN  install2.r \
        lutz \
        memoise \
        openssl \
+       lubridate \
+       memoise \
        promises \
        purrr \
        rapidoc \
