@@ -9,8 +9,26 @@ HEALTHCHECK --interval=1m --timeout=10s \
   CMD curl -sfI -o /dev/null 0.0.0.0:8000/healthz || exit 1
 
 RUN  install2.r \
+       blob \
+       DBI \
+       dbplyr \
+       digest \
+       dplyr \
+       future \
+       ggplot2 \
+       lubridate \
+       memoise \
+       promises \
+       purrr \
        rapidoc \
-       readr
+       readr \
+       rlang \
+       RPostgres \
+       rtrim \
+       svglite \
+       tibble \
+       tidyr \
+       tidyselect
 
 RUN  R -e "remotes::install_github('luomus/finbif@43bc598e')"
 
