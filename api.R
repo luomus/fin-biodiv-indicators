@@ -24,6 +24,16 @@ cors <- function(req, res) {
   }
 }
 
+#* Check the liveness of the API
+#* @head /healthz
+#* @get /healthz
+#* @tag status
+#* @response 200 A json object
+#* @serializer unboxedJSON
+function() {
+  ""
+}
+
 #* Get list of available multi-species indices
 #* Gets a list of shortcodes for the multi-species indices available.
 #* The list is returned in boxed JSON format.
