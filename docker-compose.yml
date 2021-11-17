@@ -21,7 +21,7 @@ services:
         - "FINBIF_WAREHOUSE_QUERY=${FINBIF_WAREHOUSE_QUERY}"
     restart: always
     tmpfs:
-      - "/tmpsvgs"
+      - "/home/user/tmp"
     ports:
       - "8000:8000"
 

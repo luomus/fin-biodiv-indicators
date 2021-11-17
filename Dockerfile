@@ -5,38 +5,41 @@ RUN  echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula sel
   && apt-get install -y ttf-mscorefonts-installer libpq-dev \
   && fc-cache -f
 
-ARG PGUSER
-ARG PGPASSWORD
-ARG FINBIF_ACCESS_TOKEN
-ARG FINBIF_EMAIL
-ARG FINBIF_WAREHOUSE_QUERY="warehouse/query/"
+HEALTHCHECK --interval=1m --timeout=10s \
+  CMD curl -sfI -o /dev/null 0.0.0.0:8000/healthz || exit 1
 
-RUN  echo "PGHOST='postgres'" >> ${R_HOME}/etc/Renviron.site \
-  && echo "PGUSER='${PGUSER}'" >> ${R_HOME}/etc/Renviron.site \
-  && echo "PGPASSWORD='${PGPASSWORD}'" >> ${R_HOME}/etc/Renviron.site \
-  && echo "FINBIF_ACCESS_TOKEN='${FINBIF_ACCESS_TOKEN}'" >> ${R_HOME}/etc/Renviron.site \
-  && echo "FINBIF_EMAIL='${FINBIF_EMAIL}'" >> ${R_HOME}/etc/Renviron.site \
-  && echo "FINBIF_WAREHOUSE_QUERY='${FINBIF_WAREHOUSE_QUERY}'" >> ${R_HOME}/etc/Renviron.site
+RUN  install2.r \
+       rapidoc \
+       readr \
 
-COPY pkg indicators
-
-RUN  install2.r readr \
-  && R -e "remotes::install_github('wkmor1/plumber')" \
-  && R -e "remotes::install_github('luomus/finbif@71713b3')" \
-  && R -e "remotes::install_local('indicators')"
-
-RUN mkdir -p /home/user/tmpsvgs
-
-ENV HOME /home/user
-ENV OPENBLAS_NUM_THREADS 1
+RUN  R -e "remotes::install_github('luomus/finbif@43bc598e')"
 
 COPY entrypoint.sh /home/user/entrypoint.sh
 COPY init.R /home/user/init.R
 COPY api.R /home/user/api.R
+COPY pkg /home/user/indicators
 
-RUN  chgrp -R 0 /home/user \
-  && chmod -R g=u /home/user /etc/passwd
+ENV HOME /home/user
+ENV OPENBLAS_NUM_THREADS 1
 
 WORKDIR /home/user
 
+RUN  R -e "remotes::install_local('indicators')" \
+  && mkdir -p \
+       /home/user/tmp \
+       /home/user/logs \
+  && chgrp -R 0 \
+       /home/user \
+       /usr/local/lib/R/site-library/rapidoc/dist \
+  && chmod -R g=u \
+       /home/user \
+       /usr/local/lib/R/site-library/rapidoc/dist \
+       /etc/passwd
+
+USER 1000
+
+EXPOSE 8000
+
 ENTRYPOINT ["./entrypoint.sh"]
+
+CMD ["Rscript", "--vanilla", "init.R"]
