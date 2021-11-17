@@ -10,7 +10,7 @@ HEALTHCHECK --interval=1m --timeout=10s \
 
 RUN  install2.r \
        rapidoc \
-       readr \
+       readr
 
 RUN  R -e "remotes::install_github('luomus/finbif@43bc598e')"
 
