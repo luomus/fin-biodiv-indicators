@@ -8,11 +8,11 @@ get_process_counts_fun <- function(index) {
     index,
     wb = function(data) {
 
-      counts <- left_join(
+      counts <- dplyr::left_join(
         data[["surveys"]], data[["sp_data"]], by = "document_id"
       )
 
-      counts <- mutate(
+      counts <- dplyr::mutate(
         counts, abundance = tidyr::replace_na(.data[["abundance"]], 0L)
       )
 
@@ -26,14 +26,14 @@ get_process_counts_fun <- function(index) {
       counts <- dplyr::filter(data[["sp_data"]], !is.na(.data[["section"]]))
 
       counts <- dplyr::inner_join(
-        counts, .data[["surveys"]], by = "document_id"
+        counts, data[["surveys"]], by = "document_id"
       )
 
       counts <- dplyr::group_by(counts, .data[["document_id"]])
 
       counts <- dplyr::summarise(counts, abundance = sum(.data[["abundance"]]))
 
-      counts <- dplyr::left_join(.data[["surveys"]], counts, by = "document_id")
+      counts <- dplyr::left_join(data[["surveys"]], counts, by = "document_id")
 
       counts <- mutate(
         counts, abundance = tidyr::replace_na(.data[["abundance"]], 0L)

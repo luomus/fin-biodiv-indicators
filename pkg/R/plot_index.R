@@ -59,7 +59,7 @@ svg_data <- function(data, index, id) {
 
   } else {
 
-    tmp <- tempfile(tmpdir = "tmpsvgs", fileext = ".svgz")
+    tmp <- tempfile(tmpdir = "tmp", fileext = ".svgz")
     on.exit(unlink(tmp))
 
     svglite::svglite(tmp)

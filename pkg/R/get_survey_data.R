@@ -14,9 +14,9 @@
 #' @importFrom promises future_promise promise_resolve
 #' @importFrom rlang .data
 
-get_survey_data <- function(name, fltr, slct, last_mod_time, id) {
+get_survey_data <- function(index, fltr, slct, last_mod_time, id) {
 
-  force(name)
+  name <- input_cache_name(index, "surveys")
   force(fltr)
   force(slct)
 
@@ -65,19 +65,14 @@ get_survey_data <- function(name, fltr, slct, last_mod_time, id) {
 
       options(op)
 
-      n <- finbif::finbif_occurrence(
-        filter = fltr, select = slct, aggregate = "events", count_only = TRUE
-      )
-
       surveys <- finbif::finbif_occurrence(
-        filter = fltr, select = slct, aggregate = "events", n = n, quiet = TRUE
+        filter = fltr, select = slct, aggregate = "events", n = "all",
+        quiet = TRUE
       )
 
-      surveys[["n_events"]] <- NULL
+      process_surveys <- get_process_surveys_fun(index)
 
-      surveys <- dplyr::arrange(
-        surveys, .data[["year"]], .data[["month"]], .data[["day"]]
-      )
+      surveys <- process_surveys(surveys)
 
       set_input_cache(name, surveys, hash)},
       globals = c("name", "fltr", "hash", "slct", "op"),

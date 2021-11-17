@@ -77,17 +77,9 @@ get_sp_data <- function(index, sp, use_cache, id) {
 
     log_message(id, "Getting ", index, " survey data")
 
-    surveys <- get_survey_data(
-      input_cache_name(index, "surveys"),
-      fltr,
-      c("document_id", "location_id", "year", "month", "day"),
-      last_mod_time,
-      id
-    )
+    slct <- c("document_id", "location_id", "year", "month", "day")
 
-    process_surveys <- get_process_surveys_fun(index)
-
-    surveys <- promises::then(surveys, ~process_surveys(.))
+    surveys <- get_survey_data(index, fltr, slct, last_mod_time, id)
 
     slct <- c("document_id", "section", "abundance")
 
@@ -98,12 +90,8 @@ get_sp_data <- function(index, sp, use_cache, id) {
     sp_data <- promises::future_promise({
       options(op)
 
-      n <- finbif::finbif_occurrence(
-        sp_id, filter = fltr, select = slct, count_only = TRUE
-      )
-
       finbif::finbif_occurrence(
-        sp_id, filter = fltr, select = slct, n = n, quiet = TRUE
+        sp_id, filter = fltr, select = slct, n = "all", quiet = TRUE
       )
       },
       globals = c("sp_id", "fltr", "slct", "op"),

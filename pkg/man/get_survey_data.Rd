@@ -4,11 +4,9 @@
 \alias{get_survey_data}
 \title{Get survey data}
 \usage{
-get_survey_data(name, fltr, slct, last_mod_time, id)
+get_survey_data(index, fltr, slct, last_mod_time, id)
 }
 \arguments{
-\item{name}{Name of input.}
-
 \item{fltr}{Filter.}
 
 \item{slct}{Column selection.}
@@ -16,6 +14,8 @@ get_survey_data(name, fltr, slct, last_mod_time, id)
 \item{last_mod_time}{Last time upstream data was modified.}
 
 \item{id}{Request ID for logging.}
+
+\item{name}{Name of input.}
 }
 \description{
 Get survey data from finbif.
