@@ -1,6 +1,7 @@
 library("indicators")
 options(
   finbif_use_cache = FALSE,
+  finbif_api_url = Sys.getenv("FINBIF_API"),
   finbif_warehouse_query = Sys.getenv("FINBIF_WAREHOUSE_QUERY"),
   finbif_email = Sys.getenv("FINBIF_EMAIL"),
   indicator_logging = TRUE
