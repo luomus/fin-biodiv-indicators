@@ -111,6 +111,8 @@ get_sp_data <- function(index, sp, use_cache, id) {
 
         set_input_cache(cache_name, counts, hash, sp)
 
+        counts
+
       }
     )
 
