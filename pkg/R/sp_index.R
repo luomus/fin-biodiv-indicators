@@ -59,7 +59,8 @@ calc_sp_index <- function(index, sp, use_cache, id) {
         options(op)
         ans <- rtrim::index(
           rtrim::trim(
-            count ~ site + year, data = df, model = 2, changepoints = "all"
+            abundance ~ location_id + year, data = df, model = 2,
+            changepoints = "all"
           )
         )
         names(ans) <- c("year", "index", "sd")
