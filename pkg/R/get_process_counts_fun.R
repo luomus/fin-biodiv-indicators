@@ -42,7 +42,7 @@ get_process_counts_fun <- function(index) {
       counts <- dplyr::group_by(counts, .data[["location_id"]], .data[["year"]])
 
       counts <- dplyr::summarise(
-        abundance = sum(.data[["abundance"]]), .groups = "drop_last"
+        counts, abundance = sum(.data[["abundance"]]), .groups = "drop_last"
       )
 
       dplyr::filter(counts, max(.data[["abundance"]]) >= 1L)
