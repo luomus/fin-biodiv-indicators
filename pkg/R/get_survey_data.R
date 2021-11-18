@@ -61,21 +61,21 @@ get_survey_data <- function(index, fltr, slct, last_mod_time, id) {
 
     op <- options()
 
-    promises::future_promise({
+    process_surveys <- get_process_surveys_fun(index)
+
+    surveys <- promises::future_promise({
 
       options(op)
 
-      surveys <- finbif::finbif_occurrence(
+      finbif::finbif_occurrence(
         filter = fltr, select = slct, aggregate = "events", n = "all",
         quiet = TRUE
       )
 
-      process_surveys <- get_process_surveys_fun(index)
-
       surveys <- process_surveys(surveys)
 
       set_input_cache(name, surveys, hash)},
-      globals = c("name", "fltr", "hash", "slct", "op"),
+      globals = c("name", "fltr", "hash", "slct", "op", "process_surveys"),
       packages = c("finbif", "indicators"),
       seed = TRUE
     )
