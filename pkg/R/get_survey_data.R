@@ -63,11 +63,11 @@ get_survey_data <- function(index, fltr, slct, last_mod_time, id) {
 
     process_surveys <- get_process_surveys_fun(index)
 
-    surveys <- promises::future_promise({
+    promises::future_promise({
 
       options(op)
 
-      finbif::finbif_occurrence(
+      surveys <- finbif::finbif_occurrence(
         filter = fltr, select = slct, aggregate = "events", n = "all",
         quiet = TRUE
       )
