@@ -49,7 +49,7 @@ get_process_surveys_fun <- function(index) {
       surveys <- filter(surveys, dplyr::n_distinct(.data[["year"]]) >= 2L)
 
       surveys <- dplyr::group_by(
-        surveys, .data[["location_id"]], .data[["year"]], .data["fortnight"]
+        surveys, .data[["location_id"]], .data[["year"]], .data[["fortnight"]]
       )
 
       surveys <- dplyr::slice_head(surveys, n = 1L)
