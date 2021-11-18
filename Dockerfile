@@ -8,7 +8,7 @@ RUN  echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula sel
 HEALTHCHECK --interval=1m --timeout=10s \
   CMD curl -sfI -o /dev/null 0.0.0.0:8000/healthz || exit 1
 
-RUN  install2.r \
+RUN  install2.r -e \
        askpass \
        blob \
        crayon \
