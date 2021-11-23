@@ -40,6 +40,9 @@ parameters:
   - name: DB
     required: true
     value: postgres
+  - name: DB_IMAGE
+    required: true
+    value: "172.30.1.1:5000/openshift/postgresql@sha256:b681d78125361519180a6ac05242c296f8906c11eab7e207b5ca9a89b6344392"
   - name: DB_PORT
     required: true
     value: "5432"
@@ -77,8 +80,6 @@ parameters:
   - name: LOG_HOST
     required: true
   - name: LOG_SUBDOMAIN
-    required: true
-  - name: DB_USER
     required: true
   - name: DB_PASSWORD
     required: true
@@ -254,9 +255,11 @@ objects:
           - name: FINBIF_EMAIL
             value: ${FINBIF_EMAIL}
           - name: PGUSER
-            value: ${DB_USER}
+            value: ${DB}
           - name: PGPASSWORD
             value: ${DB_PASSWORD}
+          - name: PGHOST
+            value: ${DB}
         volumes:
         - name: ${LOG}
           persistentVolumeClaim:
@@ -327,9 +330,11 @@ objects:
           - name: FINBIF_EMAIL
             value: ${FINBIF_EMAIL}
           - name: PGUSER
-            value: ${DB_USER}
+            value: ${DB}
           - name: PGPASSWORD
             value: ${DEV_DB_PASSWORD}
+          - name: PGHOST
+            value: ${DEV}-{DB}
         volumes:
         - name: ${DEV}-${LOG}
           persistentVolumeClaim:
@@ -373,10 +378,12 @@ objects:
           ports:
             - containerPort: ${DB_PORT}
           env:
-          - name: POSTGRESQL_USER
-            value: ${DB_USER}
-          - name: POSTGRESQL_PASSWORD
+          - name: POSTGRES_USER
+            value: ${DB}
+          - name: POSTGRES_PASSWORD
             value: ${DB_PASSWORD}
+          - name: POSTGRESQL_DATABASE
+            value: ${DB}
         volumes:
         - name: ${DB}
           persistentVolumeClaim:
@@ -401,7 +408,7 @@ objects:
           deploymentconfig: ${DEV}-${DB}
       spec:
         containers:
-        - image: ${DB}
+        - image: ${DB_IMAGE}
           name: ${DEV}-${DB}
           volumeMounts:
           - mountPath: ${DB_DIR}
@@ -410,9 +417,11 @@ objects:
             - containerPort: ${DB_PORT}
           env:
           - name: POSTGRESQL_USER
-            value: ${DB_USER}
+            value: ${DB}
           - name: POSTGRESQL_PASSWORD
             value: ${DEV_DB_PASSWORD}
+          - name: POSTGRESQL_DATABASE
+            value: ${DB}
         volumes:
         - name: ${DEV}-${DB}
           persistentVolumeClaim:
@@ -655,6 +664,7 @@ objects:
       protocol: TCP
       targetPort: ${{DB_PORT}}
     selector:
+      name: postgres
       app: ${APP}
       deploymentconfig: ${DEV}-${DB}
 - kind: Route
