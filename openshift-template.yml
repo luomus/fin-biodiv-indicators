@@ -458,7 +458,7 @@ objects:
             value: ${DB}
           - name: PG_PRIMARY_PORT
             value: ${DB_PORT}
-          - name: PG_PRIMARY_MODE
+          - name: PG_MODE
             value: ${DB_MODE}
           - name: PG_USER
             value: ${DB}
@@ -470,6 +470,8 @@ objects:
             value: ${DB_PRIMARY_PASSWORD}
           - name: PG_ROOT_PASSWORD
             value: ${DB_ROOT_PASSWORD}
+          - name: PGDATA_PATH_OVERRIDE
+            value: ${DB}
         volumes:
         - name: ${DB}
           persistentVolumeClaim:
@@ -508,7 +510,7 @@ objects:
             value: ${DB}
           - name: PG_PRIMARY_PORT
             value: ${DB_PORT}
-          - name: PG_PRIMARY_MODE
+          - name: PG_MODE
             value: ${DB_MODE}
           - name: PG_USER
             value: ${DB}
@@ -520,6 +522,8 @@ objects:
             value: ${DEV_DB_PRIMARY_PASSWORD}
           - name: PG_ROOT_PASSWORD
             value: ${DEV_DB_ROOT_PASSWORD}
+          - name: PGDATA_PATH_OVERRIDE
+            value: ${DEV}-${DB}
         volumes:
         - name: ${DEV}-${DB}
           persistentVolumeClaim:
@@ -744,7 +748,6 @@ objects:
     ports:
     - name: ${DB_PORT}
       port: ${DB_PORT}
-      protocol: TCP
       targetPort: ${{DB_PORT}}
     selector:
       app: ${APP}
@@ -759,10 +762,8 @@ objects:
     ports:
     - name: ${DB_PORT}
       port: ${DB_PORT}
-      protocol: TCP
       targetPort: ${{DB_PORT}}
     selector:
-      name: postgres
       app: ${APP}
       deploymentconfig: ${DEV}-${DB}
 - kind: Route
