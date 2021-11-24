@@ -40,15 +40,15 @@ parameters:
   - name: DB
     required: true
     value: postgres
-  - name: DB_IMAGE
-    required: true
-    value: "172.30.1.1:5000/openshift/postgresql@sha256:b681d78125361519180a6ac05242c296f8906c11eab7e207b5ca9a89b6344392"
   - name: DB_PORT
     required: true
     value: "5432"
   - name: DB_DIR
     required: true
-    value: /var/lib/pgsql/data
+    value: /pgdata
+  - name: DB_MODE
+    required: true
+    value: primary
   - name: GIT_HOST
     required: true
     value: https://github.com
@@ -83,6 +83,10 @@ parameters:
     required: true
   - name: DB_PASSWORD
     required: true
+  - name: DB_PRIMARY_PASSWORD
+    required: true
+  - name: DB_ROOT_PASSWORD
+    required: true
   - name: FINBIF_ACCESS_TOKEN
     required: true
   - name: FINBIF_API
@@ -92,6 +96,10 @@ parameters:
   - name: FINBIF_EMAIL
     required: true
   - name: DEV_DB_PASSWORD
+    required: true
+  - name: DEV_DB_PRIMARY_PASSWORD
+    required: true
+  - name: DEV_DB_ROOT_PASSWORD
     required: true
   - name: DEV_FINBIF_ACCESS_TOKEN
     required: true
@@ -155,6 +163,54 @@ objects:
 - kind: BuildConfig
   apiVersion: v1
   metadata:
+    name: ${DB}
+    labels:
+      app: ${APP}
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${DB}:${TAG}
+    source:
+      type: Git
+      git:
+        uri: ${GIT_HOST}/${ORG}/${APP}.git
+        ref: ${PROD}
+      contextDir: ${DB}
+    strategy:
+      type: Docker
+    triggers:
+    - type: ConfigChange
+    - type: GitHub
+      github:
+        secret: ${GITHUB_SECRET}
+- kind: BuildConfig
+  apiVersion: v1
+  metadata:
+    name: ${DEV}-${DB}
+    labels:
+      app: ${APP}
+  spec:
+    output:
+      to:
+        kind: ImageStreamTag
+        name: ${DEV}-${DB}:${TAG}
+    source:
+      type: Git
+      git:
+        uri: ${GIT_HOST}/${ORG}/${APP}.git
+        ref: ${DEV}
+      contextDir: ${DB}
+    strategy:
+      type: Docker
+    triggers:
+    - type: ConfigChange
+    - type: GitHub
+      github:
+        secret: ${GITHUB_SECRET}
+- kind: BuildConfig
+  apiVersion: v1
+  metadata:
     name: ${LOG}
     labels:
       app: ${APP}
@@ -188,6 +244,24 @@ objects:
   apiVersion: v1
   metadata:
     name: ${DEV}-${APP}
+    labels:
+      app: ${APP}
+  spec:
+    lookupPolicy:
+      local: true
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: ${DB}
+    labels:
+      app: ${APP}
+  spec:
+    lookupPolicy:
+      local: true
+- kind: ImageStream
+  apiVersion: v1
+  metadata:
+    name: ${DEV}-${DB}
     labels:
       app: ${APP}
   spec:
@@ -378,12 +452,24 @@ objects:
           ports:
             - containerPort: ${DB_PORT}
           env:
-          - name: POSTGRES_USER
+          - name: MODE
             value: ${DB}
-          - name: POSTGRES_PASSWORD
+          - name: PG_DATABASE
+            value: ${DB}
+          - name: PG_PRIMARY_PORT
+            value: ${DB_PORT}
+          - name: PG_PRIMARY_MODE
+            value: ${DB_MODE}
+          - name: PG_USER
+            value: ${DB}
+          - name: PG_PASSWORD
             value: ${DB_PASSWORD}
-          - name: POSTGRESQL_DATABASE
-            value: ${DB}
+          - name: PG_PRIMARY_USER
+            value: ${DB_MODE}
+          - name: PG_PRIMARY_PASSWORD
+            value: ${DB_PRIMARY_PASSWORD}
+          - name: PG_ROOT_PASSWORD
+            value: ${DB_ROOT_PASSWORD}
         volumes:
         - name: ${DB}
           persistentVolumeClaim:
@@ -408,7 +494,7 @@ objects:
           deploymentconfig: ${DEV}-${DB}
       spec:
         containers:
-        - image: ${DB_IMAGE}
+        - image: ${DEV}-${DB}
           name: ${DEV}-${DB}
           volumeMounts:
           - mountPath: ${DB_DIR}
@@ -416,12 +502,24 @@ objects:
           ports:
             - containerPort: ${DB_PORT}
           env:
-          - name: POSTGRESQL_USER
+          - name: MODE
             value: ${DB}
-          - name: POSTGRESQL_PASSWORD
+          - name: PG_DATABASE
+            value: ${DB}
+          - name: PG_PRIMARY_PORT
+            value: ${DB_PORT}
+          - name: PG_PRIMARY_MODE
+            value: ${DB_MODE}
+          - name: PG_USER
+            value: ${DB}
+          - name: PG_PASSWORD
             value: ${DEV_DB_PASSWORD}
-          - name: POSTGRESQL_DATABASE
-            value: ${DB}
+          - name: PG_PRIMARY_USER
+            value: ${DB_MODE}
+          - name: PG_PRIMARY_PASSWORD
+            value: ${DEV_DB_PRIMARY_PASSWORD}
+          - name: PG_ROOT_PASSWORD
+            value: ${DEV_DB_ROOT_PASSWORD}
         volumes:
         - name: ${DEV}-${DB}
           persistentVolumeClaim:
