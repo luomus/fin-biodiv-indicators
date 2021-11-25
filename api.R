@@ -222,6 +222,17 @@ function(index, sp, cache = "true", res, req) {
 
 }
 
+#* @assets /usr/local/lib/R/site-library/finbif/help/figures
+list()
+
+#* @get /favicon.ico
+#* @serializer contentType list(type="image/x-icon")
+function() {
+
+  readBin("favicon.ico", "raw", n = file.info("favicon.ico")$size)
+
+}
+
 #* @plumber
 function(pr) {
 

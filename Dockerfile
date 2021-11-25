@@ -43,6 +43,7 @@ RUN  R -e "remotes::install_github('luomus/finbif@43bc598e')"
 
 COPY entrypoint.sh /home/user/entrypoint.sh
 COPY init.R /home/user/init.R
+COPY favicon.ico /home/user/favicon.ico
 COPY api.R /home/user/api.R
 COPY pkg /home/user/indicators
 
