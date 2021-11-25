@@ -49,6 +49,15 @@ parameters:
   - name: DB_MODE
     required: true
     value: primary
+  - name: JOB
+    required: true
+    value: curl
+  - name: JOB_SCHEDULE
+    required: true
+    value: "0/30 * * * *"
+  - name: JOB_LIMIT
+    required: true
+    value: "3"
   - name: GIT_HOST
     required: true
     value: https://github.com
@@ -114,45 +123,141 @@ parameters:
 metadata:
   name: ${APP}
 objects:
+# - kind: BuildConfig
+#   apiVersion: v1
+#   metadata:
+#     name: ${APP}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     output:
+#       to:
+#         kind: ImageStreamTag
+#         name: ${APP}:${TAG}
+#     source:
+#       type: Git
+#       git:
+#         uri: ${GIT_HOST}/${ORG}/${APP}.git
+#         ref: ${PROD}
+#     strategy:
+#       type: Docker
+#     triggers:
+#     - type: ConfigChange
+#     - type: GitHub
+#       github:
+#         secret: ${GITHUB_SECRET}
+# - kind: BuildConfig
+#   apiVersion: v1
+#   metadata:
+#     name: ${DEV}-${APP}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     output:
+#       to:
+#         kind: ImageStreamTag
+#         name: ${DEV}-${APP}:${TAG}
+#     source:
+#       type: Git
+#       git:
+#         uri: ${GIT_HOST}/${ORG}/${APP}.git
+#         ref: ${DEV}
+#     strategy:
+#       type: Docker
+#     triggers:
+#     - type: ConfigChange
+#     - type: GitHub
+#       github:
+#         secret: ${GITHUB_SECRET}
+# - kind: BuildConfig
+#   apiVersion: v1
+#   metadata:
+#     name: ${DB}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     output:
+#       to:
+#         kind: ImageStreamTag
+#         name: ${DB}:${TAG}
+#     source:
+#       type: Git
+#       git:
+#         uri: ${GIT_HOST}/${ORG}/${APP}.git
+#         ref: ${PROD}
+#       contextDir: ${DB}
+#     strategy:
+#       type: Docker
+#     triggers:
+#     - type: ConfigChange
+#     - type: GitHub
+#       github:
+#         secret: ${GITHUB_SECRET}
+# - kind: BuildConfig
+#   apiVersion: v1
+#   metadata:
+#     name: ${DEV}-${DB}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     output:
+#       to:
+#         kind: ImageStreamTag
+#         name: ${DEV}-${DB}:${TAG}
+#     source:
+#       type: Git
+#       git:
+#         uri: ${GIT_HOST}/${ORG}/${APP}.git
+#         ref: ${DEV}
+#       contextDir: ${DB}
+#     strategy:
+#       type: Docker
+#     triggers:
+#     - type: ConfigChange
+#     - type: GitHub
+#       github:
+#         secret: ${GITHUB_SECRET}
+# - kind: BuildConfig
+#   apiVersion: v1
+#   metadata:
+#     name: ${JOB}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     output:
+#       to:
+#         kind: ImageStreamTag
+#         name: ${JOB}:${TAG}
+#     source:
+#       type: Git
+#       git:
+#         uri: ${GIT_HOST}/${ORG}/${APP}.git
+#         ref: ${PROD}
+#       contextDir: ${JOB}
+#     strategy:
+#       type: Docker
+#     triggers:
+#     - type: ConfigChange
+#     - type: GitHub
+#       github:
+#         secret: ${GITHUB_SECRET}
 - kind: BuildConfig
   apiVersion: v1
   metadata:
-    name: ${APP}
+    name: ${DEV}-${JOB}
     labels:
       app: ${APP}
   spec:
     output:
       to:
         kind: ImageStreamTag
-        name: ${APP}:${TAG}
-    source:
-      type: Git
-      git:
-        uri: ${GIT_HOST}/${ORG}/${APP}.git
-        ref: ${PROD}
-    strategy:
-      type: Docker
-    triggers:
-    - type: ConfigChange
-    - type: GitHub
-      github:
-        secret: ${GITHUB_SECRET}
-- kind: BuildConfig
-  apiVersion: v1
-  metadata:
-    name: ${DEV}-${APP}
-    labels:
-      app: ${APP}
-  spec:
-    output:
-      to:
-        kind: ImageStreamTag
-        name: ${DEV}-${APP}:${TAG}
+        name: ${DEV}-${JOB}:${TAG}
     source:
       type: Git
       git:
         uri: ${GIT_HOST}/${ORG}/${APP}.git
         ref: ${DEV}
+      contextDir: ${JOB}
     strategy:
       type: Docker
     triggers:
@@ -160,673 +265,687 @@ objects:
     - type: GitHub
       github:
         secret: ${GITHUB_SECRET}
-- kind: BuildConfig
-  apiVersion: v1
-  metadata:
-    name: ${DB}
-    labels:
-      app: ${APP}
-  spec:
-    output:
-      to:
-        kind: ImageStreamTag
-        name: ${DB}:${TAG}
-    source:
-      type: Git
-      git:
-        uri: ${GIT_HOST}/${ORG}/${APP}.git
-        ref: ${PROD}
-      contextDir: ${DB}
-    strategy:
-      type: Docker
-    triggers:
-    - type: ConfigChange
-    - type: GitHub
-      github:
-        secret: ${GITHUB_SECRET}
-- kind: BuildConfig
-  apiVersion: v1
-  metadata:
-    name: ${DEV}-${DB}
-    labels:
-      app: ${APP}
-  spec:
-    output:
-      to:
-        kind: ImageStreamTag
-        name: ${DEV}-${DB}:${TAG}
-    source:
-      type: Git
-      git:
-        uri: ${GIT_HOST}/${ORG}/${APP}.git
-        ref: ${DEV}
-      contextDir: ${DB}
-    strategy:
-      type: Docker
-    triggers:
-    - type: ConfigChange
-    - type: GitHub
-      github:
-        secret: ${GITHUB_SECRET}
-- kind: BuildConfig
-  apiVersion: v1
-  metadata:
-    name: ${LOG}
-    labels:
-      app: ${APP}
-  spec:
-    output:
-      to:
-        kind: ImageStreamTag
-        name: ${LOG}:${PROD}
-    source:
-      type: Git
-      git:
-        uri: ${GIT_HOST}/${ORG}/${LOG}.git
-        ref: ${PROD}
-    strategy:
-      type: Docker
-    triggers:
-    - type: ConfigChange
-    - type: GitHub
-      github:
-        secret: ${GITHUB_SECRET}
+# - kind: BuildConfig
+#   apiVersion: v1
+#   metadata:
+#     name: ${LOG}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     output:
+#       to:
+#         kind: ImageStreamTag
+#         name: ${LOG}:${PROD}
+#     source:
+#       type: Git
+#       git:
+#         uri: ${GIT_HOST}/${ORG}/${LOG}.git
+#         ref: ${PROD}
+#     strategy:
+#       type: Docker
+#     triggers:
+#     - type: ConfigChange
+#     - type: GitHub
+#       github:
+#         secret: ${GITHUB_SECRET}
+# - kind: ImageStream
+#   apiVersion: v1
+#   metadata:
+#     name: ${APP}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     lookupPolicy:
+#       local: true
+# - kind: ImageStream
+#   apiVersion: v1
+#   metadata:
+#     name: ${DEV}-${APP}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     lookupPolicy:
+#       local: true
+# - kind: ImageStream
+#   apiVersion: v1
+#   metadata:
+#     name: ${DB}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     lookupPolicy:
+#       local: true
+# - kind: ImageStream
+#   apiVersion: v1
+#   metadata:
+#     name: ${DEV}-${DB}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     lookupPolicy:
+#       local: true
+# - kind: ImageStream
+#   apiVersion: v1
+#   metadata:
+#     name: ${JOB}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     lookupPolicy:
+#       local: true
 - kind: ImageStream
   apiVersion: v1
   metadata:
-    name: ${APP}
+    name: ${DEV}-${JOB}
     labels:
       app: ${APP}
   spec:
     lookupPolicy:
       local: true
-- kind: ImageStream
-  apiVersion: v1
+# - kind: ImageStream
+#   apiVersion: v1
+#   metadata:
+#     name: ${LOG}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     lookupPolicy:
+#       local: true
+# - kind: DeploymentConfig
+#   apiVersion: v1
+#   metadata:
+#     name: ${APP}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     replicas: ${{REPS}}
+#     selector:
+#       app: ${APP}
+#       deploymentconfig: ${APP}
+#     template:
+#       metadata:
+#         labels:
+#           app: ${APP}
+#           deploymentconfig: ${APP}
+#       spec:
+#         containers:
+#         - image: ${APP}:${TAG}
+#           name: ${APP}
+#           ports:
+#           - containerPort: ${APP_PORT}
+#           volumeMounts:
+#           - mountPath: ${HOME}/${LOG_DIR}
+#             name: ${LOG}
+#           - mountPath: ${HOME}/${TMP_DIR}
+#             name: ${TMP_DIR}
+#           livenessProbe:
+#             httpGet:
+#               path: /${HEALTH}
+#               port: ${{APP_PORT}}
+#             failureThreshold: ${{FAILURE_THRESHOLD}}
+#             periodSeconds: ${{LIVENESS_PERIOD}}
+#           readinessProbe:
+#             httpGet:
+#               path: /${HEALTH}
+#               port: ${{APP_PORT}}
+#             initialDelaySeconds: ${{READINESS_PERIOD}}
+#             periodSeconds: ${{READINESS_PERIOD}}
+#           env:
+#           - name: PAGE_TITLE
+#             value: ${APP_TITLE}
+#           - name: BRANCH
+#             value: ${PROD}
+#           - name: FINBIF_ACCESS_TOKEN
+#             value: ${FINBIF_ACCESS_TOKEN}
+#           - name: FINBIF_API
+#             value: ${FINBIF_API}
+#           - name: FINBIF_WAREHOUSE_QUERY
+#             value: ${FINBIF_WAREHOUSE_QUERY}
+#           - name: FINBIF_EMAIL
+#             value: ${FINBIF_EMAIL}
+#           - name: PGUSER
+#             value: ${DB}
+#           - name: PGPASSWORD
+#             value: ${DB_PASSWORD}
+#           - name: PGHOST
+#             value: ${DB}
+#         volumes:
+#         - name: ${LOG}
+#           persistentVolumeClaim:
+#             claimName: ${LOG}
+#         - name: ${TMP_DIR}
+#           emptyDir:
+#             medium: Memory
+#     triggers:
+#     - type: ConfigChange
+#     - type: ImageChange
+#       imageChangeParams:
+#         automatic: true
+#         containerNames:
+#         - ${APP}
+#         from:
+#           kind: ImageStreamTag
+#           name: ${APP}:${TAG}
+# - kind: DeploymentConfig
+#   apiVersion: v1
+#   metadata:
+#     name: ${DEV}-${APP}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     replicas: ${{REPS}}
+#     selector:
+#       app: ${APP}
+#       deploymentconfig: ${DEV}-${APP}
+#     template:
+#       metadata:
+#         labels:
+#           app: ${APP}
+#           deploymentconfig: ${DEV}-${APP}
+#       spec:
+#         containers:
+#         - image: ${DEV}-${APP}:${TAG}
+#           name: ${DEV}-${APP}
+#           ports:
+#           - containerPort: ${APP_PORT}
+#           volumeMounts:
+#           - mountPath: ${HOME}/${LOG_DIR}
+#             name: ${DEV}-${LOG}
+#           - mountPath: ${HOME}/${TMP_DIR}
+#             name: ${TMP_DIR}
+#           livenessProbe:
+#             httpGet:
+#               path: /${HEALTH}
+#               port: ${{APP_PORT}}
+#             failureThreshold: ${{FAILURE_THRESHOLD}}
+#             periodSeconds: ${{LIVENESS_PERIOD}}
+#           readinessProbe:
+#             httpGet:
+#               path: /${HEALTH}
+#               port: ${{APP_PORT}}
+#             initialDelaySeconds: ${{READINESS_PERIOD}}
+#             periodSeconds: ${{READINESS_PERIOD}}
+#           env:
+#           - name: PAGE_TITLE
+#             value: ${APP_TITLE}-${DEV}
+#           - name: BRANCH
+#             value: ${DEV}
+#           - name: FINBIF_ACCESS_TOKEN
+#             value: ${DEV_FINBIF_ACCESS_TOKEN}
+#           - name: FINBIF_API
+#             value: ${DEV_FINBIF_API}
+#           - name: FINBIF_WAREHOUSE_QUERY
+#             value: ${DEV_FINBIF_WAREHOUSE_QUERY}
+#           - name: FINBIF_EMAIL
+#             value: ${FINBIF_EMAIL}
+#           - name: PGUSER
+#             value: ${DB}
+#           - name: PGPASSWORD
+#             value: ${DEV_DB_PASSWORD}
+#           - name: PGHOST
+#             value: ${DEV}-{DB}
+#         volumes:
+#         - name: ${DEV}-${LOG}
+#           persistentVolumeClaim:
+#             claimName: ${DEV}-${LOG}
+#         - name: ${TMP_DIR}
+#           emptyDir:
+#             medium: Memory
+#     triggers:
+#     - type: ConfigChange
+#     - type: ImageChange
+#       imageChangeParams:
+#         automatic: true
+#         containerNames:
+#         - ${DEV}-${APP}
+#         from:
+#           kind: ImageStreamTag
+#           name: ${DEV}-${APP}:${TAG}
+# - kind: DeploymentConfig
+#   apiVersion: v1
+#   metadata:
+#     name: ${DB}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     replicas: 1
+#     selector:
+#       app: ${APP}
+#       deploymentconfig: ${DB}
+#     template:
+#       metadata:
+#         labels:
+#           app: ${APP}
+#           deploymentconfig: ${DB}
+#       spec:
+#         containers:
+#         - image: ${DB}
+#           name: ${DB}
+#           volumeMounts:
+#           - mountPath: ${DB_DIR}
+#             name: ${DB}
+#           ports:
+#             - containerPort: ${DB_PORT}
+#           env:
+#           - name: MODE
+#             value: ${DB}
+#           - name: PG_DATABASE
+#             value: ${DB}
+#           - name: PG_PRIMARY_PORT
+#             value: ${DB_PORT}
+#           - name: PG_MODE
+#             value: ${DB_MODE}
+#           - name: PG_USER
+#             value: ${DB}
+#           - name: PG_PASSWORD
+#             value: ${DB_PASSWORD}
+#           - name: PG_PRIMARY_USER
+#             value: ${DB_MODE}
+#           - name: PG_PRIMARY_PASSWORD
+#             value: ${DB_PRIMARY_PASSWORD}
+#           - name: PG_ROOT_PASSWORD
+#             value: ${DB_ROOT_PASSWORD}
+#           - name: PGDATA_PATH_OVERRIDE
+#             value: ${DB}
+#         volumes:
+#         - name: ${DB}
+#           persistentVolumeClaim:
+#             claimName: ${DB}
+#     triggers:
+#     - type: ConfigChange
+# - kind: DeploymentConfig
+#   apiVersion: v1
+#   metadata:
+#     name: ${DEV}-${DB}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     replicas: 1
+#     selector:
+#       app: ${APP}
+#       deploymentconfig: ${DEV}-${DB}
+#     template:
+#       metadata:
+#         labels:
+#           app: ${APP}
+#           deploymentconfig: ${DEV}-${DB}
+#       spec:
+#         containers:
+#         - image: ${DEV}-${DB}
+#           name: ${DEV}-${DB}
+#           volumeMounts:
+#           - mountPath: ${DB_DIR}
+#             name: ${DEV}-${DB}
+#           ports:
+#             - containerPort: ${DB_PORT}
+#           env:
+#           - name: MODE
+#             value: ${DB}
+#           - name: PG_DATABASE
+#             value: ${DB}
+#           - name: PG_PRIMARY_PORT
+#             value: ${DB_PORT}
+#           - name: PG_MODE
+#             value: ${DB_MODE}
+#           - name: PG_USER
+#             value: ${DB}
+#           - name: PG_PASSWORD
+#             value: ${DEV_DB_PASSWORD}
+#           - name: PG_PRIMARY_USER
+#             value: ${DB_MODE}
+#           - name: PG_PRIMARY_PASSWORD
+#             value: ${DEV_DB_PRIMARY_PASSWORD}
+#           - name: PG_ROOT_PASSWORD
+#             value: ${DEV_DB_ROOT_PASSWORD}
+#           - name: PGDATA_PATH_OVERRIDE
+#             value: ${DEV}-${DB}
+#         volumes:
+#         - name: ${DEV}-${DB}
+#           persistentVolumeClaim:
+#             claimName: ${DEV}-${DB}
+#     triggers:
+#     - type: ConfigChange
+# - kind: DeploymentConfig
+#   apiVersion: v1
+#   metadata:
+#     name: ${LOG}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     replicas: ${{REPS}}
+#     selector:
+#       app: ${APP}
+#       deploymentconfig: ${LOG}
+#     template:
+#       metadata:
+#         labels:
+#           app: ${APP}
+#           deploymentconfig: ${LOG}
+#       spec:
+#         containers:
+#         - image: ${LOG}:${TAG}
+#           name: ${LOG}
+#           ports:
+#           - containerPort: ${LOG_PORT}
+#           volumeMounts:
+#           - mountPath: ${HOME}/${LOG_DIR}
+#             name: ${LOG}
+#           livenessProbe:
+#             httpGet:
+#               port: ${{LOG_PORT}}
+#             failureThreshold: ${{FAILURE_THRESHOLD}}
+#             periodSeconds: ${{LIVENESS_PERIOD}}
+#           readinessProbe:
+#             httpGet:
+#               port: ${{LOG_PORT}}
+#             initialDelaySeconds: ${{READINESS_PERIOD}}
+#             periodSeconds: ${{READINESS_PERIOD}}
+#           env:
+#           - name: PAGE_TITLE
+#             value: ${APP_TITLE}
+#         volumes:
+#         - name: ${LOG}
+#           persistentVolumeClaim:
+#             claimName: ${LOG}
+#     triggers:
+#     - type: ConfigChange
+#     - type: ImageChange
+#       imageChangeParams:
+#         automatic: true
+#         containerNames:
+#         - ${LOG}
+#         from:
+#           kind: ImageStreamTag
+#           name: ${LOG}:${TAG}
+# - kind: DeploymentConfig
+#   apiVersion: v1
+#   metadata:
+#     name: ${DEV}-${LOG}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     replicas: ${{REPS}}
+#     selector:
+#       app: ${APP}
+#       deploymentconfig: ${DEV}-${LOG}
+#     template:
+#       metadata:
+#         labels:
+#           app: ${APP}
+#           deploymentconfig: ${DEV}-${LOG}
+#       spec:
+#         containers:
+#         - image: ${LOG}:${TAG}
+#           name: ${DEV}-${LOG}
+#           ports:
+#           - containerPort: ${LOG_PORT}
+#           volumeMounts:
+#           - mountPath: ${HOME}/${LOG_DIR}
+#             name: ${DEV}-${LOG}
+#           livenessProbe:
+#             httpGet:
+#               port: ${{LOG_PORT}}
+#             failureThreshold: ${{FAILURE_THRESHOLD}}
+#             periodSeconds: ${{LIVENESS_PERIOD}}
+#           readinessProbe:
+#             httpGet:
+#               port: ${{LOG_PORT}}
+#             initialDelaySeconds: ${{READINESS_PERIOD}}
+#             periodSeconds: ${{READINESS_PERIOD}}
+#           env:
+#           - name: PAGE_TITLE
+#             value: ${APP_TITLE}-${DEV}
+#         volumes:
+#         - name: ${DEV}-${LOG}
+#           persistentVolumeClaim:
+#             claimName: ${DEV}-${LOG}
+#     triggers:
+#     - type: ConfigChange
+#     - type: ImageChange
+#       imageChangeParams:
+#         automatic: true
+#         containerNames:
+#         - ${DEV}-${LOG}
+#         from:
+#           kind: ImageStreamTag
+#           name: ${LOG}:${TAG}
+# - kind: PersistentVolumeClaim
+#   apiVersion: v1
+#   metadata:
+#     name: ${LOG}
+#   spec:
+#     accessModes:
+#     - ReadWriteMany
+#     persistentVolumeReclaimPolicy: Retain
+#     resources:
+#       requests:
+#         storage: ${SMALL_STORAGE}
+# - kind: PersistentVolumeClaim
+#   apiVersion: v1
+#   metadata:
+#     name: ${DEV}-${LOG}
+#   spec:
+#     accessModes:
+#     - ReadWriteMany
+#     persistentVolumeReclaimPolicy: Retain
+#     resources:
+#       requests:
+#         storage: ${SMALL_STORAGE}
+# - kind: PersistentVolumeClaim
+#   apiVersion: v1
+#   metadata:
+#     name: ${DB}
+#   spec:
+#     accessModes:
+#     - ReadWriteMany
+#     persistentVolumeReclaimPolicy: Retain
+#     resources:
+#       requests:
+#         storage: ${STORAGE}
+# - kind: PersistentVolumeClaim
+#   apiVersion: v1
+#   metadata:
+#     name: ${DEV}-${DB}
+#   spec:
+#     accessModes:
+#     - ReadWriteMany
+#     persistentVolumeReclaimPolicy: Retain
+#     resources:
+#       requests:
+#         storage: ${SMALL_STORAGE}
+# - kind: Service
+#   apiVersion: v1
+#   metadata:
+#     name: ${APP}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     ports:
+#     - name: ${APP_PORT}
+#       port: ${APP_PORT}
+#       protocol: TCP
+#       targetPort: ${{APP_PORT}}
+#     selector:
+#       app: ${APP}
+#       deploymentconfig: ${APP}
+# - kind: Service
+#   apiVersion: v1
+#   metadata:
+#     name: ${DEV}-${APP}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     ports:
+#     - name: ${APP_PORT}
+#       port: ${APP_PORT}
+#       protocol: TCP
+#       targetPort: ${{APP_PORT}}
+#     selector:
+#       app: ${APP}
+#       deploymentconfig: ${DEV}-${APP}
+# - kind: Service
+#   apiVersion: v1
+#   metadata:
+#     name: ${LOG}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     ports:
+#     - name: ${LOG_PORT}
+#       port: ${LOG_PORT}
+#       protocol: TCP
+#       targetPort: ${{LOG_PORT}}
+#     selector:
+#       app: ${APP}
+#       deploymentconfig: ${LOG}
+# - kind: Service
+#   apiVersion: v1
+#   metadata:
+#     name: ${DEV}-${LOG}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     ports:
+#     - name: ${LOG_PORT}
+#       port: ${LOG_PORT}
+#       protocol: TCP
+#       targetPort: ${{LOG_PORT}}
+#     selector:
+#       app: ${APP}
+#       deploymentconfig: ${DEV}-${LOG}
+# - kind: Service
+#   apiVersion: v1
+#   metadata:
+#     name: ${DB}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     ports:
+#     - name: ${DB_PORT}
+#       port: ${DB_PORT}
+#       targetPort: ${{DB_PORT}}
+#     selector:
+#       app: ${APP}
+#       deploymentconfig: ${DB}
+# - kind: Service
+#   apiVersion: v1
+#   metadata:
+#     name: ${DEV}-${DB}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     ports:
+#     - name: ${DB_PORT}
+#       port: ${DB_PORT}
+#       targetPort: ${{DB_PORT}}
+#     selector:
+#       app: ${APP}
+#       deploymentconfig: ${DEV}-${DB}
+# - kind: Route
+#   apiVersion: v1
+#   metadata:
+#     name: ${APP}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     host: ${SUBDOMAIN}.${HOST}
+#     port:
+#       targetPort: ${APP_PORT}
+#     tls:
+#       termination: edge
+#     to:
+#       kind: Service
+#       name: ${APP}
+#     wildcardPolicy: None
+# - kind: Route
+#   apiVersion: v1
+#   metadata:
+#     name: ${DEV}-${APP}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     host: ${SUBDOMAIN}-${DEV}.${HOST}
+#     port:
+#       targetPort: ${APP_PORT}
+#     tls:
+#       termination: edge
+#     to:
+#       kind: Service
+#       name: ${DEV}-${APP}
+#     wildcardPolicy: None
+# - kind: Route
+#   apiVersion: v1
+#   metadata:
+#     name: ${LOG}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     host: ${LOG_SUBDOMAIN}.${LOG_HOST}
+#     port:
+#       targetPort: ${LOG_PORT}
+#     tls:
+#       termination: edge
+#     to:
+#       kind: Service
+#       name: ${LOG}
+#     wildcardPolicy: None
+# - kind: Route
+#   apiVersion: v1
+#   metadata:
+#     name: ${DEV}-${LOG}
+#     labels:
+#       app: ${APP}
+#   spec:
+#     host: ${LOG_SUBDOMAIN}-${DEV}.${LOG_HOST}
+#     port:
+#       targetPort: ${LOG_PORT}
+#     tls:
+#       termination: edge
+#     to:
+#       kind: Service
+#       name: ${DEV}-${LOG}
+#     wildcardPolicy: None
+# - kind: CronJob
+#   apiVersion: batch/v1beta1
+#   metadata:
+#     name: ${APP}
+#   spec:
+#     schedule: ${JOB_SCHEDULE}
+#     successfulJobsHistoryLimit: ${{JOB_LIMIT}}
+#     failedJobsHistoryLimit: ${{JOB_LIMIT}}
+#     jobTemplate:
+#       spec:
+#         template:
+#           metadata:
+#             labels:
+#               app: ${APP}
+#           spec:
+#             containers:
+#             - name: ${JOB}
+#               image: ${JOB}:${TAG}
+#               env:
+#               - name: HOST
+#                 value: ${APP}
+#             restartPolicy: Never
+- kind: CronJob
+  apiVersion: batch/v1beta1
   metadata:
     name: ${DEV}-${APP}
-    labels:
-      app: ${APP}
   spec:
-    lookupPolicy:
-      local: true
-- kind: ImageStream
-  apiVersion: v1
-  metadata:
-    name: ${DB}
-    labels:
-      app: ${APP}
-  spec:
-    lookupPolicy:
-      local: true
-- kind: ImageStream
-  apiVersion: v1
-  metadata:
-    name: ${DEV}-${DB}
-    labels:
-      app: ${APP}
-  spec:
-    lookupPolicy:
-      local: true
-- kind: ImageStream
-  apiVersion: v1
-  metadata:
-    name: ${LOG}
-    labels:
-      app: ${APP}
-  spec:
-    lookupPolicy:
-      local: true
-- kind: DeploymentConfig
-  apiVersion: v1
-  metadata:
-    name: ${APP}
-    labels:
-      app: ${APP}
-  spec:
-    replicas: ${{REPS}}
-    selector:
-      app: ${APP}
-      deploymentconfig: ${APP}
-    template:
-      metadata:
-        labels:
-          app: ${APP}
-          deploymentconfig: ${APP}
+    schedule: ${JOB_SCHEDULE}
+    successfulJobsHistoryLimit: ${{JOB_LIMIT}}
+    failedJobsHistoryLimit: ${{JOB_LIMIT}}
+    jobTemplate:
       spec:
-        containers:
-        - image: ${APP}:${TAG}
-          name: ${APP}
-          ports:
-          - containerPort: ${APP_PORT}
-          volumeMounts:
-          - mountPath: ${HOME}/${LOG_DIR}
-            name: ${LOG}
-          - mountPath: ${HOME}/${TMP_DIR}
-            name: ${TMP_DIR}
-          livenessProbe:
-            httpGet:
-              path: /${HEALTH}
-              port: ${{APP_PORT}}
-            failureThreshold: ${{FAILURE_THRESHOLD}}
-            periodSeconds: ${{LIVENESS_PERIOD}}
-          readinessProbe:
-            httpGet:
-              path: /${HEALTH}
-              port: ${{APP_PORT}}
-            initialDelaySeconds: ${{READINESS_PERIOD}}
-            periodSeconds: ${{READINESS_PERIOD}}
-          env:
-          - name: PAGE_TITLE
-            value: ${APP_TITLE}
-          - name: BRANCH
-            value: ${PROD}
-          - name: FINBIF_ACCESS_TOKEN
-            value: ${FINBIF_ACCESS_TOKEN}
-          - name: FINBIF_API
-            value: ${FINBIF_API}
-          - name: FINBIF_WAREHOUSE_QUERY
-            value: ${FINBIF_WAREHOUSE_QUERY}
-          - name: FINBIF_EMAIL
-            value: ${FINBIF_EMAIL}
-          - name: PGUSER
-            value: ${DB}
-          - name: PGPASSWORD
-            value: ${DB_PASSWORD}
-          - name: PGHOST
-            value: ${DB}
-        volumes:
-        - name: ${LOG}
-          persistentVolumeClaim:
-            claimName: ${LOG}
-        - name: ${TMP_DIR}
-          emptyDir:
-            medium: Memory
-    triggers:
-    - type: ConfigChange
-    - type: ImageChange
-      imageChangeParams:
-        automatic: true
-        containerNames:
-        - ${APP}
-        from:
-          kind: ImageStreamTag
-          name: ${APP}:${TAG}
-- kind: DeploymentConfig
-  apiVersion: v1
-  metadata:
-    name: ${DEV}-${APP}
-    labels:
-      app: ${APP}
-  spec:
-    replicas: ${{REPS}}
-    selector:
-      app: ${APP}
-      deploymentconfig: ${DEV}-${APP}
-    template:
-      metadata:
-        labels:
-          app: ${APP}
-          deploymentconfig: ${DEV}-${APP}
-      spec:
-        containers:
-        - image: ${DEV}-${APP}:${TAG}
-          name: ${DEV}-${APP}
-          ports:
-          - containerPort: ${APP_PORT}
-          volumeMounts:
-          - mountPath: ${HOME}/${LOG_DIR}
-            name: ${DEV}-${LOG}
-          - mountPath: ${HOME}/${TMP_DIR}
-            name: ${TMP_DIR}
-          livenessProbe:
-            httpGet:
-              path: /${HEALTH}
-              port: ${{APP_PORT}}
-            failureThreshold: ${{FAILURE_THRESHOLD}}
-            periodSeconds: ${{LIVENESS_PERIOD}}
-          readinessProbe:
-            httpGet:
-              path: /${HEALTH}
-              port: ${{APP_PORT}}
-            initialDelaySeconds: ${{READINESS_PERIOD}}
-            periodSeconds: ${{READINESS_PERIOD}}
-          env:
-          - name: PAGE_TITLE
-            value: ${APP_TITLE}-${DEV}
-          - name: BRANCH
-            value: ${DEV}
-          - name: FINBIF_ACCESS_TOKEN
-            value: ${DEV_FINBIF_ACCESS_TOKEN}
-          - name: FINBIF_API
-            value: ${DEV_FINBIF_API}
-          - name: FINBIF_WAREHOUSE_QUERY
-            value: ${DEV_FINBIF_WAREHOUSE_QUERY}
-          - name: FINBIF_EMAIL
-            value: ${FINBIF_EMAIL}
-          - name: PGUSER
-            value: ${DB}
-          - name: PGPASSWORD
-            value: ${DEV_DB_PASSWORD}
-          - name: PGHOST
-            value: ${DEV}-{DB}
-        volumes:
-        - name: ${DEV}-${LOG}
-          persistentVolumeClaim:
-            claimName: ${DEV}-${LOG}
-        - name: ${TMP_DIR}
-          emptyDir:
-            medium: Memory
-    triggers:
-    - type: ConfigChange
-    - type: ImageChange
-      imageChangeParams:
-        automatic: true
-        containerNames:
-        - ${DEV}-${APP}
-        from:
-          kind: ImageStreamTag
-          name: ${DEV}-${APP}:${TAG}
-- kind: DeploymentConfig
-  apiVersion: v1
-  metadata:
-    name: ${DB}
-    labels:
-      app: ${APP}
-  spec:
-    replicas: 1
-    selector:
-      app: ${APP}
-      deploymentconfig: ${DB}
-    template:
-      metadata:
-        labels:
-          app: ${APP}
-          deploymentconfig: ${DB}
-      spec:
-        containers:
-        - image: ${DB}
-          name: ${DB}
-          volumeMounts:
-          - mountPath: ${DB_DIR}
-            name: ${DB}
-          ports:
-            - containerPort: ${DB_PORT}
-          env:
-          - name: MODE
-            value: ${DB}
-          - name: PG_DATABASE
-            value: ${DB}
-          - name: PG_PRIMARY_PORT
-            value: ${DB_PORT}
-          - name: PG_MODE
-            value: ${DB_MODE}
-          - name: PG_USER
-            value: ${DB}
-          - name: PG_PASSWORD
-            value: ${DB_PASSWORD}
-          - name: PG_PRIMARY_USER
-            value: ${DB_MODE}
-          - name: PG_PRIMARY_PASSWORD
-            value: ${DB_PRIMARY_PASSWORD}
-          - name: PG_ROOT_PASSWORD
-            value: ${DB_ROOT_PASSWORD}
-          - name: PGDATA_PATH_OVERRIDE
-            value: ${DB}
-        volumes:
-        - name: ${DB}
-          persistentVolumeClaim:
-            claimName: ${DB}
-    triggers:
-    - type: ConfigChange
-- kind: DeploymentConfig
-  apiVersion: v1
-  metadata:
-    name: ${DEV}-${DB}
-    labels:
-      app: ${APP}
-  spec:
-    replicas: 1
-    selector:
-      app: ${APP}
-      deploymentconfig: ${DEV}-${DB}
-    template:
-      metadata:
-        labels:
-          app: ${APP}
-          deploymentconfig: ${DEV}-${DB}
-      spec:
-        containers:
-        - image: ${DEV}-${DB}
-          name: ${DEV}-${DB}
-          volumeMounts:
-          - mountPath: ${DB_DIR}
-            name: ${DEV}-${DB}
-          ports:
-            - containerPort: ${DB_PORT}
-          env:
-          - name: MODE
-            value: ${DB}
-          - name: PG_DATABASE
-            value: ${DB}
-          - name: PG_PRIMARY_PORT
-            value: ${DB_PORT}
-          - name: PG_MODE
-            value: ${DB_MODE}
-          - name: PG_USER
-            value: ${DB}
-          - name: PG_PASSWORD
-            value: ${DEV_DB_PASSWORD}
-          - name: PG_PRIMARY_USER
-            value: ${DB_MODE}
-          - name: PG_PRIMARY_PASSWORD
-            value: ${DEV_DB_PRIMARY_PASSWORD}
-          - name: PG_ROOT_PASSWORD
-            value: ${DEV_DB_ROOT_PASSWORD}
-          - name: PGDATA_PATH_OVERRIDE
-            value: ${DEV}-${DB}
-        volumes:
-        - name: ${DEV}-${DB}
-          persistentVolumeClaim:
-            claimName: ${DEV}-${DB}
-    triggers:
-    - type: ConfigChange
-- kind: DeploymentConfig
-  apiVersion: v1
-  metadata:
-    name: ${LOG}
-    labels:
-      app: ${APP}
-  spec:
-    replicas: ${{REPS}}
-    selector:
-      app: ${APP}
-      deploymentconfig: ${LOG}
-    template:
-      metadata:
-        labels:
-          app: ${APP}
-          deploymentconfig: ${LOG}
-      spec:
-        containers:
-        - image: ${LOG}:${TAG}
-          name: ${LOG}
-          ports:
-          - containerPort: ${LOG_PORT}
-          volumeMounts:
-          - mountPath: ${HOME}/${LOG_DIR}
-            name: ${LOG}
-          livenessProbe:
-            httpGet:
-              port: ${{LOG_PORT}}
-            failureThreshold: ${{FAILURE_THRESHOLD}}
-            periodSeconds: ${{LIVENESS_PERIOD}}
-          readinessProbe:
-            httpGet:
-              port: ${{LOG_PORT}}
-            initialDelaySeconds: ${{READINESS_PERIOD}}
-            periodSeconds: ${{READINESS_PERIOD}}
-          env:
-          - name: PAGE_TITLE
-            value: ${APP_TITLE}
-        volumes:
-        - name: ${LOG}
-          persistentVolumeClaim:
-            claimName: ${LOG}
-    triggers:
-    - type: ConfigChange
-    - type: ImageChange
-      imageChangeParams:
-        automatic: true
-        containerNames:
-        - ${LOG}
-        from:
-          kind: ImageStreamTag
-          name: ${LOG}:${TAG}
-- kind: DeploymentConfig
-  apiVersion: v1
-  metadata:
-    name: ${DEV}-${LOG}
-    labels:
-      app: ${APP}
-  spec:
-    replicas: ${{REPS}}
-    selector:
-      app: ${APP}
-      deploymentconfig: ${DEV}-${LOG}
-    template:
-      metadata:
-        labels:
-          app: ${APP}
-          deploymentconfig: ${DEV}-${LOG}
-      spec:
-        containers:
-        - image: ${LOG}:${TAG}
-          name: ${DEV}-${LOG}
-          ports:
-          - containerPort: ${LOG_PORT}
-          volumeMounts:
-          - mountPath: ${HOME}/${LOG_DIR}
-            name: ${DEV}-${LOG}
-          livenessProbe:
-            httpGet:
-              port: ${{LOG_PORT}}
-            failureThreshold: ${{FAILURE_THRESHOLD}}
-            periodSeconds: ${{LIVENESS_PERIOD}}
-          readinessProbe:
-            httpGet:
-              port: ${{LOG_PORT}}
-            initialDelaySeconds: ${{READINESS_PERIOD}}
-            periodSeconds: ${{READINESS_PERIOD}}
-          env:
-          - name: PAGE_TITLE
-            value: ${APP_TITLE}-${DEV}
-        volumes:
-        - name: ${DEV}-${LOG}
-          persistentVolumeClaim:
-            claimName: ${DEV}-${LOG}
-    triggers:
-    - type: ConfigChange
-    - type: ImageChange
-      imageChangeParams:
-        automatic: true
-        containerNames:
-        - ${DEV}-${LOG}
-        from:
-          kind: ImageStreamTag
-          name: ${LOG}:${TAG}
-- kind: PersistentVolumeClaim
-  apiVersion: v1
-  metadata:
-    name: ${LOG}
-  spec:
-    accessModes:
-    - ReadWriteMany
-    persistentVolumeReclaimPolicy: Retain
-    resources:
-      requests:
-        storage: ${SMALL_STORAGE}
-- kind: PersistentVolumeClaim
-  apiVersion: v1
-  metadata:
-    name: ${DEV}-${LOG}
-  spec:
-    accessModes:
-    - ReadWriteMany
-    persistentVolumeReclaimPolicy: Retain
-    resources:
-      requests:
-        storage: ${SMALL_STORAGE}
-- kind: PersistentVolumeClaim
-  apiVersion: v1
-  metadata:
-    name: ${DB}
-  spec:
-    accessModes:
-    - ReadWriteMany
-    persistentVolumeReclaimPolicy: Retain
-    resources:
-      requests:
-        storage: ${STORAGE}
-- kind: PersistentVolumeClaim
-  apiVersion: v1
-  metadata:
-    name: ${DEV}-${DB}
-  spec:
-    accessModes:
-    - ReadWriteMany
-    persistentVolumeReclaimPolicy: Retain
-    resources:
-      requests:
-        storage: ${SMALL_STORAGE}
-- kind: Service
-  apiVersion: v1
-  metadata:
-    name: ${APP}
-    labels:
-      app: ${APP}
-  spec:
-    ports:
-    - name: ${APP_PORT}
-      port: ${APP_PORT}
-      protocol: TCP
-      targetPort: ${{APP_PORT}}
-    selector:
-      app: ${APP}
-      deploymentconfig: ${APP}
-- kind: Service
-  apiVersion: v1
-  metadata:
-    name: ${DEV}-${APP}
-    labels:
-      app: ${APP}
-  spec:
-    ports:
-    - name: ${APP_PORT}
-      port: ${APP_PORT}
-      protocol: TCP
-      targetPort: ${{APP_PORT}}
-    selector:
-      app: ${APP}
-      deploymentconfig: ${DEV}-${APP}
-- kind: Service
-  apiVersion: v1
-  metadata:
-    name: ${LOG}
-    labels:
-      app: ${APP}
-  spec:
-    ports:
-    - name: ${LOG_PORT}
-      port: ${LOG_PORT}
-      protocol: TCP
-      targetPort: ${{LOG_PORT}}
-    selector:
-      app: ${APP}
-      deploymentconfig: ${LOG}
-- kind: Service
-  apiVersion: v1
-  metadata:
-    name: ${DEV}-${LOG}
-    labels:
-      app: ${APP}
-  spec:
-    ports:
-    - name: ${LOG_PORT}
-      port: ${LOG_PORT}
-      protocol: TCP
-      targetPort: ${{LOG_PORT}}
-    selector:
-      app: ${APP}
-      deploymentconfig: ${DEV}-${LOG}
-- kind: Service
-  apiVersion: v1
-  metadata:
-    name: ${DB}
-    labels:
-      app: ${APP}
-  spec:
-    ports:
-    - name: ${DB_PORT}
-      port: ${DB_PORT}
-      targetPort: ${{DB_PORT}}
-    selector:
-      app: ${APP}
-      deploymentconfig: ${DB}
-- kind: Service
-  apiVersion: v1
-  metadata:
-    name: ${DEV}-${DB}
-    labels:
-      app: ${APP}
-  spec:
-    ports:
-    - name: ${DB_PORT}
-      port: ${DB_PORT}
-      targetPort: ${{DB_PORT}}
-    selector:
-      app: ${APP}
-      deploymentconfig: ${DEV}-${DB}
-- kind: Route
-  apiVersion: v1
-  metadata:
-    name: ${APP}
-    labels:
-      app: ${APP}
-  spec:
-    host: ${SUBDOMAIN}.${HOST}
-    port:
-      targetPort: ${APP_PORT}
-    tls:
-      termination: edge
-    to:
-      kind: Service
-      name: ${APP}
-    wildcardPolicy: None
-- kind: Route
-  apiVersion: v1
-  metadata:
-    name: ${DEV}-${APP}
-    labels:
-      app: ${APP}
-  spec:
-    host: ${SUBDOMAIN}-${DEV}.${HOST}
-    port:
-      targetPort: ${APP_PORT}
-    tls:
-      termination: edge
-    to:
-      kind: Service
-      name: ${DEV}-${APP}
-    wildcardPolicy: None
-- kind: Route
-  apiVersion: v1
-  metadata:
-    name: ${LOG}
-    labels:
-      app: ${APP}
-  spec:
-    host: ${LOG_SUBDOMAIN}.${LOG_HOST}
-    port:
-      targetPort: ${LOG_PORT}
-    tls:
-      termination: edge
-    to:
-      kind: Service
-      name: ${LOG}
-    wildcardPolicy: None
-- kind: Route
-  apiVersion: v1
-  metadata:
-    name: ${DEV}-${LOG}
-    labels:
-      app: ${APP}
-  spec:
-    host: ${LOG_SUBDOMAIN}-${DEV}.${LOG_HOST}
-    port:
-      targetPort: ${LOG_PORT}
-    tls:
-      termination: edge
-    to:
-      kind: Service
-      name: ${DEV}-${LOG}
-    wildcardPolicy: None
+        template:
+          metadata:
+            labels:
+              app: ${APP}
+          spec:
+            containers:
+            - name: ${DEV}-${JOB}
+              image: ${DEV}-${JOB}:${TAG}
+              env:
+              - name: HOST
+                value: ${DEV}-${APP}
+            restartPolicy: Never
