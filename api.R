@@ -233,6 +233,14 @@ function() {
 
 }
 
+#* @get /
+function(res) {
+
+  res$status <- 303L
+  res$setHeader("Location", "/__docs__/")
+
+}
+
 #* @plumber
 function(pr) {
 
@@ -246,6 +254,7 @@ function(pr) {
 
       spec$paths$`/healthz` <- NULL
       spec$paths$`/favicon.ico` <- NULL
+      spec$paths$`/` <- NULL
 
       set_200_only <- function(spec, path) {
         spec$paths[[path]]$get$responses$`500` <- NULL
