@@ -35,8 +35,6 @@ function() {
 }
 
 #* Get list of available multi-species indices
-#* Gets a list of shortcodes for the multi-species indices available.
-#* The list is returned in boxed JSON format.
 #* @tag lists
 #* @get /list/indices
 #* @response 200 A json array response
@@ -52,10 +50,6 @@ function(req) {
 }
 
 #* Get list of species for an index
-#* Gets a list of species codes representing species that make up a given
-#* multi-species index. The list is returned in boxed JSON format.<br>To list
-#* the multi-species indices available see
-#* [/list/indices](#/lists/get_list_indices).
 #* @tag lists
 #* @get /list/spp
 #* @param index Shortcode for multi-species index (see [/list/indices](#/lists/get_list_indices)).
@@ -74,9 +68,6 @@ function(index, req) {
 }
 
 #* Get data for a multi-species index as JSON
-#* Gets the time series data for a given multi-species index in boxed JSON
-#* format.<br>To list the multi-species indices available see
-#* [/list/indices](#/lists/get_list_indices).
 #* @tag indices
 #* @get /ms-index/json
 #* @param index Shortcode for multi-species index (see [/list/indices](#/lists/get_list_indices)).
@@ -99,9 +90,6 @@ function(index, cache = "true", req) {
 }
 
 #* Get data for a multi-species index as a CSV file
-#* Gets the time series data for a given multi-species index as a CSV file.
-#* <br>To list the multi-species indices available see
-#* [/list/indices](#/lists/get_list_indices).
 #* @tag indices
 #* @get /ms-index/csv
 #* @serializer csv
@@ -125,9 +113,6 @@ function(index, cache = "true", req) {
 }
 
 #* Get data for a single-species index as JSON
-#* Gets the time series data for a given species from a given multi-species
-#* index in boxed JSON format<br>To list species see
-#* [/list/spp](#/lists/get_list_spp).
 #* @tag indices
 #* @get /sp-index/json
 #* @param index Shortcode for multi-species index (see [/list/indices](#/lists/get_list_indices)).
@@ -151,9 +136,6 @@ function(index, sp, cache = "true", req) {
 }
 
 #* Get data for a single-species index as CSV file
-#* Gets the time series data for a given species from a given multi-species
-#* index as a CSV file.<br>To list species see
-#* [/list/spp](#/lists/get_list_spp).
 #* @tag indices
 #* @get /sp-index/csv
 #* @serializer csv
@@ -178,9 +160,6 @@ function(index, sp, cache = "true", req) {
 }
 
 #* Get a plot of a multi-species index
-#* Gets a time-series plot of data for a given multi-species index as an SVG
-#* image.<br>To list the multi-species indices available see
-#* [/list/indices](#/lists/get_list_indices).
 #* @tag plots
 #* @get /ms-plot
 #* @param index Shortcode for multi-species index (see [/list/indices](#/lists/get_list_indices)).
@@ -212,9 +191,6 @@ function(index, cache = "true", res, req) {
 }
 
 #* Get a plot of a single-species index
-#* Gets a time-series plot of data for a given species from a given
-#* multi-species index as an SVG image.<br>To list species see
-#* [/list/spp](#/lists/get_list_spp).
 #* @tag plots
 #* @get /sp-plot
 #* @param index Shortcode for multi-species index (see [/list/indices](#/lists/get_list_indices)).
@@ -248,20 +224,35 @@ function(index, sp, cache = "true", res, req) {
 
 #* @plumber
 function(pr) {
-  pr_set_api_spec(
+
+  version <- as.character(utils::packageVersion("indicators"))
+
+  plumber::pr_set_api_spec(
     pr,
     function(spec) {
 
-      set_200_only <- function(path) {
-        spec$paths[[path]]$get$responses$`500` <<- NULL
-        spec$paths[[path]]$get$responses$default <<- NULL
+      spec$info$version <- version
+
+      spec$paths$`/healthz` <- NULL
+      spec$paths$`/favicon.ico` <- NULL
+
+      set_200_only <- function(spec, path) {
+        spec$paths[[path]]$get$responses$`500` <- NULL
+        spec$paths[[path]]$get$responses$default <- NULL
+        spec
+      }
+
+      set_description <- function(spec, path, description) {
+        spec$paths[[path]]$get$description <- description
+        spec
       }
 
       set_example <- function(
-        path, example, status = "200", type = "application/json"
+        spec, path, example, status = "200", type = "application/json"
       ) {
-        spec$paths[[path]]$get$responses[[status]]$content[[type]]$schema <<- NULL
-        spec$paths[[path]]$get$responses[[status]]$content[[type]]$example <<- example
+        spec$paths[[path]]$get$responses[[status]]$content[[type]]$schema <- NULL
+        spec$paths[[path]]$get$responses[[status]]$content[[type]]$example <- example
+        spec
       }
 
       example_json <- list(
@@ -276,32 +267,124 @@ function(pr) {
         readr::read_file("indicators/man/figures/graph.svg")
       )
 
-      set_200_only("/list/indices")
-      set_example("/list/indices", c("index1", "index2"))
+      spec <- set_200_only(spec, "/list/indices")
+      spec <- set_description(
+        spec, "/list/indices",
+        paste(
+          "Gets a list of shortcodes for the multi-species indices available.",
+          "The list is returned in boxed JSON format."
+        )
+      )
+      spec <- set_example(spec, "/list/indices", c("index1", "index2"))
 
-      set_200_only("/list/spp")
-      set_example("/list/spp", c("sp1", "sp2", "sp3"))
+      spec <- set_200_only(spec, "/list/spp")
+      spec <- set_description(
+        spec,
+        "/list/spp",
+        paste(
+          "Gets a list of species codes representing species that make up a",
+          "given multi-species index. The list is returned in boxed JSON",
+          "format.<br>To list the multi-species indices available see",
+          "[/list/indices](#/lists/get_list_indices)."
+        )
+      )
+      spec <- set_example(spec, "/list/spp", c("sp1", "sp2", "sp3"))
 
-      set_200_only("/ms-index/json")
-      set_example("/ms-index/json", example_json)
+      spec <- set_200_only(spec, "/ms-index/json")
+      spec <- set_description(
+        spec,
+        "/ms-index/json",
+        paste(
+          "Gets the time series data for a given multi-species index in boxed",
+          "JSON format.<br>To list the multi-species indices available see",
+          "[/list/indices](#/lists/get_list_indices)."
+        )
+      )
+      spec <- set_example(spec, "/ms-index/json", example_json)
 
-      set_200_only("/ms-index/csv")
-      set_example("/ms-index/csv", type = "text/csv", example_csv)
+      spec <- set_200_only(spec, "/ms-index/csv")
+      spec <- set_description(
+        spec,
+        "/ms-index/csv",
+        paste(
+          "Gets the time series data for a given multi-species index as a CSV",
+          "file.<br>To list the multi-species indices available see",
+          "[/list/indices](#/lists/get_list_indices)."
+        )
+      )
+      spec <- set_example(spec, "/ms-index/csv", type = "text/csv", example_csv)
 
-      set_200_only("/sp-index/json")
-      set_example("/sp-index/json", example_json)
+      spec <- set_200_only(spec, "/sp-index/json")
+      spec <- set_description(
+        spec,
+        "/sp-index/json",
+        paste(
+          "#* Gets the time series data for a given species from a given",
+          "multi-species index in boxed JSON format<br>To list species see",
+          "[/list/spp](#/lists/get_list_spp)."
+        )
+      )
+      spec <- set_example(spec, "/sp-index/json", example_json)
 
-      set_200_only("/sp-index/csv")
-      set_example("/sp-index/csv", type = "text/csv", example_csv)
+      spec <- set_200_only(spec, "/sp-index/csv")
+      spec <- set_description(
+        spec,
+        "/sp-index/csv",
+        paste(
+          "Gets the time series data for a given species from a given",
+          "multi-species index as a CSV file.<br>To list species see",
+          "[/list/spp](#/lists/get_list_spp)."
+        )
+      )
+      spec <- set_example(spec, "/sp-index/csv", type = "text/csv", example_csv)
 
-      set_200_only("/ms-plot")
-      set_example("/ms-plot", type = "image/svg+xml", example_svg)
+      spec <- set_200_only(spec, "/ms-plot")
+      spec <- set_description(
+        spec,
+        "/ms-plot",
+        paste(
+          "Gets a time-series plot of data for a given multi-species index as",
+          "an SVG image.<br>To list the multi-species indices available see",
+          "[/list/indices](#/lists/get_list_indices)."
+        )
+      )
+      spec <- set_example(spec, "/ms-plot", type = "image/svg+xml", example_svg)
 
-      set_200_only("/sp-plot")
-      set_example("/sp-plot", type = "image/svg+xml", example_svg)
+      spec <- set_200_only(spec, "/sp-plot")
+      spec <- set_description(
+        spec,
+        "/sp-plot",
+        paste(
+          "Gets a time-series plot of data for a given species from a given",
+          "multi-species index as an SVG image.<br>To list species see",
+          "[/list/spp](#/lists/get_list_spp)."
+        )
+      )
+      spec <- set_example(spec, "/sp-plot", type = "image/svg+xml", example_svg)
 
       spec
 
     }
   )
+
+  pr$setDocs(
+    "rapidoc",
+    bg_color = "#2691d9",
+    text_color = "#ffffff",
+    primary_color = "#2c3e50",
+    render_style = "read",
+    slots = paste0(
+      '<img ',
+      'slot="logo" ',
+      'src="../public/logo.png" ',
+      'width=36px style=\"margin-left:7px\"/>'
+    ),
+    heading_text = paste("FBI", version),
+    regular_font = "Roboto, Helvetica Neue, Helvetica, Arial, sans-serif",
+    font_size = "largest",
+    sort_tags = "false",
+    sort_endpoints_by = "summary",
+    allow_spec_file_load = "false"
+  )
+
 }

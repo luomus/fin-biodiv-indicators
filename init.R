@@ -15,6 +15,7 @@ library("promises")
 library("future")
 plan("multisession")
 
+library("rapidoc")
 library("plumber")
 p <- plumb("api.R")
 p$run(host = "0.0.0.0", port = 8000L)
