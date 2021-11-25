@@ -948,4 +948,6 @@ objects:
               env:
               - name: HOST
                 value: ${DEV}-${APP}
+              - name: PORT
+                value: ${APP_PORT}
             restartPolicy: Never
