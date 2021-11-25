@@ -57,7 +57,7 @@ parameters:
     value: luomus
   - name: PROD
     required: true
-    value: master
+    value: main
   - name: DEV
     required: true
     value: dev
@@ -218,12 +218,12 @@ objects:
     output:
       to:
         kind: ImageStreamTag
-        name: ${LOG}:main
+        name: ${LOG}:${PROD}
     source:
       type: Git
       git:
         uri: ${GIT_HOST}/${ORG}/${LOG}.git
-        ref: main
+        ref: ${PROD}
     strategy:
       type: Docker
     triggers:
