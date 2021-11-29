@@ -14,7 +14,9 @@ clear_cache <- function() {
 
   tables <- RPostgres::dbListTables(db)
 
-  for (i in tables) {
+  pg_tables <- c("pg_stat_statements", "primarytable")
+
+  for (i in setdiff(tables, pg_tables)) {
 
     RPostgres::dbRemoveTable(db, i)
 
