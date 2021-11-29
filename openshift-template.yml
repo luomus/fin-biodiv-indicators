@@ -18,7 +18,7 @@ parameters:
     value: healthz
   - name: LIVENESS_PERIOD
     required: true
-    value: "30"
+    value: "1800"
   - name: FAILURE_THRESHOLD
     required: true
     value: "5"
@@ -54,7 +54,7 @@ parameters:
     value: curl
   - name: JOB_SCHEDULE
     required: true
-    value: "0/30 * * * *"
+    value: "0 0 * * *"
   - name: JOB_LIMIT
     required: true
     value: "3"
