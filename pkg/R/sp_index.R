@@ -73,6 +73,11 @@ calc_sp_index <- function(index, sp, use_cache, id) {
         packages = c("rtrim", "indicators"),
         seed = TRUE
       )
+    },
+    onRejected = function (err) {
+
+      log_message(id, "An error occured in calculating trim index: ", err)
+
     }
   )
 }

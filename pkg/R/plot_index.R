@@ -16,7 +16,17 @@ svg_ms_index <- function(index, use_cache, id) {
 
   data <- ms_index(index, use_cache, id)
 
-  promises::then(data, ~{svg_data(., index, id)})
+  promises::then(
+    data,
+    ~{
+      svg_data(., index, id)
+    },
+    onRejected = function (err) {
+
+      log_message(id, "An error occured creating an svg image: ", err)
+
+    }
+  )
 
 }
 
@@ -39,7 +49,17 @@ svg_sp_index <- function(index, sp, use_cache, id) {
 
   data <- sp_index(index, sp, use_cache, id)
 
-  promises::then(data, ~{svg_data(., index, id)})
+  promises::then(
+    data,
+    ~{
+      svg_data(., index, id)
+    },
+    onRejected = function (err) {
+
+      log_message(id, "An error occured in creating an svg image: ", err)
+
+    }
+  )
 
 }
 

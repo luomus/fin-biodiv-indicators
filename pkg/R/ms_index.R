@@ -107,6 +107,11 @@ calc_ms_index <- function(
       set_output_cache(hash, serialize(ans, NULL))
 
       ans
+    },
+    onRejected = function (err) {
+
+      log_message(id, "An error occured in calculating ms index: ", err)
+
     }
   )
 }

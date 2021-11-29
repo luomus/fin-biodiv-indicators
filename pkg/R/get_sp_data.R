@@ -113,6 +113,11 @@ get_sp_data <- function(index, sp, use_cache, id) {
 
         counts
 
+      },
+      onRejected = function (err) {
+
+        log_message(id, "An error occured while processing counts: ", err)
+
       }
     )
 
