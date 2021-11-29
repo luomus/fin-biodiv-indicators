@@ -233,9 +233,10 @@ get_from_input_cache <- function(hash, sp, type) {
     if (!missing(sp) && !missing(type)) {
 
       data <- dplyr::filter(data, .data[["sp"]] == !!sp)
-      data <- dplyr::select(data, -dplyr::any_of(c("sp", "hash")))
 
     }
+
+    data <- dplyr::select(data, -dplyr::any_of(c("sp", "hash")))
 
     dplyr::collect(data)
 
