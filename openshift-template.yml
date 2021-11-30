@@ -946,6 +946,8 @@ objects:
             - name: ${DEV}-${JOB}
               image: ${DEV}-${JOB}:${TAG}
               env:
+              - name: APP
+                value: ${APP}
               - name: HOST
                 value: ${DEV}-${APP}
               - name: PORT
