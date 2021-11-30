@@ -13,7 +13,7 @@ clean_input_cache()
 
 library("promises")
 library("future")
-plan("multisession")
+plan("multicore", workers = 8L)
 
 library("rapidoc")
 library("plumber")
