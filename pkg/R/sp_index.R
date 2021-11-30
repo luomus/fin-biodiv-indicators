@@ -70,7 +70,7 @@ calc_sp_index <- function(index, sp, use_cache, id) {
         ans
         },
         globals = c("df", "hash", "op"),
-        packages = c("rtrim", "indicators"),
+        packages = "indicators",
         seed = TRUE
       )
     },
