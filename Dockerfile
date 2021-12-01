@@ -11,14 +11,17 @@ HEALTHCHECK --interval=1m --timeout=10s \
 RUN  install2.r -e \
        askpass \
        blob \
+       covr \
        crayon \
        DBI \
        dbplyr \
        digest \
        dplyr \
+       DT \
        future \
        ggplot2 \
        glue \
+       htmltools \
        httr \
        logger \
        lubridate \
@@ -39,7 +42,8 @@ RUN  install2.r -e \
        tibble \
        tictoc \
        tidyr \
-       tidyselect
+       tidyselect \
+       tinytest
 
 RUN  R -e "remotes::install_github('luomus/finbif@4a7df23c')"
 
@@ -56,8 +60,9 @@ WORKDIR /home/user
 
 RUN  R -e "remotes::install_local('indicators')" \
   && mkdir -p \
-       /home/user/tmp \
+       /home/user/coverage \
        /home/user/logs \
+       /home/user/tmp \
   && chgrp -R 0 \
        /home/user \
        /usr/local/lib/R/site-library/rapidoc/dist \

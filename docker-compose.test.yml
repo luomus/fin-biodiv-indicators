@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+  sut:
+    build:
+      context: .
+    command: R --slave -e 'print(cv <- covr::package_coverage("indicators"), "functions"); covr::report(cv, file = "coverage/code-coverage.html", FALSE)'
+    volumes:
+      - ./cov:/home/user/coverage
