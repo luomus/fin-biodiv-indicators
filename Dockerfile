@@ -20,6 +20,7 @@ RUN  install2.r -e \
        ggplot2 \
        glue \
        httr \
+       logger \
        lubridate \
        lutz \
        memoise \
@@ -36,10 +37,11 @@ RUN  install2.r -e \
        svglite \
        sys \
        tibble \
+       tictoc \
        tidyr \
        tidyselect
 
-RUN  R -e "remotes::install_github('luomus/finbif@43bc598e')"
+RUN  R -e "remotes::install_github('luomus/finbif@4a7df23c')"
 
 COPY entrypoint.sh /home/user/entrypoint.sh
 COPY init.R /home/user/init.R
