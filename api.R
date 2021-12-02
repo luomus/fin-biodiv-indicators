@@ -42,7 +42,6 @@ function(req) {
 
   id <- digest::digest(req)
 
-  log_message(id, "===New Request===")
   log_message(id, "JSON request made for list of indices")
 
   indices()
@@ -60,7 +59,6 @@ function(index, req) {
 
   id <- digest::digest(req)
 
-  log_message(id, "===New Request===")
   log_message(id, "JSON request made for list of species from ", index)
 
   species(index, "spcode")
@@ -82,7 +80,6 @@ function(index, cache = "true", req) {
 
   id <- digest::digest(req)
 
-  log_message(id, "===New Request===")
   log_message(id, "JSON request made for multi-species index of ", index)
 
   ms_index(index, use_cache, id)
@@ -105,7 +102,6 @@ function(index, cache = "true", req) {
 
   id <- digest::digest(req)
 
-  log_message(id, "===New Request===")
   log_message(id, "CSV request made for multi-species index of ", index)
 
   ms_index(index, use_cache, id)
@@ -128,7 +124,6 @@ function(index, sp, cache = "true", req) {
 
   id <- digest::digest(req)
 
-  log_message(id, "===New Request===")
   log_message(id, "JSON request made for index of ", sp, " from ", index)
 
   sp_index(index, sp, use_cache, id)
@@ -152,7 +147,6 @@ function(index, sp, cache = "true", req) {
 
   id <- digest::digest(req)
 
-  log_message(id, "===New Request===")
   log_message(id, "CSV request made for index of ", sp, " from ", index)
 
   sp_index(index, sp, use_cache, id)
@@ -174,7 +168,6 @@ function(index, cache = "true", res, req) {
 
   id <- digest::digest(req)
 
-  log_message(id, "===New Request===")
   log_message(id, "Request made for plot of ", index)
 
   res$setHeader("Content-Type", "image/svg+xml")
@@ -206,7 +199,6 @@ function(index, sp, cache = "true", res, req) {
 
   id <- digest::digest(req)
 
-  log_message(id, "===New Request===")
   log_message(id, "Request made for plot of ", sp, " from ", index)
 
   res$setHeader("Content-Type", "image/svg+xml")
