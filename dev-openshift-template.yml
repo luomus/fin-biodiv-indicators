@@ -93,20 +93,6 @@ parameters:
     required: true
   - name: LOG_SUBDOMAIN
     required: true
-  - name: DB_PASSWORD
-    required: true
-  - name: DB_PRIMARY_PASSWORD
-    required: true
-  - name: DB_ROOT_PASSWORD
-    required: true
-  - name: FINBIF_ACCESS_TOKEN
-    required: true
-  - name: FINBIF_API
-    required: true
-  - name: FINBIF_WAREHOUSE_QUERY
-    required: true
-  - name: FINBIF_EMAIL
-    required: true
   - name: DEV_DB_PASSWORD
     required: true
   - name: DEV_DB_PRIMARY_PASSWORD
@@ -119,6 +105,8 @@ parameters:
     required: true
   - name: DEV_FINBIF_WAREHOUSE_QUERY
     required: true
+  - name: FINBIF_EMAIL
+    required: true
   - name: GITHUB_SECRET
     required: true
     generate: expression
@@ -129,19 +117,19 @@ objects:
 - kind: BuildConfig
   apiVersion: v1
   metadata:
-    name: ${APP}
+    name: ${DEV}-${APP}
     labels:
       app: ${APP}
   spec:
     output:
       to:
         kind: ImageStreamTag
-        name: ${APP}:${TAG}
+        name: ${DEV}-${APP}:${TAG}
     source:
       type: Git
       git:
         uri: ${GIT_HOST}/${ORG}/${APP}.git
-        ref: ${PROD}
+        ref: ${DEV}
     strategy:
       type: Docker
     triggers:
@@ -152,19 +140,19 @@ objects:
 - kind: BuildConfig
   apiVersion: v1
   metadata:
-    name: ${DB}
+    name: ${DEV}-${DB}
     labels:
       app: ${APP}
   spec:
     output:
       to:
         kind: ImageStreamTag
-        name: ${DB}:${TAG}
+        name: ${DEV}-${DB}:${TAG}
     source:
       type: Git
       git:
         uri: ${GIT_HOST}/${ORG}/${APP}.git
-        ref: ${PROD}
+        ref: ${DEV}
       contextDir: ${DB}
     strategy:
       type: Docker
@@ -199,7 +187,7 @@ objects:
 - kind: ImageStream
   apiVersion: v1
   metadata:
-    name: ${APP}
+    name: ${DEV}-${APP}
     labels:
       app: ${APP}
   spec:
@@ -208,7 +196,7 @@ objects:
 - kind: ImageStream
   apiVersion: v1
   metadata:
-    name: ${DB}
+    name: ${DEV}-${DB}
     labels:
       app: ${APP}
   spec:
@@ -226,28 +214,28 @@ objects:
 - kind: DeploymentConfig
   apiVersion: v1
   metadata:
-    name: ${APP}
+    name: ${DEV}-${APP}
     labels:
       app: ${APP}
   spec:
     replicas: ${{REPS}}
     selector:
       app: ${APP}
-      deploymentconfig: ${APP}
+      deploymentconfig: ${DEV}-${APP}
     template:
       metadata:
         labels:
           app: ${APP}
-          deploymentconfig: ${APP}
+          deploymentconfig: ${DEV}-${APP}
       spec:
         containers:
-        - image: ${APP}:${TAG}
-          name: ${APP}
+        - image: ${DEV}-${APP}:${TAG}
+          name: ${DEV}-${APP}
           ports:
           - containerPort: ${APP_PORT}
           volumeMounts:
           - mountPath: ${HOME}/${LOG_DIR}
-            name: ${LOG}
+            name: ${DEV}-${LOG}
           - mountPath: ${HOME}/${TMP_DIR}
             name: ${TMP_DIR}
           livenessProbe:
@@ -264,17 +252,17 @@ objects:
             periodSeconds: ${{READINESS_PERIOD}}
           env:
           - name: PAGE_TITLE
-            value: ${APP_TITLE}
+            value: ${APP_TITLE}-${DEV}
           - name: PGUSER
             value: ${DB}
           - name: PGPASSWORD
-            value: ${DB_PASSWORD}
+            value: ${DEV_DB_PASSWORD}
           - name: PGHOST
-            value: ${DB}
+            value: ${DEV}-${DB}
         volumes:
-        - name: ${LOG}
+        - name: ${DEV}-${LOG}
           persistentVolumeClaim:
-            claimName: ${LOG}
+            claimName: ${DEV}-${LOG}
         - name: ${TMP_DIR}
           emptyDir:
             medium: Memory
@@ -284,33 +272,33 @@ objects:
       imageChangeParams:
         automatic: true
         containerNames:
-        - ${APP}
+        - ${DEV}-${APP}
         from:
           kind: ImageStreamTag
-          name: ${APP}:${TAG}
+          name: ${DEV}-${APP}:${TAG}
 - kind: DeploymentConfig
   apiVersion: v1
   metadata:
-    name: ${DB}
+    name: ${DEV}-${DB}
     labels:
       app: ${APP}
   spec:
     replicas: 1
     selector:
       app: ${APP}
-      deploymentconfig: ${DB}
+      deploymentconfig: ${DEV}-${DB}
     template:
       metadata:
         labels:
           app: ${APP}
-          deploymentconfig: ${DB}
+          deploymentconfig: ${DEV}-${DB}
       spec:
         containers:
-        - image: ${DB}
-          name: ${DB}
+        - image: ${DEV}-${DB}
+          name: ${DEV}-${DB}
           volumeMounts:
           - mountPath: ${DB_DIR}
-            name: ${DB}
+            name: ${DEV}-${DB}
           ports:
             - containerPort: ${DB_PORT}
           env:
@@ -325,46 +313,46 @@ objects:
           - name: PG_USER
             value: ${DB}
           - name: PG_PASSWORD
-            value: ${DB_PASSWORD}
+            value: ${DEV_DB_PASSWORD}
           - name: PG_PRIMARY_USER
             value: ${DB_MODE}
           - name: PG_PRIMARY_PASSWORD
-            value: ${DB_PRIMARY_PASSWORD}
+            value: ${DEV_DB_PRIMARY_PASSWORD}
           - name: PG_ROOT_PASSWORD
-            value: ${DB_ROOT_PASSWORD}
+            value: ${DEV_DB_ROOT_PASSWORD}
           - name: PGDATA_PATH_OVERRIDE
-            value: ${DB}
+            value: ${DEV}-${DB}
         volumes:
-        - name: ${DB}
+        - name: ${DEV}-${DB}
           persistentVolumeClaim:
-            claimName: ${DB}
+            claimName: ${DEV}-${DB}
     triggers:
     - type: ConfigChange
 - kind: DeploymentConfig
   apiVersion: v1
   metadata:
-    name: ${LOG}
+    name: ${DEV}-${LOG}
     labels:
       app: ${APP}
   spec:
     replicas: ${{REPS}}
     selector:
       app: ${APP}
-      deploymentconfig: ${LOG}
+      deploymentconfig: ${DEV}-${LOG}
     template:
       metadata:
         labels:
           app: ${APP}
-          deploymentconfig: ${LOG}
+          deploymentconfig: ${DEV}-${LOG}
       spec:
         containers:
         - image: ${LOG}:${TAG}
-          name: ${LOG}
+          name: ${DEV}-${LOG}
           ports:
           - containerPort: ${LOG_PORT}
           volumeMounts:
           - mountPath: ${HOME}/${LOG_DIR}
-            name: ${LOG}
+            name: ${DEV}-${LOG}
           livenessProbe:
             httpGet:
               port: ${{LOG_PORT}}
@@ -377,25 +365,25 @@ objects:
             periodSeconds: ${{READINESS_PERIOD}}
           env:
           - name: PAGE_TITLE
-            value: ${APP_TITLE}
+            value: ${APP_TITLE}-${DEV}
         volumes:
-        - name: ${LOG}
+        - name: ${DEV}-${LOG}
           persistentVolumeClaim:
-            claimName: ${LOG}
+            claimName: ${DEV}-${LOG}
     triggers:
     - type: ConfigChange
     - type: ImageChange
       imageChangeParams:
         automatic: true
         containerNames:
-        - ${LOG}
+        - ${DEV}-${LOG}
         from:
           kind: ImageStreamTag
           name: ${LOG}:${TAG}
 - kind: PersistentVolumeClaim
   apiVersion: v1
   metadata:
-    name: ${LOG}
+    name: ${DEV}-${LOG}
   spec:
     accessModes:
     - ReadWriteMany
@@ -406,18 +394,18 @@ objects:
 - kind: PersistentVolumeClaim
   apiVersion: v1
   metadata:
-    name: ${DB}
+    name: ${DEV}-${DB}
   spec:
     accessModes:
     - ReadWriteMany
     persistentVolumeReclaimPolicy: Retain
     resources:
       requests:
-        storage: ${STORAGE}
+        storage: ${SMALL_STORAGE}
 - kind: Service
   apiVersion: v1
   metadata:
-    name: ${APP}
+    name: ${DEV}-${APP}
     labels:
       app: ${APP}
   spec:
@@ -428,11 +416,11 @@ objects:
       targetPort: ${{APP_PORT}}
     selector:
       app: ${APP}
-      deploymentconfig: ${APP}
+      deploymentconfig: ${DEV}-${APP}
 - kind: Service
   apiVersion: v1
   metadata:
-    name: ${LOG}
+    name: ${DEV}-${LOG}
     labels:
       app: ${APP}
   spec:
@@ -443,11 +431,11 @@ objects:
       targetPort: ${{LOG_PORT}}
     selector:
       app: ${APP}
-      deploymentconfig: ${LOG}
+      deploymentconfig: ${DEV}-${LOG}
 - kind: Service
   apiVersion: v1
   metadata:
-    name: ${DB}
+    name: ${DEV}-${DB}
     labels:
       app: ${APP}
   spec:
@@ -457,43 +445,43 @@ objects:
       targetPort: ${{DB_PORT}}
     selector:
       app: ${APP}
-      deploymentconfig: ${DB}
+      deploymentconfig: ${DEV}-${DB}
 - kind: Route
   apiVersion: v1
   metadata:
-    name: ${APP}
+    name: ${DEV}-${APP}
     labels:
       app: ${APP}
   spec:
-    host: ${SUBDOMAIN}.${HOST}
+    host: ${SUBDOMAIN}-${DEV}.${HOST}
     port:
       targetPort: ${APP_PORT}
     tls:
       termination: edge
     to:
       kind: Service
-      name: ${APP}
+      name: ${DEV}-${APP}
     wildcardPolicy: None
 - kind: Route
   apiVersion: v1
   metadata:
-    name: ${LOG}
+    name: ${DEV}-${LOG}
     labels:
       app: ${APP}
   spec:
-    host: ${LOG_SUBDOMAIN}.${LOG_HOST}
+    host: ${LOG_SUBDOMAIN}-${DEV}.${LOG_HOST}
     port:
       targetPort: ${LOG_PORT}
     tls:
       termination: edge
     to:
       kind: Service
-      name: ${LOG}
+      name: ${DEV}-${LOG}
     wildcardPolicy: None
 - kind: CronJob
   apiVersion: batch/v1beta1
   metadata:
-    name: ${APP}
+    name: ${DEV}-${APP}
   spec:
     schedule: ${JOB_SCHEDULE}
     concurrencyPolicy: ${JOB_CONCURRENCY}
@@ -507,22 +495,22 @@ objects:
               app: ${APP}
           spec:
             containers:
-            - name: ${APP}-${JOB}
-              image: ${APP}:${TAG}
+            - name: ${DEV}-${APP}-${JOB}
+              image: ${DEV}-${APP}:${TAG}
               command: ${{JOB_CMD}}
               env:
               - name: FINBIF_ACCESS_TOKEN
-                value: ${FINBIF_ACCESS_TOKEN}
+                value: ${DEV_FINBIF_ACCESS_TOKEN}
               - name: FINBIF_API
-                value: ${FINBIF_API}
+                value: ${DEV_FINBIF_API}
               - name: FINBIF_WAREHOUSE_QUERY
-                value: ${FINBIF_WAREHOUSE_QUERY}
+                value: ${DEV_FINBIF_WAREHOUSE_QUERY}
               - name: FINBIF_EMAIL
                 value: ${FINBIF_EMAIL}
               - name: PGUSER
                 value: ${DB}
               - name: PGPASSWORD
-                value: ${DB_PASSWORD}
+                value: ${DEV_DB_PASSWORD}
               - name: PGHOST
-                value: ${DB}
+                value: ${DEV}-${DB}
             restartPolicy: Never
