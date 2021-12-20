@@ -9,49 +9,29 @@ HEALTHCHECK --interval=1m --timeout=10s \
   CMD curl -sfI -o /dev/null 0.0.0.0:8000/healthz || exit 1
 
 RUN  install2.r -e \
-       askpass \
-       blob \
+       config \
        covr \
-       crayon \
-       DBI \
-       dbplyr \
-       digest \
-       dplyr \
        DT \
-       future \
        ggplot2 \
-       glue \
-       htmltools \
-       httr \
        logger \
-       lubridate \
-       lutz \
-       memoise \
-       openssl \
-       lubridate \
-       memoise \
-       promises \
-       purrr \
+       pool \
        rapidoc \
-       readr \
-       rlang \
        RPostgres \
        rtrim \
        svglite \
-       sys \
-       tibble \
        tictoc \
-       tidyr \
-       tidyselect \
-       tinytest
+       tinytest \
+       tidyr
 
-RUN  R -e "remotes::install_github('luomus/finbif@4a7df23c')"
+RUN  R -e "remotes::install_github('tidyverse/dbplyr')" \
+  && R -e "remotes::install_github('luomus/finbif@4a7df23c')"
 
 COPY entrypoint.sh /home/user/entrypoint.sh
 COPY init.R /home/user/init.R
 COPY favicon.ico /home/user/favicon.ico
 COPY api.R /home/user/api.R
 COPY pkg /home/user/indicators
+COPY config.yml /home/user/config.yml
 
 ENV HOME /home/user
 ENV OPENBLAS_NUM_THREADS 1

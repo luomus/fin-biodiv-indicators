@@ -1,6 +1,6 @@
 Package: indicators
 Title: Functions for calculating biodiversity indicators
-Version: 0.2.0.9002
+Version: 0.3.0.9000
 Authors@R: c(
     person(given = "Finnish Museum of Natural History - Luomus",
            role = "cph"),
@@ -15,27 +15,18 @@ LazyData: true
 Depends: R (>= 3.5.0)
 Imports:
     blob,
-    DBI,
+    config,
     dbplyr,
-    digest,
     dplyr,
     finbif,
-    future,
     ggplot2,
     grDevices,
     lubridate,
-    memoise,
-    promises,
-    purrr,
-    rlang,
-    RPostgres,
+    pool,
     rtrim,
     stats,
     svglite,
-    tibble,
-    tidyr,
-    tidyselect,
-    utils
+    tidyr
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
