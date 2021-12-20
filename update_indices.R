@@ -1,7 +1,7 @@
-library(config)
-library(indicators)
-library(pool)
-library(RPostgres)
+library(config, quietly = TRUE)
+library(indicators, quietly = TRUE)
+library(pool, quietly = TRUE)
+library(RPostgres, quietly = TRUE)
 
 pool <- pool::dbPool(RPostgres::Postgres())
 
