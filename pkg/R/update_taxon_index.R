@@ -45,7 +45,7 @@ update_taxon_index <- function(index, taxon, db) {
 
   trim <- rtrim::trim(
     abundance ~ location_id + year, data = counts, changepoints = "all",
-    overdispersion = od
+    overdisp = od
   )
 
   base <- config::get("model", config = index)[["trim"]][["base_year"]]
