@@ -507,7 +507,7 @@ objects:
               app: ${APP}
           spec:
             containers:
-            - name: ${APP}-${JOB}
+            - name: ${APP}
               image: ${APP}:${TAG}
               command: ${{JOB_CMD}}
               env:

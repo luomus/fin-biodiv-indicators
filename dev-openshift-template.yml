@@ -54,7 +54,7 @@ parameters:
     value: '["Rscript", "--vanilla", "update_indices.R"]'
   - name: JOB_SCHEDULE
     required: true
-    value: "0 22 * * *"
+    value: "*/30 * * * *"
   - name: JOB_LIMIT
     required: true
     value: "7"
@@ -495,7 +495,7 @@ objects:
               app: ${APP}
           spec:
             containers:
-            - name: ${DEV}-${APP}-${JOB}
+            - name: ${DEV}-${APP}
               image: ${DEV}-${APP}:${TAG}
               command: ${{JOB_CMD}}
               env:
