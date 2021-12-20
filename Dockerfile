@@ -28,8 +28,9 @@ RUN  R -e "remotes::install_github('tidyverse/dbplyr')" \
 
 COPY entrypoint.sh /home/user/entrypoint.sh
 COPY init.R /home/user/init.R
-COPY favicon.ico /home/user/favicon.ico
+COPY update_indices.R /home/user/update_indices.R
 COPY api.R /home/user/api.R
+COPY favicon.ico /home/user/favicon.ico
 COPY pkg /home/user/indicators
 COPY config.yml /home/user/config.yml
 
