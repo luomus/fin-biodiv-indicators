@@ -11,6 +11,7 @@
 #' @importFrom dplyr summarise sql tbl ungroup
 #' @importFrom stats sd
 #' @importFrom tidyr expand
+#' @export
 
 update_index <- function(index, db) {
 

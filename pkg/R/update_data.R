@@ -10,6 +10,7 @@
 #'
 #' @importFrom config get
 #' @importFrom finbif finbif_occurrence
+#' @export
 
 update_data <- function(type, index, taxon, db) {
 

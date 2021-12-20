@@ -9,6 +9,7 @@
 #' @importFrom config get
 #' @importFrom dplyr .data collect select
 #' @importFrom rtrim index trim
+#' @export
 
 update_taxon_index <- function(index, taxon, db) {
 
