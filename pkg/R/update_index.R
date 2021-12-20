@@ -18,11 +18,11 @@ update_index <- function(index, db) {
   maxcv <- 3
   minindex <- .01
   trunc <- 10
-  sp <- config::get("taxa", config = index)
+  taxa <- config::get("taxa", config = index)
 
   df <- dplyr::tbl(db, "trim")
 
-  df <- dplyr::filter(df, .data[["index"]] %in% !!paste(index, sp, sep = "_"))
+  df <- dplyr::filter(df, .data[["index"]] %in% !!paste(index, taxa, sep = "_"))
 
   df <- dplyr::right_join(
     df, tidyr::expand(df, .data[["index"]], .data[["time"]]),
@@ -155,6 +155,10 @@ update_index <- function(index, db) {
   )
 
   df <- dplyr::arrange(df, .data[["time"]])
+
+  message(
+    sprintf("INFO [%s] Calculating %s combined index", Sys.time(), index)
+  )
 
   df <- dplyr::collect(df)
 

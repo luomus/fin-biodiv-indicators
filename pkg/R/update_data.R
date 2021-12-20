@@ -29,9 +29,22 @@ update_data <- function(type, index, taxon, db) {
 
     aggregate <- switch(type, surveys = "events", "none")
 
+    message(
+      sprintf(
+        "INFO [%s] Fetching %s data for %s from FinBIF", Sys.time(), type, index
+      )
+    )
+
     data <- finbif::finbif_occurrence(
       filter = filter, select = select, aggregate = aggregate, n = "all",
       quiet = TRUE
+    )
+
+    message(
+      sprintf(
+        "INFO [%s] Fetched %s %s for %s", Sys.time(), attr(data, "nrec_dnld"),
+        type, index
+      )
     )
 
     data[["n_events"]] <- NULL

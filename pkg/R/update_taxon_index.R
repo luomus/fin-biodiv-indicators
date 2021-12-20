@@ -36,6 +36,12 @@ update_taxon_index <- function(index, taxon, db) {
 
   od <- config::get("model", config = index)[["trim"]][["overdispersion"]]
 
+  message(
+    sprintf(
+      "INFO [%s] Calculating %s index for %s", Sys.time(), index, taxon
+    )
+  )
+
   trim <- rtrim::trim(
     abundance ~ location_id + year, data = counts, changepoints = "all",
     overdispersion = od
