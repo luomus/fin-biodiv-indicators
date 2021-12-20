@@ -151,9 +151,9 @@ update_index <- function(index, db) {
       exp(mean(.data[["mcf"]], na.rm = TRUE)) *
       exp(mean(.data[["mcb"]], na.rm = TRUE)),
     se_imp =
-      stats::sd(.data[["mcf"]], na.rm = TRUE) *
+      sd(.data[["mcf"]], na.rm = TRUE) *
       exp(mean(.data[["mcf"]], na.rm = TRUE)) +
-      stats::sd(.data[["mcb"]], na.rm = TRUE) *
+      sd(.data[["mcb"]], na.rm = TRUE) *
       exp(mean(.data[["mcb"]], na.rm = TRUE))
   )
 
