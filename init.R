@@ -1,5 +1,5 @@
 pkgs <- c(
-  "future", "indicators", "logger", "plumber", "promises", "rapidoc", "tictoc"
+  "indicators", "logger", "plumber", "pool", "rapidoc", "RPostgres", "tictoc"
 )
 
 for (pkg in pkgs) {
@@ -14,9 +14,7 @@ log_dir <- "logs"
 
 log_file <- tempfile("plumber_", log_dir, ".log")
 
-logger::log_appender(
-  logger::appender_tee(log_file)
-)
+logger::log_appender(logger::appender_tee(log_file))
 
 convert_empty <- function(x) switch(paste0(".", x), . = "-", x)
 
@@ -24,15 +22,15 @@ options(
   finbif_use_cache = FALSE,
   finbif_api_url = Sys.getenv("FINBIF_API"),
   finbif_warehouse_query = Sys.getenv("FINBIF_WAREHOUSE_QUERY"),
-  finbif_email = Sys.getenv("FINBIF_EMAIL"),
-  indicator_logging = TRUE
+  finbif_email = Sys.getenv("FINBIF_EMAIL")
 )
 
-create_output_cache()
-create_input_cache_index()
-clean_input_cache()
+pool <- pool::dbPool(RPostgres::Postgres())
 
-plan("multicore", workers = 8L)
+tryCatch(
+  pool::dbExecute(pool, "CREATE EXTENSION tablefunc"),
+  error = function(e) message(e[["message"]])
+)
 
 p <- plumb("api.R")
 
@@ -65,4 +63,4 @@ p$registerHooks(
   )
 )
 
-p$run(host = "0.0.0.0", port = 8000L, quiet = TRUE)
+p$run(host = "0.0.0.0", port = 8000L)

@@ -2,26 +2,33 @@
 #* @apiDescription Tracking biodiversity trends in Finland using single- and multi-species population index based indicators.
 #* @apiTOS https://laji.fi/en/about/845
 #* @apiContact list(name = "laji.fi support", email = "helpdesk@laji.fi")
-#* @apiVersion 0.1.0.9002
 #* @apiLicense list(name = "MIT", url = "https://opensource.org/licenses/MIT")
-#* @apiTag lists Endpoints to list available indices.
-#* @apiTag indices Endpoints to get biodiversity index data in json or csv format.
-#* @apiTag plots Endpoints to get plots of biodiversity indices in SVG image format.
+#* @apiTag list Endpoints to list available indices.
+#* @apiTag data Endpoints to get biodiversity index data in json or csv format.
 
 #* @filter cors
 cors <- function(req, res) {
-  res$setHeader("Access-Control-Allow-Origin", "*")
-  if (req$REQUEST_METHOD == "OPTIONS") {
-    res$setHeader("Access-Control-Allow-Methods", "*")
-    res$setHeader(
-      "Access-Control-Allow-Headers",
-      req$HTTP_ACCESS_CONTROL_REQUEST_HEADERS
+
+  res[["setHeader"]]("Access-Control-Allow-Origin", "*")
+
+  if (req[["REQUEST_METHOD"]] == "OPTIONS") {
+
+    res[["setHeader"]]("Access-Control-Allow-Methods", "*")
+
+    res[["setHeader"]](
+      "Access-Control-Allow-Headers", req$HTTP_ACCESS_CONTROL_REQUEST_HEADERS
     )
-    res$status <- 200L
+
+    res[["status"]] <- 200L
+
     return(list())
+
   } else {
+
     plumber::forward()
+
   }
+
 }
 
 #* Check the liveness of the API
@@ -31,186 +38,82 @@ cors <- function(req, res) {
 #* @response 200 A json object
 #* @serializer unboxedJSON
 function() {
+
   ""
+
 }
 
 #* Get list of available multi-species indices
-#* @tag lists
-#* @get /list/indices
+#* @tag list
+#* @get /indices
 #* @response 200 A json array response
-function(req) {
+#* @serializer unboxedJSON
+function() {
 
-  id <- digest::digest(req)
-
-  log_message(id, "JSON request made for list of indices")
-
-  indices()
+  config::get("indices")
 
 }
 
 #* Get list of species for an index
-#* @tag lists
-#* @get /list/spp
-#* @param index Shortcode for multi-species index (see [/list/indices](#/lists/get_list_indices)).
+#* @tag list
+#* @get /taxa/<index:str>
+#* @param index:str Shortcode for multi-species index (see [/indices](#get-/indices)).
 #* @response 200 A json array response
-function(index, req) {
+#* @serializer unboxedJSON
+function(index) {
 
-  index <- check_index(index)
-
-  id <- digest::digest(req)
-
-  log_message(id, "JSON request made for list of species from ", index)
-
-  species(index, "spcode")
+  config::get("taxa", config = index)
 
 }
 
-#* Get data for a multi-species index as JSON
-#* @tag indices
-#* @get /ms-index/json
-#* @param index Shortcode for multi-species index (see [/list/indices](#/lists/get_list_indices)).
-#* @param cache:bool Whether or not to use cached data. Cached data is used unless the cache does not exist or is invalid.<br>Using `cache=false` will check the cache validity but is rate limited to one check per day.
+#* Get data for an index
+#* @tag data
+#* @get /data/<index:str>
+#* @param index:str Shortcode for index (see [/indices](#get-/indices)).
+#* @param taxa:str Shortcode for taxa (see [/taxa](#get-/taxa)).
 #* @response 200 A json array response
-function(index, cache = "true", req) {
+#* @serializer unboxedJSON
+function(index, taxa = "none") {
 
-  cache <- match.arg(cache, c("true", "false"))
-  use_cache <- switch(cache, true = TRUE, false = FALSE)
+  taxa <- switch(taxa, none = NULL, taxa)
 
-  index <- check_index(index)
+  index <- paste(c(index, taxa), collapse = "_")
 
-  id <- digest::digest(req)
+  ans <- dplyr::tbl(pool, "data")
 
-  log_message(id, "JSON request made for multi-species index of ", index)
+  ans <- dplyr::filter(ans, .data[["index"]] == !!index)
 
-  ms_index(index, use_cache, id)
+  ans <- dplyr::select(ans, .data[["data"]])
 
-}
-
-#* Get data for a multi-species index as a CSV file
-#* @tag indices
-#* @get /ms-index/csv
-#* @serializer csv
-#* @param index Shortcode for multi-species index (see [/list/indices](#/lists/get_list_indices)).
-#* @param cache:bool Whether or not to use cached data. Cached data is used unless the cache does not exist or is invalid.<br>Using `cache=false` will check the cache validity but is rate limited to one check per day.
-#* @response 200 A csv file response
-function(index, cache = "true", req) {
-
-  cache <- match.arg(cache, c("true", "false"))
-  use_cache <- switch(cache, true = TRUE, false = FALSE)
-
-  index <- check_index(index)
-
-  id <- digest::digest(req)
-
-  log_message(id, "CSV request made for multi-species index of ", index)
-
-  ms_index(index, use_cache, id)
+  unserialize(dplyr::pull(ans)[[1L]])
 
 }
 
-#* Get data for a single-species index as JSON
-#* @tag indices
-#* @get /sp-index/json
-#* @param index Shortcode for multi-species index (see [/list/indices](#/lists/get_list_indices)).
-#* @param sp Shortcode for species (see [/list/spp](#/lists/get_list_spp)).
-#* @param cache:bool Whether or not to use cached data. Cached data is used unless the cache does not exist or is invalid.<br>Using `cache=false` will check the cache validity but is rate limited to one check per day.
-#* @response 200 A json array response
-function(index, sp, cache = "true", req) {
-
-  cache <- match.arg(cache, c("true", "false"))
-  use_cache <- switch(cache, true = TRUE, false = FALSE)
-
-  sp <- check_sp(index, sp)
-
-  id <- digest::digest(req)
-
-  log_message(id, "JSON request made for index of ", sp, " from ", index)
-
-  sp_index(index, sp, use_cache, id)
-
-}
-
-#* Get data for a single-species index as CSV file
-#* @tag indices
-#* @get /sp-index/csv
-#* @serializer csv
-#* @param index Shortcode for multi-species index (see [/list/indices](#/lists/get_list_indices)).
-#* @param sp Shortcode for species (see [/list/spp](#/lists/get_list_spp)).
-#* @param cache:bool Whether or not to use cached data. Cached data is used unless the cache does not exist or is invalid.<br>Using `cache=false` will check the cache validity but is rate limited to one check per day.
-#* @response 200 A csv file response
-function(index, sp, cache = "true", req) {
-
-  cache <- match.arg(cache, c("true", "false"))
-  use_cache <- switch(cache, true = TRUE, false = FALSE)
-
-  sp <- check_sp(index, sp)
-
-  id <- digest::digest(req)
-
-  log_message(id, "CSV request made for index of ", sp, " from ", index)
-
-  sp_index(index, sp, use_cache, id)
-
-}
-
-#* Get a plot of a multi-species index
-#* @tag plots
-#* @get /ms-plot
-#* @param index Shortcode for multi-species index (see [/list/indices](#/lists/get_list_indices)).
-#* @param cache:bool Whether or not to use cached data. Cached data is used unless the cache does not exist or is invalid.<br>Using `cache=false` will check the cache validity but is rate limited to one check per day.
+#* Get svg for an index
+#* @tag data
+#* @get /svg/<index:str>
+#* @param index:str Shortcode for index (see [/indices](#get-/indices)).
+#* @param taxa:str Shortcode for taxa (see [/taxa](#get-/taxa)).
 #* @response 200 An svg file response
-function(index, cache = "true", res, req) {
+function(index, taxa = "none", res) {
 
-  cache <- match.arg(cache, c("true", "false"))
-  use_cache <- switch(cache, true = TRUE, false = FALSE)
+  res[["setHeader"]]("Content-Type", "image/svg+xml")
+  res[["setHeader"]]("Content-Encoding", "gzip")
+  res[["setHeader"]]("Content-Disposition", "inline")
 
-  index <- check_index(index)
+  taxa <- switch(taxa, none = NULL, taxa)
 
-  id <- digest::digest(req)
+  index <- paste(c(index, taxa), collapse = "_")
 
-  log_message(id, "Request made for plot of ", index)
+  ans <- dplyr::tbl(pool, "svg")
 
-  res$setHeader("Content-Type", "image/svg+xml")
-  res$setHeader("Content-Encoding", "gzip")
-  res$setHeader("Content-Disposition", "inline")
+  ans <- dplyr::filter(ans, .data[["index"]] == !!index)
 
-  svg <- svg_ms_index(index, use_cache, id)
+  ans <- dplyr::select(ans, .data[["data"]])
 
-  promises::then(svg, ~{
-    res$body <- .
-    res
-  })
+  res[["body"]] <- dplyr::pull(ans)[[1L]]
 
-}
-
-#* Get a plot of a single-species index
-#* @tag plots
-#* @get /sp-plot
-#* @param index Shortcode for multi-species index (see [/list/indices](#/lists/get_list_indices)).
-#* @param sp Shortcode for species (see [/list/spp](#/lists/get_list_spp)).
-#* @param cache:bool Whether or not to use cached data. Cached data is used unless the cache does not exist or is invalid.<br>Using `cache=false` will check the cache validity but is rate limited to one check per day.
-#* @response 200 An svg file response
-function(index, sp, cache = "true", res, req) {
-
-  cache <- match.arg(cache, c("true", "false"))
-  use_cache <- switch(cache, true = TRUE, false = FALSE)
-
-  sp <- check_sp(index, sp)
-
-  id <- digest::digest(req)
-
-  log_message(id, "Request made for plot of ", sp, " from ", index)
-
-  res$setHeader("Content-Type", "image/svg+xml")
-  res$setHeader("Content-Encoding", "gzip")
-  res$setHeader("Content-Disposition", "inline")
-
-  svg <- svg_sp_index(index, sp, use_cache, id)
-
-  promises::then(svg, ~{
-    res$body <- .
-    res
-  })
+  res
 
 }
 
@@ -228,8 +131,8 @@ function() {
 #* @get /
 function(res) {
 
-  res$status <- 303L
-  res$setHeader("Location", "/__docs__/")
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/__docs__/")
 
 }
 
@@ -248,131 +151,33 @@ function(pr) {
       spec$paths$`/favicon.ico` <- NULL
       spec$paths$`/` <- NULL
 
-      set_200_only <- function(spec, path) {
-        spec$paths[[path]]$get$responses$`500` <- NULL
-        spec$paths[[path]]$get$responses$default <- NULL
-        spec
-      }
-
       set_description <- function(spec, path, description) {
         spec$paths[[path]]$get$description <- description
         spec
       }
 
-      set_example <- function(
-        spec, path, example, status = "200", type = "application/json"
-      ) {
-        spec$paths[[path]]$get$responses[[status]]$content[[type]]$schema <- NULL
-        spec$paths[[path]]$get$responses[[status]]$content[[type]]$example <- example
-        spec
-      }
-
-      example_json <- list(
-        list(year = 1990, index = 1, sd = 0),
-        list(year = 1991, index = 1.1, sd = .1),
-        list(year = 1992, index = 1.2, sd = .3)
-      )
-
-      example_csv <- "year,index,sd\n1990,1,0\n1991,1.1,0.1\n1992,1.2,0.3"
-
-      example_svg <- readr::read_file(
-        readr::read_file("indicators/man/figures/graph.svg")
-      )
-
-      spec <- set_200_only(spec, "/list/indices")
       spec <- set_description(
-        spec, "/list/indices",
-        paste(
-          "Gets a list of shortcodes for the multi-species indices available.",
-          "The list is returned in boxed JSON format."
-        )
+        spec, "/indices", "Gets a list of shortcodes for the available indices."
       )
-      spec <- set_example(spec, "/list/indices", c("index1", "index2"))
 
-      spec <- set_200_only(spec, "/list/spp")
       spec <- set_description(
         spec,
-        "/list/spp",
+        "/taxa/{index}",
         paste(
-          "Gets a list of species codes representing species that make up a",
-          "given multi-species index. The list is returned in boxed JSON",
-          "format.<br>To list the multi-species indices available see",
-          "[/list/indices](#/lists/get_list_indices)."
+          "Gets a list of taxon codes representing taxa that make up a",
+          "given index<br>To list the available indices see",
+          "[/indices](#get-/indices)."
         )
       )
-      spec <- set_example(spec, "/list/spp", c("sp1", "sp2", "sp3"))
 
-      spec <- set_200_only(spec, "/ms-index/json")
       spec <- set_description(
         spec,
-        "/ms-index/json",
+        "/data/{index}",
         paste(
-          "Gets the time series data for a given multi-species index in boxed",
-          "JSON format.<br>To list the multi-species indices available see",
-          "[/list/indices](#/lists/get_list_indices)."
+          "Gets the time series data for a species or ",
+          "multi-species index<br>To list species see [/taxa](#get-/taxa)."
         )
       )
-      spec <- set_example(spec, "/ms-index/json", example_json)
-
-      spec <- set_200_only(spec, "/ms-index/csv")
-      spec <- set_description(
-        spec,
-        "/ms-index/csv",
-        paste(
-          "Gets the time series data for a given multi-species index as a CSV",
-          "file.<br>To list the multi-species indices available see",
-          "[/list/indices](#/lists/get_list_indices)."
-        )
-      )
-      spec <- set_example(spec, "/ms-index/csv", type = "text/csv", example_csv)
-
-      spec <- set_200_only(spec, "/sp-index/json")
-      spec <- set_description(
-        spec,
-        "/sp-index/json",
-        paste(
-          "#* Gets the time series data for a given species from a given",
-          "multi-species index in boxed JSON format<br>To list species see",
-          "[/list/spp](#/lists/get_list_spp)."
-        )
-      )
-      spec <- set_example(spec, "/sp-index/json", example_json)
-
-      spec <- set_200_only(spec, "/sp-index/csv")
-      spec <- set_description(
-        spec,
-        "/sp-index/csv",
-        paste(
-          "Gets the time series data for a given species from a given",
-          "multi-species index as a CSV file.<br>To list species see",
-          "[/list/spp](#/lists/get_list_spp)."
-        )
-      )
-      spec <- set_example(spec, "/sp-index/csv", type = "text/csv", example_csv)
-
-      spec <- set_200_only(spec, "/ms-plot")
-      spec <- set_description(
-        spec,
-        "/ms-plot",
-        paste(
-          "Gets a time-series plot of data for a given multi-species index as",
-          "an SVG image.<br>To list the multi-species indices available see",
-          "[/list/indices](#/lists/get_list_indices)."
-        )
-      )
-      spec <- set_example(spec, "/ms-plot", type = "image/svg+xml", example_svg)
-
-      spec <- set_200_only(spec, "/sp-plot")
-      spec <- set_description(
-        spec,
-        "/sp-plot",
-        paste(
-          "Gets a time-series plot of data for a given species from a given",
-          "multi-species index as an SVG image.<br>To list species see",
-          "[/list/spp](#/lists/get_list_spp)."
-        )
-      )
-      spec <- set_example(spec, "/sp-plot", type = "image/svg+xml", example_svg)
 
       spec
 
