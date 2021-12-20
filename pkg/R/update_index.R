@@ -127,7 +127,7 @@ update_index <- function(index, db) {
 
   df <- dplyr::mutate(df, mcf = dplyr::lead(.data[["mcf"]], base - 1L))
 
-  df <- dplyr::mutate(df, mcf = dplyr::lag(.data[["mcf"]], base, 0))
+  df <- dplyr::mutate(df, mcf = dplyr::lag(.data[["mcf"]], base, as.double(0)))
 
   df <- dplyr::mutate(df, mcf = cumsum(.data[["mcf"]]))
 
@@ -136,7 +136,7 @@ update_index <- function(index, db) {
   df <- dplyr::mutate(df, mcb = dplyr::lead(.data[["mcb"]], nyears - base))
 
   df <- dplyr::mutate(
-    df, mcb = dplyr::lag(.data[["mcb"]], !!(nyears - base + 1L), 0)
+    df, mcb = dplyr::lag(.data[["mcb"]], !!(nyears - base + 1L), as.double(0))
   )
 
   df <- dplyr::mutate(df, mcb = cumsum(.data[["mcb"]]))
