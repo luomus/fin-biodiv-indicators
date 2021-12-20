@@ -1,4 +1,5 @@
 library(config)
+library(indicators)
 library(pool)
 library(RPostgres)
 
