@@ -54,7 +54,7 @@ parameters:
     value: '["Rscript", "--vanilla", "update_indices.R"]'
   - name: JOB_SCHEDULE
     required: true
-    value: "*/30 * * * *"
+    value: "* 22 * * *"
   - name: JOB_LIMIT
     required: true
     value: "7"
