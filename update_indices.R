@@ -1,7 +1,21 @@
-library(config, quietly = TRUE)
-library(indicators, quietly = TRUE)
-library(pool, quietly = TRUE)
-library(RPostgres, quietly = TRUE)
+pkgs <- c(
+  "config", "indicators", "pool", "RPostgres"
+)
+
+for (pkg in pkgs) {
+
+  suppressPackageStartupMessages(
+    library(pkg, quietly = TRUE, character.only = TRUE)
+  )
+
+}
+
+options(
+  finbif_use_cache = FALSE,
+  finbif_api_url = Sys.getenv("FINBIF_API"),
+  finbif_warehouse_query = Sys.getenv("FINBIF_WAREHOUSE_QUERY"),
+  finbif_email = Sys.getenv("FINBIF_EMAIL")
+)
 
 pool <- pool::dbPool(RPostgres::Postgres())
 
