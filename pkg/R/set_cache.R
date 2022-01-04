@@ -21,7 +21,7 @@ set_cache <- function(index, table, df, db) {
     for (i in setdiff(names(df), db_cols)) {
 
       dt <- switch(
-        class(df[[i]]), integer = "int", float = "float4", "varchar"
+        class(df[[i]]), integer = "int", numeric = "real", "varchar"
       )
 
       pool::dbExecute(
