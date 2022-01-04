@@ -13,7 +13,7 @@ set_cache <- function(index, table, df, db) {
   } else {
 
     pool::dbExecute(
-      db, sprintf("DELETE FROM %s WHERE index = '%s'", table, index)
+      db, sprintf("DELETE FROM \"%s\" WHERE \"index\" = '%s'", table, index)
     )
 
     db_cols <- pool::dbListFields(db, table)
@@ -25,7 +25,7 @@ set_cache <- function(index, table, df, db) {
       )
 
       pool::dbExecute(
-        db, sprintf("ALTER TABLE %s ADD COLUMN %s %s", table, i, dt)
+        db, sprintf("ALTER TABLE \"%s\" ADD COLUMN \"%s\" %s", table, i, dt)
       )
 
     }
