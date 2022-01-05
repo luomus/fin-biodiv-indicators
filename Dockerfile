@@ -39,7 +39,7 @@ ENV OPENBLAS_NUM_THREADS 1
 
 WORKDIR /home/user
 
-RUN  R -e "remotes::install_local('indicators')" \
+RUN  R -e "remotes::install_local('indicators', NULL, FALSE, 'never')" \
   && mkdir -p \
        /home/user/coverage \
        /home/user/logs \

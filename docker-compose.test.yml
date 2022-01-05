@@ -5,5 +5,17 @@ services:
     build:
       context: .
     command: R --slave -e 'print(cv <- covr::package_coverage("indicators"), "functions"); covr::report(cv, file = "coverage/code-coverage.html", FALSE)'
+    environment:
+    - "PGHOST=postgres"
+    - "PGUSER=postgres"
+    - "PGPASSWORD=1234"
+    - "FINBIF_ACCESS_TOKEN=dummy"
     volumes:
-      - ./cov:/home/user/coverage
+    - ./cov:/home/user/coverage
+    depends_on:
+    - postgres
+  postgres:
+    image: postgres
+    environment:
+    - "POSTGRES_USER=postgres"
+    - "POSTGRES_PASSWORD=1234"
