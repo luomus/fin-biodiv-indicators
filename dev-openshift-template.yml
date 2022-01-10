@@ -367,7 +367,7 @@ objects:
           - name: PAGE_TITLE
             value: ${APP_TITLE}-${DEV}
           - name: LOG_DIR
-            value: ${LOG_DIR}
+            value: ${HOME}/${LOG_DIR}
         volumes:
         - name: ${DEV}-${LOG}
           persistentVolumeClaim:
