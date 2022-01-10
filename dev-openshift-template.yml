@@ -366,6 +366,8 @@ objects:
           env:
           - name: PAGE_TITLE
             value: ${APP_TITLE}-${DEV}
+          - name: LOG_DIR
+            value: ${LOG_DIR}
         volumes:
         - name: ${DEV}-${LOG}
           persistentVolumeClaim:
