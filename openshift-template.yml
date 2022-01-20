@@ -70,9 +70,6 @@ parameters:
   - name: PROD
     required: true
     value: main
-  - name: DEV
-    required: true
-    value: dev
   - name: TAG
     required: true
     value: latest
@@ -106,18 +103,6 @@ parameters:
   - name: FINBIF_WAREHOUSE_QUERY
     required: true
   - name: FINBIF_EMAIL
-    required: true
-  - name: DEV_DB_PASSWORD
-    required: true
-  - name: DEV_DB_PRIMARY_PASSWORD
-    required: true
-  - name: DEV_DB_ROOT_PASSWORD
-    required: true
-  - name: DEV_FINBIF_ACCESS_TOKEN
-    required: true
-  - name: DEV_FINBIF_API
-    required: true
-  - name: DEV_FINBIF_WAREHOUSE_QUERY
     required: true
   - name: GITHUB_SECRET
     required: true
