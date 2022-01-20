@@ -1,29 +1,53 @@
 version: "3.2"
-
 services:
   postgres:
-    image: postgres
-    restart: always
+    build:
+      context: "./postgres"
+      dockerfile: "Dockerfile"
+    env_file:
+    - ".env"
     environment:
-      - "POSTGRES_USER=${PGUSER}"
-      - "POSTGRES_PASSWORD=${PGPASSWORD}"
+    - "MODE=postgres"
+    - "PG_DATABASE=postgres"
+    - "PG_PRIMARY_PORT=5432"
+    - "PG_MODE=primary"
+    - "PG_USER=postgres"
+    - "PG_PASSWORD=${DEV_DB_PASSWORD}"
+    - "PG_PRIMARY_USER=primary"
+    - "PG_PRIMARY_PASSWORD=${DEV_DB_PRIMARY_PASSWORD}"
+    - "PG_ROOT_PASSWORD=${DEV_DB_ROOT_PASSWORD}"
+    - "PGDATA_PATH_OVERRIDE=postgres"
     volumes:
-      - "postgres:/var/lib/postgresql/data"
+    - "postgres:/pgdata"
   api:
     build:
-      context: ./api
-      dockerfile: Dockerfile
-      args:
-        - "PGUSER=${PGUSER}"
-        - "PGPASSWORD=${PGPASSWORD}"
-        - "FINBIF_ACCESS_TOKEN=${FINBIF_ACCESS_TOKEN}"
-        - "FINBIF_EMAIL=${FINBIF_EMAIL}"
-        - "FINBIF_WAREHOUSE_QUERY=${FINBIF_WAREHOUSE_QUERY}"
-    restart: always
+      context: "."
+      dockerfile: "Dockerfile"
+    env_file:
+    - ".env"
+    environment:
+    - "PAGE_TITLE='Finnish Biodiversity Indicators'"
+    - "FINBIF_ACCESS_TOKEN=${DEV_FINBIF_ACCESS_TOKEN}"
+    - "FINBIF_API=${DEV_FINBIF_API}"
+    - "FINBIF_WAREHOUSE_QUERY=${DEV_FINBIF_WAREHOUSE_QUERY}"
+    - "FINBIF_EMAIL=${FINBIF_EMAIL}"
+    - "PGUSER=postgres"
+    - "PGPASSWORD=${DEV_DB_PASSWORD}"
+    - "PGHOST=postgres"
     tmpfs:
-      - "/tmpsvgs"
+    - "/home/user/tmp"
+    volumes:
+    - "logs:/home/user/logs"
     ports:
-      - "8000:8000"
-
+    - "8000:8000"
+  monitor:
+    image: "ghcr.io/luomus/log-monitor"
+    environment:
+    - "PAGE_TITLE='Finnish Biodiversity Indicators'"
+    ports:
+    - "3838:3838"
+    volumes:
+    - "logs:/home/user/logs"
 volumes:
   postgres:
+  logs:
