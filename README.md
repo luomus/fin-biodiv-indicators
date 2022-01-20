@@ -27,4 +27,4 @@ docker-compose up --build -d
 ### Graphics
 [http://localhost:8000/svg/wb?taxa=MX.29008](http://localhost:8000/svg/wb?taxa=MX.29008)
 
-![](api/pkg/man/figures/graph.svg)
+![](pkg/man/figures/graph.svg)
