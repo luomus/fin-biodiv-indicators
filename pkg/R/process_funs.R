@@ -19,7 +19,8 @@ process_funs <- list(
     surveys <- dplyr::group_by(surveys, .data[["location_id"]], .data[["year"]])
 
     surveys <- dplyr::slice_min(
-      surveys, 1L / .data[["month"]] + .data[["day"]] / 100L, with_ties = FALSE
+      surveys, 1L / .data[["month"]] + .data[["day"]] / 100L, n = 1L,
+      with_ties = FALSE
     )
 
     dplyr::ungroup(surveys)
@@ -71,7 +72,9 @@ process_funs <- list(
       surveys, .data[["location_id"]], .data[["year"]], .data[["fortnight"]]
     )
 
-    surveys <- dplyr::slice_min(surveys, .data[["day"]], with_ties = FALSE)
+    surveys <- dplyr::slice_min(
+      surveys, .data[["day"]], n = 1L, with_ties = FALSE
+    )
 
     dplyr::ungroup(surveys)
 
