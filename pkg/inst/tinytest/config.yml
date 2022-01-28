@@ -9,6 +9,8 @@ default:
     - year
     - month
     - day
+  counts:
+    abundance: abundance
   model:
     trim:
       overdispersion: true

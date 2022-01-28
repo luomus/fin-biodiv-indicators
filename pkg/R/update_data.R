@@ -22,6 +22,8 @@ update_data <- function(type, index, taxon, db) {
 
   select <- config::get(type, config = index)[["selection"]]
 
+  abundance <- config::get("counts", config = index)[["abundance"]]
+
   index <- paste(c(index, taxon), collapse = "_")
 
   cache_date <- sprintf("%s_cached_date", type)
@@ -47,6 +49,12 @@ update_data <- function(type, index, taxon, db) {
         type, index
       )
     )
+
+    abundance_data <- data[[abundance]]
+
+    data[[abundance]] <- NULL
+
+    data[["abundance"]] <- abundance_data
 
     data[["n_events"]] <- NULL
 
