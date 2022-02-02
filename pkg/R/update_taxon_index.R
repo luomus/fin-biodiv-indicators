@@ -15,7 +15,7 @@ update_taxon_index <- function(index, taxon, db) {
 
   surveys <- get_from_db("surveys", index, NULL, db)
 
-  counts <- get_from_db("counts", index, taxon, db)
+  counts <- get_from_db("counts", index, taxon[["code"]], db)
 
   for (i in config::get("surveys", config = index)[["process"]]) {
 
@@ -25,7 +25,10 @@ update_taxon_index <- function(index, taxon, db) {
 
   for (i in config::get("counts", config = index)[["process"]]) {
 
-    counts <- do.call(process_funs[[i]], list(counts, surveys))
+    counts <- do.call(
+      process_funs[[i]],
+      list(counts = counts, surveys = surveys, taxon = taxon)
+    )
 
   }
 
@@ -39,7 +42,8 @@ update_taxon_index <- function(index, taxon, db) {
 
   message(
     sprintf(
-      "INFO [%s] Calculating %s index for %s", Sys.time(), index, taxon
+      "INFO [%s] Calculating %s index for %s", Sys.time(), index,
+      taxon[["code"]]
     )
   )
 
@@ -54,7 +58,7 @@ update_taxon_index <- function(index, taxon, db) {
 
   trim <- rtrim::index(trim, base = base)
 
-  index_taxon <- paste(index, taxon, sep = "_")
+  index_taxon <- paste(index, taxon[["code"]], sep = "_")
 
   cache_outputs(index_taxon, trim, db)
 

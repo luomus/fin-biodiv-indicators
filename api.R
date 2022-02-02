@@ -62,7 +62,7 @@ function() {
 #* @serializer unboxedJSON
 function(index) {
 
-  config::get("taxa", config = index)
+  vapply(config::get("taxa", config = index), getElement, "", "code")
 
 }
 

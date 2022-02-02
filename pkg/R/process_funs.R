@@ -80,7 +80,7 @@ process_funs <- list(
 
   },
 
-  zero_fill = function(counts, surveys) {
+  zero_fill = function(counts, surveys, ...) {
 
     counts <- dplyr::right_join(counts, surveys, by = "document_id")
 
@@ -103,7 +103,7 @@ process_funs <- list(
 
   },
 
-  sum_over_sections = function(counts, surveys) {
+  sum_over_sections = function(counts, surveys, ...) {
 
     counts <- dplyr::filter(counts, !is.na(.data[["section"]]))
 
@@ -132,19 +132,15 @@ process_funs <- list(
 
   },
 
-  remove_initial_zero_years = function(counts, ...) {
+  set_start_year = function(counts, taxon, ...) {
 
-    counts <- window_arrange(counts, .data[["year"]])
+    if (exists("start_year", taxon)) {
 
-    counts <- dplyr::mutate(counts, csum = cumsum(.data[["abundance"]]))
+      counts <- dplyr::filter(counts, .data[["year"]] > !!taxon[["start_year"]])
 
-    counts <- dplyr::group_by(counts, .data[["year"]])
+    }
 
-    counts <- dplyr::filter(counts, sum(.data[["csum"]], na.rm = TRUE) > 0L)
-
-    counts <- dplyr::select(counts, !.data[["csum"]])
-
-    dplyr::ungroup(counts)
+    counts
 
   }
 

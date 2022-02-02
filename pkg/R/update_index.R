@@ -18,7 +18,7 @@ update_index <- function(index, db) {
   maxcv <- 3
   minindex <- .01
   trunc <- 10
-  taxa <- config::get("taxa", config = index)
+  taxa <-  vapply(config::get("taxa", config = index), getElement, "", "code")
 
   df <- dplyr::tbl(db, "trim")
 

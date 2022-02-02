@@ -18,13 +18,13 @@ update_data <- function(type, index, taxon, db) {
 
   filter <- config::get("filters", config = index)
 
-  filter[["taxon_id"]] <- taxon
+  filter[["taxon_id"]] <- taxon[["code"]]
 
   select <- config::get(type, config = index)[["selection"]]
 
   abundance <- config::get("counts", config = index)[["abundance"]]
 
-  index <- paste(c(index, taxon), collapse = "_")
+  index <- paste(c(index, taxon[["code"]]), collapse = "_")
 
   cache_date <- sprintf("%s_cached_date", type)
 
