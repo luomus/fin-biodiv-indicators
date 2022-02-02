@@ -128,7 +128,7 @@ bf:
     process:
     - sum_over_sections
     - zero_fill
-    - sum_over_fortnights
+    - sum_by_event
     - set_start_year
     - remove_all_zero_locations
   model:

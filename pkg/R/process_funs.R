@@ -119,7 +119,7 @@ process_funs <- list(
 
   },
 
-  sum_over_fortnights = function(counts, ...) {
+  sum_by_event = function(counts, ...) {
 
     counts <- dplyr::group_by(counts, .data[["location_id"]], .data[["year"]])
 
