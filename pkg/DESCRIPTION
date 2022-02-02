@@ -25,8 +25,7 @@ Imports:
     pool,
     rtrim,
     stats,
-    svglite,
-    tidyr
+    svglite
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

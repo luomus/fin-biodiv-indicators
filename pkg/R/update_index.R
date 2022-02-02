@@ -10,7 +10,6 @@
 #' @importFrom dplyr inner_join lag lead mutate pull right_join row_number
 #' @importFrom dplyr summarise sql tbl ungroup
 #' @importFrom stats sd
-#' @importFrom tidyr expand
 #' @export
 
 update_index <- function(index, db) {
@@ -24,11 +23,6 @@ update_index <- function(index, db) {
   df <- dplyr::tbl(db, "trim")
 
   df <- dplyr::filter(df, .data[["index"]] %in% !!paste(index, taxa, sep = "_"))
-
-  df <- dplyr::right_join(
-    df, tidyr::expand(df, .data[["index"]], .data[["time"]]),
-    by = c("index", "time")
-  )
 
   years <- sort(dplyr::pull(dplyr::distinct(df, .data[["time"]])))
 
