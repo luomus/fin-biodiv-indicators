@@ -43,6 +43,8 @@ update_index <- function(index, db) {
     )
   )
 
+  df <- dplyr::group_by(df, .data[["index"]])
+
   df <- dplyr::mutate(df, cv = mean(.data[["cv"]], na.rm = TRUE))
 
   df <- dplyr::filter(df, .data[["cv"]] < maxcv)
