@@ -4,6 +4,8 @@ options(
   finbif_cache_path = "cache"
 )
 
+Sys.setenv(R_CONFIG_FILE = "/home/user/config.yml")
+
 con <- pool::dbPool(RPostgres::Postgres())
 
 pool::dbExecute(con, "CREATE EXTENSION tablefunc")
