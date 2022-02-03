@@ -25,7 +25,11 @@ for (index in config::get("indices")) {
 
   surveys <- update_data("surveys", index, NULL, pool)
 
-  for (taxon in config::get("taxa", config = index)) {
+  taxa <- config::get("taxa", config = index)
+
+  extra_taxa <- config::get("extra_taxa", config = index)
+
+  for (taxon in c(taxa, extra_taxa)) {
 
     counts <- update_data("counts", index, taxon, pool)
 

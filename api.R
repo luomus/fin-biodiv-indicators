@@ -66,6 +66,18 @@ function(index) {
 
 }
 
+#* Get list of extra species available but that are not included in the overall multi-species index
+#* @tag list
+#* @get /extra-taxa/<index:str>
+#* @param index:str Shortcode for multi-species index (see [/indices](#get-/indices)).
+#* @response 200 A json array response
+#* @serializer unboxedJSON
+function(index) {
+
+  vapply(config::get("extra_taxa", config = index), getElement, "", "code")
+
+}
+
 #* Get data for an index
 #* @tag data
 #* @get /data/<index:str>

@@ -107,6 +107,13 @@ bf:
   - code: MX.60877
   - code: MX.60799
   - code: MX.60749
+  extra_taxa:
+  - code: MX.60858
+  - code: MX.60791
+  - code: MX.60775
+  - code: MX.60777
+  - code: MX.60910
+  - code: MX.60911
   filters:
     date_range_ymd:
     - "1999-05-16"
