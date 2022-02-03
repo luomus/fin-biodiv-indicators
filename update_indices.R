@@ -33,7 +33,11 @@ for (index in config::get("indices")) {
 
     counts <- update_data("counts", index, taxon, pool)
 
-    taxon_index_update <- surveys || counts
+    do_update <- isTRUE(as.logical(Sys.getenv(taxon[["code"]], FALSE)))
+
+    do_update <- do_update || isTRUE(as.logical(Sys.getenv(index, FALSE)))
+
+    taxon_index_update <- surveys || counts || do_update
 
     if (taxon_index_update) {
 
