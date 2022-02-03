@@ -33,7 +33,9 @@ for (index in config::get("indices")) {
 
     counts <- update_data("counts", index, taxon, pool)
 
-    do_update <- isTRUE(as.logical(Sys.getenv(taxon[["code"]], FALSE)))
+    do_update <- isTRUE(
+      as.logical(Sys.getenv(sub("\\.", "", taxon[["code"]]), FALSE))
+    )
 
     do_update <- do_update || isTRUE(as.logical(Sys.getenv(index, FALSE)))
 
