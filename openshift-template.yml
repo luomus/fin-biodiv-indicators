@@ -256,6 +256,14 @@ objects:
             value: ${DB_PASSWORD}
           - name: PGHOST
             value: ${DB}
+          - name: FINBIF_ACCESS_TOKEN
+            value: ${FINBIF_ACCESS_TOKEN}
+          - name: FINBIF_API
+            value: ${FINBIF_API}
+          - name: FINBIF_WAREHOUSE_QUERY
+            value: ${FINBIF_WAREHOUSE_QUERY}
+          - name: FINBIF_EMAIL
+            value: ${FINBIF_EMAIL}
         volumes:
         - name: ${LOG}
           persistentVolumeClaim:
