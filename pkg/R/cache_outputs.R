@@ -21,6 +21,14 @@ cache_outputs <- function(index, df, db) {
 
   set_cache(index, "data", data, db)
 
+  count_summary <- attr(df, "count_summary")
+
+  count_summary <- data.frame(
+    index = index, data = blob::blob(serialize(count_summary, NULL))
+  )
+
+  set_cache(index, "count_summary", count_summary, db)
+
   p <-
     ggplot2::ggplot() +
     ggplot2::aes(

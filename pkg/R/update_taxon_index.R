@@ -8,7 +8,7 @@
 #'
 #' @importFrom config get
 #' @importFrom dplyr .data collect select
-#' @importFrom rtrim index trim
+#' @importFrom rtrim count_summary index trim
 #' @export
 
 update_taxon_index <- function(index, taxon, db) {
@@ -59,6 +59,10 @@ update_taxon_index <- function(index, taxon, db) {
   trim <- rtrim::index(trim, base = base)
 
   index_taxon <- paste(index, taxon[["code"]], sep = "_")
+
+  attr(trim, "count_summary") <- rtrim::count_summary(
+    as.data.frame(counts), "abundance", "location_id"
+  )[-2L]
 
   cache_outputs(index_taxon, trim, db)
 

@@ -101,6 +101,29 @@ function(index, taxa = "none") {
 
 }
 
+#* Get count summary for an index
+#* @tag data
+#* @get /count-summary/<index:str>
+#* @param index:str Shortcode for index (see [/indices](#get-/indices)).
+#* @param taxa:str Shortcode for taxa (see [/taxa](#get-/taxa)).
+#* @response 200 A json array response
+#* @serializer unboxedJSON
+function(index, taxa = "none") {
+
+  taxa <- switch(taxa, none = NULL, taxa)
+
+  index <- paste(c(index, taxa), collapse = "_")
+
+  ans <- dplyr::tbl(pool, "count_summary")
+
+  ans <- dplyr::filter(ans, .data[["index"]] == !!index)
+
+  ans <- dplyr::select(ans, .data[["data"]])
+
+  unserialize(dplyr::pull(ans)[[1L]])
+
+}
+
 #* Get svg for an index
 #* @tag data
 #* @get /svg/<index:str>

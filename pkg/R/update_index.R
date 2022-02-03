@@ -161,6 +161,8 @@ update_index <- function(index, db) {
 
   df <- dplyr::collect(df)
 
+  attr(df, "count_summary") <- list(taxa = length(taxa))
+
   cache_outputs(index, df, db)
 
   invisible(NULL)
