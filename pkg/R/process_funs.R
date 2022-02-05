@@ -103,11 +103,9 @@ process_funs <- list(
 
   },
 
-  sum_over_sections = function(counts, surveys, ...) {
+  sum_over_sections = function(counts, ...) {
 
     counts <- dplyr::filter(counts, !is.na(.data[["section"]]))
-
-    counts <- dplyr::inner_join(counts, surveys, by = "document_id")
 
     counts <- dplyr::group_by(counts, .data[["document_id"]])
 
