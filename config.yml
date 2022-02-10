@@ -1,5 +1,6 @@
 default:
   indices:
+#  - fb
   - wb
   - bf
   surveys:
@@ -11,9 +12,49 @@ default:
     - day
   counts:
     abundance: abundance
-  model:
-    trim:
-      overdispersion: true
+
+# fb:
+#   taxa:
+#   - code: MX.27328
+#     start_year: 2006
+#   - code: MX.27527
+#   - code: MX.27613
+#   - code: MX.32065
+#   - code: MX.32132
+#   - code: MX.32163
+#   - code: MX.32213
+#   - code: MX.32949
+#   - code: MX.33117
+#   - code: MX.33936
+#   - code: MX.37142
+#   - code: MX.36817
+#   - code: MX.36589
+#     start_year: 2006
+#   - code: MX.35154
+#   filters:
+#     date_range_ymd:
+#     - "1979-01-01"
+#     - ""
+#   collection:
+#   - HR.157
+#   - HR.61
+#   counts:
+#     abundance: pair_abundance
+#     selection:
+#     - document_id
+#     - pair_abundance
+#   model:
+#     trim:
+#       base_year: 2006
+#       overdispersion: false
+#       survey_process:
+#       - pick_first_survey_in_year
+#       - require_gt_two_years
+#       count_process:
+#       - zero_fill
+#       - sum_by_event
+#       - set_start_year
+#       - remove_all_zero_locations
 
 wb:
   taxa:
@@ -41,21 +82,20 @@ wb:
     - "12-01"
     - "01-31"
     collection: HR.39
-  surveys:
-    process:
-    - shift_year_winter
-    - pick_first_survey_in_year
   counts:
     selection:
     - document_id
     - abundance
-    process:
-    - zero_fill
-    - remove_all_zero_locations
   model:
     trim:
       base_year: 1959
       overdispersion: false
+      surveys_process:
+      - shift_year_winter
+      - pick_first_survey_in_year
+      counts_process:
+      - zero_fill
+      - remove_all_zero_locations
 
 bf:
   taxa:
@@ -122,22 +162,22 @@ bf:
     - "05-16"
     - "08-31"
     collection: HR.3431
-  surveys:
-    process:
-    - require_seven_fortnights
-    - require_gt_two_years
-    - pick_first_survey_in_fortnight
   counts:
     selection:
     - document_id
     - section
     - abundance
-    process:
-    - sum_over_sections
-    - zero_fill
-    - sum_by_event
-    - set_start_year
-    - remove_all_zero_locations
   model:
     trim:
+      overdispersion: true
       base_year: 2001
+      surveys_process:
+      - require_seven_fortnights
+      - require_gt_two_years
+      - pick_first_survey_in_fortnight
+      counts_process:
+      - sum_over_sections
+      - zero_fill
+      - sum_by_event
+      - set_start_year
+      - remove_all_zero_locations
