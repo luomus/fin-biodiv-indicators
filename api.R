@@ -82,14 +82,19 @@ function(index) {
 #* @tag data
 #* @get /data/<index:str>
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
+#* @param model:str Which model (trim, rbms, etc.).
 #* @param taxa:str Shortcode for taxa (see [/taxa](#get-/taxa)).
 #* @response 200 A json array response
 #* @serializer unboxedJSON
-function(index, taxa = "none") {
+function(index,  model = "default", taxa = "none") {
 
   taxa <- switch(taxa, none = NULL, taxa)
 
-  index <- paste(c(index, taxa), collapse = "_")
+  model <- switch(
+    model, "default" = names(config::get("model", confifg = index))[[1L]], model
+  )
+
+  index <- paste(c(index, model, taxa), collapse = "_")
 
   ans <- dplyr::tbl(pool, "data")
 
@@ -105,14 +110,19 @@ function(index, taxa = "none") {
 #* @tag data
 #* @get /count-summary/<index:str>
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
+#* @param model:str Which model (trim, rbms, etc.).
 #* @param taxa:str Shortcode for taxa (see [/taxa](#get-/taxa)).
 #* @response 200 A json array response
 #* @serializer unboxedJSON
-function(index, taxa = "none") {
+function(index, model = "default", taxa = "none") {
 
   taxa <- switch(taxa, none = NULL, taxa)
 
-  index <- paste(c(index, taxa), collapse = "_")
+  model <- switch(
+    model, "default" = names(config::get("model", confifg = index))[[1L]], model
+  )
+
+  index <- paste(c(index, model, taxa), collapse = "_")
 
   ans <- dplyr::tbl(pool, "count_summary")
 
@@ -128,9 +138,10 @@ function(index, taxa = "none") {
 #* @tag data
 #* @get /svg/<index:str>
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
+#* @param model:str Which model (trim, rbms, etc.).
 #* @param taxa:str Shortcode for taxa (see [/taxa](#get-/taxa)).
 #* @response 200 An svg file response
-function(index, taxa = "none", res) {
+function(index, model = "default", taxa = "none", res) {
 
   res[["setHeader"]]("Content-Type", "image/svg+xml")
   res[["setHeader"]]("Content-Encoding", "gzip")
@@ -138,7 +149,11 @@ function(index, taxa = "none", res) {
 
   taxa <- switch(taxa, none = NULL, taxa)
 
-  index <- paste(c(index, taxa), collapse = "_")
+  model <- switch(
+    model, "default" = names(config::get("model", confifg = index))[[1L]], model
+  )
+
+  index <- paste(c(index, model, taxa), collapse = "_")
 
   ans <- dplyr::tbl(pool, "svg")
 

@@ -4,10 +4,12 @@
 \alias{update_taxon_index}
 \title{Update taxon index}
 \usage{
-update_taxon_index(index, taxon, db)
+update_taxon_index(index, model, taxon, db)
 }
 \arguments{
 \item{index}{Character. Update which index?}
+
+\item{model}{Character. Which model to use?}
 
 \item{taxon}{Character. Update the data for which taxa?}
 

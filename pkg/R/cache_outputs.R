@@ -7,9 +7,9 @@
 cache_outputs <- function(index, df, db) {
 
   data <- cbind(
-    df[["imputed"]],
-    df[["imputed"]] - df[["se_imp"]],
-    df[["imputed"]] + df[["se_imp"]]
+    df[["mean"]],
+    df[["mean"]] - df[["sd"]],
+    df[["mean"]] + df[["sd"]]
   )
 
   data <- list(
@@ -33,9 +33,9 @@ cache_outputs <- function(index, df, db) {
     ggplot2::ggplot() +
     ggplot2::aes(
       x = lubridate::parse_date_time(df[["time"]], "Y"),
-      y = df[["imputed"]],
-      ymin = df[["imputed"]] - df[["se_imp"]],
-      ymax = df[["imputed"]] + df[["se_imp"]]
+      y = df[["mean"]],
+      ymin = df[["mean"]] - df[["sd"]],
+      ymax = df[["mean"]] + df[["sd"]]
     ) +
     ggplot2::geom_ribbon(alpha = .2) +
     ggplot2::geom_line() +

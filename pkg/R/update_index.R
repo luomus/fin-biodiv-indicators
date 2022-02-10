@@ -3,6 +3,7 @@
 #' Update index output data.
 #'
 #' @param index Character. Update which index?
+#' @param model Character. Which model to use?
 #' @param db Connection. Database in which to update index.
 #'
 #' @importFrom config get
@@ -12,7 +13,7 @@
 #' @importFrom stats sd
 #' @export
 
-update_index <- function(index, db) {
+update_index <- function(index, model, db) {
 
   n <- 1000L
   maxcv <- 3
@@ -20,25 +21,29 @@ update_index <- function(index, db) {
   trunc <- 10
   taxa <-  vapply(config::get("taxa", config = index), getElement, "", "code")
 
-  df <- dplyr::tbl(db, "trim")
+  df <- dplyr::tbl(db, "model_output")
 
-  df <- dplyr::filter(df, .data[["index"]] %in% !!paste(index, taxa, sep = "_"))
+  df <- dplyr::filter(
+    df, .data[["index"]] %in% !!paste(index, model, taxa, sep = "_")
+  )
 
   years <- sort(dplyr::pull(dplyr::distinct(df, .data[["time"]])))
 
   nyears <- length(years)
 
-  base <- config::get("model", config = index)[["trim"]][["base_year"]]
+  base <- config::get("model", config = index)[[model]][["base_year"]]
 
   base <- which(years == base)
+
+  esab <- nyears - base + 1L
 
   nrows <- dplyr::pull(dplyr::count(df))
 
   df <- dplyr::mutate(
     df,
     cv = ifelse(
-      .data[["imputed"]] >= .1 & .data[["se_imp"]] > 0,
-      .data[["se_imp"]] / .data[["imputed"]],
+      .data[["mean"]] >= .1 & .data[["sd"]] > 0,
+      .data[["sd"]] / .data[["mean"]],
       NA_real_
     )
   )
@@ -50,12 +55,12 @@ update_index <- function(index, db) {
   df <- dplyr::filter(df, .data[["cv"]] < maxcv)
 
   df <- dplyr::mutate(
-    df, imputed = pmax(.data[["imputed"]], minindex, na.rm = TRUE)
+    df, imputed = pmax(.data[["mean"]], minindex, na.rm = TRUE)
   )
 
   df <- dplyr::mutate(
     df,
-    se_imp = ifelse(.data[["imputed"]] > minindex, .data[["se_imp"]], 0)
+    se_imp = ifelse(.data[["mean"]] > minindex, .data[["sd"]], 0)
   )
 
   seq_n <- dplyr::tbl(
@@ -79,8 +84,8 @@ update_index <- function(index, db) {
   df <- dplyr::mutate(
     df,
     mc = pmax(
-      .data[["mc"]] * .data[["se_imp"]] /
-        .data[["imputed"]] + log(.data[["imputed"]]),
+      .data[["mc"]] * .data[["sd"]] /
+        .data[["mean"]] + log(.data[["mean"]]),
       log(minindex),
       na.rm = TRUE
     )
@@ -134,7 +139,7 @@ update_index <- function(index, db) {
   df <- dplyr::mutate(df, mcb = dplyr::lead(.data[["mcb"]], nyears - base))
 
   df <- dplyr::mutate(
-    df, mcb = dplyr::lag(.data[["mcb"]], !!(nyears - base + 1L), double_zero)
+    df, mcb = dplyr::lag(.data[["mcb"]], esab, double_zero)
   )
 
   df <- dplyr::mutate(df, mcb = cumsum(.data[["mcb"]]))
@@ -143,10 +148,10 @@ update_index <- function(index, db) {
 
   df <- dplyr::summarise(
     df,
-    imputed =
+    mean =
       exp(mean(.data[["mcf"]], na.rm = TRUE)) *
       exp(mean(.data[["mcb"]], na.rm = TRUE)),
-    se_imp =
+    sd =
       sd(.data[["mcf"]], na.rm = TRUE) *
       exp(mean(.data[["mcf"]], na.rm = TRUE)) +
       sd(.data[["mcb"]], na.rm = TRUE) *
@@ -154,6 +159,8 @@ update_index <- function(index, db) {
   )
 
   df <- dplyr::arrange(df, .data[["time"]])
+
+  index <- paste(index, model, sep = "_")
 
   message(
     sprintf("INFO [%s] Calculating %s combined index", Sys.time(), index)

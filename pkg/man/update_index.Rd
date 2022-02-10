@@ -4,10 +4,12 @@
 \alias{update_index}
 \title{Update index}
 \usage{
-update_index(index, db)
+update_index(index, model, db)
 }
 \arguments{
 \item{index}{Character. Update which index?}
+
+\item{model}{Character. Which model to use?}
 
 \item{db}{Connection. Database in which to update index.}
 }

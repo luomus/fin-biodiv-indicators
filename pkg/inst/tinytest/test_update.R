@@ -18,6 +18,6 @@ pool::dbWriteTable(con, "surveys", data.frame(index = character()))
 
 expect_true(update_data("surveys", "bf", NULL, con))
 
-expect_null(update_taxon_index("bf", list(code = "MX.60914"), con))
+expect_null(update_taxon_index("bf", "trim", list(code = "MX.60914"), con))
 
-expect_null(update_index("bf", con))
+expect_null(update_index("bf", "trim", con))

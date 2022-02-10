@@ -3,27 +3,31 @@
 #' Update the relative abundance index for a taxon.
 #'
 #' @param index Character. Update which index?
+#' @param model Character. Which model to use?
 #' @param taxon Character. Update the data for which taxa?
 #' @param db Connection. Database in which to update index.
 #'
 #' @importFrom config get
 #' @importFrom dplyr .data collect select
-#' @importFrom rtrim count_summary index trim
 #' @export
 
-update_taxon_index <- function(index, taxon, db) {
+update_taxon_index <- function(index, model, taxon, db) {
 
   surveys <- get_from_db("surveys", index, NULL, db)
 
   counts <- get_from_db("counts", index, taxon[["code"]], db)
 
-  for (i in config::get("surveys", config = index)[["process"]]) {
+  model_spec <- config::get("model", config = index)[[model]]
+
+  for (i in model_spec[["surveys_process"]]) {
 
     surveys <- do.call(process_funs[[i]], list(surveys))
 
   }
 
-  for (i in config::get("counts", config = index)[["process"]]) {
+  config::get("model", config = index)[["process"]]
+
+  for (i in model_spec[["counts_process"]]) {
 
     counts <- do.call(
       process_funs[[i]],
@@ -38,37 +42,15 @@ update_taxon_index <- function(index, taxon, db) {
 
   counts <- dplyr::collect(counts)
 
-  od <- config::get("model", config = index)[["trim"]][["overdispersion"]]
+  model_data <- run_model(index, taxon, counts, model)
 
-  message(
-    sprintf(
-      "INFO [%s] Calculating %s index for %s", Sys.time(), index,
-      taxon[["code"]]
-    )
-  )
+  index_taxon <- paste(index, model, taxon[["code"]], sep = "_")
 
-  trim <- rtrim::trim(
-    abundance ~ location_id + year, data = counts, changepoints = "all",
-    overdisp = od
-  )
+  cache_outputs(index_taxon, model_data, db)
 
-  base <- config::get("model", config = index)[["trim"]][["base_year"]]
+  model_data[["index"]] <- index_taxon
 
-  base <- which(trim[["time.id"]] == base)
-
-  trim <- rtrim::index(trim, base = base)
-
-  index_taxon <- paste(index, taxon[["code"]], sep = "_")
-
-  attr(trim, "count_summary") <- rtrim::count_summary(
-    as.data.frame(counts), "abundance", "location_id"
-  )[-2L]
-
-  cache_outputs(index_taxon, trim, db)
-
-  trim[["index"]] <- index_taxon
-
-  set_cache(index_taxon, "trim", trim, db)
+  set_cache(index_taxon, "model_output", model_data, db)
 
   invisible(NULL)
 

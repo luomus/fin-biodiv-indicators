@@ -27,6 +27,8 @@ for (index in config::get("indices")) {
 
   taxa <- config::get("taxa", config = index)
 
+  models <- names(config::get("model", config = index))
+
   extra_taxa <- config::get("extra_taxa", config = index)
 
   for (taxon in c(taxa, extra_taxa)) {
@@ -43,7 +45,11 @@ for (index in config::get("indices")) {
 
     if (taxon_index_update) {
 
-      update_taxon_index(index, taxon, pool)
+      for (model in models) {
+
+        update_taxon_index(index, model, taxon, pool)
+
+      }
 
     }
 
@@ -53,7 +59,11 @@ for (index in config::get("indices")) {
 
   if (index_update) {
 
-    update_index(index, pool)
+    for (model in models) {
+
+      update_index(index, model, pool)
+
+    }
 
   }
 
