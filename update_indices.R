@@ -19,6 +19,8 @@ options(
 
 pool <- pool::dbPool(RPostgres::Postgres())
 
+message(sprintf("INFO [%s] Update starting...", Sys.time()))
+
 for (index in config::get("indices")) {
 
   index_update <- FALSE
