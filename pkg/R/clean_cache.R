@@ -71,17 +71,17 @@ clean_cache <- function(db) {
 
   taxa_model_indices <- do.call(c, c(model_indices, taxa_model_indices))
 
-  clean_indices(index_tables, indices, db)
+  clean_indices(index_tables, db_tables,indices, db)
 
-  clean_indices(taxon_tables, taxa_indices, db)
+  clean_indices(taxon_tables, db_tables, taxa_indices, db)
 
-  clean_indices(model_tables, taxa_model_indices, db)
+  clean_indices(model_tables, db_tables, taxa_model_indices, db)
 
 }
 
-clean_indices <- function(tables, indices, db) {
+clean_indices <- function(tables, db_tables, indices, db) {
 
-  for (table in tables) {
+  for (table in intersect(tables, db_tables)) {
 
     db_indices <- dplyr::tbl(db, table)
 
