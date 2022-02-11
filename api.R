@@ -91,7 +91,7 @@ function(index,  model = "default", taxa = "none") {
   taxa <- switch(taxa, none = NULL, taxa)
 
   model <- switch(
-    model, "default" = names(config::get("model", confifg = index))[[1L]], model
+    model, "default" = names(config::get("model", config = index))[[1L]], model
   )
 
   index <- paste(c(index, model, taxa), collapse = "_")
@@ -119,7 +119,7 @@ function(index, model = "default", taxa = "none") {
   taxa <- switch(taxa, none = NULL, taxa)
 
   model <- switch(
-    model, "default" = names(config::get("model", confifg = index))[[1L]], model
+    model, "default" = names(config::get("model", config = index))[[1L]], model
   )
 
   index <- paste(c(index, model, taxa), collapse = "_")
@@ -150,7 +150,7 @@ function(index, model = "default", taxa = "none", res) {
   taxa <- switch(taxa, none = NULL, taxa)
 
   model <- switch(
-    model, "default" = names(config::get("model", confifg = index))[[1L]], model
+    model, "default" = names(config::get("model", config = index))[[1L]], model
   )
 
   index <- paste(c(index, model, taxa), collapse = "_")
