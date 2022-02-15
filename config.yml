@@ -155,12 +155,6 @@ bf:
   - code: MX.60910
   - code: MX.60911
   filters:
-    date_range_ymd:
-    - "1999-05-16"
-    - ""
-    date_range_md:
-    - "05-16"
-    - "08-31"
     collection: HR.3431
   counts:
     selection:
