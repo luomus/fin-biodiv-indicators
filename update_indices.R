@@ -29,7 +29,7 @@ do_update <- function(index, type = c("input", "output")) {
 
   ans <- Sys.getenv(envvar, FALSE)
 
-  ans <- as.logcial(ans)
+  ans <- as.logical(ans)
 
   isTRUE(ans)
 
