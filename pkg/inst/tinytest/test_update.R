@@ -25,3 +25,5 @@ expect_null(update_index("bf", "trim", con))
 pool::dbWriteTable(con, "redundant", data.frame(index = character()))
 
 expect_null(clean_cache(con))
+
+pool::poolClose(con)
