@@ -19,29 +19,47 @@ options(
 
 pool <- pool::dbPool(RPostgres::Postgres())
 
+do_update <- function(index, type = c("input", "output")) {
+
+  index <- sub("\\.", "", index)
+
+  type <- match.arg(type)
+
+  envvar <- paste(index, type, sep = "_")
+
+  ans <- Sys.getenv(envvar, FALSE)
+
+  ans <- as.logcial(ans)
+
+  isTRUE(ans)
+
+}
+
 message(sprintf("INFO [%s] Update starting...", Sys.time()))
 
 for (index in config::get("indices")) {
 
   index_update <- FALSE
 
-  surveys <- update_data("surveys", index, NULL, pool)
+  do_update <- do_update(index)
+
+  surveys <- update_data("surveys", index, NULL, pool, do_update)
 
   taxa <- config::get("taxa", config = index)
 
-  models <- names(config::get("model", config = index))
-
   extra_taxa <- config::get("extra_taxa", config = index)
+
+  models <- names(config::get("model", config = index))
 
   for (taxon in c(taxa, extra_taxa)) {
 
-    counts <- update_data("counts", index, taxon, pool)
+    do_update <- do_update || do_update(taxon[["code"]])
 
-    do_update <- isTRUE(
-      as.logical(Sys.getenv(sub("\\.", "", taxon[["code"]]), FALSE))
-    )
+    counts <- update_data("counts", index, taxon, pool, do_update)
 
-    do_update <- do_update || isTRUE(as.logical(Sys.getenv(index, FALSE)))
+    do_update <- do_update(index, "output")
+
+    do_update <- do_update || do_update(taxon[["code"]], "output")
 
     taxon_index_update <- surveys || counts || do_update
 

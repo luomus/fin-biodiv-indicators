@@ -7,12 +7,13 @@
 #' @param taxon Character. Update the data for which taxon? Ignored if
 #'   `type = "surveys"`
 #' @param db Connection. Database in which to update the data from FinBIF.
+#' @param do_update Logical. Update data regardless of need.
 #'
 #' @importFrom config get
 #' @importFrom finbif finbif_occurrence
 #' @export
 
-update_data <- function(type, index, taxon, db) {
+update_data <- function(type, index, taxon, db, do_update = FALSE) {
 
   taxon <- switch(type, surveys = NULL, taxon)
 
@@ -30,7 +31,7 @@ update_data <- function(type, index, taxon, db) {
 
   cache_date <- sprintf("%s_cached_date", type)
 
-  if (needs_update(index, filter, cache_date, db)) {
+  if (needs_update(index, filter, cache_date, db) || do_update) {
 
     aggregate <- switch(type, surveys = "events", "none")
 

@@ -4,7 +4,7 @@
 \alias{update_data}
 \title{Update data}
 \usage{
-update_data(type, index, taxon, db)
+update_data(type, index, taxon, db, do_update = FALSE)
 }
 \arguments{
 \item{type}{Character. Which type of input data (e.g., surveys or counts)}
@@ -15,6 +15,8 @@ update_data(type, index, taxon, db)
 \code{type = "surveys"}}
 
 \item{db}{Connection. Database in which to update the data from FinBIF.}
+
+\item{do_update}{Logical. Update data regardless of need.}
 }
 \description{
 Update input data from FinBIF.
