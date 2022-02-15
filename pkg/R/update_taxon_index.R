@@ -21,7 +21,7 @@ update_taxon_index <- function(index, model, taxon, db) {
 
   for (i in model_spec[["surveys_process"]]) {
 
-    surveys <- do.call(process_funs[[i]], list(surveys))
+    surveys <- do.call(process_funs()[[i]], list(surveys))
 
   }
 
@@ -30,7 +30,7 @@ update_taxon_index <- function(index, model, taxon, db) {
   for (i in model_spec[["counts_process"]]) {
 
     counts <- do.call(
-      process_funs[[i]],
+      process_funs()[[i]],
       list(counts = counts, surveys = surveys, taxon = taxon)
     )
 
