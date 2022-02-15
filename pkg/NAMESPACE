@@ -2,6 +2,7 @@
 
 export(clean_cache)
 export(pick_first_survey_in_fortnight)
+export(pick_first_survey_in_winter)
 export(pick_first_survey_in_year)
 export(process_funs)
 export(remove_all_zero_locations)

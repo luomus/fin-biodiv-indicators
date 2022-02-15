@@ -3,6 +3,7 @@
 \name{process_funs}
 \alias{process_funs}
 \alias{shift_year_winter}
+\alias{pick_first_survey_in_winter}
 \alias{pick_first_survey_in_year}
 \alias{require_seven_fortnights}
 \alias{require_gt_two_years}
@@ -17,6 +18,8 @@
 process_funs()
 
 shift_year_winter(surveys)
+
+pick_first_survey_in_winter(surveys)
 
 pick_first_survey_in_year(surveys)
 

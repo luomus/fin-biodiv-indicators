@@ -14,6 +14,7 @@ process_funs <- function() {
 
   list(
     shift_year_winter              = shift_year_winter,
+    pick_first_survey_in_winter    = pick_first_survey_in_winter,
     pick_first_survey_in_year      = pick_first_survey_in_year,
     require_seven_fortnights       = require_seven_fortnights,
     require_gt_two_years           = require_gt_two_years,
@@ -42,12 +43,27 @@ shift_year_winter <- function(surveys) {
 
 #' @export
 #' @rdname process_funs
-pick_first_survey_in_year <- function(surveys) {
+pick_first_survey_in_winter <- function(surveys) {
 
   surveys <- dplyr::group_by(surveys, .data[["location_id"]], .data[["year"]])
 
   surveys <- dplyr::slice_min(
     surveys, 1L / .data[["month"]] + .data[["day"]] / 100L, n = 1L,
+    with_ties = FALSE
+  )
+
+  dplyr::ungroup(surveys)
+
+}
+
+#' @export
+#' @rdname process_funs
+pick_first_survey_in_year <- function(surveys) {
+
+  surveys <- dplyr::group_by(surveys, .data[["location_id"]], .data[["year"]])
+
+  surveys <- dplyr::slice_min(
+    surveys, .data[["month"]] + .data[["day"]] / 10L, n = 1L,
     with_ties = FALSE
   )
 
