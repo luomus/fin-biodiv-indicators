@@ -198,7 +198,7 @@ set_start_year <- function(counts, taxon, ...) {
 
   if (exists("start_year", taxon)) {
 
-    counts <- dplyr::filter(counts, .data[["year"]] > !!taxon[["start_year"]])
+    counts <- dplyr::filter(counts, .data[["year"]] >= !!taxon[["start_year"]])
 
   }
 
