@@ -53,13 +53,11 @@ for (index in config::get("indices")) {
 
   for (taxon in c(taxa, extra_taxa)) {
 
-    do_upd <- do_upd || do_update(taxon[["code"]])
+    do_upd <- do_update(index) || do_update(taxon[["code"]])
 
     counts <- update_data("counts", index, taxon, pool, do_upd)
 
-    do_upd <- do_update(index, "output")
-
-    do_upd <- do_upd || do_update(taxon[["code"]], "output")
+    do_upd <- do_update(index, "output") || do_update(taxon[["code"]], "output")
 
     taxon_index_update <- surveys || counts || do_upd
 
