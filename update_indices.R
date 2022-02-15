@@ -59,7 +59,7 @@ for (index in config::get("indices")) {
 
     do_upd <- do_update(index, "output")
 
-    do_update <- do_update || do_update(taxon[["code"]], "output")
+    do_update <- do_upd || do_update(taxon[["code"]], "output")
 
     taxon_index_update <- surveys || counts || do_upd
 
