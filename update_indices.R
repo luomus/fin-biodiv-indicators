@@ -41,9 +41,9 @@ for (index in config::get("indices")) {
 
   index_update <- FALSE
 
-  do_update <- do_update(index)
+  do_upd <- do_update(index)
 
-  surveys <- update_data("surveys", index, NULL, pool, do_update)
+  surveys <- update_data("surveys", index, NULL, pool, do_upd)
 
   taxa <- config::get("taxa", config = index)
 
@@ -53,15 +53,15 @@ for (index in config::get("indices")) {
 
   for (taxon in c(taxa, extra_taxa)) {
 
-    do_update <- do_update || do_update(taxon[["code"]])
+    do_upd <- do_upd || do_update(taxon[["code"]])
 
-    counts <- update_data("counts", index, taxon, pool, do_update)
+    counts <- update_data("counts", index, taxon, pool, do_upd)
 
-    do_update <- do_update(index, "output")
+    do_upd <- do_update(index, "output")
 
     do_update <- do_update || do_update(taxon[["code"]], "output")
 
-    taxon_index_update <- surveys || counts || do_update
+    taxon_index_update <- surveys || counts || do_upd
 
     if (taxon_index_update) {
 
