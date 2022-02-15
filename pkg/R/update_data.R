@@ -20,6 +20,8 @@ update_data <- function(type, index, taxon, db) {
 
   filter[["taxon_id"]] <- taxon[["code"]]
 
+  filter[["has_value"]] <- config::get(type, config = index)[["has_value"]]
+
   select <- config::get(type, config = index)[["selection"]]
 
   abundance <- config::get("counts", config = index)[["abundance"]]

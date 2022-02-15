@@ -161,6 +161,9 @@ bf:
     - document_id
     - section
     - abundance
+    has_value:
+    - section
+    - document_id
   model:
     trim:
       overdispersion: true
