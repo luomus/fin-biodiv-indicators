@@ -165,8 +165,6 @@ remove_all_zero_locations <- function(counts, ...) {
 #' @rdname process_funs
 sum_over_sections <- function(counts, ...) {
 
-  counts <- dplyr::filter(counts, !is.na(.data[["section"]]))
-
   counts <- dplyr::group_by(counts, .data[["document_id"]])
 
   counts <- dplyr::summarise(
