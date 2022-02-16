@@ -12,8 +12,6 @@ run_model <- function(index, taxon, counts, model) {
 
 run_trim <- function(index, taxon, counts) {
 
-  od <- config::get("model", config = index)[["trim"]][["overdispersion"]]
-
   message(
     sprintf(
       "INFO [%s] Calculating %s index for %s", Sys.time(), index,
@@ -21,10 +19,19 @@ run_trim <- function(index, taxon, counts) {
     )
   )
 
-  trim <- rtrim::trim(
-    abundance ~ location_id + year, data = counts, changepoints = "all",
-    overdisp = od
-  )
+  args <- config::get("model", config = index)[["trim"]][["args"]]
+
+  args[["object"]] <- counts
+  args[["count_col"]] <- "abundance"
+  args[["site_col"]] <- "location_id"
+
+  if (is.null(args[["changepoints"]])) {
+
+    args[["changepoints"]] <- "all"
+
+  }
+
+  trim <- do.call(rtrim::trim, args)
 
   base <- config::get("model", config = index)[["trim"]][["base_year"]]
 

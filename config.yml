@@ -46,7 +46,6 @@ default:
 #   model:
 #     trim:
 #       base_year: 2006
-#       overdispersion: false
 #       survey_process:
 #       - pick_first_survey_in_year
 #       - require_gt_two_years
@@ -89,7 +88,6 @@ wb:
   model:
     trim:
       base_year: 1959
-      overdispersion: false
       surveys_process:
       - shift_year_winter
       - pick_first_survey_in_year
@@ -166,7 +164,8 @@ bf:
     - document_id
   model:
     trim:
-      overdispersion: true
+      args:
+        overdisp: true
       base_year: 2001
       surveys_process:
       - require_seven_fortnights
