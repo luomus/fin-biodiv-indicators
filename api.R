@@ -178,7 +178,7 @@ function() {
 
 }
 
-#* @assets /indicators/docs /
+#* @assets ./indicators/docs /
 list()
 
 #* @plumber
