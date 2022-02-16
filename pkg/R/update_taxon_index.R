@@ -8,7 +8,6 @@
 #' @param db Connection. Database in which to update index.
 #'
 #' @importFrom config get
-#' @importFrom dplyr .data collect select
 #' @export
 
 update_taxon_index <- function(index, model, taxon, db) {
@@ -25,8 +24,6 @@ update_taxon_index <- function(index, model, taxon, db) {
 
   }
 
-  config::get("model", config = index)[["process"]]
-
   for (i in model_spec[["counts_process"]]) {
 
     counts <- do.call(
@@ -36,13 +33,7 @@ update_taxon_index <- function(index, model, taxon, db) {
 
   }
 
-  counts <- dplyr::select(
-    counts, .data[["abundance"]], .data[["location_id"]], .data[["year"]]
-  )
-
-  counts <- dplyr::collect(counts)
-
-  model_data <- run_model(index, taxon, counts, model)
+  model_data <- run_model(index, taxon, surveys, counts, model)
 
   index_taxon <- paste(index, model, taxon[["code"]], sep = "_")
 

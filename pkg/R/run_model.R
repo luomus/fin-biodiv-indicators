@@ -1,4 +1,4 @@
-run_model <- function(index, taxon, counts, model) {
+run_model <- function(index, taxon, surveys, counts, model) {
 
   switch(
     model,
@@ -9,6 +9,7 @@ run_model <- function(index, taxon, counts, model) {
 
 #' @importFrom config get
 #' @importFrom rtrim count_summary index trim
+#' @importFrom dplyr collect .data select
 
 run_trim <- function(index, taxon, counts) {
 
@@ -21,7 +22,11 @@ run_trim <- function(index, taxon, counts) {
 
   args <- config::get("model", config = index)[["trim"]][["args"]]
 
-  args[["object"]] <- counts
+  counts <- dplyr::select(
+    counts, .data[["abundance"]], .data[["location_id"]], .data[["year"]]
+  )
+
+  args[["object"]] <- dplyr::collect(counts)
   args[["count_col"]] <- "abundance"
   args[["site_col"]] <- "location_id"
 
