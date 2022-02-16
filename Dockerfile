@@ -24,7 +24,7 @@ RUN  install2.r -e \
        tidyr
 
 RUN  R -e "remotes::install_github('tidyverse/dbplyr')" \
-  && R -e "remotes::install_github('luomus/finbif@21420486')"
+  && R -e "remotes::install_github('luomus/finbif@333114ee')" \
 
 COPY entrypoint.sh /home/user/entrypoint.sh
 COPY init.R /home/user/init.R

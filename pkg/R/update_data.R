@@ -43,7 +43,7 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
 
     data <- finbif::finbif_occurrence(
       filter = filter, select = select, aggregate = aggregate, n = "all",
-      quiet = TRUE
+      quiet = TRUE, aggregate_counts = FALSE
     )
 
     message(
@@ -58,8 +58,6 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
     data[[abundance]] <- NULL
 
     data[["abundance"]] <- abundance_data
-
-    data[["n_events"]] <- NULL
 
     data[["index"]] <- index
 
