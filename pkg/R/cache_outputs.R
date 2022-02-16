@@ -6,11 +6,7 @@
 
 cache_outputs <- function(index, df, db) {
 
-  data <- cbind(
-    df[["mean"]],
-    df[["mean"]] - df[["sd"]],
-    df[["mean"]] + df[["sd"]]
-  )
+  data <- cbind(df[["mean"]], df[["upper"]], df[["lower"]])
 
   data <- list(
     data = data, pointStart = min(df[["time"]]), pointInterval = 1,
@@ -34,8 +30,8 @@ cache_outputs <- function(index, df, db) {
     ggplot2::aes(
       x = lubridate::parse_date_time(df[["time"]], "Y"),
       y = df[["mean"]],
-      ymin = df[["mean"]] - df[["sd"]],
-      ymax = df[["mean"]] + df[["sd"]]
+      ymin = df[["lower"]],
+      ymax = df[["upper"]]
     ) +
     ggplot2::geom_ribbon(alpha = .2) +
     ggplot2::geom_line() +

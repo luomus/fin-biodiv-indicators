@@ -44,7 +44,12 @@ run_trim <- function(index, taxon, counts) {
 
   model_data <- rtrim::index(trim, base = base)
 
-  names(model_data) <- c("time", "mean", "sd")
+  model_data <- data.frame(
+    time = model_data[["time"]],
+    mean = model_data[["imputed"]],
+    lower = model_data[["imputed"]] - model_data[["se_imp"]],
+    upper = model_data[["imputed"]] + model_data[["se_imp"]]
+  )
 
   attr(model_data, "count_summary") <- rtrim::count_summary(
     as.data.frame(counts), "abundance", "location_id"
