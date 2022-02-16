@@ -178,7 +178,15 @@ function() {
 
 }
 
-#* @assets ./indicators/docs /
+#* @get /
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/docs/")
+
+}
+
+#* @assets ./indicators/docs /docs
 list()
 
 #* @plumber
