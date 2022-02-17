@@ -158,6 +158,12 @@ update_index <- function(index, model, db) {
       exp(mean(.data[["mcb"]], na.rm = TRUE))
   )
 
+  df <- dplyr::mutate(
+    df,
+    lower = .data[["mean"]] - .data[["sd"]],
+    upper = .data[["mean"]] + .data[["sd"]]
+  )
+
   df <- dplyr::arrange(df, .data[["time"]])
 
   index <- paste(index, model, sep = "_")
