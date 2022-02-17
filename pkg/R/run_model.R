@@ -1,5 +1,12 @@
 run_model <- function(index, taxon, surveys, counts, model) {
 
+  message(
+    sprintf(
+      "INFO [%s] Calculating %s %s index for %s", Sys.time(), index, model,
+      taxon[["code"]]
+    )
+  )
+
   switch(
     model,
     trim = run_trim(index, taxon, counts),
@@ -13,13 +20,6 @@ run_model <- function(index, taxon, surveys, counts, model) {
 #' @importFrom dplyr collect .data select
 
 run_trim <- function(index, taxon, counts) {
-
-  message(
-    sprintf(
-      "INFO [%s] Calculating %s index for %s", Sys.time(), index,
-      taxon[["code"]]
-    )
-  )
 
   args <- config::get("model", config = index)[["trim"]][["args"]]
 
@@ -65,13 +65,6 @@ run_trim <- function(index, taxon, counts) {
 #' @importFrom rtrim count_summary
 
 run_rbms <- function(index, taxon, surveys, counts) {
-
-  message(
-    sprintf(
-      "INFO [%s] Calculating %s index for %s", Sys.time(), index,
-      taxon[["code"]]
-    )
-  )
 
   args <- config::get("model", config = index)[["rbms"]][["args"]]
 
