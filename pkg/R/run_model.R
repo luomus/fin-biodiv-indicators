@@ -47,6 +47,7 @@ run_trim <- function(index, taxon, counts) {
   model_data <- data.frame(
     time = model_data[["time"]],
     mean = model_data[["imputed"]],
+    sd = model_data[["se_imp"]],
     lower = model_data[["imputed"]] - model_data[["se_imp"]],
     upper = model_data[["imputed"]] + model_data[["se_imp"]]
   )
