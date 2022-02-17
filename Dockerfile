@@ -25,7 +25,7 @@ RUN  install2.r -e \
 
 RUN  R -e "remotes::install_github('tidyverse/dbplyr')" \
   && R -e "remotes::install_github('luomus/finbif@333114ee')" \
-  && R -e "remotes::install_github('wkmor1/speedglm')" \
+  && R -e "remotes::install_github('wkmor1/speedglm@patch-1')" \
   && R -e "remotes::install_github('RetoSchmucki/rbms')"
 
 COPY entrypoint.sh /home/user/entrypoint.sh
