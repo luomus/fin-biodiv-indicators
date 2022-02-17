@@ -165,6 +165,12 @@ bf:
     - section
     - document_id
   model:
+    rbms:
+      base_year: 2001
+      surveys_process:
+      - format_date
+      counts_process:
+      - combine_with_surveys
     trim:
       args:
         overdisp: true

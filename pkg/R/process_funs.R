@@ -19,6 +19,8 @@ process_funs <- function() {
     require_seven_fortnights       = require_seven_fortnights,
     require_gt_two_years           = require_gt_two_years,
     pick_first_survey_in_fortnight = pick_first_survey_in_fortnight,
+    format_date                    = format_date,
+    combine_with_surveys           = combine_with_surveys,
     zero_fill                      = zero_fill,
     remove_all_zero_locations      = remove_all_zero_locations,
     sum_over_sections              = sum_over_sections,
@@ -131,6 +133,25 @@ pick_first_survey_in_fortnight <- function(surveys) {
   )
 
   dplyr::ungroup(surveys)
+
+}
+
+#' @export
+#' @rdname process_funs
+format_date <- function(surveys) {
+
+  dplyr::mutate(
+    surveys,
+    date = paste(.data[["year"]], .data[["month"]], .data[["day"]], sep = "-")
+  )
+
+}
+
+#' @export
+#' @rdname process_funs
+combine_with_surveys <- function(counts, surveys, ...) {
+
+  dplyr::left_join(counts, surveys, by = "document_id")
 
 }
 

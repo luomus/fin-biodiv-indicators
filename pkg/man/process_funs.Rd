@@ -8,6 +8,8 @@
 \alias{require_seven_fortnights}
 \alias{require_gt_two_years}
 \alias{pick_first_survey_in_fortnight}
+\alias{format_date}
+\alias{combine_with_surveys}
 \alias{zero_fill}
 \alias{remove_all_zero_locations}
 \alias{sum_over_sections}
@@ -28,6 +30,10 @@ require_seven_fortnights(surveys)
 require_gt_two_years(surveys)
 
 pick_first_survey_in_fortnight(surveys)
+
+format_date(surveys)
+
+combine_with_surveys(counts, surveys, ...)
 
 zero_fill(counts, surveys, ...)
 

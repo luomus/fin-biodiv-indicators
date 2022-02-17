@@ -18,6 +18,8 @@ pool::dbWriteTable(con, "surveys", data.frame(index = "redundant"))
 
 expect_true(update_data("surveys", "bf", NULL, con))
 
+expect_null(update_taxon_index("bf", "rbms", list(code = "MX.60914"), con))
+
 expect_null(update_taxon_index("bf", "trim", list(code = "MX.60914"), con))
 
 expect_null(update_index("bf", "trim", con))

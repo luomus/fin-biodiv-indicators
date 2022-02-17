@@ -23,6 +23,7 @@ Imports:
     grDevices,
     lubridate,
     pool,
+    rbms,
     rtrim,
     stats,
     svglite
