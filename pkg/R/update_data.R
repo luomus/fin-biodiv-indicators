@@ -46,6 +46,8 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
       quiet = TRUE, aggregate_counts = FALSE
     )
 
+    data <- data[!is.na(data[["document_id"]]), ]
+
     message(
       sprintf(
         "INFO [%s] Fetched %s %s for %s", Sys.time(), attr(data, "nrec_dnld"),
