@@ -170,6 +170,7 @@ bf:
       surveys_process:
       - format_date
       counts_process:
+      - sum_over_sections
       - combine_with_surveys
     trim:
       args:
