@@ -12,6 +12,8 @@ default:
     - day
   counts:
     abundance: abundance
+    has_value:
+    - document_id
 
 # fb:
 #   taxa:
