@@ -59,18 +59,15 @@ update_index <- function(index, model, db) {
   )
 
   df <- dplyr::mutate(
-    df,
-    se_imp = ifelse(.data[["mean"]] > minindex, .data[["sd"]], 0)
+    df, se_imp = ifelse(.data[["mean"]] > minindex, .data[["sd"]], 0)
   )
 
   seq_n <- dplyr::tbl(
-    db,
-    dplyr::sql(sprintf("SELECT generate_series(1, %s) AS j", n))
+    db, dplyr::sql(sprintf("SELECT generate_series(1, %s) AS j", n))
   )
 
   rand <- dplyr::tbl(
-    db,
-    dplyr::sql(sprintf("SELECT normal_rand(%s, 0, 1) AS mc", n * nrows))
+    db, dplyr::sql(sprintf("SELECT normal_rand(%s, 0, 1) AS mc", n * nrows))
   )
 
   rand <- dplyr::mutate(rand, i = dplyr::row_number())
@@ -84,8 +81,7 @@ update_index <- function(index, model, db) {
   df <- dplyr::mutate(
     df,
     mc = pmax(
-      .data[["mc"]] * .data[["sd"]] /
-        .data[["mean"]] + log(.data[["mean"]]),
+      .data[["mc"]] * .data[["sd"]] / .data[["mean"]] + log(.data[["mean"]]),
       log(minindex),
       na.rm = TRUE
     )
@@ -138,9 +134,7 @@ update_index <- function(index, model, db) {
 
   df <- dplyr::mutate(df, mcb = dplyr::lead(.data[["mcb"]], nyears - base))
 
-  df <- dplyr::mutate(
-    df, mcb = dplyr::lag(.data[["mcb"]], esab, double_zero)
-  )
+  df <- dplyr::mutate(df, mcb = dplyr::lag(.data[["mcb"]], esab, double_zero))
 
   df <- dplyr::mutate(df, mcb = cumsum(.data[["mcb"]]))
 
