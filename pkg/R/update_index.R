@@ -55,7 +55,7 @@ update_index <- function(index, model, db) {
   df <- dplyr::filter(df, .data[["cv"]] < maxcv)
 
   df <- dplyr::mutate(
-    df, imputed = pmax(.data[["mean"]], minindex, na.rm = TRUE)
+    df, mean = pmax(.data[["mean"]], minindex, na.rm = TRUE)
   )
 
   df <- dplyr::mutate(
