@@ -6,9 +6,9 @@
 
 cache_outputs <- function(index, df, db) {
 
-  data_csv <- data.frame(index = index, df = blob::blob(serialize(data, NULL)))
+  data_csv <- data.frame(index = index, data = blob::blob(serialize(df, NULL)))
 
-  set_cache(index, "data_csv", data, db)
+  set_cache(index, "data_csv", data_csv, db)
 
   data <- cbind(df[["mean"]], df[["upper"]], df[["lower"]])
 
