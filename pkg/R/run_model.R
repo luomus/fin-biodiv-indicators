@@ -166,22 +166,19 @@ rbms <- function(
     m_season_visit = ts_season_visit, m_count = counts
   )
 
-  invisible(capture.output({
-
-    ts_flight_curve <- rbms::flight_curve(
-      ts_season_count = ts_season_count,
-      NbrSample       = NbrSample,
-      MinVisit        = MinVisit,
-      MinOccur        = MinOccur,
-      MinNbrSite      = MinNbrSite,
-      MaxTrial        = MaxTrial,
-      GamFamily       = GamFamily,
-      SpeedGam        = FALSE,
-      TimeUnit        = FlightCurveTimeUnit,
-      MultiVisit      = MultiVisit
-    )
-
-  }))
+  ts_flight_curve <- rbms::flight_curve(
+    ts_season_count = ts_season_count,
+    NbrSample       = NbrSample,
+    MinVisit        = MinVisit,
+    MinOccur        = MinOccur,
+    MinNbrSite      = MinNbrSite,
+    MaxTrial        = MaxTrial,
+    GamFamily       = GamFamily,
+    SpeedGam        = FALSE,
+    TimeUnit        = FlightCurveTimeUnit,
+    MultiVisit      = MultiVisit,
+    verbose         = FALSE
+  )
 
   impt_counts <- rbms::impute_count(
     ts_season_count = ts_season_count,
