@@ -16,6 +16,7 @@ RUN  install2.r -e \
        logger \
        pool \
        rapidoc \
+       readr \
        RPostgres \
        rtrim \
        svglite \
