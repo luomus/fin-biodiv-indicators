@@ -108,7 +108,7 @@ function(index,  model = "default", taxon = "none") {
 
 #* Get data for an index as a CSV
 #* @tag data
-#* @get /data/<index:str>
+#* @get /csv/<index:str>
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.).
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
