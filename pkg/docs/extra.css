@@ -1,0 +1,28 @@
+body {
+  padding-top: 50px;
+}
+
+.page-header, .template-home .page-header {
+  min-height: 135px;
+}
+
+.navbar-nav .nav-item > .nav-link {
+  padding: 1rem;
+}
+
+.navbar-dark .navbar-nav .active > .nav-link {
+  background-color: #2691D9;
+}
+
+.ref-description img {
+  display: none;
+}
+
+.sourceCode {
+  font-size: 87%;
+}
+
+.navbar-dark input[type="search"] {
+  background-color: #2691D9;
+  padding-left: 0.5rem;
+}
