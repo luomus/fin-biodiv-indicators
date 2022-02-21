@@ -33,7 +33,7 @@ COPY init.R /home/user/init.R
 COPY update_indices.R /home/user/update_indices.R
 COPY api.R /home/user/api.R
 COPY favicon.ico /home/user/favicon.ico
-COPY pkg /home/user/indicators
+COPY pkg /home/user/fbi
 COPY config.yml /home/user/config.yml
 
 ENV HOME /home/user
@@ -41,7 +41,7 @@ ENV OPENBLAS_NUM_THREADS 1
 
 WORKDIR /home/user
 
-RUN  R -e "remotes::install_local('indicators', NULL, FALSE, 'never')" \
+RUN  R -e "remotes::install_local('fbi', NULL, FALSE, 'never')" \
   && mkdir -p \
        /home/user/coverage \
        /home/user/logs \
