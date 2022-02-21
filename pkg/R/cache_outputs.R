@@ -6,6 +6,10 @@
 
 cache_outputs <- function(index, df, db) {
 
+  data_csv <- data.frame(index = index, df = blob::blob(serialize(data, NULL)))
+
+  set_cache(index, "data_csv", data, db)
+
   data <- cbind(df[["mean"]], df[["upper"]], df[["lower"]])
 
   data <- list(
@@ -24,6 +28,14 @@ cache_outputs <- function(index, df, db) {
   )
 
   set_cache(index, "count_summary", count_summary, db)
+
+  trends <- attr(df, "trends")
+
+  trends <- data.frame(
+    index = index, data = blob::blob(serialize(trends, NULL))
+  )
+
+  set_cache(index, "trends", trends, db)
 
   p <-
     ggplot2::ggplot() +

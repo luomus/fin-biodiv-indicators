@@ -57,6 +57,9 @@ run_trim <- function(index, taxon, counts) {
     as.data.frame(counts), "abundance", "location_id"
   )[-2L]
 
+  attr(model_data, "trends") <-
+    rtrim::overall(trim)[["slope"]][, c("add", "meaning")]
+
   model_data
 
 }

@@ -106,6 +106,35 @@ function(index,  model = "default", taxa = "none") {
 
 }
 
+#* Get data for an index as a CSV
+#* @tag data
+#* @get /data/<index:str>
+#* @param index:str Shortcode for index (see [/indices](#get-/indices)).
+#* @param model:str Which model (trim, rbms, etc.).
+#* @param taxa:str Shortcode for taxa (see [/taxa](#get-/taxa)).
+#* @response 200 A csv file
+#* @serializer csv
+function(index,  model = "default", taxa = "none") {
+
+  taxa <- switch(taxa, none = NULL, taxa)
+
+  model <- switch(
+    model, "default" = names(config::get("model", config = index))[[1L]], model
+  )
+
+  index <- paste(c(index, model, taxa), collapse = "_")
+
+  ans <- dplyr::tbl(pool, "data_csv")
+
+  ans <- dplyr::filter(ans, .data[["index"]] == !!index)
+
+  ans <- dplyr::select(ans, .data[["data"]])
+
+  unserialize(dplyr::pull(ans)[[1L]])
+
+}
+
+
 #* Get count summary for an index
 #* @tag data
 #* @get /count-summary/<index:str>
@@ -125,6 +154,34 @@ function(index, model = "default", taxa = "none") {
   index <- paste(c(index, model, taxa), collapse = "_")
 
   ans <- dplyr::tbl(pool, "count_summary")
+
+  ans <- dplyr::filter(ans, .data[["index"]] == !!index)
+
+  ans <- dplyr::select(ans, .data[["data"]])
+
+  unserialize(dplyr::pull(ans)[[1L]])
+
+}
+
+#* Get trend summary for an index
+#* @tag data
+#* @get /trends/<index:str>
+#* @param index:str Shortcode for index (see [/indices](#get-/indices)).
+#* @param model:str Which model (trim, rbms, etc.).
+#* @param taxa:str Shortcode for taxa (see [/taxa](#get-/taxa)).
+#* @response 200 A json array response
+#* @serializer unboxedJSON
+function(index, model = "default", taxa = "none") {
+
+  taxa <- switch(taxa, none = NULL, taxa)
+
+  model <- switch(
+    model, "default" = names(config::get("model", config = index))[[1L]], model
+  )
+
+  index <- paste(c(index, model, taxa), collapse = "_")
+
+  ans <- dplyr::tbl(pool, "trends")
 
   ans <- dplyr::filter(ans, .data[["index"]] == !!index)
 

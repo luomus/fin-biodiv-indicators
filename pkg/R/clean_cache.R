@@ -30,7 +30,9 @@ clean_cache <- function(db) {
     "model_output",
     "svg",
     "data",
-    "count_summary"
+    "data_csv",
+    "count_summary",
+    "trends"
   )
 
   tables <- c(pg_tables, index_tables, taxon_tables, model_tables)
