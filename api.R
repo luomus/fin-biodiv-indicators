@@ -186,13 +186,13 @@ function(res) {
 
 }
 
-#* @assets ./indicators/docs /docs
+#* @assets ./fbi/docs /docs
 list()
 
 #* @plumber
 function(pr) {
 
-  version <- as.character(utils::packageVersion("indicators"))
+  version <- as.character(utils::packageVersion("fbi"))
 
   plumber::pr_set_api_spec(
     pr,

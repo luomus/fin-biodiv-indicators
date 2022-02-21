@@ -1,6 +1,5 @@
 pkgs <- c(
-  "dplyr", "indicators", "logger", "plumber", "pool", "rapidoc", "RPostgres",
-  "tictoc"
+  "dplyr", "fbi", "logger", "plumber", "pool", "rapidoc", "RPostgres", "tictoc"
 )
 
 for (pkg in pkgs) {
