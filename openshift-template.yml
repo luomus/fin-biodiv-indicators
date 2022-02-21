@@ -333,6 +333,14 @@ objects:
             claimName: ${DB}
     triggers:
     - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${DB}
+        from:
+          kind: ImageStreamTag
+          name: ${DB}:${TAG}
 - kind: DeploymentConfig
   apiVersion: v1
   metadata:
