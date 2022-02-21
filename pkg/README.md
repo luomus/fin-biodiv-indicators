@@ -1,13 +1,5 @@
 # Finnish Biodiversity Indicators
 
-<!-- badges: start -->
-<!-- badges: end -->
-
 ## HTTP API
 
-
-
-----
-
-## Contributing
-
+Documentation for the HTTP API can be found [here](../__docs__/#overview)
