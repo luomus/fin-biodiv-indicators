@@ -83,18 +83,18 @@ function(index) {
 #* @get /data/<index:str>
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.).
-#* @param taxa:str Shortcode for taxa (see [/taxa](#get-/taxa)).
+#* @param taxon:str Shortcode for a taxon (see [/taxa](#get-/taxa)).
 #* @response 200 A json array response
 #* @serializer unboxedJSON
-function(index,  model = "default", taxa = "none") {
+function(index,  model = "default", taxon = "none") {
 
-  taxa <- switch(taxa, none = NULL, taxa)
+  taxon <- switch(taxon, none = NULL, taxon)
 
   model <- switch(
     model, "default" = names(config::get("model", config = index))[[1L]], model
   )
 
-  index <- paste(c(index, model, taxa), collapse = "_")
+  index <- paste(c(index, model, taxon), collapse = "_")
 
   ans <- dplyr::tbl(pool, "data")
 
@@ -111,18 +111,18 @@ function(index,  model = "default", taxa = "none") {
 #* @get /data/<index:str>
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.).
-#* @param taxa:str Shortcode for taxa (see [/taxa](#get-/taxa)).
+#* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
 #* @response 200 A csv file
 #* @serializer csv
-function(index,  model = "default", taxa = "none") {
+function(index,  model = "default", taxon = "none") {
 
-  taxa <- switch(taxa, none = NULL, taxa)
+  taxon <- switch(taxon, none = NULL, taxon)
 
   model <- switch(
     model, "default" = names(config::get("model", config = index))[[1L]], model
   )
 
-  index <- paste(c(index, model, taxa), collapse = "_")
+  index <- paste(c(index, model, taxon), collapse = "_")
 
   ans <- dplyr::tbl(pool, "data_csv")
 
@@ -140,18 +140,18 @@ function(index,  model = "default", taxa = "none") {
 #* @get /count-summary/<index:str>
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.).
-#* @param taxa:str Shortcode for taxa (see [/taxa](#get-/taxa)).
+#* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
 #* @response 200 A json array response
 #* @serializer unboxedJSON
-function(index, model = "default", taxa = "none") {
+function(index, model = "default", taxon = "none") {
 
-  taxa <- switch(taxa, none = NULL, taxa)
+  taxon <- switch(taxon, none = NULL, taxon)
 
   model <- switch(
     model, "default" = names(config::get("model", config = index))[[1L]], model
   )
 
-  index <- paste(c(index, model, taxa), collapse = "_")
+  index <- paste(c(index, model, taxon), collapse = "_")
 
   ans <- dplyr::tbl(pool, "count_summary")
 
@@ -168,18 +168,18 @@ function(index, model = "default", taxa = "none") {
 #* @get /trends/<index:str>
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.).
-#* @param taxa:str Shortcode for taxa (see [/taxa](#get-/taxa)).
+#* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
 #* @response 200 A json array response
 #* @serializer unboxedJSON
-function(index, model = "default", taxa = "none") {
+function(index, model = "default", taxon = "none") {
 
-  taxa <- switch(taxa, none = NULL, taxa)
+  taxon <- switch(taxon, none = NULL, taxon)
 
   model <- switch(
     model, "default" = names(config::get("model", config = index))[[1L]], model
   )
 
-  index <- paste(c(index, model, taxa), collapse = "_")
+  index <- paste(c(index, model, taxon), collapse = "_")
 
   ans <- dplyr::tbl(pool, "trends")
 
@@ -196,21 +196,21 @@ function(index, model = "default", taxa = "none") {
 #* @get /svg/<index:str>
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.).
-#* @param taxa:str Shortcode for taxa (see [/taxa](#get-/taxa)).
+#* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
 #* @response 200 An svg file response
-function(index, model = "default", taxa = "none", res) {
+function(index, model = "default", taxon = "none", res) {
 
   res[["setHeader"]]("Content-Type", "image/svg+xml")
   res[["setHeader"]]("Content-Encoding", "gzip")
   res[["setHeader"]]("Content-Disposition", "inline")
 
-  taxa <- switch(taxa, none = NULL, taxa)
+  taxon <- switch(taxon, none = NULL, taxon)
 
   model <- switch(
     model, "default" = names(config::get("model", config = index))[[1L]], model
   )
 
-  index <- paste(c(index, model, taxa), collapse = "_")
+  index <- paste(c(index, model, taxon), collapse = "_")
 
   ans <- dplyr::tbl(pool, "svg")
 
