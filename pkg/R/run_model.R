@@ -16,7 +16,7 @@ run_model <- function(index, taxon, surveys, counts, model) {
 }
 
 #' @importFrom config get
-#' @importFrom rtrim count_summary index trim
+#' @importFrom rtrim count_summary index overall trim
 #' @importFrom dplyr collect .data select
 
 run_trim <- function(index, taxon, counts) {
@@ -57,8 +57,7 @@ run_trim <- function(index, taxon, counts) {
     as.data.frame(counts), "abundance", "location_id"
   )[-2L]
 
-  attr(model_data, "trends") <-
-    rtrim::overall(trim)[["slope"]][, c("add", "meaning")]
+  attr(model_data, "trends") <- as.list(rtrim::overall(trim)[["slope"]])
 
   model_data
 
