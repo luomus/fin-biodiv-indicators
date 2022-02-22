@@ -2,16 +2,16 @@
 #' @importFrom finbif finbif_occurrence
 #' @importFrom dplyr .data all_of filter select tbl
 
-get_from_db <- function(x, index, taxon = NULL, db) {
+get_from_db <- function(db, tbl, index, taxa, select) {
 
-  select <- config::get(x, config = index)[["selection"]]
+  if (missing(select)) select <- config::get(tbl, config = index)[["selection"]]
 
-  index <- paste(c(index, taxon), collapse = "_")
+  if (!missing(taxa)) index <- paste(index, taxa, sep = "_")
 
-  x <- dplyr::tbl(db, x)
+  tbl <- dplyr::tbl(db, tbl)
 
-  x <- dplyr::filter(x, .data[["index"]] == !!index)
+  tbl <- dplyr::filter(tbl, .data[["index"]] %in% !!index)
 
-  dplyr::select(x, dplyr::all_of(select))
+  dplyr::select(tbl, dplyr::all_of(select))
 
 }

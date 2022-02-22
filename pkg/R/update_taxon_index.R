@@ -12,9 +12,9 @@
 
 update_taxon_index <- function(index, model, taxon, db) {
 
-  surveys <- get_from_db("surveys", index, NULL, db)
+  surveys <- get_from_db(db, "surveys", index)
 
-  counts <- get_from_db("counts", index, taxon[["code"]], db)
+  counts <- get_from_db(db, "counts", index, taxon[["code"]])
 
   model_spec <- config::get("model", config = index)[[model]]
 

@@ -13,7 +13,9 @@
 \alias{zero_fill}
 \alias{remove_all_zero_locations}
 \alias{sum_over_sections}
+\alias{sum_taxa_over_sections}
 \alias{sum_by_event}
+\alias{sum_taxa_by_event}
 \alias{set_start_year}
 \title{Process functions}
 \usage{
@@ -41,7 +43,11 @@ remove_all_zero_locations(counts, ...)
 
 sum_over_sections(counts, ...)
 
+sum_taxa_over_sections(counts, ...)
+
 sum_by_event(counts, ...)
+
+sum_taxa_by_event(counts, ...)
 
 set_start_year(counts, taxon, ...)
 }

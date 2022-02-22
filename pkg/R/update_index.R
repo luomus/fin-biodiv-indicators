@@ -7,19 +7,111 @@
 #' @param db Connection. Database in which to update index.
 #'
 #' @importFrom config get
-#' @importFrom dplyr .data collect count distinct group_by filter full_join
-#' @importFrom dplyr inner_join lag lead mutate pull right_join row_number
-#' @importFrom dplyr summarise sql tbl ungroup
-#' @importFrom stats sd
 #' @export
 
 update_index <- function(index, model, db) {
+
+  taxa <- config::get("taxa", config = index)
+
+  from <- config::get("from", config = index)
+
+  df <- switch(
+    config::get("combine", config = index),
+    cti = cti(from, index, model, taxa, db),
+    geometric_mean = geometric_mean(index, model, taxa, db)
+  )
+
+  attr(df, "count_summary") <- list(taxa = length(taxa))
+
+  cache_outputs(index, df, db)
+
+  invisible(NULL)
+
+}
+
+#' @importFrom arm se.ranef
+#' @importFrom config get
+#' @importFrom dplyr .data collect copy_to group_by left_join summarise
+#' @importFrom lme4 lmer
+#' @importFrom pool poolCheckout poolReturn
+#' @importFrom stats coef
+
+cti <- function(index, cti, model, taxa, db) {
+
+  con <- pool::poolCheckout(db)
+
+  surveys <- get_from_db(con, "surveys", index)
+
+  model_spec <- config::get("model", config = cti)[[model]]
+
+  for (i in model_spec[["surveys_process"]]) {
+
+    surveys <- do.call(process_funs()[[i]], list(surveys))
+
+  }
+
+  codes <- vapply(config::get("taxa", config = index), getElement, "", "code")
+
+  select <- config::get("counts", config = index)[["selection"]]
+
+  counts <- get_from_db(con, "counts", index, codes, c("index", select))
+
+  for (i in model_spec[["counts_process"]]) {
+
+    counts <- do.call(
+      process_funs()[[i]], list(counts = counts, surveys = surveys)
+    )
+
+  }
+
+  sti <- vapply(config::get("taxa", config = index), getElement, 0, "sti")
+
+  sti <- data.frame(index = paste(index, codes, sep = "_"), sti = sti)
+
+  sti <- dplyr::copy_to(con, sti)
+
+  data <- dplyr::left_join(counts, sti, by = "index")
+
+  data <- dplyr::group_by(data, .data[["location_id"]], .data[["year"]])
+
+  data <- dplyr::summarise(
+    data,
+    cti = sum(.data[["abundance"]] * .data[["sti"]], na.rm = TRUE) /
+      sum(.data[["abundance"]], na.rm = TRUE),
+    .groups = "drop"
+  )
+
+  data <- dplyr::collect(data)
+
+  pool::poolReturn(con)
+
+  mod <- lme4::lmer(cti ~ (1 | location_id) + (1 | year), data)
+
+  df <- data.frame(stats::coef(mod)[["year"]], arm::se.coef(mod)[["year"]])
+
+  data.frame(
+    time  = as.integer(rownames(df)),
+    mean  = df[[1L]],
+    sd    = df[[2L]],
+    lower = df[[1L]] - df[[2L]],
+    upper = df[[1L]] + df[[2L]]
+  )
+
+}
+
+#' @importFrom config get
+#' @importFrom dplyr arrange .data collect count distinct group_by filter
+#' @importFrom dplyr full_join inner_join lag lead mutate pull right_join
+#' @importFrom dplyr row_number summarise sql tbl ungroup
+
+geometric_mean <- function(index, model, taxa, db) {
 
   n <- 1000L
   maxcv <- 3
   minindex <- .01
   trunc <- 10
-  taxa <-  vapply(config::get("taxa", config = index), getElement, "", "code")
+
+  taxa <- vapply(taxa, getElement, "", "code")
 
   df <- dplyr::tbl(db, "model_output")
 
@@ -166,12 +258,6 @@ update_index <- function(index, model, db) {
     sprintf("INFO [%s] Calculating %s combined index", Sys.time(), index)
   )
 
-  df <- dplyr::collect(df)
-
-  attr(df, "count_summary") <- list(taxa = length(taxa))
-
-  cache_outputs(index, df, db)
-
-  invisible(NULL)
+  dplyr::collect(df)
 
 }

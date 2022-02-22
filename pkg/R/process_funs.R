@@ -24,7 +24,9 @@ process_funs <- function() {
     zero_fill                      = zero_fill,
     remove_all_zero_locations      = remove_all_zero_locations,
     sum_over_sections              = sum_over_sections,
+    sum_taxa_over_sections         = sum_taxa_over_sections,
     sum_by_event                   = sum_by_event,
+    sum_taxa_by_event              = sum_taxa_by_event,
     set_start_year                 = set_start_year
   )
 
@@ -189,12 +191,25 @@ sum_over_sections <- function(counts, ...) {
   counts <- dplyr::group_by(counts, .data[["document_id"]])
 
   counts <- dplyr::summarise(
-    counts, abundance = sum(.data[["abundance"]], na.rm = TRUE)
+    counts, abundance = sum(.data[["abundance"]], na.rm = TRUE),
+    .groups = "drop"
   )
 
-  dplyr::ungroup(counts)
+}
+
+#' @export
+#' @rdname process_funs
+sum_taxa_over_sections <- function(counts, ...) {
+
+  counts <- dplyr::group_by(counts, .data[["document_id"]], .data[["index"]])
+
+  dplyr::summarise(
+    counts, abundance = sum(.data[["abundance"]], na.rm = TRUE),
+    .groups = "drop"
+  )
 
 }
+
 
 #' @export
 #' @rdname process_funs
@@ -202,12 +217,25 @@ sum_by_event <- function(counts, ...) {
 
   counts <- dplyr::group_by(counts, .data[["location_id"]], .data[["year"]])
 
-  counts <- dplyr::summarise(
+  dplyr::summarise(
     counts, abundance = sum(.data[["abundance"]], na.rm = TRUE),
-    .groups = "drop_last"
+    .groups = "drop"
   )
 
-  dplyr::ungroup(counts)
+}
+
+#' @export
+#' @rdname process_funs
+sum_taxa_by_event <- function(counts, ...) {
+
+  counts <- dplyr::group_by(
+    counts, .data[["location_id"]], .data[["year"]], .data[["index"]]
+  )
+
+  dplyr::summarise(
+    counts, abundance = sum(.data[["abundance"]], na.rm = TRUE),
+    .groups = "drop"
+  )
 
 }
 
