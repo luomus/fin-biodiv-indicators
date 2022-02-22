@@ -41,29 +41,33 @@ for (index in config::get("indices")) {
 
   do_upd <- do_update(index)
 
-  surveys <- update_data("surveys", index, NULL, pool, do_upd)
+  src <- config::get("from", config = index)
 
-  taxa <- config::get("taxa", config = index)
+  if (is.null(src)) src <- index
 
-  extra_taxa <- config::get("extra_taxa", config = index)
+  surveys <- update_data("surveys", src, NULL, pool, do_upd)
+
+  taxa <- config::get("taxa", config = src)
+
+  extra_taxa <- config::get("extra_taxa", config = src)
 
   models <- names(config::get("model", config = index))
 
   for (taxon in c(taxa, extra_taxa)) {
 
-    do_upd <- do_update(index) || do_update(taxon[["code"]])
+    do_upd <- do_update(src) || do_update(taxon[["code"]])
 
-    counts <- update_data("counts", index, taxon, pool, do_upd)
+    counts <- update_data("counts", src, taxon, pool, do_upd)
 
-    do_upd <- do_update(index, "output") || do_update(taxon[["code"]], "output")
+    do_upd <- do_update(src, "output") || do_update(taxon[["code"]], "output")
 
     taxon_index_update <- surveys || counts || do_upd
 
-    if (taxon_index_update) {
+    if (taxon_index_update && identical(index, src)) {
 
       for (model in models) {
 
-        update_taxon_index(index, model, taxon, pool)
+        update_taxon_index(src, model, taxon, pool)
 
       }
 
