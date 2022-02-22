@@ -2,9 +2,9 @@ default:
   indices:
 #  - fb
   - wb
-  - wbcti
+#  - wbcti
   - bf
-  - bfcti
+#  - bfcti
 
   surveys:
     selection:
