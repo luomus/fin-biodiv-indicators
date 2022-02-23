@@ -37,6 +37,8 @@ message(sprintf("INFO [%s] Update starting...", Sys.time()))
 
 for (index in config::get("indices")) {
 
+  message(sprintf("INFO [%s] Updating %s index...", Sys.time(), index))
+
   index_update <- FALSE
 
   do_upd <- do_update(index)
@@ -55,6 +57,10 @@ for (index in config::get("indices")) {
 
   for (taxon in c(taxa, extra_taxa)) {
 
+    message(
+      sprintf("INFO [%s] Updating %s for %s index...", Sys.time(), taxon, index)
+    )
+
     do_upd <- do_update(src) || do_update(taxon[["code"]])
 
     counts <- update_data("counts", src, taxon, pool, do_upd)
@@ -66,6 +72,13 @@ for (index in config::get("indices")) {
     if (taxon_index_update && identical(index, src)) {
 
       for (model in models) {
+
+        message(
+          sprintf(
+            "INFO [%s] Updating %s model for %s (%s index)...", Sys.time(),
+            model, taxon, index
+          )
+        )
 
         update_taxon_index(src, model, taxon, pool)
 
@@ -81,6 +94,13 @@ for (index in config::get("indices")) {
 
     for (model in models) {
 
+      message(
+        sprintf(
+          "INFO [%s] Updating combined %s model for %s index...", Sys.time(),
+          model, index
+        )
+      )
+
       update_index(index, model, pool)
 
     }
@@ -90,3 +110,5 @@ for (index in config::get("indices")) {
 }
 
 pool::poolClose(pool)
+
+message(sprintf("INFO [%s] Update complete", Sys.time()))
