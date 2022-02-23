@@ -17,4 +17,4 @@ navbar:
   components:
     api:
       text: API
-      href: ../__docs__/
+      href: ../__docs__/#overview
