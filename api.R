@@ -311,7 +311,8 @@ function(pr) {
     font_size = "largest",
     sort_tags = "false",
     sort_endpoints_by = "summary",
-    allow_spec_file_load = "false"
+    allow_spec_file_load = "false",
+    goto_path = "get-/indices"
   )
 
 }
