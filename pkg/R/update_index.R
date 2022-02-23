@@ -68,7 +68,7 @@ cti <- function(index, cti, model, taxa, db) {
 
   sti <- data.frame(index = paste(index, codes, sep = "_"), sti = sti)
 
-  sti <- dplyr::copy_to(con, sti)
+  sti <- dplyr::copy_to(con, sti, overwrite = TRUE)
 
   data <- dplyr::left_join(counts, sti, by = "index")
 
