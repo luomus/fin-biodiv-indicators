@@ -1,0 +1,20 @@
+template:
+  bootstrap: 5
+  bootswatch: materia
+  bslib:
+    table-border-width: "0px"
+    primary: "#2691D9"
+    font-size-base: "1rem"
+    base_font:
+      google: "Roboto"
+home:
+  title: "Finnish Biodiversity Indicators"
+destination: docs
+navbar:
+  structure:
+    left:  [reference, api]
+    right: [search, github]
+  components:
+    api:
+      text: API
+      href: ../__docs__/#overview

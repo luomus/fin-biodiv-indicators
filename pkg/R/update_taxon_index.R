@@ -3,64 +3,45 @@
 #' Update the relative abundance index for a taxon.
 #'
 #' @param index Character. Update which index?
+#' @param model Character. Which model to use?
 #' @param taxon Character. Update the data for which taxa?
 #' @param db Connection. Database in which to update index.
 #'
 #' @importFrom config get
-#' @importFrom dplyr .data collect select
-#' @importFrom rtrim index trim
 #' @export
 
-update_taxon_index <- function(index, taxon, db) {
+update_taxon_index <- function(index, model, taxon, db) {
 
-  surveys <- get_from_db("surveys", index, NULL, db)
+  surveys <- get_from_db(db, "surveys", index)
 
-  counts <- get_from_db("counts", index, taxon, db)
+  counts <- get_from_db(db, "counts", index, taxon[["code"]])
 
-  for (i in config::get("surveys", config = index)[["process"]]) {
+  model_spec <- config::get("model", config = index)[[model]]
 
-    surveys <- do.call(process_funs[[i]], list(surveys))
+  for (i in model_spec[["surveys_process"]]) {
 
-  }
-
-  for (i in config::get("counts", config = index)[["process"]]) {
-
-    counts <- do.call(process_funs[[i]], list(counts, surveys))
+    surveys <- do.call(process_funs()[[i]], list(surveys))
 
   }
 
-  counts <- dplyr::select(
-    counts, .data[["abundance"]], .data[["location_id"]], .data[["year"]]
-  )
+  for (i in model_spec[["counts_process"]]) {
 
-  counts <- dplyr::collect(counts)
-
-  od <- config::get("model", config = index)[["trim"]][["overdispersion"]]
-
-  message(
-    sprintf(
-      "INFO [%s] Calculating %s index for %s", Sys.time(), index, taxon
+    counts <- do.call(
+      process_funs()[[i]],
+      list(counts = counts, surveys = surveys, taxon = taxon)
     )
-  )
 
-  trim <- rtrim::trim(
-    abundance ~ location_id + year, data = counts, changepoints = "all",
-    overdisp = od
-  )
+  }
 
-  base <- config::get("model", config = index)[["trim"]][["base_year"]]
+  model_data <- run_model(index, taxon, surveys, counts, model)
 
-  base <- which(trim[["time.id"]] == base)
+  index_taxon <- paste(index, model, taxon[["code"]], sep = "_")
 
-  trim <- rtrim::index(trim, base = base)
+  cache_outputs(index_taxon, model_data, db)
 
-  index_taxon <- paste(index, taxon, sep = "_")
+  model_data[["index"]] <- index_taxon
 
-  cache_outputs(index_taxon, trim, db)
-
-  trim[["index"]] <- index_taxon
-
-  set_cache(index_taxon, "trim", trim, db)
+  set_cache(index_taxon, "model_output", model_data, db)
 
   invisible(NULL)
 

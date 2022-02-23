@@ -259,6 +259,14 @@ objects:
             value: ${DEV_DB_PASSWORD}
           - name: PGHOST
             value: ${DEV}-${DB}
+          - name: FINBIF_ACCESS_TOKEN
+            value: ${DEV_FINBIF_ACCESS_TOKEN}
+          - name: FINBIF_API
+            value: ${DEV_FINBIF_API}
+          - name: FINBIF_WAREHOUSE_QUERY
+            value: ${DEV_FINBIF_WAREHOUSE_QUERY}
+          - name: FINBIF_EMAIL
+            value: ${FINBIF_EMAIL}
         volumes:
         - name: ${DEV}-${LOG}
           persistentVolumeClaim:
@@ -328,6 +336,14 @@ objects:
             claimName: ${DEV}-${DB}
     triggers:
     - type: ConfigChange
+    - type: ImageChange
+      imageChangeParams:
+        automatic: true
+        containerNames:
+        - ${DEV}-${DB}
+        from:
+          kind: ImageStreamTag
+          name: ${DEV}-${DB}:${TAG}
 - kind: DeploymentConfig
   apiVersion: v1
   metadata:

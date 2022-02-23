@@ -4,7 +4,7 @@ services:
   sut:
     build:
       context: .
-    command: R --slave -e 'print(cv <- covr::package_coverage("indicators"), "functions"); covr::report(cv, file = "coverage/code-coverage.html", FALSE)'
+    command: R --slave -e 'print(cv <- covr::package_coverage("fbi"), "functions"); covr::report(cv, file = "coverage/code-coverage.html", FALSE)'
     environment:
     - "PGHOST=postgres"
     - "PGUSER=postgres"

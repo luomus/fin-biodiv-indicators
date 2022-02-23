@@ -6,11 +6,15 @@
 
 cache_outputs <- function(index, df, db) {
 
-  data <- cbind(
-    df[["imputed"]],
-    df[["imputed"]] - df[["se_imp"]],
-    df[["imputed"]] + df[["se_imp"]]
+  set_cache(
+    index, "output_cache_time", data.frame(index = index, time = Sys.time()), db
   )
+
+  data_csv <- data.frame(index = index, data = blob::blob(serialize(df, NULL)))
+
+  set_cache(index, "data_csv", data_csv, db)
+
+  data <- cbind(df[["mean"]], df[["upper"]], df[["lower"]])
 
   data <- list(
     data = data, pointStart = min(df[["time"]]), pointInterval = 1,
@@ -21,13 +25,29 @@ cache_outputs <- function(index, df, db) {
 
   set_cache(index, "data", data, db)
 
+  count_summary <- attr(df, "count_summary")
+
+  count_summary <- data.frame(
+    index = index, data = blob::blob(serialize(count_summary, NULL))
+  )
+
+  set_cache(index, "count_summary", count_summary, db)
+
+  trends <- attr(df, "trends")
+
+  trends <- data.frame(
+    index = index, data = blob::blob(serialize(trends, NULL))
+  )
+
+  set_cache(index, "trends", trends, db)
+
   p <-
     ggplot2::ggplot() +
     ggplot2::aes(
       x = lubridate::parse_date_time(df[["time"]], "Y"),
-      y = df[["imputed"]],
-      ymin = df[["imputed"]] - df[["se_imp"]],
-      ymax = df[["imputed"]] + df[["se_imp"]]
+      y = df[["mean"]],
+      ymin = df[["lower"]],
+      ymax = df[["upper"]]
     ) +
     ggplot2::geom_ribbon(alpha = .2) +
     ggplot2::geom_line() +

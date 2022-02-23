@@ -3,73 +3,171 @@
 #' Update index output data.
 #'
 #' @param index Character. Update which index?
+#' @param model Character. Which model to use?
 #' @param db Connection. Database in which to update index.
 #'
 #' @importFrom config get
-#' @importFrom dplyr .data collect count distinct group_by filter full_join
-#' @importFrom dplyr inner_join lag lead mutate pull right_join row_number
-#' @importFrom dplyr summarise sql tbl ungroup
-#' @importFrom stats sd
-#' @importFrom tidyr expand
 #' @export
 
-update_index <- function(index, db) {
+update_index <- function(index, model, db) {
+
+  taxa <- config::get("taxa", config = index)
+
+  from <- config::get("from", config = index)
+
+  df <- switch(
+    config::get("combine", config = index),
+    cti = cti(from, index, model, taxa, db),
+    geometric_mean = geometric_mean(index, model, taxa, db)
+  )
+
+  attr(df, "count_summary") <- list(taxa = length(taxa))
+
+  cache_outputs(paste(index, model, sep = "_"), df, db)
+
+  invisible(NULL)
+
+}
+
+#' @importFrom arm se.ranef
+#' @importFrom config get
+#' @importFrom dplyr .data collect copy_to group_by left_join summarise
+#' @importFrom lme4 lmer
+#' @importFrom pool poolCheckout poolReturn
+#' @importFrom stats coef
+
+cti <- function(index, cti, model, taxa, db) {
+
+  con <- pool::poolCheckout(db)
+
+  surveys <- get_from_db(con, "surveys", index)
+
+  model_spec <- config::get("model", config = cti)[[model]]
+
+  for (i in model_spec[["surveys_process"]]) {
+
+    surveys <- do.call(process_funs()[[i]], list(surveys))
+
+  }
+
+  codes <- vapply(config::get("taxa", config = index), getElement, "", "code")
+
+  select <- config::get("counts", config = index)[["selection"]]
+
+  counts <- get_from_db(con, "counts", index, codes, c("index", select))
+
+  for (i in model_spec[["counts_process"]]) {
+
+    counts <- do.call(
+      process_funs()[[i]], list(counts = counts, surveys = surveys)
+    )
+
+  }
+
+  sti <- vapply(config::get("taxa", config = index), getElement, 0, "sti")
+
+  sti <- data.frame(index = paste(index, codes, sep = "_"), sti = sti)
+
+  sti <- dplyr::copy_to(con, sti, overwrite = TRUE)
+
+  data <- dplyr::left_join(counts, sti, by = "index")
+
+  data <- dplyr::group_by(data, .data[["location_id"]], .data[["year"]])
+
+  data <- dplyr::summarise(
+    data,
+    cti = sum(.data[["abundance"]] * .data[["sti"]], na.rm = TRUE) /
+      sum(.data[["abundance"]], na.rm = TRUE),
+    .groups = "drop"
+  )
+
+  message(
+    sprintf(
+      "INFO [%s] Calculating %s combined index",
+      Sys.time(),
+      paste(cti, model, sep = "_")
+    )
+  )
+
+  data <- dplyr::collect(data)
+
+  pool::poolReturn(con)
+
+  mod <- lme4::lmer(cti ~ (1 | location_id) + (1 | year), data)
+
+  df <- data.frame(stats::coef(mod)[["year"]], arm::se.coef(mod)[["year"]])
+
+  data.frame(
+    time  = as.integer(rownames(df)),
+    mean  = df[[1L]],
+    sd    = df[[2L]],
+    lower = df[[1L]] - df[[2L]],
+    upper = df[[1L]] + df[[2L]]
+  )
+
+}
+
+#' @importFrom config get
+#' @importFrom dplyr arrange .data collect count distinct group_by filter
+#' @importFrom dplyr full_join inner_join lag lead mutate pull right_join
+#' @importFrom dplyr row_number summarise sql tbl ungroup
+
+geometric_mean <- function(index, model, taxa, db) {
 
   n <- 1000L
   maxcv <- 3
   minindex <- .01
   trunc <- 10
-  taxa <- config::get("taxa", config = index)
 
-  df <- dplyr::tbl(db, "trim")
+  taxa <- vapply(taxa, getElement, "", "code")
 
-  df <- dplyr::filter(df, .data[["index"]] %in% !!paste(index, taxa, sep = "_"))
+  df <- dplyr::tbl(db, "model_output")
 
-  df <- dplyr::right_join(
-    df, tidyr::expand(df, .data[["index"]], .data[["time"]]),
-    by = c("index", "time")
+  df <- dplyr::filter(
+    df, .data[["index"]] %in% !!paste(index, model, taxa, sep = "_")
   )
 
   years <- sort(dplyr::pull(dplyr::distinct(df, .data[["time"]])))
 
   nyears <- length(years)
 
-  base <- config::get("model", config = index)[["trim"]][["base_year"]]
+  base <- config::get("model", config = index)[[model]][["base_year"]]
 
   base <- which(years == base)
+
+  esab <- nyears - base + 1L
 
   nrows <- dplyr::pull(dplyr::count(df))
 
   df <- dplyr::mutate(
     df,
     cv = ifelse(
-      .data[["imputed"]] >= .1 & .data[["se_imp"]] > 0,
-      .data[["se_imp"]] / .data[["imputed"]],
+      .data[["mean"]] >= .1 & .data[["sd"]] > 0,
+      .data[["sd"]] / .data[["mean"]],
       NA_real_
     )
   )
+
+  df <- dplyr::group_by(df, .data[["index"]])
 
   df <- dplyr::mutate(df, cv = mean(.data[["cv"]], na.rm = TRUE))
 
   df <- dplyr::filter(df, .data[["cv"]] < maxcv)
 
   df <- dplyr::mutate(
-    df, imputed = pmax(.data[["imputed"]], minindex, na.rm = TRUE)
+    df, mean = pmax(.data[["mean"]], minindex, na.rm = TRUE)
   )
 
   df <- dplyr::mutate(
-    df,
-    se_imp = ifelse(.data[["imputed"]] > minindex, .data[["se_imp"]], 0)
+    df, se_imp = ifelse(.data[["mean"]] > minindex, .data[["sd"]], 0)
   )
 
   seq_n <- dplyr::tbl(
-    db,
-    dplyr::sql(sprintf("SELECT generate_series(1, %s) AS j", n))
+    db, dplyr::sql(sprintf("SELECT generate_series(1, %s) AS j", n))
   )
 
   rand <- dplyr::tbl(
-    db,
-    dplyr::sql(sprintf("SELECT normal_rand(%s, 0, 1) AS mc", n * nrows))
+    db, dplyr::sql(sprintf("SELECT normal_rand(%s, 0, 1) AS mc", n * nrows))
   )
 
   rand <- dplyr::mutate(rand, i = dplyr::row_number())
@@ -83,8 +181,7 @@ update_index <- function(index, db) {
   df <- dplyr::mutate(
     df,
     mc = pmax(
-      .data[["mc"]] * .data[["se_imp"]] /
-        .data[["imputed"]] + log(.data[["imputed"]]),
+      .data[["mc"]] * .data[["sd"]] / .data[["mean"]] + log(.data[["mean"]]),
       log(minindex),
       na.rm = TRUE
     )
@@ -137,9 +234,7 @@ update_index <- function(index, db) {
 
   df <- dplyr::mutate(df, mcb = dplyr::lead(.data[["mcb"]], nyears - base))
 
-  df <- dplyr::mutate(
-    df, mcb = dplyr::lag(.data[["mcb"]], !!(nyears - base + 1L), double_zero)
-  )
+  df <- dplyr::mutate(df, mcb = dplyr::lag(.data[["mcb"]], esab, double_zero))
 
   df <- dplyr::mutate(df, mcb = cumsum(.data[["mcb"]]))
 
@@ -147,26 +242,32 @@ update_index <- function(index, db) {
 
   df <- dplyr::summarise(
     df,
-    imputed =
+    mean =
       exp(mean(.data[["mcf"]], na.rm = TRUE)) *
       exp(mean(.data[["mcb"]], na.rm = TRUE)),
-    se_imp =
+    sd =
       sd(.data[["mcf"]], na.rm = TRUE) *
       exp(mean(.data[["mcf"]], na.rm = TRUE)) +
       sd(.data[["mcb"]], na.rm = TRUE) *
       exp(mean(.data[["mcb"]], na.rm = TRUE))
   )
 
+  df <- dplyr::mutate(
+    df,
+    lower = .data[["mean"]] - .data[["sd"]],
+    upper = .data[["mean"]] + .data[["sd"]]
+  )
+
   df <- dplyr::arrange(df, .data[["time"]])
 
   message(
-    sprintf("INFO [%s] Calculating %s combined index", Sys.time(), index)
+    sprintf(
+      "INFO [%s] Calculating %s combined index",
+      Sys.time(),
+      paste(index, model, sep = "_")
+    )
   )
 
-  df <- dplyr::collect(df)
-
-  cache_outputs(index, df, db)
-
-  invisible(NULL)
+  dplyr::collect(df)
 
 }

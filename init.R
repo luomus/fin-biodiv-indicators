@@ -1,5 +1,5 @@
 pkgs <- c(
-  "indicators", "logger", "plumber", "pool", "rapidoc", "RPostgres", "tictoc"
+  "dplyr", "fbi", "logger", "plumber", "pool", "rapidoc", "RPostgres", "tictoc"
 )
 
 for (pkg in pkgs) {
@@ -14,7 +14,7 @@ log_dir <- "logs"
 
 log_file <- tempfile("plumber_", log_dir, ".log")
 
-logger::log_appender(logger::appender_tee(log_file))
+log_appender(appender_tee(log_file))
 
 convert_empty <- function(x) switch(paste0(".", x), . = "-", x)
 
@@ -25,10 +25,16 @@ options(
   finbif_email = Sys.getenv("FINBIF_EMAIL")
 )
 
-pool <- pool::dbPool(RPostgres::Postgres())
+pool <- dbPool(Postgres())
 
 tryCatch(
-  pool::dbExecute(pool, "CREATE EXTENSION tablefunc"),
+  {
+    if (!"tablefunc" %in% pull(tbl(pool, "pg_extension"), extname)) {
+
+      dbExecute(pool, "CREATE EXTENSION tablefunc")
+
+    }
+  },
   error = function(e) message(e[["message"]])
 )
 
@@ -36,14 +42,14 @@ p <- plumb("api.R")
 
 p$registerHooks(
   list(
-    preroute = function() tictoc::tic(),
+    preroute = function() tic(),
     postroute = function(req, res) {
 
       end <- tictoc::toc(quiet = TRUE)
 
-      log_fn <- logger::log_info
+      log_fn <- log_info
 
-      if (res$status >= 400L) log_fn <- logger::log_error
+      if (res$status >= 400L) log_fn <- log_error
 
       if (identical(req$PATH_INFO, "/healthz")) log_fn <- function(.) {}
 

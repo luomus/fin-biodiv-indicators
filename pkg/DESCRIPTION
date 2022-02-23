@@ -1,6 +1,6 @@
-Package: indicators
-Title: Functions for calculating biodiversity indicators
-Version: 0.3.0
+Package: fbi
+Title: Finnish Biodiversity Indicators
+Version: 0.7.0
 Authors@R: c(
     person(given = "Finnish Museum of Natural History - Luomus",
            role = "cph"),
@@ -23,11 +23,13 @@ Imports:
     grDevices,
     lubridate,
     pool,
+    rbms,
     rtrim,
     stats,
-    svglite,
-    tidyr
+    svglite
 License: MIT + file LICENSE
+URL: https://github.com/luomus/fin-biodiv-indicators, https://indicators.laji.fi
+BugReports: https://github.com/luomus/fin-biodiv-indicators/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2

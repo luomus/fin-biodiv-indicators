@@ -62,7 +62,19 @@ function() {
 #* @serializer unboxedJSON
 function(index) {
 
-  config::get("taxa", config = index)
+  vapply(config::get("taxa", config = index), getElement, "", "code")
+
+}
+
+#* Get list of extra species available but that are not included in the overall multi-species index
+#* @tag list
+#* @get /extra-taxa/<index:str>
+#* @param index:str Shortcode for multi-species index (see [/indices](#get-/indices)).
+#* @response 200 A json array response
+#* @serializer unboxedJSON
+function(index) {
+
+  vapply(config::get("extra_taxa", config = index), getElement, "", "code")
 
 }
 
@@ -70,16 +82,106 @@ function(index) {
 #* @tag data
 #* @get /data/<index:str>
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
-#* @param taxa:str Shortcode for taxa (see [/taxa](#get-/taxa)).
+#* @param model:str Which model (trim, rbms, etc.).
+#* @param taxon:str Shortcode for a taxon (see [/taxa](#get-/taxa)).
 #* @response 200 A json array response
 #* @serializer unboxedJSON
-function(index, taxa = "none") {
+function(index,  model = "default", taxon = "none") {
 
-  taxa <- switch(taxa, none = NULL, taxa)
+  taxon <- switch(taxon, none = NULL, taxon)
 
-  index <- paste(c(index, taxa), collapse = "_")
+  model <- switch(
+    model, "default" = names(config::get("model", config = index))[[1L]], model
+  )
+
+  index <- paste(c(index, model, taxon), collapse = "_")
 
   ans <- dplyr::tbl(pool, "data")
+
+  ans <- dplyr::filter(ans, .data[["index"]] == !!index)
+
+  ans <- dplyr::select(ans, .data[["data"]])
+
+  unserialize(dplyr::pull(ans)[[1L]])
+
+}
+
+#* Get data for an index as a CSV
+#* @tag data
+#* @get /csv/<index:str>
+#* @param index:str Shortcode for index (see [/indices](#get-/indices)).
+#* @param model:str Which model (trim, rbms, etc.).
+#* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
+#* @response 200 A csv file
+#* @serializer csv
+function(index,  model = "default", taxon = "none") {
+
+  taxon <- switch(taxon, none = NULL, taxon)
+
+  model <- switch(
+    model, "default" = names(config::get("model", config = index))[[1L]], model
+  )
+
+  index <- paste(c(index, model, taxon), collapse = "_")
+
+  ans <- dplyr::tbl(pool, "data_csv")
+
+  ans <- dplyr::filter(ans, .data[["index"]] == !!index)
+
+  ans <- dplyr::select(ans, .data[["data"]])
+
+  unserialize(dplyr::pull(ans)[[1L]])
+
+}
+
+
+#* Get count summary for an index
+#* @tag data
+#* @get /count-summary/<index:str>
+#* @param index:str Shortcode for index (see [/indices](#get-/indices)).
+#* @param model:str Which model (trim, rbms, etc.).
+#* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
+#* @response 200 A json array response
+#* @serializer unboxedJSON
+function(index, model = "default", taxon = "none") {
+
+  taxon <- switch(taxon, none = NULL, taxon)
+
+  model <- switch(
+    model, "default" = names(config::get("model", config = index))[[1L]], model
+  )
+
+  index <- paste(c(index, model, taxon), collapse = "_")
+
+  ans <- dplyr::tbl(pool, "count_summary")
+
+  ans <- dplyr::filter(ans, .data[["index"]] == !!index)
+
+  ans <- dplyr::select(ans, .data[["data"]])
+
+  unserialize(dplyr::pull(ans)[[1L]])
+
+}
+
+#* Get trend summary for an index
+#* @tag data
+#* @get /trends/<index:str>
+#* @param index:str Shortcode for index (see [/indices](#get-/indices)).
+#* @param model:str Which model (trim, rbms, etc.).
+#* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
+#* @response 200 A json array response
+#* @serializer unboxedJSON
+function(index, model = "default", taxon = "none") {
+
+  taxon <- switch(taxon, none = NULL, taxon)
+
+  model <- switch(
+    model, "default" = names(config::get("model", config = index))[[1L]], model
+  )
+
+  index <- paste(c(index, model, taxon), collapse = "_")
+
+  ans <- dplyr::tbl(pool, "trends")
 
   ans <- dplyr::filter(ans, .data[["index"]] == !!index)
 
@@ -93,17 +195,22 @@ function(index, taxa = "none") {
 #* @tag data
 #* @get /svg/<index:str>
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
-#* @param taxa:str Shortcode for taxa (see [/taxa](#get-/taxa)).
+#* @param model:str Which model (trim, rbms, etc.).
+#* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
 #* @response 200 An svg file response
-function(index, taxa = "none", res) {
+function(index, model = "default", taxon = "none", res) {
 
   res[["setHeader"]]("Content-Type", "image/svg+xml")
   res[["setHeader"]]("Content-Encoding", "gzip")
   res[["setHeader"]]("Content-Disposition", "inline")
 
-  taxa <- switch(taxa, none = NULL, taxa)
+  taxon <- switch(taxon, none = NULL, taxon)
 
-  index <- paste(c(index, taxa), collapse = "_")
+  model <- switch(
+    model, "default" = names(config::get("model", config = index))[[1L]], model
+  )
+
+  index <- paste(c(index, model, taxon), collapse = "_")
 
   ans <- dplyr::tbl(pool, "svg")
 
@@ -132,14 +239,17 @@ function() {
 function(res) {
 
   res[["status"]] <- 303L
-  res[["setHeader"]]("Location", "/__docs__/")
+  res[["setHeader"]]("Location", "/docs/")
 
 }
+
+#* @assets ./fbi/docs /docs
+list()
 
 #* @plumber
 function(pr) {
 
-  version <- as.character(utils::packageVersion("indicators"))
+  version <- as.character(utils::packageVersion("fbi"))
 
   plumber::pr_set_api_spec(
     pr,
@@ -201,7 +311,11 @@ function(pr) {
     font_size = "largest",
     sort_tags = "false",
     sort_endpoints_by = "summary",
-    allow_spec_file_load = "false"
+    allow_spec_file_load = "false",
+    goto_path = "get-/indices",
+    update_route = "false",
+    allow_authentication = "false",
+    allow_server_selection = "false"
   )
 
 }
