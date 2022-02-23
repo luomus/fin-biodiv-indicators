@@ -1,6 +1,6 @@
 # Finnish Biodiversity Indicators
 
-![Winter bird index](../svg/wb)
+![Biodiversity indicator for birds in winter](../svg/wb)
 
 ## HTTP API
 
