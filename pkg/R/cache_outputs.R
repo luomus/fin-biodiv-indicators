@@ -6,6 +6,10 @@
 
 cache_outputs <- function(index, df, db) {
 
+  set_cache(
+    index, "output_cache_time", data.frame(index = index, time = Sys.time()), db
+  )
+
   data_csv <- data.frame(index = index, data = blob::blob(serialize(df, NULL)))
 
   set_cache(index, "data_csv", data_csv, db)

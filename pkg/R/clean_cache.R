@@ -27,6 +27,7 @@ clean_cache <- function(db) {
   )
 
   model_tables <- c(
+    "output_cache_time",
     "model_output",
     "svg",
     "data",

@@ -1,4 +1,4 @@
-pkgs <- c("fbi", "pool", "RPostgres")
+pkgs <- c("dplyr", "fbi", "pool", "RPostgres")
 
 for (pkg in pkgs) {
 
@@ -39,19 +39,23 @@ for (index in config::get("indices")) {
 
   message(sprintf("INFO [%s] Updating %s index...", Sys.time(), index))
 
-  index_update <- FALSE
+  index_update <- TRUE
 
   do_upd <- do_update(index)
 
   src <- config::get("from", config = index)
 
-  if (is.null(src)) src <- index
+  if (is.null(src)) {
 
-  surveys <- update_data("surveys", src, NULL, pool, do_upd)
+    surveys <- update_data("surveys", index, NULL, pool, do_upd)
 
-  taxa <- config::get("taxa", config = src)
+    index_update <- FALSE
 
-  extra_taxa <- config::get("extra_taxa", config = src)
+  }
+
+  taxa <- config::get("taxa", config = index)
+
+  extra_taxa <- config::get("extra_taxa", config = index)
 
   models <- names(config::get("model", config = index))
 
@@ -66,15 +70,15 @@ for (index in config::get("indices")) {
       )
     )
 
-    do_upd <- do_update(src) || do_update(taxon[["code"]])
+    do_upd <- do_update(index) || do_update(taxon[["code"]])
 
-    counts <- update_data("counts", src, taxon, pool, do_upd)
+    counts <- update_data("counts", index, taxon, pool, do_upd)
 
-    do_upd <- do_update(src, "output") || do_update(taxon[["code"]], "output")
+    do_upd <- do_update(index, "output") || do_update(taxon[["code"]], "output")
 
     taxon_index_update <- surveys || counts || do_upd
 
-    if (taxon_index_update && identical(index, src)) {
+    if (taxon_index_update) {
 
       for (model in models) {
 
@@ -88,7 +92,7 @@ for (index in config::get("indices")) {
           )
         )
 
-        update_taxon_index(src, model, taxon, pool)
+        update_taxon_index(index, model, taxon, pool)
 
       }
 
@@ -109,7 +113,33 @@ for (index in config::get("indices")) {
         )
       )
 
-      update_index(index, model, pool)
+      needs_update <- TRUE
+
+      if (!identical(src, index)) {
+
+        last_mod <- dplyr::tbl(pool, "output_cache_time")
+
+        last_mod_src <- dplyr::filter(
+          last_mod, .data[["index"]] == !!paste(src, model, sep = "_")
+        )
+
+        last_mod_src <- dplyr::pull(last_mod_src, .data[["time"]])
+
+        last_mod_index <- dplyr::filter(
+          last_mod, .data[["index"]] == !!paste(index, model, sep = "_")
+        )
+
+        last_mod_index <- dplyr::pull(last_mod_index, .data[["time"]])
+
+        needs_update <- !isFALSE(last_mod_src > last_mod_index)
+
+      }
+
+      if (needs_update) {
+
+        update_index(index, model, pool)
+
+      }
 
     }
 
