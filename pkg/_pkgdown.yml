@@ -10,3 +10,11 @@ template:
 home:
   title: "Finnish Biodiversity Indicators"
 destination: docs
+navbar:
+  structure:
+    left:  [reference, api]
+    right: [search, github]
+  components:
+    api:
+      text: API
+      href: ../__docs__/
