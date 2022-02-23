@@ -314,8 +314,8 @@ function(pr) {
     allow_spec_file_load = "false",
     goto_path = "get-/indices",
     update_route = "false",
-    allow-authentication = "false",
-    allow-server-selection = "false"
+    allow_authentication = "false",
+    allow_server_selection = "false"
   )
 
 }
