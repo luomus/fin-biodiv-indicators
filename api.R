@@ -312,7 +312,10 @@ function(pr) {
     sort_tags = "false",
     sort_endpoints_by = "summary",
     allow_spec_file_load = "false",
-    goto_path = "get-/indices"
+    goto_path = "get-/indices",
+    update-route = "false",
+    allow-authentication = "false",
+    allow-server-selection = "false"
   )
 
 }
