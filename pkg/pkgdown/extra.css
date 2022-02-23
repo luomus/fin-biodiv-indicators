@@ -3,7 +3,7 @@ body {
 }
 
 .page-header, .template-home .page-header {
-  min-height: 135px;
+  min-height: 54px;
 }
 
 .navbar-nav .nav-item > .nav-link {
@@ -18,17 +18,12 @@ body {
   display: none;
 }
 
-.sourceCode {
-  font-size: 87%;
-}
-
 .navbar-dark input[type="search"] {
   background-color: #2691D9;
   padding-left: 0.5rem;
 }
 
 .figure {
-  float: right;
   width: 100%;
   text-align: center;
   font-style: italic;
