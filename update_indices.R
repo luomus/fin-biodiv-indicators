@@ -58,7 +58,12 @@ for (index in config::get("indices")) {
   for (taxon in c(taxa, extra_taxa)) {
 
     message(
-      sprintf("INFO [%s] Updating %s for %s index...", Sys.time(), taxon, index)
+      sprintf(
+        "INFO [%s] Updating %s for %s index...",
+        Sys.time(),
+        taxon[["binomial"]],
+        index
+      )
     )
 
     do_upd <- do_update(src) || do_update(taxon[["code"]])
@@ -75,8 +80,11 @@ for (index in config::get("indices")) {
 
         message(
           sprintf(
-            "INFO [%s] Updating %s model for %s (%s index)...", Sys.time(),
-            model, taxon, index
+            "INFO [%s] Updating %s model for %s (%s index)...",
+            Sys.time(),
+            model,
+            taxon[["binomial"]],
+            index
           )
         )
 
