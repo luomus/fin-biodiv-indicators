@@ -23,7 +23,7 @@ update_index <- function(index, model, db) {
 
   attr(df, "count_summary") <- list(taxa = length(taxa))
 
-  cache_outputs(index, df, db)
+  cache_outputs(paste(index, model, sep = "_"), df, db)
 
   invisible(NULL)
 
@@ -252,10 +252,12 @@ geometric_mean <- function(index, model, taxa, db) {
 
   df <- dplyr::arrange(df, .data[["time"]])
 
-  index <- paste(index, model, sep = "_")
-
   message(
-    sprintf("INFO [%s] Calculating %s combined index", Sys.time(), index)
+    sprintf(
+      "INFO [%s] Calculating %s combined index",
+      Sys.time(),
+      paste(index, model, sep = "_")
+    )
   )
 
   dplyr::collect(df)
