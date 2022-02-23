@@ -47,17 +47,31 @@ clean_cache <- function(db) {
 
   indices <- config::get("indices")
 
+  sep <- list(sep = "_")
+
   taxa <- .mapply(
     config::get, list(config = indices), list(value = "taxa")
   )
 
   taxa <- lapply(taxa, vapply, getElement, "", "code")
 
-  sep <- list(sep = "_")
+  ind <- vapply(taxa, length, 0L) > 1
 
-  taxa_indices <- .mapply(paste, list(indices, taxa), sep)
+  taxa_indices <- .mapply(paste, list(indices, taxa), sep)[ind]
 
   taxa_indices <- do.call(c, taxa_indices)
+
+  extra_taxa <- .mapply(
+    config::get, list(config = indices), list(value = "extra_taxa")
+  )
+
+  extra_taxa <- lapply(extra_taxa, vapply, getElement, "", "code")
+
+  ind <- vapply(extra_taxa, length, 0L) > 1
+
+  extra_taxa_indices <- .mapply(paste, list(indices, extra_taxa), sep)[ind]
+
+  extra_taxa_indices <- do.call(c, extra_taxa_indices)
 
   models <- .mapply(
     config::get, list(config = indices), list(value = "model")
@@ -73,11 +87,21 @@ clean_cache <- function(db) {
 
   taxa_model_indices <- do.call(c, c(model_indices, taxa_model_indices))
 
-  clean_indices(index_tables, db_tables,indices, db)
+  extra_taxa_model_indices <- .mapply(
+    outer, list(model_indices, extra_taxa), c(list(FUN = paste), sep)
+  )
 
-  clean_indices(taxon_tables, db_tables, taxa_indices, db)
+  extra_taxa_model_indices <- do.call(c, c(extra_taxa_model_indices))
 
-  clean_indices(model_tables, db_tables, taxa_model_indices, db)
+  clean_indices(index_tables, db_tables, indices, db)
+
+  clean_indices(
+    taxon_tables, db_tables, c(taxa_indices, extra_taxa_indices), db
+  )
+
+  clean_indices(
+    model_tables, db_tables, c(taxa_model_indices, extra_taxa_model_indices), db
+  )
 
 }
 
