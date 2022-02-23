@@ -81,6 +81,14 @@ cti <- function(index, cti, model, taxa, db) {
     .groups = "drop"
   )
 
+  message(
+    sprintf(
+      "INFO [%s] Calculating %s combined index",
+      Sys.time(),
+      paste(cti, model, sep = "_")
+    )
+  )
+
   data <- dplyr::collect(data)
 
   pool::poolReturn(con)
