@@ -35,7 +35,9 @@ do_update <- function(index, type = c("input", "output")) {
 
 message(sprintf("INFO [%s] Update starting...", Sys.time()))
 
-for (index in config::get("indices")) {
+indices <- vapply(config::get("indices"), getElement, "", "code")
+
+for (index in indices) {
 
   message(sprintf("INFO [%s] Updating %s index...", Sys.time(), index))
 

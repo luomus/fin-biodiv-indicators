@@ -46,7 +46,7 @@ clean_cache <- function(db) {
 
   }
 
-  indices <- config::get("indices")
+  indices <- vapply(config::get("indices"), getElement, "", "code")
 
   sep <- list(sep = "_")
 
