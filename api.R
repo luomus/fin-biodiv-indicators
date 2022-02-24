@@ -186,7 +186,7 @@ function(pr) {
       spec$info$contact$email <- "helpdesk@laji.fi"
 
       spec$info$license$name <- "MIT"
-      spec$info$contact$url <- "https://opensource.org/licenses/MIT"
+      spec$info$license$url <- "https://opensource.org/licenses/MIT"
 
       spec$tags <- list(
         list(
