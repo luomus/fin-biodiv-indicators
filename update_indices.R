@@ -119,8 +119,10 @@ for (index in config::get("indices")) {
 
         last_mod <- dplyr::tbl(pool, "output_cache_time")
 
+        src_model <- names(config::get("model", config = src))[[1L]]
+
         last_mod_src <- dplyr::filter(
-          last_mod, .data[["index"]] == !!paste(src, model, sep = "_")
+          last_mod, .data[["index"]] == !!paste(src, src_model, sep = "_")
         )
 
         last_mod_src <- dplyr::pull(last_mod_src, .data[["time"]])
