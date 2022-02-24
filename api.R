@@ -1,11 +1,6 @@
 #* @apiTitle Finnish Biodiversity Indicators HTTP API
 #* @apiDescription Finnish biodiversity indicators is a service providing time series of abundance indices and related metrics for Finland. The input data for the indices are provided by the [Finnish Biodiversity Information Facility](https://laji.fi "FinBIF").
 #* @apiTOS https://laji.fi/en/about/845
-#* @apiContact list(name = "laji.fi support", email = "helpdesk@laji.fi")
-#* @apiLicense list(name = "MIT", url = "https://opensource.org/licenses/MIT")
-#* @apiTag list Endpoints to list available indices
-#* @apiTag data Endpoints to get biodiversity index data
-#* @apiTag graphics Endpoints to get biodiversity index graphics
 
 #* @filter cors
 cors <- function(req, res) {
@@ -59,7 +54,7 @@ function() {
 #* @tag list
 #* @get /taxa/<index:str>
 #* @param index:str Shortcode for multi-taxa index (see [/indices](#get-/indices)).
-#* @response 200 A json array response
+#* @response 200 A json array
 #* @serializer unboxedJSON
 function(index) {
 
@@ -71,7 +66,7 @@ function(index) {
 #* @tag list
 #* @get /taxa-extra/<index:str>
 #* @param index:str Shortcode for multi-taxa index (see [/indices](#get-/indices)).
-#* @response 200 A json array response
+#* @response 200 A json array
 #* @serializer unboxedJSON
 function(index) {
 
@@ -85,7 +80,7 @@ function(index) {
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.).
 #* @param taxon:str Shortcode for a taxon (see [/taxa](#get-/taxa)).
-#* @response 200 A json array response
+#* @response 200 A json object
 #* @serializer unboxedJSON
 function(index,  model = "default", taxon = "none") {
 
@@ -113,7 +108,7 @@ function(index,  model = "default", taxon = "none") {
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.).
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
-#* @response 200 A json array response
+#* @response 200 A json object
 #* @serializer unboxedJSON
 function(index, model = "default", taxon = "none") {
 
@@ -127,7 +122,7 @@ function(index, model = "default", taxon = "none") {
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.).
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
-#* @response 200 A json array response
+#* @response 200 A json object
 #* @serializer unboxedJSON
 function(index, model = "default", taxon = "none") {
 
@@ -141,7 +136,7 @@ function(index, model = "default", taxon = "none") {
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.).
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
-#* @response 200 An svg file response
+#* @response 200 An svgz file
 function(index, model = "default", taxon = "none", res) {
 
   res[["setHeader"]]("Content-Type", "image/svg+xml")
@@ -187,6 +182,26 @@ function(pr) {
     function(spec) {
 
       spec$info$version <- version
+
+      spec$info$contact$name <- "laji.fi support"
+      spec$info$contact$email <- "helpdesk@laji.fi"
+
+      spec$info$license$name <- "MIT"
+      spec$info$contact$url <- "https://opensource.org/licenses/MIT"
+
+      spec$tags <- list(
+        list(
+          name = "list", description = "Endpoints to list available indices"
+        ),
+        list(
+          name = "data",
+          description = "Endpoints to get biodiversity index data"
+        ),
+        list(
+          name = "graphics",
+          description = "Endpoints to get biodiversity index graphics"
+        )
+      )
 
       spec$paths$`/healthz` <- NULL
       spec$paths$`/favicon.ico` <- NULL
