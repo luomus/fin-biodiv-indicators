@@ -7,8 +7,8 @@
 #' @param taxon Taxon configuration.
 #' @param ... Additional arguments.
 #'
-#' @importFrom dplyr dense_rank filter group_by inner_join mutate right_join
-#' @importFrom dplyr select slice_min summarise ungroup
+#' @importFrom dplyr dense_rank filter group_by inner_join left_join mutate
+#' @importFrom dplyr right_join select slice_min summarise ungroup
 #' @export
 process_funs <- function() {
 
@@ -17,7 +17,7 @@ process_funs <- function() {
     pick_first_survey_in_winter    = pick_first_survey_in_winter,
     pick_first_survey_in_year      = pick_first_survey_in_year,
     require_seven_fortnights       = require_seven_fortnights,
-    require_gt_two_years           = require_gt_two_years,
+    require_two_years              = require_two_years,
     pick_first_survey_in_fortnight = pick_first_survey_in_fortnight,
     format_date                    = format_date,
     combine_with_surveys           = combine_with_surveys,
@@ -32,8 +32,12 @@ process_funs <- function() {
 
 }
 
+#' Shift year winter
+#'
+#' Transpose early winter months to following calendar year
+#'
 #' @export
-#' @rdname process_funs
+#' @inheritParams process_funs
 shift_year_winter <- function(surveys) {
 
   dplyr::mutate(
@@ -45,8 +49,12 @@ shift_year_winter <- function(surveys) {
 
 }
 
+#' Pick first survey in winter
+#'
+#' Pick first winter survey in each year discarding subsequent surveys
+#'
 #' @export
-#' @rdname process_funs
+#' @inheritParams process_funs
 pick_first_survey_in_winter <- function(surveys) {
 
   surveys <- dplyr::group_by(surveys, .data[["location_id"]], .data[["year"]])
@@ -60,8 +68,12 @@ pick_first_survey_in_winter <- function(surveys) {
 
 }
 
+#' Pick first survey in year
+#'
+#' Pick first survey in each year discarding subsequent surveys
+#'
 #' @export
-#' @rdname process_funs
+#' @inheritParams process_funs
 pick_first_survey_in_year <- function(surveys) {
 
   surveys <- dplyr::group_by(surveys, .data[["location_id"]], .data[["year"]])
@@ -75,8 +87,13 @@ pick_first_survey_in_year <- function(surveys) {
 
 }
 
+#' Require seven fortnights
+#'
+#' Divide year into approximate 2 week blocks selecting blocks 11-17 and
+#' discarding locations without a survey in each remaining block
+#'
 #' @export
-#' @rdname process_funs
+#' @inheritParams process_funs
 require_seven_fortnights <- function(surveys) {
 
   surveys <- dplyr::mutate(
@@ -102,9 +119,14 @@ require_seven_fortnights <- function(surveys) {
 
 }
 
+
+#' Require at least two years
+#'
+#' Discard locations with less than two survey years
+#'
 #' @export
-#' @rdname process_funs
-require_gt_two_years <- function(surveys) {
+#' @inheritParams process_funs
+require_two_years <- function(surveys) {
 
   surveys <- dplyr::group_by(surveys, .data[["location_id"]])
 
@@ -122,8 +144,12 @@ require_gt_two_years <- function(surveys) {
 
 }
 
+#' Pick first survey in fortnight
+#'
+#' Pick first survey in each fortnight discarding subsequent surveys
+#'
 #' @export
-#' @rdname process_funs
+#' @inheritParams process_funs
 pick_first_survey_in_fortnight <- function(surveys) {
 
   surveys <- dplyr::group_by(
@@ -138,8 +164,12 @@ pick_first_survey_in_fortnight <- function(surveys) {
 
 }
 
+#' Format date
+#'
+#' Combine year, month, day of survey into a single date string
+#'
 #' @export
-#' @rdname process_funs
+#' @inheritParams process_funs
 format_date <- function(surveys) {
 
   dplyr::mutate(
@@ -149,16 +179,25 @@ format_date <- function(surveys) {
 
 }
 
+#' Combine with surveys
+#'
+#' Combine count data with survey data
+#'
 #' @export
-#' @rdname process_funs
+#' @inheritParams process_funs
 combine_with_surveys <- function(counts, surveys, ...) {
 
   dplyr::left_join(counts, surveys, by = "document_id")
 
 }
 
+#' Zero fill
+#'
+#' Combine count data with survey data filling missing surveys in count data
+#' with zero counts.
+#'
 #' @export
-#' @rdname process_funs
+#' @inheritParams process_funs
 zero_fill <- function(counts, surveys, ...) {
 
   counts <- dplyr::right_join(counts, surveys, by = "document_id")
@@ -170,8 +209,13 @@ zero_fill <- function(counts, surveys, ...) {
 
 }
 
+
+#' Remove all-zero locations
+#'
+#' Discard locations where taxa always had zero abundance
+#'
 #' @export
-#' @rdname process_funs
+#' @inheritParams process_funs
 remove_all_zero_locations <- function(counts, ...) {
 
   counts <- dplyr::group_by(counts, .data[["location_id"]])
@@ -184,8 +228,12 @@ remove_all_zero_locations <- function(counts, ...) {
 
 }
 
+#' Sum over sections
+#'
+#' Sum the counts of a single taxa over the sections of surveys
+#'
 #' @export
-#' @rdname process_funs
+#' @inheritParams process_funs
 sum_over_sections <- function(counts, ...) {
 
   counts <- dplyr::group_by(counts, .data[["document_id"]])
@@ -197,8 +245,12 @@ sum_over_sections <- function(counts, ...) {
 
 }
 
+#' Sum taxa over sections
+#'
+#' Sum the counts of multiple taxa over the sections of surveys
+#'
 #' @export
-#' @rdname process_funs
+#' @inheritParams process_funs
 sum_taxa_over_sections <- function(counts, ...) {
 
   counts <- dplyr::group_by(counts, .data[["document_id"]], .data[["index"]])
@@ -210,9 +262,12 @@ sum_taxa_over_sections <- function(counts, ...) {
 
 }
 
-
+#' Sum by event
+#'
+#' Sum the counts of a single taxa over the surveys in each year
+#'
 #' @export
-#' @rdname process_funs
+#' @inheritParams process_funs
 sum_by_event <- function(counts, ...) {
 
   counts <- dplyr::group_by(counts, .data[["location_id"]], .data[["year"]])
@@ -224,8 +279,12 @@ sum_by_event <- function(counts, ...) {
 
 }
 
+#' Sum taxa by event
+#'
+#' Sum the counts of a multiple taxa over the surveys in each year
+#'
 #' @export
-#' @rdname process_funs
+#' @inheritParams process_funs
 sum_taxa_by_event <- function(counts, ...) {
 
   counts <- dplyr::group_by(
@@ -239,8 +298,13 @@ sum_taxa_by_event <- function(counts, ...) {
 
 }
 
+
+#' Set start year
+#'
+#' Discard counts from years before the start year
+#'
 #' @export
-#' @rdname process_funs
+#' @inheritParams process_funs
 set_start_year <- function(counts, taxon, ...) {
 
   if (exists("start_year", taxon)) {

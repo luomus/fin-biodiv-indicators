@@ -16,10 +16,52 @@
     <loc>/reference/clean_cache.html</loc>
   </url>
   <url>
+    <loc>/reference/combine_with_surveys.html</loc>
+  </url>
+  <url>
+    <loc>/reference/format_date.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/pick_first_survey_in_fortnight.html</loc>
+  </url>
+  <url>
+    <loc>/reference/pick_first_survey_in_winter.html</loc>
+  </url>
+  <url>
+    <loc>/reference/pick_first_survey_in_year.html</loc>
+  </url>
+  <url>
     <loc>/reference/process_funs.html</loc>
+  </url>
+  <url>
+    <loc>/reference/remove_all_zero_locations.html</loc>
+  </url>
+  <url>
+    <loc>/reference/require_seven_fortnights.html</loc>
+  </url>
+  <url>
+    <loc>/reference/require_two_years.html</loc>
+  </url>
+  <url>
+    <loc>/reference/set_start_year.html</loc>
+  </url>
+  <url>
+    <loc>/reference/shift_year_winter.html</loc>
+  </url>
+  <url>
+    <loc>/reference/sum_by_event.html</loc>
+  </url>
+  <url>
+    <loc>/reference/sum_over_sections.html</loc>
+  </url>
+  <url>
+    <loc>/reference/sum_taxa_by_event.html</loc>
+  </url>
+  <url>
+    <loc>/reference/sum_taxa_over_sections.html</loc>
   </url>
   <url>
     <loc>/reference/update_data.html</loc>
@@ -29,5 +71,8 @@
   </url>
   <url>
     <loc>/reference/update_taxon_index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/zero_fill.html</loc>
   </url>
 </urlset>

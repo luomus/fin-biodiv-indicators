@@ -12,9 +12,29 @@ home:
 destination: docs
 navbar:
   structure:
-    left:  [reference, api]
+    left:  [api, reference]
     right: [search, github]
   components:
     api:
       text: API
       href: ../__docs__/#overview
+reference:
+  - title: Processing functions
+    desc: >
+      Functions to process indicator input data
+    contents:
+      - combine_with_surveys
+      - format_date
+      - pick_first_survey_in_fortnight
+      - pick_first_survey_in_winter
+      - pick_first_survey_in_year
+      - remove_all_zero_locations
+      - require_seven_fortnights
+      - require_two_years
+      - set_start_year
+      - shift_year_winter
+      - sum_by_event
+      - sum_over_sections
+      - sum_taxa_by_event
+      - sum_taxa_over_sections
+      - zero_fill

@@ -329,7 +329,7 @@ bf:
       base_year: 2001
       surveys_process:
       - require_seven_fortnights
-      - require_gt_two_years
+      - require_two_years
       - pick_first_survey_in_fortnight
       counts_process:
       - sum_over_sections

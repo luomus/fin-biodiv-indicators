@@ -18,11 +18,11 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
-<li class="nav-item">
+      <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../../__docs__/#overview">API</a>
+</li>
+<li class="active nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -51,37 +51,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">process_funs</span><span class="op">(</span><span class="op">)</span>
-
-<span class="fu">shift_year_winter</span><span class="op">(</span><span class="va">surveys</span><span class="op">)</span>
-
-<span class="fu">pick_first_survey_in_winter</span><span class="op">(</span><span class="va">surveys</span><span class="op">)</span>
-
-<span class="fu">pick_first_survey_in_year</span><span class="op">(</span><span class="va">surveys</span><span class="op">)</span>
-
-<span class="fu">require_seven_fortnights</span><span class="op">(</span><span class="va">surveys</span><span class="op">)</span>
-
-<span class="fu">require_gt_two_years</span><span class="op">(</span><span class="va">surveys</span><span class="op">)</span>
-
-<span class="fu">pick_first_survey_in_fortnight</span><span class="op">(</span><span class="va">surveys</span><span class="op">)</span>
-
-<span class="fu">format_date</span><span class="op">(</span><span class="va">surveys</span><span class="op">)</span>
-
-<span class="fu">combine_with_surveys</span><span class="op">(</span><span class="va">counts</span>, <span class="va">surveys</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">zero_fill</span><span class="op">(</span><span class="va">counts</span>, <span class="va">surveys</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">remove_all_zero_locations</span><span class="op">(</span><span class="va">counts</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">sum_over_sections</span><span class="op">(</span><span class="va">counts</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">sum_taxa_over_sections</span><span class="op">(</span><span class="va">counts</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">sum_by_event</span><span class="op">(</span><span class="va">counts</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">sum_taxa_by_event</span><span class="op">(</span><span class="va">counts</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">set_start_year</span><span class="op">(</span><span class="va">counts</span>, <span class="va">taxon</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">process_funs</span><span class="op">(</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -90,10 +60,10 @@
 <dd><p>Survey data.</p></dd>
 <dt>counts</dt>
 <dd><p>Count data.</p></dd>
-<dt>...</dt>
-<dd><p>Additional arguments.</p></dd>
 <dt>taxon</dt>
 <dd><p>Taxon configuration.</p></dd>
+<dt>...</dt>
+<dd><p>Additional arguments.</p></dd>
 </dl></div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
