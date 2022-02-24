@@ -3,6 +3,7 @@
 export(clean_cache)
 export(combine_with_surveys)
 export(format_date)
+export(get_output)
 export(pick_first_survey_in_fortnight)
 export(pick_first_survey_in_winter)
 export(pick_first_survey_in_year)
