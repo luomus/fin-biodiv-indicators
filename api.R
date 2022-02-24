@@ -58,7 +58,7 @@ function() {
 #* @serializer unboxedJSON
 function(index) {
 
-  vapply(config::get("taxa", config = index), getElement, "", "code")
+  config::get("taxa", config = index)
 
 }
 
@@ -70,7 +70,7 @@ function(index) {
 #* @serializer unboxedJSON
 function(index) {
 
-  vapply(config::get("extra_taxa", config = index), getElement, "", "code")
+  config::get("extra_taxa", config = index)
 
 }
 
@@ -143,7 +143,6 @@ function(index, model = "default", taxon = "none", res) {
   res[["setHeader"]]("Content-Encoding", "gzip")
   res[["setHeader"]]("Content-Disposition", "inline")
 
-
   res[["body"]] <- get_output("svg", index, model, taxon, pool)
 
   res
@@ -191,7 +190,8 @@ function(pr) {
 
       spec$tags <- list(
         list(
-          name = "list", description = "Endpoints to list available indices"
+          name = "list",
+          description = "Endpoints to list available indices"
         ),
         list(
           name = "data",

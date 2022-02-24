@@ -1,11 +1,15 @@
 default:
   indices:
-#  - fb
-  - wb
-  - wbcti
-  - bf
-  - bfcti
-
+# - code: fb
+#   name: Farmland birds
+  - code: wb
+    name: Winter birds
+  - code: wbcti
+    name: Winter birds community temperature index
+  - code: bf
+    name: Farmland butterflies
+  - code: bfcti
+    name: Farmland butterflies community temperature index
   surveys:
     selection:
     - document_id
