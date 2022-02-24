@@ -1,10 +1,11 @@
 #* @apiTitle Finnish Biodiversity Indicators HTTP API
-#* @apiDescription Tracking biodiversity trends in Finland using single- and multi-species population index based indicators.
+#* @apiDescription Finnish biodiversity indicators is a service providing time series of abundance indices and related metrics for Finland. The input data for the indices are provided by the [Finnish Biodiversity Information Facility](https://laji.fi "FinBIF").
 #* @apiTOS https://laji.fi/en/about/845
 #* @apiContact list(name = "laji.fi support", email = "helpdesk@laji.fi")
 #* @apiLicense list(name = "MIT", url = "https://opensource.org/licenses/MIT")
-#* @apiTag list Endpoints to list available indices.
-#* @apiTag data Endpoints to get biodiversity index data in json or csv format.
+#* @apiTag list Endpoints to list available indices
+#* @apiTag data Endpoints to get biodiversity index data
+#* @apiTag graphics Endpoints to get biodiversity index graphics
 
 #* @filter cors
 cors <- function(req, res) {
@@ -43,7 +44,7 @@ function() {
 
 }
 
-#* Get list of available multi-species indices
+#* Get list of available indices
 #* @tag list
 #* @get /indices
 #* @response 200 A json array response
@@ -54,10 +55,10 @@ function() {
 
 }
 
-#* Get list of species for an index
+#* Get list of taxa available for an index
 #* @tag list
 #* @get /taxa/<index:str>
-#* @param index:str Shortcode for multi-species index (see [/indices](#get-/indices)).
+#* @param index:str Shortcode for multi-taxa index (see [/indices](#get-/indices)).
 #* @response 200 A json array response
 #* @serializer unboxedJSON
 function(index) {
@@ -66,10 +67,10 @@ function(index) {
 
 }
 
-#* Get list of extra species available but that are not included in the overall multi-species index
+#* Get list of taxa available for but not included in index
 #* @tag list
-#* @get /extra-taxa/<index:str>
-#* @param index:str Shortcode for multi-species index (see [/indices](#get-/indices)).
+#* @get /taxa-extra/<index:str>
+#* @param index:str Shortcode for multi-taxa index (see [/indices](#get-/indices)).
 #* @response 200 A json array response
 #* @serializer unboxedJSON
 function(index) {
@@ -88,21 +89,7 @@ function(index) {
 #* @serializer unboxedJSON
 function(index,  model = "default", taxon = "none") {
 
-  taxon <- switch(taxon, none = NULL, taxon)
-
-  model <- switch(
-    model, "default" = names(config::get("model", config = index))[[1L]], model
-  )
-
-  index <- paste(c(index, model, taxon), collapse = "_")
-
-  ans <- dplyr::tbl(pool, "data")
-
-  ans <- dplyr::filter(ans, .data[["index"]] == !!index)
-
-  ans <- dplyr::select(ans, .data[["data"]])
-
-  unserialize(dplyr::pull(ans)[[1L]])
+  unserialize(get_output("data", index, model, taxon, pool))
 
 }
 
@@ -116,22 +103,7 @@ function(index,  model = "default", taxon = "none") {
 #* @serializer csv
 function(index,  model = "default", taxon = "none") {
 
-  taxon <- switch(taxon, none = NULL, taxon)
-
-  model <- switch(
-    model, "default" = names(config::get("model", config = index))[[1L]], model
-  )
-
-  index <- paste(c(index, model, taxon), collapse = "_")
-
-  ans <- dplyr::tbl(pool, "data_csv")
-
-  ans <- dplyr::filter(ans, .data[["index"]] == !!index)
-
-  ans <- dplyr::select(ans, .data[["data"]])
-
-  unserialize(dplyr::pull(ans)[[1L]])
-
+  unserialize(get_output("csv_data", index, model, taxon, pool))
 }
 
 
@@ -145,21 +117,7 @@ function(index,  model = "default", taxon = "none") {
 #* @serializer unboxedJSON
 function(index, model = "default", taxon = "none") {
 
-  taxon <- switch(taxon, none = NULL, taxon)
-
-  model <- switch(
-    model, "default" = names(config::get("model", config = index))[[1L]], model
-  )
-
-  index <- paste(c(index, model, taxon), collapse = "_")
-
-  ans <- dplyr::tbl(pool, "count_summary")
-
-  ans <- dplyr::filter(ans, .data[["index"]] == !!index)
-
-  ans <- dplyr::select(ans, .data[["data"]])
-
-  unserialize(dplyr::pull(ans)[[1L]])
+  unserialize(get_output("count_summary", index, model, taxon, pool))
 
 }
 
@@ -173,26 +131,12 @@ function(index, model = "default", taxon = "none") {
 #* @serializer unboxedJSON
 function(index, model = "default", taxon = "none") {
 
-  taxon <- switch(taxon, none = NULL, taxon)
-
-  model <- switch(
-    model, "default" = names(config::get("model", config = index))[[1L]], model
-  )
-
-  index <- paste(c(index, model, taxon), collapse = "_")
-
-  ans <- dplyr::tbl(pool, "trends")
-
-  ans <- dplyr::filter(ans, .data[["index"]] == !!index)
-
-  ans <- dplyr::select(ans, .data[["data"]])
-
-  unserialize(dplyr::pull(ans)[[1L]])
+  unserialize(get_output("trends", index, model, taxon, pool))
 
 }
 
 #* Get svg for an index
-#* @tag data
+#* @tag graphics
 #* @get /svg/<index:str>
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.).
@@ -204,21 +148,8 @@ function(index, model = "default", taxon = "none", res) {
   res[["setHeader"]]("Content-Encoding", "gzip")
   res[["setHeader"]]("Content-Disposition", "inline")
 
-  taxon <- switch(taxon, none = NULL, taxon)
 
-  model <- switch(
-    model, "default" = names(config::get("model", config = index))[[1L]], model
-  )
-
-  index <- paste(c(index, model, taxon), collapse = "_")
-
-  ans <- dplyr::tbl(pool, "svg")
-
-  ans <- dplyr::filter(ans, .data[["index"]] == !!index)
-
-  ans <- dplyr::select(ans, .data[["data"]])
-
-  res[["body"]] <- dplyr::pull(ans)[[1L]]
+  res[["body"]] <- get_output("trends", index, model, taxon, pool)
 
   res
 
@@ -267,14 +198,24 @@ function(pr) {
       }
 
       spec <- set_description(
-        spec, "/indices", "Gets a list of shortcodes for the available indices."
+        spec, "/indices", "Gets the available indices."
       )
 
       spec <- set_description(
         spec,
         "/taxa/{index}",
         paste(
-          "Gets a list of taxon codes representing taxa that make up a",
+          "Gets the taxa that make up a",
+          "given index<br>To list the available indices see",
+          "[/indices](#get-/indices)."
+        )
+      )
+
+      spec <- set_description(
+        spec,
+        "/taxa-extra/{index}",
+        paste(
+          "Gets the taxa available for but not included in a",
           "given index<br>To list the available indices see",
           "[/indices](#get-/indices)."
         )
@@ -284,8 +225,41 @@ function(pr) {
         spec,
         "/data/{index}",
         paste(
-          "Gets the time series data for a species or ",
-          "multi-species index<br>To list species see [/taxa](#get-/taxa)."
+          "Gets the time series data for a taxa or ",
+          "multi-taxa index as JSON."
+        )
+      )
+
+      spec <- set_description(
+        spec,
+        "/csv/{index}",
+        paste(
+          "Gets the time series data for a taxa or ",
+          "multi-taxa index as a CSV."
+        )
+      )
+
+      spec <- set_description(
+        spec,
+        "/count-summary/{index}",
+        paste(
+          "Gets a summary of the count data used as input for an index."
+        )
+      )
+
+      spec <- set_description(
+        spec,
+        "/trends/{index}",
+        paste(
+          "Gets a summary of the trends for index."
+        )
+      )
+
+      spec <- set_description(
+        spec,
+        "/svg/{index}",
+        paste(
+          "Gets an svg image for an index."
         )
       )
 
