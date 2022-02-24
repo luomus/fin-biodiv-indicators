@@ -103,7 +103,7 @@ function(index,  model = "default", taxon = "none") {
 #* @serializer csv
 function(index,  model = "default", taxon = "none") {
 
-  unserialize(get_output("csv_data", index, model, taxon, pool))
+  unserialize(get_output("data_csv", index, model, taxon, pool))
 }
 
 
