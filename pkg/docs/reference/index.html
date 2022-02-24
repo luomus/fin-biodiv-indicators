@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">fbi</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,11 +18,11 @@
     </button>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
-      <ul class="navbar-nav me-auto"><li class="active nav-item">
-  <a class="nav-link" href="../reference/index.html">Reference</a>
-</li>
-<li class="nav-item">
+      <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../../__docs__/#overview">API</a>
+</li>
+<li class="active nav-item">
+  <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
@@ -44,9 +44,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="processing-functions">Processing functions<a class="anchor" aria-label="anchor" href="#processing-functions"></a></h2>
       
-      
+      <p class="section-desc"></p><p>Functions to process indicator input data</p>
 
       
     </div><div id="" class="section level2">
@@ -56,29 +56,79 @@
 
       <dl><dt>
           
-          <code><a href="clean_cache.html">clean_cache()</a></code> 
+          <code><a href="combine_with_surveys.html">combine_with_surveys()</a></code> 
         </dt>
-        <dd>Clean cache</dd>
+        <dd>Combine with surveys</dd>
       </dl><dl><dt>
           
-          <code><a href="process_funs.html">process_funs()</a></code> <code><a href="process_funs.html">shift_year_winter()</a></code> <code><a href="process_funs.html">pick_first_survey_in_winter()</a></code> <code><a href="process_funs.html">pick_first_survey_in_year()</a></code> <code><a href="process_funs.html">require_seven_fortnights()</a></code> <code><a href="process_funs.html">require_gt_two_years()</a></code> <code><a href="process_funs.html">pick_first_survey_in_fortnight()</a></code> <code><a href="process_funs.html">format_date()</a></code> <code><a href="process_funs.html">combine_with_surveys()</a></code> <code><a href="process_funs.html">zero_fill()</a></code> <code><a href="process_funs.html">remove_all_zero_locations()</a></code> <code><a href="process_funs.html">sum_over_sections()</a></code> <code><a href="process_funs.html">sum_taxa_over_sections()</a></code> <code><a href="process_funs.html">sum_by_event()</a></code> <code><a href="process_funs.html">sum_taxa_by_event()</a></code> <code><a href="process_funs.html">set_start_year()</a></code> 
+          <code><a href="format_date.html">format_date()</a></code> 
         </dt>
-        <dd>Process functions</dd>
+        <dd>Format date</dd>
       </dl><dl><dt>
           
-          <code><a href="update_data.html">update_data()</a></code> 
+          <code><a href="pick_first_survey_in_fortnight.html">pick_first_survey_in_fortnight()</a></code> 
         </dt>
-        <dd>Update data</dd>
+        <dd>Pick first survey in fortnight</dd>
       </dl><dl><dt>
           
-          <code><a href="update_index.html">update_index()</a></code> 
+          <code><a href="pick_first_survey_in_winter.html">pick_first_survey_in_winter()</a></code> 
         </dt>
-        <dd>Update index</dd>
+        <dd>Pick first survey in winter</dd>
       </dl><dl><dt>
           
-          <code><a href="update_taxon_index.html">update_taxon_index()</a></code> 
+          <code><a href="pick_first_survey_in_year.html">pick_first_survey_in_year()</a></code> 
         </dt>
-        <dd>Update taxon index</dd>
+        <dd>Pick first survey in year</dd>
+      </dl><dl><dt>
+          
+          <code><a href="remove_all_zero_locations.html">remove_all_zero_locations()</a></code> 
+        </dt>
+        <dd>Remove all-zero locations</dd>
+      </dl><dl><dt>
+          
+          <code><a href="require_seven_fortnights.html">require_seven_fortnights()</a></code> 
+        </dt>
+        <dd>Require seven fortnights</dd>
+      </dl><dl><dt>
+          
+          <code><a href="require_two_years.html">require_two_years()</a></code> 
+        </dt>
+        <dd>Require at least two years</dd>
+      </dl><dl><dt>
+          
+          <code><a href="set_start_year.html">set_start_year()</a></code> 
+        </dt>
+        <dd>Set start year</dd>
+      </dl><dl><dt>
+          
+          <code><a href="shift_year_winter.html">shift_year_winter()</a></code> 
+        </dt>
+        <dd>Shift year winter</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sum_by_event.html">sum_by_event()</a></code> 
+        </dt>
+        <dd>Sum by event</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sum_over_sections.html">sum_over_sections()</a></code> 
+        </dt>
+        <dd>Sum over sections</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sum_taxa_by_event.html">sum_taxa_by_event()</a></code> 
+        </dt>
+        <dd>Sum taxa by event</dd>
+      </dl><dl><dt>
+          
+          <code><a href="sum_taxa_over_sections.html">sum_taxa_over_sections()</a></code> 
+        </dt>
+        <dd>Sum taxa over sections</dd>
+      </dl><dl><dt>
+          
+          <code><a href="zero_fill.html">zero_fill()</a></code> 
+        </dt>
+        <dd>Zero fill</dd>
       </dl></div>
   </main></div>
 
