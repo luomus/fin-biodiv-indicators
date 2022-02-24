@@ -149,7 +149,7 @@ function(index, model = "default", taxon = "none", res) {
   res[["setHeader"]]("Content-Disposition", "inline")
 
 
-  res[["body"]] <- get_output("trends", index, model, taxon, pool)
+  res[["body"]] <- get_output("svg", index, model, taxon, pool)
 
   res
 
