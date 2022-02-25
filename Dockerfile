@@ -2,7 +2,7 @@ FROM rstudio/plumber:latest
 
 RUN  echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections \
   && apt-get update -qq \
-  && apt-get install -y ttf-mscorefonts-installer libpq-dev \
+  && apt-get install -y ttf-mscorefonts-installer libpq-dev nano \
   && fc-cache -f
 
 HEALTHCHECK --interval=1m --timeout=10s \
