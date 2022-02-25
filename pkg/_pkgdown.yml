@@ -12,12 +12,25 @@ home:
 destination: docs
 navbar:
   structure:
-    left:  [api, reference]
+    left:  [api, reference, articles]
     right: [search, github]
   components:
     api:
       text: API
       href: ../__docs__/#overview
+    articles:
+      text: Examples
+      href: articles/index.html
+      menu:
+      - text: Winter Birds
+        href: articles/winter-birds.html
+      - text: Farmland Butterflies
+        href: articles/farmland-butterflies.html
+      - text: Community Temperature Indices
+        href: articles/community-temperature-indices.html
+    reference:
+      text: Functions
+      href: reference/index.html
 reference:
   - title: Processing functions
     desc: >

@@ -1,0 +1,15 @@
+---
+title: "Community Temperature Indices"
+author: "William K. Morris"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Community Temperature Indices}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+![Community temperature indicator for winter birds](https://indicators.laji.fi/svg/wbcti "Winter Bird Community Temperature Index")
+
+![Community temperature indicator for farmland butterflies](https://indicators.laji.fi/svg/bfcti "Farmland Butterfly Community Temperature Index")

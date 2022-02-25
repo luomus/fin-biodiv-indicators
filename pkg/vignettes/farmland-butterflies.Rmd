@@ -1,0 +1,15 @@
+---
+title: "Farmland Butterfly Indicator"
+author: "William K. Morris"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Farmland Butterfly Indicator}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+![Biodiversity indicator for farmland butterflies using rbms model](https://indicators.laji.fi/svg/bf?model=rbms "Farmland Butterflies (rbms)")
+
+![Biodiversity indicator for farmland butterflies using rtrim model](https://indicators.laji.fi/svg/bf?model=trim "Farmland Butterflies (rtrim)")
