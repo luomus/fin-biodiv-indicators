@@ -12,14 +12,14 @@ home:
 destination: docs
 navbar:
   structure:
-    left:  [api, reference, articles]
+    left:  [api, articles, reference]
     right: [search, github]
   components:
     api:
       text: API
       href: ../__docs__/#overview
     articles:
-      text: Examples
+      text: Example Indicators
       href: articles/index.html
       menu:
       - text: Winter Birds
@@ -29,7 +29,7 @@ navbar:
       - text: Community Temperature Indices
         href: articles/community-temperature-indices.html
     reference:
-      text: Functions
+      text: Function Reference
       href: reference/index.html
 reference:
   - title: Processing functions

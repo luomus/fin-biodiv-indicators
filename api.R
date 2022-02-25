@@ -136,7 +136,7 @@ function(index, model = "default", taxon = "none") {
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.).
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
-#* @response 200 An svgz file
+#* @response 200 An svg file
 function(index, model = "default", taxon = "none", res) {
 
   res[["setHeader"]]("Content-Type", "image/svg+xml")
