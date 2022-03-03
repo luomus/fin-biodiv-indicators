@@ -117,7 +117,7 @@ for (index in indices) {
 
       needs_update <- TRUE
 
-      if (!identical(src, index)) {
+      if (!is.null(src)) {
 
         last_mod <- dplyr::tbl(pool, "output_cache_time")
 
