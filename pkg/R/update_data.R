@@ -41,12 +41,14 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
       )
     )
 
+    names(select) <- select
+
+    names(select)[select == abundance] <- "abundance"
+
     data <- finbif::finbif_occurrence(
       filter = filter, select = select, aggregate = aggregate, n = "all",
       quiet = TRUE, aggregate_counts = FALSE
     )
-
-    data <- data[!is.na(data[["document_id"]]), ]
 
     message(
       sprintf(
@@ -54,12 +56,6 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
         type, index
       )
     )
-
-    abundance_data <- data[[abundance]]
-
-    data[[abundance]] <- NULL
-
-    data[["abundance"]] <- abundance_data
 
     data[["index"]] <- index
 

@@ -17,6 +17,8 @@ default:
     - year
     - month
     - day
+    has_value:
+    - document_id
   counts:
     abundance: abundance
     has_value:

@@ -28,6 +28,10 @@ expect_null(update_index("bfcti", "lmer", con))
 
 pool::dbWriteTable(con, "redundant", data.frame(index = character()))
 
+expect_true(check_input("bf", "rbms", "MX.60914"))
+
+expect_inherits(get_output("data", "bf", "rbms", "MX.60914", con), "raw")
+
 expect_null(clean_cache(con))
 
 pool::poolClose(con)
