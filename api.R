@@ -81,8 +81,18 @@ function(index) {
 #* @param model:str Which model (trim, rbms, etc.).
 #* @param taxon:str Shortcode for a taxon (see [/taxa](#get-/taxa)).
 #* @response 200 A json object
+#* @response 404 A json object
 #* @serializer unboxedJSON
-function(index,  model = "default", taxon = "none") {
+function(index, model = "default", taxon = "none", res) {
+
+  has_output <- check_input(index, model, taxon)
+
+  if (!has_output) {
+
+    res[["status"]] <- 404L
+    return("Not found")
+
+  }
 
   unserialize(get_output("data", index, model, taxon, pool))
 
@@ -95,10 +105,21 @@ function(index,  model = "default", taxon = "none") {
 #* @param model:str Which model (trim, rbms, etc.).
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
 #* @response 200 A csv file
+#* @response 404 A json object
 #* @serializer csv
-function(index,  model = "default", taxon = "none") {
+function(index, model = "default", taxon = "none", res) {
+
+  has_output <- check_input(index, model, taxon)
+
+  if (!has_output) {
+
+    res[["status"]] <- 404L
+    return("Not found")
+
+  }
 
   unserialize(get_output("data_csv", index, model, taxon, pool))
+
 }
 
 
@@ -109,8 +130,18 @@ function(index,  model = "default", taxon = "none") {
 #* @param model:str Which model (trim, rbms, etc.).
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
 #* @response 200 A json object
+#* @response 404 A json object
 #* @serializer unboxedJSON
-function(index, model = "default", taxon = "none") {
+function(index, model = "default", taxon = "none", res) {
+
+  has_output <- check_input(index, model, taxon)
+
+  if (!has_output) {
+
+    res[["status"]] <- 404L
+    return("Not found")
+
+  }
 
   unserialize(get_output("count_summary", index, model, taxon, pool))
 
@@ -123,8 +154,18 @@ function(index, model = "default", taxon = "none") {
 #* @param model:str Which model (trim, rbms, etc.).
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
 #* @response 200 A json object
+#* @response 404 A json object
 #* @serializer unboxedJSON
-function(index, model = "default", taxon = "none") {
+function(index, model = "default", taxon = "none", res) {
+
+  has_output <- check_input(index, model, taxon)
+
+  if (!has_output) {
+
+    res[["status"]] <- 404L
+    return("Not found")
+
+  }
 
   unserialize(get_output("trends", index, model, taxon, pool))
 
@@ -137,7 +178,18 @@ function(index, model = "default", taxon = "none") {
 #* @param model:str Which model (trim, rbms, etc.).
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
 #* @response 200 An svg file
+#* @response 404 A json object
 function(index, model = "default", taxon = "none", res) {
+
+  has_output <- check_input(index, model, taxon)
+
+  if (!has_output) {
+
+    res[["serializer"]] <- plumber::serializer_unboxed_json()
+    res[["status"]] <- 404L
+    return("Not found")
+
+  }
 
   res[["setHeader"]]("Content-Type", "image/svg+xml")
   res[["setHeader"]]("Content-Encoding", "gzip")
