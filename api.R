@@ -160,6 +160,14 @@ function() {
 
 }
 
+#* @get /robots.txt
+#* @serializer contentType list(type="text/plain")
+function() {
+
+  readBin("robots.txt", "raw", n = file.info("robots.txt")$size)
+
+}
+
 #* @get /
 function(res) {
 
