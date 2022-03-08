@@ -19,10 +19,10 @@ HEALTHCHECK --interval=1m --timeout=10s \
 ENV HOME /home/user
 
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-COPY ../config.yml /home/user/config.yml
+COPY config.yml /home/user/config.yml
 COPY app.R /home/user/shiny/app.R
-COPY ../robots.txt /home/user/shiny/robots.txt
-COPY ../favicon.ico /home/user/shiny/favicon.ico
+COPY robots.txt /home/user/shiny/robots.txt
+COPY favicon.ico /home/user/shiny/favicon.ico
 
 RUN  mkdir -p /home/user \
   && chgrp -R 0 /home/user \

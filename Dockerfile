@@ -35,10 +35,10 @@ COPY entrypoint.sh /home/user/entrypoint.sh
 COPY init.R /home/user/init.R
 COPY update_indices.R /home/user/update_indices.R
 COPY api.R /home/user/api.R
-COPY favicon.ico /home/user/favicon.ico
-COPY robots.txt /home/user/favicon.txt
+COPY config/favicon.ico /home/user/favicon.ico
+COPY config/robots.txt /home/user/favicon.txt
 COPY pkg /home/user/fbi
-COPY config.yml /home/user/config.yml
+COPY config/config.yml /home/user/config.yml
 
 ENV HOME /home/user
 ENV OPENBLAS_NUM_THREADS 1
