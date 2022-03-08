@@ -6,3 +6,4 @@
 .dev-env
 cov/
 sandbox/
+var/

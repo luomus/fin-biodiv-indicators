@@ -48,7 +48,7 @@ WORKDIR /home/user
 RUN  R -e "remotes::install_local('fbi', NULL, FALSE, 'never')" \
   && mkdir -p \
        /home/user/coverage \
-       /home/user/logs \
+       /home/user/var \
        /home/user/tmp \
   && chgrp -R 0 \
        /home/user \
