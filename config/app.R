@@ -5,6 +5,14 @@ library(bslib)
 
 users <- read.csv("var/pass.csv")
 
+if (!file.exists("var/config.yml")) {
+
+  config <- file.copy("config.yml", "var")
+
+  stopifnot("Config not found" = config)
+
+}
+
 txt <- readLines("var/config.yml")
 
 ui <- shinyUI(
