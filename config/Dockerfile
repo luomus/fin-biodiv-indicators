@@ -8,7 +8,8 @@ RUN install2.r -s -e \
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
-      curl \
+      curl
+      libsodium-dev \
  && apt-get autoremove -y \
  && apt-get autoclean -y \
  && rm -rf /var/lib/apt/lists/*
