@@ -5,7 +5,7 @@ library(bslib)
 
 if (!file.exists("/home/user/var/config.yml")) {
 
-  config <- file.copy("/home/user/config.yml", "var")
+  config <- file.copy("/home/user/config.yml", "/home/user/var/config.yml")
 
   stopifnot("Config not found" = config)
 
