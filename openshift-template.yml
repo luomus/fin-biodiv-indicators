@@ -275,8 +275,8 @@ objects:
           ports:
           - containerPort: ${APP_PORT}
           volumeMounts:
-          - mountPath: ${HOME}/${LOG_DIR}
-            name: ${LOG}
+          - mountPath: ${HOME}/${VAR}
+            name: ${VAR}
           - mountPath: ${HOME}/${TMP_DIR}
             name: ${TMP_DIR}
           livenessProbe:
@@ -309,9 +309,9 @@ objects:
           - name: FINBIF_EMAIL
             value: ${FINBIF_EMAIL}
         volumes:
-        - name: ${LOG}
+        - name: ${VAR}
           persistentVolumeClaim:
-            claimName: ${LOG}
+            claimName: ${VAR}
         - name: ${TMP_DIR}
           emptyDir:
             medium: Memory
@@ -457,8 +457,8 @@ objects:
           ports:
           - containerPort: ${SHINY_PORT}
           volumeMounts:
-          - mountPath: ${HOME}/${LOG_DIR}
-            name: ${LOG}
+          - mountPath: ${HOME}/${VAR}
+            name: ${VAR}
           livenessProbe:
             httpGet:
               port: ${{SHINY_PORT}}
@@ -475,9 +475,9 @@ objects:
           - name: LOG_DIR
             value: ${HOME}/${VAR}/${LOG_DIR}
         volumes:
-        - name: ${LOG}
+        - name: ${VAR}
           persistentVolumeClaim:
-            claimName: ${LOG}
+            claimName: ${VAR}
     triggers:
     - type: ConfigChange
     - type: ImageChange
