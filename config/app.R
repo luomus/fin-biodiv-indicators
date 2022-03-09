@@ -3,8 +3,6 @@ library(shinyAce)
 library(shinyauthr)
 library(bslib)
 
-users <- read.csv("var/pass.csv")
-
 if (!file.exists("var/config.yml")) {
 
   config <- file.copy("config.yml", "var")
@@ -23,6 +21,8 @@ if (!file.exists("var/pass.csv")) {
   )
 
 }
+
+users <- read.csv("var/pass.csv")
 
 txt <- readLines("var/config.yml")
 
