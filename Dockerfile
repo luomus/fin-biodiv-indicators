@@ -38,7 +38,6 @@ COPY api.R /home/user/api.R
 COPY config/favicon.ico /home/user/favicon.ico
 COPY config/robots.txt /home/user/favicon.txt
 COPY pkg /home/user/fbi
-COPY config/config.yml /home/user/config.yml
 
 ENV HOME /home/user
 ENV OPENBLAS_NUM_THREADS 1
