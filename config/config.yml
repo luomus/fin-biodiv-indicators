@@ -1,0 +1,358 @@
+default:
+  indices:
+# - code: fb
+#   name: Farmland birds
+  - code: wb
+    name: Winter birds
+  - code: wbcti
+    name: Winter birds community temperature index
+  - code: bf
+    name: Farmland butterflies
+  - code: bfcti
+    name: Farmland butterflies community temperature index
+  surveys:
+    selection:
+    - document_id
+    - location_id
+    - year
+    - month
+    - day
+    has_value:
+    - document_id
+  counts:
+    abundance: abundance
+    has_value:
+    - document_id
+
+# fb:
+#   taxa:
+#   - code: MX.27328
+#     start_year: 2006
+#   - code: MX.27527
+#   - code: MX.27613
+#   - code: MX.32065
+#   - code: MX.32132
+#   - code: MX.32163
+#   - code: MX.32213
+#   - code: MX.32949
+#   - code: MX.33117
+#   - code: MX.33936
+#   - code: MX.37142
+#   - code: MX.36817
+#   - code: MX.36589
+#     start_year: 2006
+#   - code: MX.35154
+#   filters:
+#     date_range_ymd:
+#     - "1979-01-01"
+#     - ""
+#   collection:
+#   - HR.157
+#   - HR.61
+#   counts:
+#     abundance: pair_abundance
+#     selection:
+#     - document_id
+#     - pair_abundance
+#   combine: geometric_mean
+#   model:
+#     trim:
+#       base_year: 2006
+#       survey_process:
+#       - pick_first_survey_in_year
+#       - require_gt_two_years
+#       count_process:
+#       - zero_fill
+#       - sum_by_event
+#       - set_start_year
+#       - remove_all_zero_locations
+
+wb:
+  taxa:
+  - code: MX.34535
+    binomial: Poecile montanus
+    sti: -7.51
+  - code: MX.33954
+    binomial: Regulus regulus
+    sti: -4.23
+  - code: MX.34553
+    binomial: Lophophanes cristatus
+    sti: -5.90
+  - code: MX.26931
+    binomial: Tetrastes bonasia
+    sti: -9.64
+  - code: MX.26928
+    binomial: Tetrao urogallus
+    sti: -9.78
+  - code: MX.26926
+    binomial: Lyrurus tetrix
+    sti: -9.96
+  - code: MX.34616
+    binomial: Certhia familiaris
+    sti: -6.89
+  - code: MX.30504
+    binomial: Dryocopus martius
+    sti: -7.59
+  - code: MX.36358
+    binomial: Loxia curvirostra
+    sti: -7.53
+  - code: MX.29011
+    binomial: Glaucidium passerinum
+    sti: -9.86
+  - code: MX.36351
+    binomial: Pinicola enucleator
+    sti: -12.49
+  - code: MX.30453
+    binomial: Picoides tridactylus
+    sti: -10.52
+  - code: MX.36356
+    binomial: Loxia pytyopsittacus
+    sti: -10.67
+  - code: MX.29008
+    binomial: Surnia ulula
+    sti: -12.25
+  - code: MX.34542
+    binomial: Poecile cinctus
+    sti: -13.70
+  - code: MX.37095
+    binomial: Perisoreus infaustus
+    sti: -12.56
+  filters:
+    date_range_ymd:
+    - "1958-12-01"
+    - ""
+    date_range_md:
+    - "12-01"
+    - "01-31"
+    collection: HR.39
+  counts:
+    selection:
+    - document_id
+    - abundance
+  combine: geometric_mean
+  model:
+    trim:
+      base_year: 1959
+      surveys_process:
+      - shift_year_winter
+      - pick_first_survey_in_year
+      counts_process:
+      - zero_fill
+      - remove_all_zero_locations
+
+wbcti:
+  from: wb
+  combine: cti
+  model:
+    lmer:
+      surveys_process:
+      - shift_year_winter
+      - pick_first_survey_in_year
+      counts_process:
+      - combine_with_surveys
+
+bf:
+  taxa:
+  - code: MX.60914
+    binomial: Aglais io
+    sti: 8.84
+  - code: MX.60916
+    binomial: Aglais urticae
+    sti: 8.12
+  - code: MX.60767
+    binomial: Anthocharis cardamines
+    sti: 8.3
+  - code: MX.60970
+    binomial: Aphantopus hyperantus
+    sti: 7.9
+  - code: MX.60772
+    binomial: Aporia crataegi
+    sti: 9.14
+  - code: MX.60908
+    binomial: Araschnia levana
+    sti: 8.62
+    start_year: 2000
+  - code: MX.60876
+    binomial: Argynnis paphia
+    sti: 9.02
+  - code: MX.60859
+    binomial: Aricia artaxerxes
+    sti: 6.45
+  - code: MX.60889
+    binomial: Boloria euphrosyne
+    sti: 6.95
+  - code: MX.60890
+    binomial: Boloria selene
+    sti: 6.93
+  - code: MX.60884
+    binomial: Brenthis ino
+    sti: 6.86
+  - code: MX.60811
+    binomial: Callophrys rubi
+    sti: 8.57
+  - code: MX.60745
+    binomial: Carterocephalus silvicola
+    sti: 5.19
+  - code: MX.60830
+    binomial: Celastrina argiolus
+    sti: 9.14
+  - code: MX.60965
+    binomial: Coenonympha glycerion
+    sti: 8.06
+  - code: MX.60968
+    binomial: Coenonympha pamphilus
+    sti: 8.96
+  - code: MX.60865
+    binomial: Cyaniris semiargus
+    sti: 7.91
+  - code: MX.60979
+    binomial: Erebia ligea
+    sti: 5.51
+  - code: MX.60863
+    binomial: Eumedonia eumedon
+    sti: 5.98
+  - code: MX.60931
+    binomial: Euphydryas maturna
+    sti: 7.64
+  - code: MX.60878
+    binomial: Fabriciana adippe
+    sti: 8.37
+  - code: MX.60794
+    binomial: Gonepteryx rhamni
+    sti: 8.81
+  - code: MX.60957
+    binomial: Lasiommata maera
+    sti: 8.56
+  - code: MX.60958
+    binomial: Lasiommata petropolitana
+    sti: 5.07
+  - code: MX.60763
+    binomial: Leptidea sinapis
+    sti: 9.11
+  - code: MX.60944
+    binomial: Limenitis populi
+    sti: 7.48
+  - code: MX.60821
+    binomial: Lycaena hippothoe
+    sti: 6.45
+  - code: MX.60816
+    binomial: Lycaena phlaeas
+    sti: 9.29
+  - code: MX.60819
+    binomial: Lycaena virgaureae
+    sti: 7.27
+  - code: MX.60939
+    binomial: Melitaea athalia
+    sti: 8.27
+  - code: MX.60920
+    binomial: Nymphalis antiopa
+    sti: 7.61
+  - code: MX.60755
+    binomial: Ochlodes sylvanus
+    sti: 8.58
+  - code: MX.60730
+    binomial: Papilio machaon
+    sti: 9.28
+  - code: MX.60953
+    binomial: Pararge aegeria
+    sti: 9.71
+  - code: MX.60778
+    binomial: Pieris napi
+    sti: 8.21
+  - code: MX.60854
+    binomial: Plebejus argus
+    sti: 8.61
+  - code: MX.60855
+    binomial: Plebejus idas
+    sti: 6.68
+  - code: MX.60925
+    binomial: Polygonia c-album
+    sti: 8.60
+  - code: MX.60866
+    binomial: Polyommatus amandus
+    sti: 7.66
+  - code: MX.60867
+    binomial: Polyommatus icarus
+    sti: 9.07
+  - code: MX.60735
+    binomial: Pyrgus malvae
+    sti: 8.74
+    start_year: 2000
+  - code: MX.60809
+    binomial: Satyrium pruni
+    sti: 8.31
+    start_year: 2000
+  - code: MX.60877
+    binomial: Speyeria aglaja
+    sti: 7.79
+  - code: MX.60799
+    binomial: Thecla betulae
+    sti: 8.62
+  - code: MX.60749
+    binomial: Thymelicus lineola
+    sti: 8.69
+  extra_taxa:
+  - code: MX.60858
+    binomial: Agriades optilete
+    sti: 4.19
+  - code: MX.60791
+    binomial: Colias palaeno
+    sti: 3.62
+  - code: MX.60775
+    binomial: Pieris brassicae
+    sti: 9.29
+  - code: MX.60777
+    binomial: Pieris rapae
+    sti: 9.63
+  - code: MX.60910
+    binomial: Vanessa atalanta
+    sti: 9.07
+  - code: MX.60911
+    binomial: Vanessa cardui
+    sti: 9.04
+  filters:
+    collection: HR.3431
+  counts:
+    selection:
+    - document_id
+    - section
+    - abundance
+    has_value:
+    - section
+    - document_id
+  combine: geometric_mean
+  model:
+    rbms:
+      base_year: 2001
+      surveys_process:
+      - format_date
+      counts_process:
+      - sum_over_sections
+      - combine_with_surveys
+    trim:
+      args:
+        overdisp: true
+      base_year: 2001
+      surveys_process:
+      - require_seven_fortnights
+      - require_two_years
+      - pick_first_survey_in_fortnight
+      counts_process:
+      - sum_over_sections
+      - zero_fill
+      - sum_by_event
+      - set_start_year
+      - remove_all_zero_locations
+
+bfcti:
+  from: bf
+  combine: cti
+  model:
+    lmer:
+      surveys_process:
+      - require_seven_fortnights
+      - pick_first_survey_in_fortnight
+      counts_process:
+      - sum_taxa_over_sections
+      - combine_with_surveys
+      - sum_taxa_by_event

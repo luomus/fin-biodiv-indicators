@@ -10,7 +10,17 @@ for (pkg in pkgs) {
 
 }
 
-log_dir <- "logs"
+Sys.setenv(R_CONFIG_FILE = "var/config.yml")
+
+if (!dir.exists("var/logs")) {
+
+  log_dir <- dir.create("var/logs", recursive = TRUE)
+
+  stopifnot("Log dir creation failed" = log_dir)
+
+}
+
+log_dir <- "var/logs"
 
 log_file <- tempfile("plumber_", log_dir, ".log")
 
