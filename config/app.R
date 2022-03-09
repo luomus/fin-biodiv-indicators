@@ -3,28 +3,28 @@ library(shinyAce)
 library(shinyauthr)
 library(bslib)
 
-if (!file.exists("var/config.yml")) {
+if (!file.exists("/home/user/var/config.yml")) {
 
-  config <- file.copy("config.yml", "var")
+  config <- file.copy("/home/user/config.yml", "var")
 
   stopifnot("Config not found" = config)
 
 }
 
-if (!file.exists("var/pass.csv")) {
+if (!file.exists("/home/user/var/pass.csv")) {
 
   write.csv(
     data.frame(user = character(), password = character()),
-    "var/pass.csv",
+    "/home/user/var/pass.csv",
     quote = FALSE,
     row.names = FALSE,
   )
 
 }
 
-users <- read.csv("var/pass.csv")
+users <- read.csv("/home/user/var/pass.csv")
 
-txt <- readLines("var/config.yml")
+txt <- readLines("/home/user/var/config.yml")
 
 ui <- shinyUI(
   fluidPage(
@@ -81,7 +81,7 @@ server <- function(input, output, session) {
 
     if (inherits(validate, "list")) {
 
-      writeLines(yml, "var/config.yml")
+      writeLines(yml, "/home/user/var/config.yml")
       HTML("Valid")
 
     } else {
