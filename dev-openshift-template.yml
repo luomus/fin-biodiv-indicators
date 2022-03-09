@@ -502,17 +502,17 @@ objects:
     resources:
       requests:
         storage: ${SMALL_STORAGE}
-# - kind: PersistentVolumeClaim
-#   apiVersion: v1
-#   metadata:
-#     name: ${DEV}-${DB}
-#   spec:
-#     accessModes:
-#     - ReadWriteMany
-#     persistentVolumeReclaimPolicy: Retain
-#     resources:
-#       requests:
-#         storage: ${SMALL_STORAGE}
+- kind: PersistentVolumeClaim
+  apiVersion: v1
+  metadata:
+   name: ${DEV}-${DB}
+  spec:
+   accessModes:
+   - ReadWriteMany
+   persistentVolumeReclaimPolicy: Retain
+   resources:
+     requests:
+       storage: ${SMALL_STORAGE}
 - kind: Service
   apiVersion: v1
   metadata:
