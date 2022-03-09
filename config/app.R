@@ -13,6 +13,14 @@ if (!file.exists("var/config.yml")) {
 
 }
 
+if (!file.exists("var/pass.csv")) {
+
+  pass <- file.create("var/pass.csv")
+
+  stopifnot("Password file not initialised" = pass)
+
+}
+
 txt <- readLines("var/config.yml")
 
 ui <- shinyUI(
