@@ -4,7 +4,8 @@ RUN install2.r -s -e \
       bslib \
       shiny \
       shinyAce \
-      shinyauthr
+      shinyauthr \
+      yaml
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends \
