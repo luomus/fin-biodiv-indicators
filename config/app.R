@@ -15,9 +15,12 @@ if (!file.exists("var/config.yml")) {
 
 if (!file.exists("var/pass.csv")) {
 
-  pass <- file.create("var/pass.csv")
-
-  stopifnot("Password file not initialised" = pass)
+  write.csv(
+    data.frame(user = character(), password = character()),
+    "var/pass.csv",
+    quote = FALSE,
+    row.names = FALSE,
+  )
 
 }
 
