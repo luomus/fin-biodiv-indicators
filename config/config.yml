@@ -1,7 +1,7 @@
 default:
   indices:
-# - code: fb
-#   name: Farmland birds
+  - code: fb
+    name: Farmland birds
   - code: wb
     name: Winter birds
   - code: wbcti
@@ -24,48 +24,49 @@ default:
     has_value:
     - document_id
 
-# fb:
-#   taxa:
-#   - code: MX.27328
-#     start_year: 2006
-#   - code: MX.27527
-#   - code: MX.27613
-#   - code: MX.32065
-#   - code: MX.32132
-#   - code: MX.32163
-#   - code: MX.32213
-#   - code: MX.32949
-#   - code: MX.33117
-#   - code: MX.33936
-#   - code: MX.37142
-#   - code: MX.36817
-#   - code: MX.36589
-#     start_year: 2006
-#   - code: MX.35154
-#   filters:
-#     date_range_ymd:
-#     - "1979-01-01"
-#     - ""
-#   collection:
-#   - HR.157
-#   - HR.61
-#   counts:
-#     abundance: pair_abundance
-#     selection:
-#     - document_id
-#     - pair_abundance
-#   combine: geometric_mean
-#   model:
-#     trim:
-#       base_year: 2006
-#       survey_process:
-#       - pick_first_survey_in_year
-#       - require_gt_two_years
-#       count_process:
-#       - zero_fill
-#       - sum_by_event
-#       - set_start_year
-#       - remove_all_zero_locations
+fb:
+  taxa:
+  - code: MX.27328
+    start_year: 2006
+  - code: MX.27527
+  - code: MX.27613
+  - code: MX.32065
+  - code: MX.32132
+  - code: MX.32163
+  - code: MX.32213
+  - code: MX.32949
+  - code: MX.33117
+  - code: MX.33936
+  - code: MX.37142
+  - code: MX.36817
+  - code: MX.36589
+    start_year: 2006
+  - code: MX.35154
+  filters:
+    date_range_ymd:
+    - "1979-01-01"
+    - ""
+  location_tag: farmland
+  collection:
+  - HR.157
+  - HR.61
+  counts:
+    abundance: pair_abundance
+    selection:
+    - document_id
+    - pair_abundance
+  combine: geometric_mean
+  model:
+    trim:
+      base_year: 2006
+      survey_process:
+      - pick_first_survey_in_year
+      - require_gt_two_years
+      count_process:
+      - zero_fill
+      - sum_by_event
+      - set_start_year
+      - remove_all_zero_locations
 
 wb:
   taxa:
