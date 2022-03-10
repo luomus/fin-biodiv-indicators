@@ -35,7 +35,9 @@ do_update <- function(index, type = c("input", "output")) {
 
 message(sprintf("INFO [%s] Update starting...", Sys.time()))
 
-file.copy("var/config.yml", "config.yml", TRUE)
+config_copy <- file.copy("var/config.yml", "config.yml", TRUE)
+
+stopifnot("Copying config.yml failed" = config_copy)
 
 indices <- vapply(config::get("indices"), getElement, "", "code")
 
