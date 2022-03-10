@@ -27,7 +27,7 @@ RUN  install2.r -e \
        tidyr
 
 RUN  R -e "remotes::install_github('tidyverse/dbplyr')" \
-  && R -e "remotes::install_github('luomus/finbif@6b460cb2')" \
+  && R -e "remotes::install_github('luomus/finbif@46e115d3')" \
   && R -e "remotes::install_github('MarcoEnea/speedglm')" \
   && R -e "remotes::install_github('RetoSchmucki/rbms')"
 
