@@ -4,7 +4,15 @@
 
 get_from_db <- function(db, tbl, index, taxa, select) {
 
-  if (missing(select)) select <- config::get(tbl, config = index)[["selection"]]
+  if (missing(select)) {
+
+    select <- config::get(tbl, config = index)[["selection"]]
+
+    abundance <- config::get(tbl, config = index)[["abundance"]]
+
+    select[select == abundance] <- "abundance"
+
+  }
 
   if (!missing(taxa)) index <- paste(index, taxa, sep = "_")
 
