@@ -24,8 +24,6 @@ if (!file.exists("/home/user/var/pass.csv")) {
 
 users <- read.csv("/home/user/var/pass.csv")
 
-txt <- readLines("/home/user/var/config.yml")
-
 ui <- shinyUI(
   fluidPage(
     theme = bs_theme(version = 4, bootswatch = "darkly"),
@@ -49,6 +47,8 @@ server <- function(input, output, session) {
   logout_init <- logoutServer(
     id = "logout", active = reactive(credentials()[["user_auth"]])
   )
+
+  txt <- readLines("/home/user/var/config.yml")
 
   output[["ui"]] <- renderUI({
 
