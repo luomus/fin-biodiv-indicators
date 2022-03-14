@@ -48,8 +48,6 @@ server <- function(input, output, session) {
     id = "logout", active = reactive(credentials()[["user_auth"]])
   )
 
-  txt <- readLines("/home/user/var/config.yml")
-
   output[["ui"]] <- renderUI({
 
     req(credentials()[["user_auth"]])
@@ -58,7 +56,9 @@ server <- function(input, output, session) {
       column(
         6,
         h2("config.yml"),
-        aceEditor("yml", txt, "yaml", "twilight"),
+        aceEditor(
+          "yml", readLines("/home/user/var/config.yml"), "yaml", "twilight"
+        ),
         actionButton("save", "Save")
       ),
       column(
