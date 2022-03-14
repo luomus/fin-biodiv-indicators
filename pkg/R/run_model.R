@@ -28,7 +28,11 @@ run_trim <- function(index, taxon, counts) {
   )
 
   args[["object"]] <- dplyr::collect(counts)
+
+  args[["object"]][["abundance"]] <- as.integer(args[["object"]][["abundance"]])
+
   args[["count_col"]] <- "abundance"
+
   args[["site_col"]] <- "location_id"
 
   if (is.null(args[["changepoints"]])) {
