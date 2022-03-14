@@ -1,7 +1,11 @@
 default:
   indices:
-  - code: fb
+  - code: flb
     name: Farmland birds
+  - code: mrb
+    name: Mire birds
+  - code: mtb
+    name: Mountain birds
   - code: wb
     name: Winter birds
   - code: wbcti
@@ -24,24 +28,38 @@ default:
     has_value:
     - document_id
 
-fb:
+flb:
   taxa:
   - code: MX.27328
+    binomial: Crex crex
     start_year: 2006
   - code: MX.27527
+    binomial: Vanellus vanellus
   - code: MX.27613
+    binomial: Numenius arquata
   - code: MX.32065
+    binomial: Alauda arvensis
   - code: MX.32132
+    binomial: Hirundo rustica
   - code: MX.32163
+    binomial: Delichon urbicum
   - code: MX.32213
+    binomial: Anthus pratensis
   - code: MX.32949
+    binomial: Saxicola rubetra
   - code: MX.33117
+    binomial: Turdus pilaris
   - code: MX.33936
+    binomial: Sylvia communis
   - code: MX.37142
+    binomial: Corvus monedula
   - code: MX.36817
+    binomial: Sturnus vulgaris
   - code: MX.36589
+    binomial: Passer montanus
     start_year: 2006
   - code: MX.35154
+    binomial: Emberiza hortulana
   filters:
     date_range_ymd:
     - "1979-01-01"
@@ -59,6 +77,118 @@ fb:
   model:
     trim:
       base_year: 2006
+      survey_process:
+      - pick_first_survey_in_year
+      - require_gt_two_years
+      count_process:
+      - zero_fill
+      - sum_by_event
+      - set_start_year
+      - remove_all_zero_locations
+
+mrb:
+  taxa:
+  - code: MX.32213
+    binomial: Anthus pratensis
+  - code: MX.27704
+    binomial: Calidris falcinellus
+    start_year: 2006
+  - code: MX.27710
+    binomial: Calidris pugnax
+  - code: MX.27674
+    binomial: Lymnocryptes minimus
+  - code: MX.27610
+    binomial: Numenius phaeopus
+  - code: MX.27553
+    binomial: Pluvialis apricaria
+  - code: MX.27628
+    binomial: Tringa glareola
+  - code: MX.35165
+    binomial: Emberiza pusilla
+  - code: MX.35167
+    binomial: Emberiza rustica
+  - code: MX.27666
+    binomial: Gallinago gallinago
+  - code: MX.27214
+    binomial: Grus grus
+  - code: MX.32180
+    binomial: Motacilla flava
+  - code: MX.27619
+    binomial: Tringa erythropus
+    start_year: 2006
+  - code: MX.27622
+    binomial: Tringa nebularia
+  - code: MX.35182
+    binomial: Emberiza schoeniclus
+  filters:
+    date_range_ymd:
+    - "1981-01-01"
+    - ""
+  location_tag: mire
+  collection:
+  - HR.157
+  - HR.61
+  counts:
+    abundance: pair_abundance
+    selection:
+    - document_id
+    - pair_abundance
+  combine: geometric_mean
+  model:
+    trim:
+      base_year: 2006
+      survey_process:
+      - pick_first_survey_in_year
+      - require_gt_two_years
+      count_process:
+      - zero_fill
+      - sum_by_event
+      - set_start_year
+      - remove_all_zero_locations
+
+mtb:
+  taxa:
+  - code: MX.26921
+    binomial: Lagopus lagopus
+  - code: MX.27553
+    binomial: Pluvialis apricaria
+  - code: MX.28715
+    binomial: Cuculus canorus
+  - code: MX.32213
+    binomial: Anthus pratensis
+  - code: MX.32821
+    binomial: Luscinia svecica
+  - code: MX.32895
+    binomial: Phoenicurus phoenicurus
+  - code: MX.32966
+    binomial: Oenanthe oenanthe
+  - code: MX.33118
+    binomial: Turdus iliacus
+  - code: MX.33873
+    binomial: Phylloscopus trochilus
+  - code: MX.36239
+    binomial: Fringilla montifringilla
+  - code: MX.36308
+    binomial: Carduelis flammea
+  - code: MX.35185
+    binomial: Calcarius lapponicus
+  filters:
+    date_range_ymd:
+    - "1996-01-01"
+    - ""
+  location_tag: mountain
+  collection:
+  - HR.157
+  - HR.61
+  counts:
+    abundance: pair_abundance
+    selection:
+    - document_id
+    - pair_abundance
+  combine: geometric_mean
+  model:
+    trim:
+      base_year: 1996
       survey_process:
       - pick_first_survey_in_year
       - require_gt_two_years
