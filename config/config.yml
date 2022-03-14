@@ -272,7 +272,7 @@ wb:
     - abundance
     has_value:
     - document_id
-    - abundance
+    - abundance_interpreted
   combine: geometric_mean
   model:
     trim:
@@ -464,7 +464,7 @@ bf:
     has_value:
     - section
     - document_id
-    - abundance
+    - abundance_interpreted
   combine: geometric_mean
   model:
     rbms:
