@@ -23,10 +23,11 @@ default:
     - day
     has_value:
     - document_id
+    - location_id
+    - year
+    - month
   counts:
     abundance: abundance
-    has_value:
-    - document_id
 
 flb:
   taxa:
@@ -64,23 +65,26 @@ flb:
     date_range_ymd:
     - "1979-01-01"
     - ""
-  location_tag: farmland
-  collection:
-  - HR.157
-  - HR.61
+    location_tag: farmland
+    collection:
+    - HR.157
+    - HR.61
   counts:
     abundance: pair_abundance
     selection:
+    - document_id
+    - pair_abundance
+    has_value:
     - document_id
     - pair_abundance
   combine: geometric_mean
   model:
     trim:
       base_year: 2006
-      survey_process:
+      surveys_process:
       - pick_first_survey_in_year
-      - require_gt_two_years
-      count_process:
+      - require_two_years
+      counts_process:
       - zero_fill
       - sum_by_event
       - set_start_year
@@ -124,23 +128,26 @@ mrb:
     date_range_ymd:
     - "1981-01-01"
     - ""
-  location_tag: mire
-  collection:
-  - HR.157
-  - HR.61
+    location_tag: mire
+    collection:
+    - HR.157
+    - HR.61
   counts:
     abundance: pair_abundance
     selection:
+    - document_id
+    - pair_abundance
+    has_value:
     - document_id
     - pair_abundance
   combine: geometric_mean
   model:
     trim:
       base_year: 2006
-      survey_process:
+      surveys_process:
       - pick_first_survey_in_year
-      - require_gt_two_years
-      count_process:
+      - require_two_years
+      counts_process:
       - zero_fill
       - sum_by_event
       - set_start_year
@@ -176,23 +183,26 @@ mtb:
     date_range_ymd:
     - "1996-01-01"
     - ""
-  location_tag: mountain
-  collection:
-  - HR.157
-  - HR.61
+    location_tag: mountain
+    collection:
+    - HR.157
+    - HR.61
   counts:
     abundance: pair_abundance
     selection:
+    - document_id
+    - pair_abundance
+    has_value:
     - document_id
     - pair_abundance
   combine: geometric_mean
   model:
     trim:
       base_year: 1996
-      survey_process:
+      surveys_process:
       - pick_first_survey_in_year
-      - require_gt_two_years
-      count_process:
+      - require_two_years
+      counts_process:
       - zero_fill
       - sum_by_event
       - set_start_year
@@ -258,6 +268,9 @@ wb:
     collection: HR.39
   counts:
     selection:
+    - document_id
+    - abundance
+    has_value:
     - document_id
     - abundance
   combine: geometric_mean
@@ -451,6 +464,7 @@ bf:
     has_value:
     - section
     - document_id
+    - abundance
   combine: geometric_mean
   model:
     rbms:
