@@ -139,7 +139,8 @@ for (index in indices) {
 
         last_mod_index <- dplyr::pull(last_mod_index, .data[["time"]])
 
-        needs_update <- !isFALSE(last_mod_src > last_mod_index)
+        needs_update <-
+          !isFALSE(last_mod_src > last_mod_index) || do_update(index, "output")
 
       }
 
