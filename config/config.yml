@@ -109,6 +109,7 @@ mrb:
     binomial: Tringa glareola
   - code: MX.35165
     binomial: Emberiza pusilla
+    start_year: 2006
   - code: MX.35167
     binomial: Emberiza rustica
   - code: MX.27666
