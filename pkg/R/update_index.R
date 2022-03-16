@@ -159,7 +159,7 @@ geometric_mean <- function(index, model, taxa, db) {
   )
 
   df <- dplyr::mutate(
-    df, se_imp = ifelse(.data[["mean"]] > minindex, .data[["sd"]], 0)
+    df, sd = ifelse(.data[["mean"]] > minindex, .data[["sd"]], 0)
   )
 
   seq_n <- dplyr::tbl(
