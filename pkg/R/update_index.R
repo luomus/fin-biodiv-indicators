@@ -191,22 +191,44 @@ geometric_mean <- function(index, model, taxa, db) {
 
   df <- window_arrange(df, .data[["time"]])
 
-  df <- dplyr::mutate(df, mcf = dplyr::lead(.data[["mc"]]) - .data[["mc"]])
+  df <- dplyr::mutate(
+    df,
+    mcf = dplyr::lead(.data[["mc"]], 1L, NA_real_) - .data[["mc"]]
+  )
 
   df <- window_arrange(df, -.data[["time"]])
 
-  df <- dplyr::mutate(df, mcb = dplyr::lead(.data[["mc"]]) - .data[["mc"]])
-
   df <- dplyr::mutate(
     df,
-    mcf = pmin(.data[["mcf"]], log(trunc), na.rm = TRUE),
-    mcb = pmin(.data[["mcb"]], log(trunc), na.rm = TRUE)
+    mcb = dplyr::lead(.data[["mc"]], 1L, NA_real_) - .data[["mc"]]
   )
 
   df <- dplyr::mutate(
     df,
-    mcf = pmax(.data[["mcf"]], log(1 / trunc), na.rm = TRUE),
-    mcb = pmax(.data[["mcb"]], log(1 / trunc), na.rm = TRUE)
+    mcf = ifelse(
+      is.na(.data[["mcf"]]),
+      NA_real_,
+      pmin(.data[["mcf"]], log(trunc), na.rm = TRUE)
+    ),
+    mcb = ifelse(
+      is.na(.data[["mcb"]]),
+      NA_real_,
+      pmin(.data[["mcb"]], log(trunc), na.rm = TRUE)
+    )
+  )
+
+  df <- dplyr::mutate(
+    df,
+    mcf = ifelse(
+      is.na(.data[["mcf"]]),
+      NA_real_,
+      pmax(.data[["mcf"]], log(1 / trunc), na.rm = TRUE)
+    ),
+    mcb = ifelse(
+      is.na(.data[["mcb"]]),
+      NA_real_,
+      pmax(.data[["mcb"]], log(1 / trunc), na.rm = TRUE)
+    )
   )
 
   df <- dplyr::group_by(df, .data[["j"]], .data[["time"]])
