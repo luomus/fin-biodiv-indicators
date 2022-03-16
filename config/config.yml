@@ -455,6 +455,126 @@ bf:
   - code: MX.60911
     binomial: Vanessa cardui
     sti: 9.04
+  - code: MX.60761
+    binomial: Leptidea juvernica
+    sti: ~
+  - code: MX.60882
+    binomial: Issoria lathonia
+    sti: 9.33
+  - code: MX.60725
+    binomial: Parnassius mnemosyne
+    sti: 8.79
+  - code: MX.60934
+    binomial: Euphydryas aurinia
+    sti: 9.53
+  - code: MX.60904
+    binomial: Boloria aquilonaris
+    sti: 4.17
+  - code: MX.60781
+    binomial: Pontia edusa
+    sti: 10.43
+  - code: MX.60838
+    binomial: Glaucopsyche alexis
+    sti: 9.59
+  - code: MX.60887
+    binomial: Boloria eunomia
+    sti: 3.45
+  - code: MX.60879
+    binomial: Fabriciana niobe
+    sti: 8.50
+  - code: MX.60744
+    binomial: Carterocephalus palaemon
+    sti: 6.90
+  - code: MX.60803
+    binomial: Favonius quercus
+    sti: 9.49
+  - code: MX.60919
+    binomial: Nymphalis xanthomelas
+    sti: 8.58
+  - code: MX.60736
+    binomial: Pyrgus alveus
+    sti: 7.98
+  - code: MX.60938
+    binomial: Melitaea diamina
+    sti: 8.03
+  - code: MX.60948
+    binomial: Apatura iris
+    sti: 8.51
+  - code: MX.60949
+    binomial: Apatura ilia
+    sti: 9.03
+  - code: MX.60982
+    binomial: Erebia embla
+    sti: 1.77
+  - code: MX.60817
+    binomial: Lycaena helle
+    sti: 4.89
+  - code: MX.60818
+    binomial: Lycaena dispar
+    sti: 9.34
+  - code: MX.60827
+    binomial: Cupido argiades
+    sti: 9.42
+  - code: MX.60898
+    binomial: Boloria frigga
+    sti: 1.57
+  - code: MX.60808
+    binomial: Satyrium w-album
+    sti: 8.87
+  - code: MX.60963
+    binomial: Coenonympha tullia
+    sti: 6.36
+  - code: MX.60880
+    binomial: Argynnis laodice
+    sti: 7.06
+  - code: MX.60785
+    binomial: Colias hyale
+    sti: 8.37
+  - code: MX.60891
+    binomial: Boloria titania
+    sti: 6.75
+  - code: MX.60997
+    binomial: Oeneis jutta
+    sti: 2.85
+  - code: MX.60862
+    binomial: Aricia nicias
+    sti: 4.14
+  - code: MX.60974
+    binomial: Maniola jurtina
+    sti: 9.85
+  - code: MX.60960
+    binomial: Lopinga achine
+    sti: 8.20
+  - code: MX.60895
+    binomial: Boloria thore
+    sti: 2.45
+  - code: MX.60993
+    binomial: HIpparchia semele
+    sti: 9.18
+  - code: MX.60836
+    binomial: Scolitantides orion
+    sti: 8.98
+  - code: MX.60739
+    binomial: Pyrgus centaureae
+    sti: 9.68
+  - code: MX.60918
+    binomial: Nymphalis polychloros
+    sti: 9.68
+  - code: MX.60724
+    binomial: Parnassius apollo
+    sti: 8.14
+  - code: MX.60945
+    binomial: Limenitis camilla
+    sti: 8.85
+  - code: MX.60893
+    binomial: Boloria freija
+    sti: 1.33
+  - code: MX.60792
+    binomial: Colias crocea
+    sti: 10.69
+  - code: MX.60976
+    binomial: Hyponephele lycaon
+    sti: 9.14
   filters:
     collection: HR.3431
   counts:
