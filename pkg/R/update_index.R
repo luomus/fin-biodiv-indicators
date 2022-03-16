@@ -50,7 +50,15 @@ cti <- function(index, cti, model, taxa, db) {
 
   }
 
-  codes <- vapply(config::get("taxa", config = index), getElement, "", "code")
+  codes <- vapply(
+    config::get("taxa", config = index), getElement, "", "code"
+  )
+
+  extra_codes <- vapply(
+    config::get("extra_taxa", config = index), getElement, "", "code"
+  )
+
+  codes <- c(codes, extra_codes)
 
   select <- config::get("counts", config = index)[["selection"]]
 
@@ -65,6 +73,12 @@ cti <- function(index, cti, model, taxa, db) {
   }
 
   sti <- vapply(config::get("taxa", config = index), getElement, 0, "sti")
+
+  extra_sti <- vapply(
+    config::get("extra_taxa", config = index), getElement, 0, "sti"
+  )
+
+  sti <- c(sti, extra_sti)
 
   sti <- data.frame(index = paste(index, codes, sep = "_"), sti = sti)
 
