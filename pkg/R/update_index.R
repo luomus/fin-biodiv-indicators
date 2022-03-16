@@ -72,13 +72,17 @@ cti <- function(index, cti, model, taxa, db) {
 
   }
 
-  sti <- vapply(config::get("taxa", config = index), getElement, 0, "sti")
+  sti <- lapply(config::get("taxa", config = index), getElement, "sti")
 
-  extra_sti <- vapply(
-    config::get("extra_taxa", config = index), getElement, 0, "sti"
+  sti[vapply(sti, is.null, NA)] <- NA_real_
+
+  extra_sti <- lapply(
+    config::get("extra_taxa", config = index), getElement, "sti"
   )
 
-  sti <- c(sti, extra_sti)
+  extra_sti[vapply(extra_sti, is.null, NA)] <- NA_real_
+
+  sti <- unlist(c(sti, extra_sti))
 
   sti <- data.frame(index = paste(index, codes, sep = "_"), sti = sti)
 
