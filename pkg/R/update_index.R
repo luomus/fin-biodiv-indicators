@@ -118,7 +118,7 @@ cti <- function(index, cti, model, db) {
     upper = df[[1L]] + df[[2L]]
   )
 
-  attr(df, "count_summary") <- list(taxa = length(which(!is.na(sti))))
+  attr(df, "count_summary") <- list(taxa = length(which(!is.na(sti[["sti"]]))))
 
   df
 
