@@ -26,6 +26,8 @@ expect_null(update_index("bf", "trim", con))
 
 expect_null(update_index("bfcti", "lmer", con))
 
+expect_null( update_index("bfoa", "glmer", con))
+
 pool::dbWriteTable(con, "redundant", data.frame(index = character()))
 
 expect_true(check_input("bf", "rbms", "MX.60914"))
