@@ -14,6 +14,8 @@ default:
     name: Farmland butterflies
   - code: bfcti
     name: Farmland butterflies community temperature index
+  - code: bfoa
+    name: Butterfly overall abundance
   surveys:
     selection:
     - document_id
@@ -550,7 +552,7 @@ bf:
     binomial: Boloria thore
     sti: 2.45
   - code: MX.60993
-    binomial: HIpparchia semele
+    binomial: Hipparchia semele
     sti: 9.18
   - code: MX.60836
     binomial: Scolitantides orion
