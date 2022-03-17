@@ -28,7 +28,11 @@ run_trim <- function(index, taxon, counts) {
   )
 
   args[["object"]] <- dplyr::collect(counts)
+
+  args[["object"]][["abundance"]] <- as.integer(args[["object"]][["abundance"]])
+
   args[["count_col"]] <- "abundance"
+
   args[["site_col"]] <- "location_id"
 
   if (is.null(args[["changepoints"]])) {
@@ -110,14 +114,6 @@ rbms <- function(
   MinFC = 0.10,
   boot_n = 200
 ) {
-
-  surveys <- dplyr::filter(
-    surveys,
-    !is.na(.data[["location_id"]]) &
-    !is.na(.data[["year"]]) &
-    !is.na(.data[["month"]]) &
-    !is.na(.data[["day"]])
-  )
 
   surveys <- dplyr::select(
     surveys, site_id = .data[["location_id"]], .data[["year"]], .data[["date"]]

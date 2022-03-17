@@ -1,4 +1,4 @@
-pkgs <- c("dplyr", "fbi", "pool", "RPostgres")
+pkgs <- c("stats", "dplyr", "fbi", "pool", "RPostgres")
 
 for (pkg in pkgs) {
 
@@ -35,7 +35,9 @@ do_update <- function(index, type = c("input", "output")) {
 
 message(sprintf("INFO [%s] Update starting...", Sys.time()))
 
-file.copy("var/config.yml", "config.yml", TRUE)
+config_copy <- file.copy("var/config.yml", "config.yml", TRUE)
+
+stopifnot("Copying config.yml failed" = config_copy)
 
 indices <- vapply(config::get("indices"), getElement, "", "code")
 
@@ -137,7 +139,8 @@ for (index in indices) {
 
         last_mod_index <- dplyr::pull(last_mod_index, .data[["time"]])
 
-        needs_update <- !isFALSE(last_mod_src > last_mod_index)
+        needs_update <-
+          !isFALSE(last_mod_src > last_mod_index) || do_update(index, "output")
 
       }
 

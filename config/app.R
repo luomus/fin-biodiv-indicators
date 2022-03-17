@@ -24,8 +24,6 @@ if (!file.exists("/home/user/var/pass.csv")) {
 
 users <- read.csv("/home/user/var/pass.csv")
 
-txt <- readLines("/home/user/var/config.yml")
-
 ui <- shinyUI(
   fluidPage(
     theme = bs_theme(version = 4, bootswatch = "darkly"),
@@ -58,7 +56,9 @@ server <- function(input, output, session) {
       column(
         6,
         h2("config.yml"),
-        aceEditor("yml", txt, "yaml", "twilight"),
+        aceEditor(
+          "yml", readLines("/home/user/var/config.yml"), "yaml", "twilight"
+        ),
         actionButton("save", "Save")
       ),
       column(

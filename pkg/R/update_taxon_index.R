@@ -33,16 +33,35 @@ update_taxon_index <- function(index, model, taxon, db) {
 
   }
 
-  model_data <- run_model(index, taxon, surveys, counts, model)
+  model_data <- tryCatch(
+    run_model(index, taxon, surveys, counts, model),
+    error = err_msg
+  )
 
-  index_taxon <- paste(index, model, taxon[["code"]], sep = "_")
+  cond <- !inherits(model_data, "error")
+  cond <- cond && length(which(is.finite(model_data[["time"]]))) > 0L
 
-  cache_outputs(index_taxon, model_data, db)
+  if (cond) {
 
-  model_data[["index"]] <- index_taxon
+    index_taxon <- paste(index, model, taxon[["code"]], sep = "_")
 
-  set_cache(index_taxon, "model_output", model_data, db)
+    cache_outputs(index_taxon, model_data, db)
+
+    model_data[["index"]] <- index_taxon
+
+    set_cache(index_taxon, "model_output", model_data, db)
+
+  }
 
   invisible(NULL)
 
 }
+
+err_msg <- function(x) {
+
+  message(sprintf("ERROR [%s] %s", Sys.time(), x[["message"]]))
+
+  x
+
+}
+

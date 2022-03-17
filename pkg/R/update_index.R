@@ -11,17 +11,14 @@
 
 update_index <- function(index, model, db) {
 
-  taxa <- config::get("taxa", config = index)
-
   from <- config::get("from", config = index)
 
   df <- switch(
     config::get("combine", config = index),
-    cti = cti(from, index, model, taxa, db),
-    geometric_mean = geometric_mean(index, model, taxa, db)
+    cti = cti(from, index, model, db),
+    geometric_mean = geometric_mean(index, model, db),
+    overall_abundance = overall_abundance(from, index, model, db)
   )
-
-  attr(df, "count_summary") <- list(taxa = length(taxa))
 
   cache_outputs(paste(index, model, sep = "_"), df, db)
 
@@ -36,7 +33,7 @@ update_index <- function(index, model, db) {
 #' @importFrom pool poolCheckout poolReturn
 #' @importFrom stats coef
 
-cti <- function(index, cti, model, taxa, db) {
+cti <- function(index, cti, model, db) {
 
   con <- pool::poolCheckout(db)
 
@@ -50,7 +47,15 @@ cti <- function(index, cti, model, taxa, db) {
 
   }
 
-  codes <- vapply(config::get("taxa", config = index), getElement, "", "code")
+  taxa <- config::get("taxa", config = index)
+
+  extra_taxa <- config::get("extra_taxa", config = index)
+
+  codes <- vapply(taxa, getElement, "", "code")
+
+  extra_codes <- vapply(extra_taxa, getElement, "", "code")
+
+  codes <- c(codes, extra_codes)
 
   select <- config::get("counts", config = index)[["selection"]]
 
@@ -64,7 +69,15 @@ cti <- function(index, cti, model, taxa, db) {
 
   }
 
-  sti <- vapply(config::get("taxa", config = index), getElement, 0, "sti")
+  sti <- lapply(taxa, getElement, "sti")
+
+  sti[vapply(sti, is.null, NA)] <- NA_real_
+
+  extra_sti <- lapply(extra_taxa, getElement, "sti")
+
+  extra_sti[vapply(extra_sti, is.null, NA)] <- NA_real_
+
+  sti <- unlist(c(sti, extra_sti))
 
   sti <- data.frame(index = paste(index, codes, sep = "_"), sti = sti)
 
@@ -97,13 +110,17 @@ cti <- function(index, cti, model, taxa, db) {
 
   df <- data.frame(stats::coef(mod)[["year"]], arm::se.coef(mod)[["year"]])
 
-  data.frame(
+  df <- data.frame(
     time  = as.integer(rownames(df)),
     mean  = df[[1L]],
     sd    = df[[2L]],
     lower = df[[1L]] - df[[2L]],
     upper = df[[1L]] + df[[2L]]
   )
+
+  attr(df, "count_summary") <- list(taxa = length(which(!is.na(sti))))
+
+  df
 
 }
 
@@ -112,12 +129,14 @@ cti <- function(index, cti, model, taxa, db) {
 #' @importFrom dplyr full_join inner_join lag lead mutate pull right_join
 #' @importFrom dplyr row_number summarise sql tbl ungroup
 
-geometric_mean <- function(index, model, taxa, db) {
+geometric_mean <- function(index, model, db) {
 
   n <- 1000L
   maxcv <- 3
   minindex <- .01
   trunc <- 10
+
+  taxa <- config::get("taxa", config = index)
 
   taxa <- vapply(taxa, getElement, "", "code")
 
@@ -159,7 +178,7 @@ geometric_mean <- function(index, model, taxa, db) {
   )
 
   df <- dplyr::mutate(
-    df, se_imp = ifelse(.data[["mean"]] > minindex, .data[["sd"]], 0)
+    df, sd = ifelse(.data[["mean"]] > minindex, .data[["sd"]], 0)
   )
 
   seq_n <- dplyr::tbl(
@@ -191,22 +210,44 @@ geometric_mean <- function(index, model, taxa, db) {
 
   df <- window_arrange(df, .data[["time"]])
 
-  df <- dplyr::mutate(df, mcf = dplyr::lead(.data[["mc"]]) - .data[["mc"]])
+  df <- dplyr::mutate(
+    df,
+    mcf = dplyr::lead(.data[["mc"]], 1L, NA_real_) - .data[["mc"]]
+  )
 
   df <- window_arrange(df, -.data[["time"]])
 
-  df <- dplyr::mutate(df, mcb = dplyr::lead(.data[["mc"]]) - .data[["mc"]])
-
   df <- dplyr::mutate(
     df,
-    mcf = pmin(.data[["mcf"]], log(trunc), na.rm = TRUE),
-    mcb = pmin(.data[["mcb"]], log(trunc), na.rm = TRUE)
+    mcb = dplyr::lead(.data[["mc"]], 1L, NA_real_) - .data[["mc"]]
   )
 
   df <- dplyr::mutate(
     df,
-    mcf = pmax(.data[["mcf"]], log(1 / trunc), na.rm = TRUE),
-    mcb = pmax(.data[["mcb"]], log(1 / trunc), na.rm = TRUE)
+    mcf = ifelse(
+      is.na(.data[["mcf"]]),
+      NA_real_,
+      pmin(.data[["mcf"]], log(trunc), na.rm = TRUE)
+    ),
+    mcb = ifelse(
+      is.na(.data[["mcb"]]),
+      NA_real_,
+      pmin(.data[["mcb"]], log(trunc), na.rm = TRUE)
+    )
+  )
+
+  df <- dplyr::mutate(
+    df,
+    mcf = ifelse(
+      is.na(.data[["mcf"]]),
+      NA_real_,
+      pmax(.data[["mcf"]], log(1 / trunc), na.rm = TRUE)
+    ),
+    mcb = ifelse(
+      is.na(.data[["mcb"]]),
+      NA_real_,
+      pmax(.data[["mcb"]], log(1 / trunc), na.rm = TRUE)
+    )
   )
 
   df <- dplyr::group_by(df, .data[["j"]], .data[["time"]])
@@ -268,6 +309,87 @@ geometric_mean <- function(index, model, taxa, db) {
     )
   )
 
-  dplyr::collect(df)
+  df <- dplyr::collect(df)
+
+  attr(df, "count_summary") <- list(taxa = length(taxa))
+
+  df
+
+}
+
+#' @importFrom arm se.ranef
+#' @importFrom config get
+#' @importFrom dplyr .data collect group_by summarise
+#' @importFrom stats coef
+
+overall_abundance <- function(index, oa, model, db) {
+
+  surveys <- get_from_db(db, "surveys", index)
+
+  model_spec <- config::get("model", config = oa)[[model]]
+
+  for (i in model_spec[["surveys_process"]]) {
+
+    surveys <- do.call(process_funs()[[i]], list(surveys))
+
+  }
+
+  taxa <- config::get("taxa", config = index)
+
+  extra_taxa <- config::get("extra_taxa", config = index)
+
+  codes <- vapply(taxa, getElement, "", "code")
+
+  extra_codes <- vapply(extra_taxa, getElement, "", "code")
+
+  codes <- c(codes, extra_codes)
+
+  select <- config::get("counts", config = index)[["selection"]]
+
+  counts <- get_from_db(db, "counts", index, codes, c("index", select))
+
+  for (i in model_spec[["counts_process"]]) {
+
+    counts <- do.call(
+      process_funs()[[i]], list(counts = counts, surveys = surveys)
+    )
+
+  }
+
+  data <- dplyr::group_by(counts, .data[["location_id"]], .data[["year"]])
+
+  data <- dplyr::summarise(
+    data,
+    overall_abundance = sum(.data[["abundance"]], na.rm = TRUE),
+    .groups = "drop"
+  )
+
+  message(
+    sprintf(
+      "INFO [%s] Calculating %s combined index",
+      Sys.time(),
+      paste(oa, model, sep = "_")
+    )
+  )
+
+  data <- dplyr::collect(data)
+
+  mod <- lme4::glmer(
+    overall_abundance ~ (1 | location_id) + (1 | year), data, family = "poisson"
+  )
+
+  df <- data.frame(stats::coef(mod)[["year"]], arm::se.coef(mod)[["year"]])
+
+  df <- data.frame(
+    time  = as.integer(rownames(df)),
+    mean  = df[[1L]],
+    sd    = df[[2L]],
+    lower = df[[1L]] - df[[2L]],
+    upper = df[[1L]] + df[[2L]]
+  )
+
+  attr(df, "count_summary") <- list(taxa = length(codes))
+
+  df
 
 }
