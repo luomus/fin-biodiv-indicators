@@ -115,14 +115,6 @@ rbms <- function(
   boot_n = 200
 ) {
 
-  surveys <- dplyr::filter(
-    surveys,
-    !is.na(.data[["location_id"]]) &
-    !is.na(.data[["year"]]) &
-    !is.na(.data[["month"]]) &
-    !is.na(.data[["day"]])
-  )
-
   surveys <- dplyr::select(
     surveys, site_id = .data[["location_id"]], .data[["year"]], .data[["date"]]
   )
