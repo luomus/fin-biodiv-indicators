@@ -622,3 +622,16 @@ bfcti:
       - sum_taxa_over_sections
       - combine_with_surveys
       - sum_taxa_by_event
+
+bfoa:
+  from: bf
+  combine: overall_abundance
+  model:
+    glmer:
+      surveys_process:
+      - require_seven_fortnights
+      - pick_first_survey_in_fortnight
+      counts_process:
+      - sum_taxa_over_sections
+      - combine_with_surveys
+      - sum_taxa_by_event
