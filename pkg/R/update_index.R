@@ -135,6 +135,8 @@ geometric_mean <- function(index, model, db) {
   minindex <- .01
   trunc <- 10
 
+  taxa <- config::get("taxa", config = index)
+
   taxa <- vapply(taxa, getElement, "", "code")
 
   df <- dplyr::tbl(db, "model_output")
