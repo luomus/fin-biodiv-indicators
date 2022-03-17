@@ -38,7 +38,10 @@ update_taxon_index <- function(index, model, taxon, db) {
     error = err_msg
   )
 
-  if (!inherits(model_data, "error")) {
+  cond <- !inherits(model_data, "error")
+  cond <- cond && length(which(is.finite(model_data[["time"]]))) > 0L
+
+  if (cond) {
 
     index_taxon <- paste(index, model, taxon[["code"]], sep = "_")
 
