@@ -11,16 +11,12 @@
 
 update_index <- function(index, model, db) {
 
-  taxa <- config::get("taxa", config = index)
-
-  extra_taxa <- config::get("extra_taxa", config = index)
-
   from <- config::get("from", config = index)
 
   df <- switch(
     config::get("combine", config = index),
-    cti = cti(from, index, model, taxa, extra_taxa, db),
-    geometric_mean = geometric_mean(index, model, taxa, db)
+    cti = cti(from, index, model, db),
+    geometric_mean = geometric_mean(index, model, db)
   )
 
   cache_outputs(paste(index, model, sep = "_"), df, db)
@@ -36,7 +32,7 @@ update_index <- function(index, model, db) {
 #' @importFrom pool poolCheckout poolReturn
 #' @importFrom stats coef
 
-cti <- function(index, cti, model, taxa, extra_taxa, db) {
+cti <- function(index, cti, model, db) {
 
   con <- pool::poolCheckout(db)
 
@@ -49,6 +45,10 @@ cti <- function(index, cti, model, taxa, extra_taxa, db) {
     surveys <- do.call(process_funs()[[i]], list(surveys))
 
   }
+
+  taxa <- config::get("taxa", config = index)
+
+  extra_taxa <- config::get("extra_taxa", config = index)
 
   codes <- vapply(taxa, getElement, "", "code")
 
@@ -128,7 +128,7 @@ cti <- function(index, cti, model, taxa, extra_taxa, db) {
 #' @importFrom dplyr full_join inner_join lag lead mutate pull right_join
 #' @importFrom dplyr row_number summarise sql tbl ungroup
 
-geometric_mean <- function(index, model, taxa, db) {
+geometric_mean <- function(index, model, db) {
 
   n <- 1000L
   maxcv <- 3
