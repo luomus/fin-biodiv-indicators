@@ -1,4 +1,4 @@
-pkgs <- c("dplyr", "fbi", "pool", "RPostgres")
+pkgs <- c("stats", "dplyr", "fbi", "pool", "RPostgres")
 
 for (pkg in pkgs) {
 
