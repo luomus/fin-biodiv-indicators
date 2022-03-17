@@ -13,15 +13,15 @@ update_index <- function(index, model, db) {
 
   taxa <- config::get("taxa", config = index)
 
+  extra_taxa <- config::get("extra_taxa", config = index)
+
   from <- config::get("from", config = index)
 
   df <- switch(
     config::get("combine", config = index),
-    cti = cti(from, index, model, taxa, db),
+    cti = cti(from, index, model, taxa, extra_taxa, db),
     geometric_mean = geometric_mean(index, model, taxa, db)
   )
-
-  attr(df, "count_summary") <- list(taxa = length(taxa))
 
   cache_outputs(paste(index, model, sep = "_"), df, db)
 
@@ -36,7 +36,7 @@ update_index <- function(index, model, db) {
 #' @importFrom pool poolCheckout poolReturn
 #' @importFrom stats coef
 
-cti <- function(index, cti, model, taxa, db) {
+cti <- function(index, cti, model, taxa, extra_taxa, db) {
 
   con <- pool::poolCheckout(db)
 
@@ -50,13 +50,9 @@ cti <- function(index, cti, model, taxa, db) {
 
   }
 
-  codes <- vapply(
-    config::get("taxa", config = index), getElement, "", "code"
-  )
+  codes <- vapply(taxa, getElement, "", "code")
 
-  extra_codes <- vapply(
-    config::get("extra_taxa", config = index), getElement, "", "code"
-  )
+  extra_codes <- vapply(extra_taxa, getElement, "", "code")
 
   codes <- c(codes, extra_codes)
 
@@ -72,13 +68,11 @@ cti <- function(index, cti, model, taxa, db) {
 
   }
 
-  sti <- lapply(config::get("taxa", config = index), getElement, "sti")
+  sti <- lapply(taxa, getElement, "sti")
 
   sti[vapply(sti, is.null, NA)] <- NA_real_
 
-  extra_sti <- lapply(
-    config::get("extra_taxa", config = index), getElement, "sti"
-  )
+  extra_sti <- lapply(extra_taxa, getElement, "sti")
 
   extra_sti[vapply(extra_sti, is.null, NA)] <- NA_real_
 
@@ -115,13 +109,17 @@ cti <- function(index, cti, model, taxa, db) {
 
   df <- data.frame(stats::coef(mod)[["year"]], arm::se.coef(mod)[["year"]])
 
-  data.frame(
+  df <- data.frame(
     time  = as.integer(rownames(df)),
     mean  = df[[1L]],
     sd    = df[[2L]],
     lower = df[[1L]] - df[[2L]],
     upper = df[[1L]] + df[[2L]]
   )
+
+  attr(df, "count_summary") <- list(taxa = length(which(!is.na(sti))))
+
+  df
 
 }
 
@@ -308,6 +306,10 @@ geometric_mean <- function(index, model, taxa, db) {
     )
   )
 
-  dplyr::collect(df)
+  df <- dplyr::collect(df)
+
+  attr(df, "count_summary") <- list(taxa = length(taxa))
+
+  df
 
 }
