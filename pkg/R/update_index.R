@@ -368,7 +368,7 @@ overall_abundance <- function(index, oa, model, db) {
     sprintf(
       "INFO [%s] Calculating %s combined index",
       Sys.time(),
-      paste(cti, model, sep = "_")
+      paste(oa, model, sep = "_")
     )
   )
 
