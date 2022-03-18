@@ -79,11 +79,11 @@ cti <- function(index, cti, model, db) {
 
   sti <- unlist(c(sti, extra_sti))
 
-  sti <- data.frame(index = paste(index, codes, sep = "_"), sti = sti)
+  sti_df <- data.frame(index = paste(index, codes, sep = "_"), sti = sti)
 
-  sti <- dplyr::copy_to(con, sti, overwrite = TRUE)
+  sti_df <- dplyr::copy_to(con, sti_df, overwrite = TRUE)
 
-  data <- dplyr::left_join(counts, sti, by = "index")
+  data <- dplyr::left_join(counts, sti_df, by = "index")
 
   data <- dplyr::group_by(data, .data[["location_id"]], .data[["year"]])
 
@@ -118,7 +118,7 @@ cti <- function(index, cti, model, db) {
     upper = df[[1L]] + df[[2L]]
   )
 
-  attr(df, "count_summary") <- list(taxa = length(which(!is.na(sti[["sti"]]))))
+  attr(df, "count_summary") <- list(taxa = length(which(!is.na(sti))))
 
   df
 
