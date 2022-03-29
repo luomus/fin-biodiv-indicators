@@ -59,7 +59,7 @@ cti <- function(index, cti, model, db) {
 
   select <- config::get("counts", config = index)[["selection"]]
 
-  abundance <- config::get(tbl, config = index)[["abundance"]]
+  abundance <- config::get("counts", config = index)[["abundance"]]
 
   select[select == abundance] <- "abundance"
 
