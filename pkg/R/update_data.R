@@ -19,7 +19,9 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
 
   filter <- config::get("filters", config = index)
 
-  filter[["taxon_id"]] <- taxon[["code"]]
+  filter[["taxon_id"]] <- c(taxon[["code"]], taxon[["extra_codes"]])
+
+  filter[["subtaxa"]] <- taxon[["subtaxa"]]
 
   filter[["has_value"]] <- config::get(type, config = index)[["has_value"]]
 

@@ -237,6 +237,8 @@ ftb:
     binomial: Lophophanes cristatus
     sti: 11.71
   - code: MX.36358
+    extra_codes: MX.36355
+    subtaxa: false
     binomial: Loxia curvirostra
     sti: 10.49
   - code: MX.33989
@@ -940,6 +942,8 @@ wb:
     binomial: Dryocopus martius
     sti: -7.59
   - code: MX.36358
+    extra_codes: MX.36355
+    subtaxa: false
     binomial: Loxia curvirostra
     sti: -7.53
   - code: MX.29011
