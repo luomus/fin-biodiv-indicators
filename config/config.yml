@@ -912,8 +912,8 @@ sbcti:
       surveys_process:
       - pick_first_survey_in_year
       counts_process:
-      - sum_taxa_by_event
       - combine_with_surveys
+      - sum_taxa_by_event
 
 wb:
   taxa:
