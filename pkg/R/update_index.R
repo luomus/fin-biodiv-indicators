@@ -59,6 +59,10 @@ cti <- function(index, cti, model, db) {
 
   select <- config::get("counts", config = index)[["selection"]]
 
+  abundance <- config::get(tbl, config = index)[["abundance"]]
+
+  select[select == abundance] <- "abundance"
+
   counts <- get_from_db(con, "counts", index, codes, c("index", select))
 
   for (i in model_spec[["counts_process"]]) {
