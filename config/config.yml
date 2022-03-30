@@ -901,6 +901,7 @@ ftb:
       counts_process:
       - zero_fill
       - sum_by_event
+      - sum_taxa_by_event
       - set_start_year
       - remove_all_zero_locations
 
@@ -1439,6 +1440,7 @@ wb:
       - pick_first_survey_in_year
       counts_process:
       - zero_fill
+      - sum_taxa_by_event
       - remove_all_zero_locations
 
 wbcti:

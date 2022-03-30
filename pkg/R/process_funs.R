@@ -287,17 +287,20 @@ sum_by_event <- function(counts, ...) {
 #' @inheritParams process_funs
 sum_taxa_by_event <- function(counts, ...) {
 
-  counts <- dplyr::group_by(
-    counts, .data[["location_id"]], .data[["year"]], .data[["index"]]
-  )
+  counts <- dplyr::group_by(counts, .data[["location_id"]], .data[["year"]])
+
+  if ("index" %in% colnames(counts)) {
+
+    counts <- dplyr::group_by(counts, .data[["index"]], .add = TRUE)
+
+  }
 
   dplyr::summarise(
     counts, abundance = sum(.data[["abundance"]], na.rm = TRUE),
-    .groups = "drop"
+    .groups = "keep"
   )
 
 }
-
 
 #' Set start year
 #'
