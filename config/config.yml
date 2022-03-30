@@ -901,7 +901,6 @@ ftb:
       counts_process:
       - zero_fill
       - sum_by_event
-      - sum_taxa_by_event
       - set_start_year
       - remove_all_zero_locations
 
@@ -914,7 +913,7 @@ sbcti:
       - pick_first_survey_in_year
       counts_process:
       - combine_with_surveys
-      - sum_taxa_by_event
+      - sum_by_event
 
 wb:
   taxa:
@@ -1440,7 +1439,7 @@ wb:
       - pick_first_survey_in_year
       counts_process:
       - zero_fill
-      - sum_taxa_by_event
+      - sum_by_event
       - remove_all_zero_locations
 
 wbcti:
@@ -1777,9 +1776,9 @@ bfcti:
       - require_seven_fortnights
       - pick_first_survey_in_fortnight
       counts_process:
-      - sum_taxa_over_sections
+      - sum_over_sections
       - combine_with_surveys
-      - sum_taxa_by_event
+      - sum_by_event
 
 bfoa:
   from: bf
@@ -1790,6 +1789,6 @@ bfoa:
       - require_seven_fortnights
       - pick_first_survey_in_fortnight
       counts_process:
-      - sum_taxa_over_sections
+      - sum_over_sections
       - combine_with_surveys
-      - sum_taxa_by_event
+      - sum_by_event

@@ -24,9 +24,7 @@ process_funs <- function() {
     zero_fill                      = zero_fill,
     remove_all_zero_locations      = remove_all_zero_locations,
     sum_over_sections              = sum_over_sections,
-    sum_taxa_over_sections         = sum_taxa_over_sections,
     sum_by_event                   = sum_by_event,
-    sum_taxa_by_event              = sum_taxa_by_event,
     set_start_year                 = set_start_year
   )
 
@@ -230,13 +228,19 @@ remove_all_zero_locations <- function(counts, ...) {
 
 #' Sum over sections
 #'
-#' Sum the counts of a single taxa over the sections of surveys
+#' Sum counts over the sections of surveys
 #'
 #' @export
 #' @inheritParams process_funs
 sum_over_sections <- function(counts, ...) {
 
   counts <- dplyr::group_by(counts, .data[["document_id"]])
+
+  if ("index" %in% colnames(counts)) {
+
+    counts <- dplyr::group_by(counts, .data[["index"]], .add = TRUE)
+
+  }
 
   counts <- dplyr::summarise(
     counts, abundance = sum(.data[["abundance"]], na.rm = TRUE),
@@ -245,47 +249,13 @@ sum_over_sections <- function(counts, ...) {
 
 }
 
-#' Sum taxa over sections
-#'
-#' Sum the counts of multiple taxa over the sections of surveys
-#'
-#' @export
-#' @inheritParams process_funs
-sum_taxa_over_sections <- function(counts, ...) {
-
-  counts <- dplyr::group_by(counts, .data[["document_id"]], .data[["index"]])
-
-  dplyr::summarise(
-    counts, abundance = sum(.data[["abundance"]], na.rm = TRUE),
-    .groups = "drop"
-  )
-
-}
-
 #' Sum by event
 #'
-#' Sum the counts of a single taxa over the surveys in each year
+#' Sum the counts over the surveys or taxa in each year
 #'
 #' @export
 #' @inheritParams process_funs
 sum_by_event <- function(counts, ...) {
-
-  counts <- dplyr::group_by(counts, .data[["location_id"]], .data[["year"]])
-
-  dplyr::summarise(
-    counts, abundance = sum(.data[["abundance"]], na.rm = TRUE),
-    .groups = "drop"
-  )
-
-}
-
-#' Sum taxa by event
-#'
-#' Sum the counts of a multiple taxa over the surveys in each year
-#'
-#' @export
-#' @inheritParams process_funs
-sum_taxa_by_event <- function(counts, ...) {
 
   counts <- dplyr::group_by(counts, .data[["location_id"]], .data[["year"]])
 
@@ -297,7 +267,7 @@ sum_taxa_by_event <- function(counts, ...) {
 
   dplyr::summarise(
     counts, abundance = sum(.data[["abundance"]], na.rm = TRUE),
-    .groups = "keep"
+    .groups = "drop"
   )
 
 }
