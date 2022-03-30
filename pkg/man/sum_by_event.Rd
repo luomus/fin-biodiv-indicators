@@ -12,5 +12,5 @@ sum_by_event(counts, ...)
 \item{...}{Additional arguments.}
 }
 \description{
-Sum the counts of a single taxa over the surveys in each year
+Sum the counts over the surveys or taxa in each year
 }

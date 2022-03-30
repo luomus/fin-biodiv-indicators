@@ -12,5 +12,5 @@ sum_over_sections(counts, ...)
 \item{...}{Additional arguments.}
 }
 \description{
-Sum the counts of a single taxa over the sections of surveys
+Sum counts over the sections of surveys
 }
