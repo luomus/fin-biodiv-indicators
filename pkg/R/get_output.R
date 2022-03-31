@@ -28,6 +28,34 @@ get_output <- function(output, index, model, taxon, db) {
 
   ans <- dplyr::select(ans, .data[["data"]])
 
-  dplyr::pull(ans)[[1L]]
+  ans <- dplyr::pull(ans)
+
+  if (length(ans) < 1L) {
+
+    ans <- dplyr::tbl(db, "model_state")
+
+    ans <- dplyr::filter(ans, .data[["index"]] == !!index)
+
+    ans <- dplyr::select(ans, .data[["state"]], .data[["time"]])
+
+    ans <- dplyr::collect(ans)
+
+    if (nrow(ans) < 1L)  {
+
+      ans <- list(state = "not_run")
+
+    } else {
+
+      ans <- as.list(ans)
+
+    }
+
+  } else {
+
+    ans <- ans[[1L]]
+
+  }
+
+  ans
 
 }
