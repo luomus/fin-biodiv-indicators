@@ -2,8 +2,8 @@
 #'
 #' Check indicator inputs
 #'
-#' @param index Character. Update which index?
-#' @param model Character. Which model to use?
+#' @param index Character. Which index?
+#' @param model Character. Which model?
 #' @param taxon Character. Which taxon?
 #'
 #' @importFrom config get
