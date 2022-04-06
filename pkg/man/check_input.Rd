@@ -7,9 +7,9 @@
 check_input(index, model, taxon)
 }
 \arguments{
-\item{index}{Character. Update which index?}
+\item{index}{Character. Which index?}
 
-\item{model}{Character. Which model to use?}
+\item{model}{Character. Which model?}
 
 \item{taxon}{Character. Which taxon?}
 }

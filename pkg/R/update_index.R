@@ -59,6 +59,10 @@ cti <- function(index, cti, model, db) {
 
   select <- config::get("counts", config = index)[["selection"]]
 
+  abundance <- config::get("counts", config = index)[["abundance"]]
+
+  select[select == abundance] <- "abundance"
+
   counts <- get_from_db(con, "counts", index, codes, c("index", select))
 
   for (i in model_spec[["counts_process"]]) {
@@ -79,11 +83,11 @@ cti <- function(index, cti, model, db) {
 
   sti <- unlist(c(sti, extra_sti))
 
-  sti <- data.frame(index = paste(index, codes, sep = "_"), sti = sti)
+  sti_df <- data.frame(index = paste(index, codes, sep = "_"), sti = sti)
 
-  sti <- dplyr::copy_to(con, sti, overwrite = TRUE)
+  sti_df <- dplyr::copy_to(con, sti_df, overwrite = TRUE)
 
-  data <- dplyr::left_join(counts, sti, by = "index")
+  data <- dplyr::left_join(counts, sti_df, by = "index")
 
   data <- dplyr::group_by(data, .data[["location_id"]], .data[["year"]])
 

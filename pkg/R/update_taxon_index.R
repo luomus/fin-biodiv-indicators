@@ -41,15 +41,27 @@ update_taxon_index <- function(index, model, taxon, db) {
   cond <- !inherits(model_data, "error")
   cond <- cond && length(which(is.finite(model_data[["time"]]))) > 0L
 
-  if (cond) {
+  index_taxon <- paste(index, model, taxon[["code"]], sep = "_")
 
-    index_taxon <- paste(index, model, taxon[["code"]], sep = "_")
+  if (cond) {
 
     cache_outputs(index_taxon, model_data, db)
 
     model_data[["index"]] <- index_taxon
 
+    set_cache(
+      index_taxon, "model_state",
+      data.frame(index = index_taxon, state = "success", time = Sys.time()), db
+    )
+
     set_cache(index_taxon, "model_output", model_data, db)
+
+  } else {
+
+    set_cache(
+      index_taxon, "model_state",
+      data.frame(index = index_taxon, state = "fail", time = Sys.time()), db
+    )
 
   }
 
@@ -64,4 +76,3 @@ err_msg <- function(x) {
   x
 
 }
-

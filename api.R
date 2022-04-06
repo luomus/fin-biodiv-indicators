@@ -81,6 +81,7 @@ function(index) {
 #* @param model:str Which model (trim, rbms, etc.).
 #* @param taxon:str Shortcode for a taxon (see [/taxa](#get-/taxa)).
 #* @response 200 A json object
+#* @response 400 A json object
 #* @response 404 A json object
 #* @serializer unboxedJSON
 function(index, model = "default", taxon = "none", res) {
@@ -94,7 +95,19 @@ function(index, model = "default", taxon = "none", res) {
 
   }
 
-  unserialize(get_output("data", index, model, taxon, pool))
+  ans <- get_output("data", index, model, taxon, pool)
+
+  if (is.raw(ans)) {
+
+    ans <- unserialize(ans)
+
+  } else {
+
+    res[["status"]] <- 400L
+
+  }
+
+  ans
 
 }
 
@@ -105,6 +118,7 @@ function(index, model = "default", taxon = "none", res) {
 #* @param model:str Which model (trim, rbms, etc.).
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
 #* @response 200 A csv file
+#* @response 400 A json object
 #* @response 404 A json object
 #* @serializer csv
 function(index, model = "default", taxon = "none", res) {
@@ -118,7 +132,19 @@ function(index, model = "default", taxon = "none", res) {
 
   }
 
-  unserialize(get_output("data_csv", index, model, taxon, pool))
+  ans <- get_output("data_csv", index, model, taxon, pool)
+
+  if (is.raw(ans)) {
+
+    ans <- unserialize(ans)
+
+  } else {
+
+    res[["status"]] <- 400L
+
+  }
+
+  ans
 
 }
 
@@ -130,6 +156,7 @@ function(index, model = "default", taxon = "none", res) {
 #* @param model:str Which model (trim, rbms, etc.).
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
 #* @response 200 A json object
+#* @response 400 A json object
 #* @response 404 A json object
 #* @serializer unboxedJSON
 function(index, model = "default", taxon = "none", res) {
@@ -143,7 +170,19 @@ function(index, model = "default", taxon = "none", res) {
 
   }
 
-  unserialize(get_output("count_summary", index, model, taxon, pool))
+  ans <- get_output("count_summary", index, model, taxon, pool)
+
+  if (is.raw(ans)) {
+
+    ans <- unserialize(ans)
+
+  } else {
+
+    res[["status"]] <- 400L
+
+  }
+
+  ans
 
 }
 
@@ -154,6 +193,7 @@ function(index, model = "default", taxon = "none", res) {
 #* @param model:str Which model (trim, rbms, etc.).
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
 #* @response 200 A json object
+#* @response 400 A json object
 #* @response 404 A json object
 #* @serializer unboxedJSON
 function(index, model = "default", taxon = "none", res) {
@@ -167,7 +207,19 @@ function(index, model = "default", taxon = "none", res) {
 
   }
 
-  unserialize(get_output("trends", index, model, taxon, pool))
+  ans <- get_output("trends", index, model, taxon, pool)
+
+  if (is.raw(ans)) {
+
+    ans <- unserialize(ans)
+
+  } else {
+
+    res[["status"]] <- 400L
+
+  }
+
+  ans
 
 }
 
@@ -178,6 +230,7 @@ function(index, model = "default", taxon = "none", res) {
 #* @param model:str Which model (trim, rbms, etc.).
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
 #* @response 200 An svg file
+#* @response 400 A json object
 #* @response 404 A json object
 function(index, model = "default", taxon = "none", res) {
 
@@ -191,13 +244,25 @@ function(index, model = "default", taxon = "none", res) {
 
   }
 
-  res[["setHeader"]]("Content-Type", "image/svg+xml")
-  res[["setHeader"]]("Content-Encoding", "gzip")
-  res[["setHeader"]]("Content-Disposition", "inline")
+  ans <- get_output("svg", index, model, taxon, pool)
 
-  res[["body"]] <- get_output("svg", index, model, taxon, pool)
+  if (is.raw(ans)) {
 
-  res
+    res[["setHeader"]]("Content-Type", "image/svg+xml")
+    res[["setHeader"]]("Content-Encoding", "gzip")
+    res[["setHeader"]]("Content-Disposition", "inline")
+
+    res[["body"]] <- ans
+
+    res
+
+  } else {
+
+    res[["serializer"]] <- plumber::serializer_unboxed_json()
+    res[["status"]] <- 400L
+    ans
+
+  }
 
 }
 

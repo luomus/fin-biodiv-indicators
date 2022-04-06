@@ -22,6 +22,8 @@ expect_null(update_taxon_index("bf", "rbms", list(code = "MX.60914"), con))
 
 expect_null(update_taxon_index("bf", "trim", list(code = "MX.60914"), con))
 
+expect_null(update_taxon_index("bf", "trim", list(code = "MX.MISSING"), con))
+
 expect_null(update_index("bf", "trim", con))
 
 expect_null(update_index("bfcti", "lmer", con))
@@ -33,6 +35,8 @@ pool::dbWriteTable(con, "redundant", data.frame(index = character()))
 expect_true(check_input("bf", "rbms", "MX.60914"))
 
 expect_inherits(get_output("data", "bf", "rbms", "MX.60914", con), "raw")
+
+expect_inherits(get_output("data", "bf", "trim", "MX.MISSING", con), "list")
 
 expect_null(clean_cache(con))
 
