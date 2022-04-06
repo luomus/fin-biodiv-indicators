@@ -359,7 +359,7 @@ ftb:
     sti: 3.13
   - code: MX.32221
     binomial: Anthus petrosus
-    sti: .na.real
+    sti: 11.68
   - code: MX.32213
     binomial: Anthus pratensis
     sti: 9.95
@@ -524,7 +524,7 @@ ftb:
     sti: 11.12
   - code: MX.26105
     binomial: Egretta alba
-    sti: 19.03
+    sti: .na.real
   - code: MX.35169
     binomial: Emberiza aureola
     sti: 9.21
@@ -614,7 +614,7 @@ ftb:
     sti: 8.57
   - code: MX.27753
     binomial: Larus fuscus
-    sti: .na.real
+    sti: 8.92
   - code: MX.27759
     binomial: Larus marinus
     sti: 8.37
@@ -1048,7 +1048,7 @@ wb:
     sti: -6.21
   - code: MX.26298
     binomial: Branta canadensis
-    sti: -0.11
+    sti: .na.real
   - code: MX.26299
     binomial: Branta leucopsis
     sti: 2.1
@@ -1063,7 +1063,7 @@ wb:
     sti: -3.26
   - code: MX.26334
     binomial: Cairina moschata
-    sti: 25.1
+    sti: .na.real
   - code: MX.35185
     binomial: Calcarius lapponicus
     sti: -7.76
@@ -1087,7 +1087,7 @@ wb:
     sti: -1.37
   - code: MX.73545
     binomial: Carduelis hornemanni
-    sti: .na.real
+    sti: -7.44
   - code: MX.36287
     binomial: Carduelis spinus
     sti: 0.16
@@ -1294,7 +1294,7 @@ wb:
     sti: -3.96
   - code: MX.35194
     binomial: Passerella iliaca
-    sti: 4.34
+    sti: .na.real
   - code: MX.27048
     binomial: Perdix perdix
     sti: -5.37
