@@ -97,7 +97,7 @@ function(index, model = "default", taxon = "none", res) {
 
   ans <- get_output("data", index, model, taxon, pool)
 
-  if (blob::is_blob(ans)) {
+  if (is.raw(ans)) {
 
     ans <- unserialize(ans)
 
@@ -134,7 +134,7 @@ function(index, model = "default", taxon = "none", res) {
 
   ans <- get_output("data_csv", index, model, taxon, pool)
 
-  if (blob::is_blob(ans)) {
+  if (is.raw(ans)) {
 
     ans <- unserialize(ans)
 
@@ -172,7 +172,7 @@ function(index, model = "default", taxon = "none", res) {
 
   ans <- get_output("count_summary", index, model, taxon, pool)
 
-  if (blob::is_blob(ans)) {
+  if (is.raw(ans)) {
 
     ans <- unserialize(ans)
 
@@ -209,7 +209,7 @@ function(index, model = "default", taxon = "none", res) {
 
   ans <- get_output("trends", index, model, taxon, pool)
 
-  if (blob::is_blob(ans)) {
+  if (is.raw(ans)) {
 
     ans <- unserialize(ans)
 
@@ -246,7 +246,7 @@ function(index, model = "default", taxon = "none", res) {
 
   ans <- get_output("svg", index, model, taxon, pool)
 
-  if (blob::is_blob(ans)) {
+  if (is.raw(ans)) {
 
     res[["setHeader"]]("Content-Type", "image/svg+xml")
     res[["setHeader"]]("Content-Encoding", "gzip")
