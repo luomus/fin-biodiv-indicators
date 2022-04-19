@@ -1,0 +1,13 @@
+---
+title: "Mire Bird Indicator"
+author: "William K. Morris"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Mire Bird Indicator}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+![Biodiversity indicator for mire breeding birds](https://indicators.laji.fi/svg/mrb "Mire Birds")

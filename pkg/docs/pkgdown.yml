@@ -2,8 +2,13 @@ pandoc: 2.17.1.1
 pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
+  alpine-birds: alpine-birds.html
+  butterfly-abundance: butterfly-abundance.html
   community-temperature-indices: community-temperature-indices.html
+  farmland-birds: farmland-birds.html
   farmland-butterflies: farmland-butterflies.html
+  forest-birds: forest-birds.html
+  mire-birds: mire-birds.html
   winter-birds: winter-birds.html
-last_built: 2022-04-06T23:07Z
+last_built: 2022-04-19T05:22Z
 

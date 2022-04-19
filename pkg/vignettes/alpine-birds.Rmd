@@ -1,0 +1,13 @@
+---
+title: "Alpine Bird Indicator"
+author: "William K. Morris"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Alpine Bird Indicator}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+![Biodiversity indicator for alpine breeding birds](https://indicators.laji.fi/svg/mtb "Alpine Birds")
