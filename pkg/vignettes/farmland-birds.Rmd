@@ -1,0 +1,13 @@
+---
+title: "Farmland Bird Indicator"
+author: "William K. Morris"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Farmland Bird Indicator}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+![Biodiversity indicator for farmland breeding birds](https://indicators.laji.fi/svg/flb "Farmland Birds")

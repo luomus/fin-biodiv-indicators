@@ -24,8 +24,18 @@ navbar:
       menu:
       - text: Winter Birds
         href: articles/winter-birds.html
+      - text: Alpine Birds
+        href: articles/alpine-birds.html
+      - text: Farmland Birds
+        href: articles/farmland-birds.html
+      - text: Forest Birds
+        href: articles/forest-birds.html
+      - text: Mire Birds
+        href: articles/mire-birds.html
       - text: Farmland Butterflies
         href: articles/farmland-butterflies.html
+      - text: Butterfly Overall Abundance
+        href: articles/butterfly-abundance.html
       - text: Community Temperature Indices
         href: articles/community-temperature-indices.html
     reference:

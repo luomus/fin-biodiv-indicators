@@ -1,0 +1,13 @@
+---
+title: "Forest Bird Indicator"
+author: "William K. Morris"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Forest Bird Indicator}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+![Biodiversity indicator for forest breeding birds](https://indicators.laji.fi/svg/ftb "Forest Birds")

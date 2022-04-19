@@ -1,0 +1,13 @@
+---
+title: "Butterfly Abundance Indicator"
+author: "William K. Morris"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Butterfly Abundance Indicator}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+![Biodiversity indicator for butterfly abundance](https://indicators.laji.fi/svg/bfoa "Butterfly Abundance")

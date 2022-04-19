@@ -12,4 +12,6 @@ vignette: >
 
 ![Community temperature indicator for winter birds](https://indicators.laji.fi/svg/wbcti "Winter Bird Community Temperature Index")
 
+![Community temperature indicator for summer birds](https://indicators.laji.fi/svg/sbcti "Summer Bird Community Temperature Index")
+
 ![Community temperature indicator for farmland butterflies](https://indicators.laji.fi/svg/bfcti "Farmland Butterfly Community Temperature Index")
