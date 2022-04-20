@@ -6,9 +6,21 @@ set_cache <- function(index, table, df, db) {
 
   df <- as.data.frame(df)
 
+  nms <- names(df)
+
+  rmax <- 1e5L
+
+  idx <- seq_len(nrow(df))
+
+  df <- lapply(split(idx, ceiling(idx / rmax)), slice_rows, df)
+
   if (!pool::dbExistsTable(db, table)) {
 
-    pool::dbWriteTable(db, table, df)
+    for (dfi in df) {
+
+      pool::dbWriteTable(db, table, dfi)
+
+    }
 
   } else {
 
@@ -18,10 +30,10 @@ set_cache <- function(index, table, df, db) {
 
     db_cols <- pool::dbListFields(db, table)
 
-    for (i in setdiff(names(df), db_cols)) {
+    for (i in setdiff(nms, db_cols)) {
 
       dt <- switch(
-        class(df[[i]]), integer = "int", numeric = "real", "varchar"
+        class(df[[1L]][[i]]), integer = "int", numeric = "real", "varchar"
       )
 
       pool::dbExecute(
@@ -30,8 +42,18 @@ set_cache <- function(index, table, df, db) {
 
     }
 
-    pool::dbAppendTable(db, table, df)
+    for (dfi in df) {
+
+      pool::dbAppendTable(db, table, dfi)
+
+    }
 
   }
+
+}
+
+slice_rows <- function(idx, df) {
+
+  df[idx, , drop = FALSE]
 
 }
