@@ -342,6 +342,8 @@ objects:
     selector:
       app: ${APP}
       deploymentconfig: ${DEV}-${DB}
+    strategy:
+      type: Recreate
     template:
       metadata:
         labels:
