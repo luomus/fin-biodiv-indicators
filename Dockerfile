@@ -1,4 +1,4 @@
-FROM rstudio/plumber:latest
+FROM rstudio/plumber:v1.2.0
 
 RUN  echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections \
   && apt-get update -qq \
@@ -16,7 +16,6 @@ RUN  install2.r -e \
        ggplot2 \
        lme4 \
        logger \
-       pool \
        rapidoc \
        readr \
        RPostgres \
@@ -26,8 +25,9 @@ RUN  install2.r -e \
        tinytest \
        tidyr
 
-RUN  R -e "remotes::install_github('tidyverse/dbplyr')" \
-  && R -e "remotes::install_github('luomus/finbif@46e115d3')" \
+RUN  R -e "remotes::install_github('rstudio/pool')" \
+  && R -e "remotes::install_github('tidyverse/dbplyr')" \
+  && R -e "remotes::install_github('luomus/finbif@c29b702c')" \
   && R -e "remotes::install_github('MarcoEnea/speedglm')" \
   && R -e "remotes::install_github('RetoSchmucki/rbms')"
 
