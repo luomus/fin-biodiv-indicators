@@ -1,0 +1,72 @@
+---
+title: "Indicator Walkthrough"
+author: "William K. Morris"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Indicator Walkthrough}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r farmland-birds}
+library(fbi)
+library(finbif)
+library(ggplot2)
+library(lubridate)
+library(rtrim)
+
+filter <- list(
+  location_tag = "farmland",
+  collection = c(
+    "Point counts of breeding terrestrial birds",
+    "Line transect censuses of breeding birds"
+  ),
+  date_range_ymd = c("1979-01-01", "")
+)
+
+surveys <- finbif_occurrence(
+  filter = filter,
+  select = c("document_id", "location_id", "year", "month", "day"),
+  aggregate = "events",
+  aggregate_counts = FALSE,
+  n = "all",
+  quiet = TRUE
+)
+
+surveys <- pick_first_survey_in_year(surveys)
+
+surveys <- require_two_years(surveys)
+
+counts <- finbif_occurrence(
+  taxa = "Anthus pratensis",
+  filter = filter,
+  select = c("document_id", abundance = "pair_abundance"),
+  n = "all",
+  quiet = TRUE
+)
+
+counts <- zero_fill(counts, surveys)
+
+counts <- sum_by_event(counts)
+
+counts <- remove_all_zero_locations(counts)
+
+model <- trim(abundance ~ location_id + year, counts)
+
+index <- index(model, base = 28)
+
+ggplot(index) +
+aes(
+  x = parse_date_time(time, "Y"),
+  y = imputed,
+  ymin = imputed - se_imp,
+  ymax = imputed + se_imp
+) +
+geom_ribbon(alpha = .2) +
+geom_line() +
+ylab(NULL) +
+xlab(NULL) +
+theme_minimal()
+```

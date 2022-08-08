@@ -1294,10 +1294,10 @@ wb:
     sti: -3.96
   - code: MX.35194
     binomial: Passerella iliaca
-    sti: .na.real
+    sti: 4.34
   - code: MX.27048
     binomial: Perdix perdix
-    sti: -5.37
+    sti: .na.real
   - code: MX.34549
     binomial: Periparus ater
     sti: -5.03
@@ -1439,7 +1439,6 @@ wb:
       - pick_first_survey_in_year
       counts_process:
       - zero_fill
-      - sum_by_event
       - remove_all_zero_locations
 
 wbcti:

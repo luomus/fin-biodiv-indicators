@@ -83,7 +83,10 @@ parameters:
   - name: TAG
     required: true
     value: latest
-  - name: STORAGE
+  - name: STORAGE_CLASS
+    required: true
+    value: "standard-rwo"
+  - name: LARGE_STORAGE
     required: true
     value: "40Gi"
   - name: SMALL_STORAGE
@@ -231,7 +234,7 @@ objects:
 - kind: ImageStream
   apiVersion: v1
   metadata:
-    name: ${DEV}-${DB}r
+    name: ${DEV}-${DB}
     labels:
       app: ${APP}
   spec:
@@ -339,6 +342,8 @@ objects:
     selector:
       app: ${APP}
       deploymentconfig: ${DEV}-${DB}
+    strategy:
+      type: Recreate
     template:
       metadata:
         labels:
@@ -507,12 +512,13 @@ objects:
   metadata:
    name: ${DEV}-${DB}
   spec:
-   accessModes:
-   - ReadWriteMany
-   persistentVolumeReclaimPolicy: Retain
-   resources:
-     requests:
-       storage: ${SMALL_STORAGE}
+    storageClassName: ${STORAGE_CLASS}
+    accessModes:
+    - ReadWriteOnce
+    persistentVolumeReclaimPolicy: Retain
+    resources:
+      requests:
+        storage: ${SMALL_STORAGE}
 - kind: Service
   apiVersion: v1
   metadata:

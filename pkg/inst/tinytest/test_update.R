@@ -38,6 +38,8 @@ expect_inherits(get_output("data", "bf", "rbms", "MX.60914", con), "raw")
 
 expect_inherits(get_output("data", "bf", "trim", "MX.MISSING", con), "list")
 
+expect_inherits(get_output("data", "bf", "trim", "MX.60916", con), "list")
+
 expect_null(clean_cache(con))
 
 pool::poolClose(con)

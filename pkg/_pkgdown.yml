@@ -12,7 +12,7 @@ home:
 destination: docs
 navbar:
   structure:
-    left:  [api, articles, reference]
+    left:  [api, articles, walkthroughs, reference]
     right: [search, github]
   components:
     api:
@@ -20,7 +20,6 @@ navbar:
       href: ../__docs__/#overview
     articles:
       text: Example Indicators
-      href: articles/index.html
       menu:
       - text: Winter Birds
         href: articles/winter-birds.html
@@ -38,6 +37,11 @@ navbar:
         href: articles/butterfly-abundance.html
       - text: Community Temperature Indices
         href: articles/community-temperature-indices.html
+    walkthroughs:
+      text: Code Walkthroughs
+      menu:
+      - text: Indicator Walkthrough
+        href: articles/indicator-walkthrough.html
     reference:
       text: Function Reference
       href: reference/index.html
