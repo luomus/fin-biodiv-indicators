@@ -80,7 +80,10 @@ parameters:
   - name: TAG
     required: true
     value: latest
-  - name: STORAGE
+  - name: STORAGE_CLASS
+    required: true
+    value: "standard-rwo"
+  - name: LARGE_STORAGE
     required: true
     value: "40Gi"
   - name: SMALL_STORAGE
@@ -336,6 +339,8 @@ objects:
     selector:
       app: ${APP}
       deploymentconfig: ${DB}
+    strategy:
+      type: Recreate
     template:
       metadata:
         labels:
@@ -504,12 +509,13 @@ objects:
   metadata:
     name: ${DB}
   spec:
+    storageClassName: ${STORAGE_CLASS}
     accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
     persistentVolumeReclaimPolicy: Retain
     resources:
       requests:
-        storage: ${STORAGE}
+        storage: ${LARGE_STORAGE}
 - kind: Service
   apiVersion: v1
   metadata:
