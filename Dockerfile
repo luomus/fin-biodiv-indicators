@@ -12,10 +12,12 @@ RUN  install2.r -e \
        arm \
        config \
        covr \
+       dbplyr \
        DT \
        ggplot2 \
        lme4 \
        logger \
+       pool \
        rapidoc \
        readr \
        RPostgres \
@@ -25,9 +27,7 @@ RUN  install2.r -e \
        tinytest \
        tidyr
 
-RUN  R -e "remotes::install_github('rstudio/pool')" \
-  && R -e "remotes::install_github('tidyverse/dbplyr')" \
-  && R -e "remotes::install_github('luomus/finbif@c29b702c')" \
+RUN  R -e "remotes::install_github('luomus/finbif@c29b702c')" \
   && R -e "remotes::install_github('MarcoEnea/speedglm')" \
   && R -e "remotes::install_github('RetoSchmucki/rbms')"
 
