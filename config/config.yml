@@ -35,6 +35,7 @@ default:
     - day
   counts:
     abundance: abundance
+  use_data_after: "01-01"
 
 flb:
   taxa:
