@@ -63,3 +63,12 @@ reference:
       - sum_by_event
       - sum_over_sections
       - zero_fill
+  - title: internal
+    contents:
+      - check_input
+      - clean_cache
+      - get_output
+      - process_funs
+      - update_data
+      - update_index
+      - update_taxon_index

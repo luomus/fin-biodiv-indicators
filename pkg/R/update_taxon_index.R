@@ -8,6 +8,7 @@
 #' @param db Connection. Database in which to update index.
 #'
 #' @importFrom config get
+#' @importFrom dplyr filter
 #' @export
 
 update_taxon_index <- function(index, model, taxon, db) {
@@ -30,6 +31,32 @@ update_taxon_index <- function(index, model, taxon, db) {
       process_funs()[[i]],
       list(counts = counts, surveys = surveys, taxon = taxon)
     )
+
+  }
+
+  current_year <- as.integer(format(Sys.Date(), "%Y"))
+
+  next_year <- current_year + 1L
+
+  surveys <- dplyr::filter(surveys, .data[["year"]] < next_year)
+
+  counts <- dplyr::filter(counts, .data[["year"]] < next_year)
+
+  use_after_date <- config::get("use_data_after", config = index)
+
+  use_after_date <- paste(current_year, use_after_date, sep = "-")
+
+  use_current_year <- Sys.Date() >= as.Date(use_after_date)
+
+  use_current_year_env <- as.logical(Sys.getenv(paste0(index, "_UCY"), "true"))
+
+  use_current_year <- use_current_year && use_current_year_env
+
+  if (!use_current_year) {
+
+    surveys <- dplyr::filter(surveys, .data[["year"]] < current_year)
+
+    counts <- dplyr::filter(counts, .data[["year"]] < current_year)
 
   }
 

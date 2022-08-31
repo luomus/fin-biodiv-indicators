@@ -35,6 +35,7 @@ default:
     - day
   counts:
     abundance: abundance
+  use_data_after: "01-01"
 
 flb:
   taxa:
@@ -85,6 +86,7 @@ flb:
     - document_id
     - pair_abundance
   combine: geometric_mean
+  use_data_after: "10-01"
   model:
     trim:
       base_year: 2006
@@ -149,6 +151,7 @@ mrb:
     - document_id
     - pair_abundance
   combine: geometric_mean
+  use_data_after: "10-01"
   model:
     trim:
       base_year: 2006
@@ -204,6 +207,7 @@ mtb:
     - document_id
     - pair_abundance
   combine: geometric_mean
+  use_data_after: "10-01"
   model:
     trim:
       base_year: 1996
@@ -892,6 +896,7 @@ ftb:
     - document_id
     - pair_abundance
   combine: geometric_mean
+  use_data_after: "10-01"
   model:
     trim:
       base_year: 2006
@@ -1294,10 +1299,10 @@ wb:
     sti: -3.96
   - code: MX.35194
     binomial: Passerella iliaca
-    sti: 4.34
+    sti: .na.real
   - code: MX.27048
     binomial: Perdix perdix
-    sti: .na.real
+    sti: -5.37
   - code: MX.34549
     binomial: Periparus ater
     sti: -5.03
@@ -1431,6 +1436,7 @@ wb:
     - document_id
     - abundance_interpreted
   combine: geometric_mean
+  use_data_after: "03-01"
   model:
     trim:
       base_year: 1959
@@ -1439,6 +1445,7 @@ wb:
       - pick_first_survey_in_year
       counts_process:
       - zero_fill
+      - sum_by_event
       - remove_all_zero_locations
 
 wbcti:
@@ -1743,6 +1750,7 @@ bf:
     - document_id
     - abundance_interpreted
   combine: geometric_mean
+  use_data_after: "10-01"
   model:
     rbms:
       base_year: 2001
