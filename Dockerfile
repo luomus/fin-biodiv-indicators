@@ -27,7 +27,7 @@ RUN  install2.r -e \
        tinytest \
        tidyr
 
-RUN  R -e "remotes::install_github('luomus/finbif@73564aa5')" \
+RUN  R -e "remotes::install_github('luomus/finbif@ddf7fe1b')" \
   && R -e "remotes::install_github('MarcoEnea/speedglm')" \
   && R -e "remotes::install_github('RetoSchmucki/rbms')"
 
