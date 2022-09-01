@@ -79,6 +79,18 @@
 <dd><p>Survey data.</p></dd>
 
 </dl></div>
+    <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>This function moves <code>surveys</code> occurring in December ahead one year.
+This enables all December surveys to be grouped with subsequent surveys
+occurring in the January of the same winter. Surveys are then grouped by
+location and year then ordered by date. Then all but the first survey in
+each group is removed. If two or more surveys share the same date and
+location then one is picked at random and the rest are removed. This
+function works on the assumption that surveys occur in winter from December
+to January and that the <code>surveys</code> data includes at least <code>day</code>, <code>month</code> and
+<code>year</code> (as integers) and <code>location_id</code>.</p>
+    </div>
 
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

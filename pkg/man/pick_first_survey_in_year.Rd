@@ -12,3 +12,10 @@ pick_first_survey_in_year(surveys)
 \description{
 Pick first survey in each year discarding subsequent surveys
 }
+\details{
+This function groups \code{surveys} by location and year then orders
+them by date. All but the first survey in each group is removed. If two or
+more surveys share the same date and location then one is picked at random
+and the rest are removed. The function assumes the \code{surveys} data at least
+\code{day}, \code{month} and \code{year} (as integers) and \code{location_id}.
+}

@@ -1441,8 +1441,7 @@ wb:
     trim:
       base_year: 1959
       surveys_process:
-      - shift_year_winter
-      - pick_first_survey_in_year
+      - pick_first_survey_in_winter
       counts_process:
       - zero_fill
       - sum_by_event
@@ -1454,8 +1453,7 @@ wbcti:
   model:
     lmer:
       surveys_process:
-      - shift_year_winter
-      - pick_first_survey_in_year
+      - pick_first_survey_in_winter
       counts_process:
       - combine_with_surveys
 

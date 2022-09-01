@@ -13,7 +13,6 @@
 process_funs <- function() {
 
   list(
-    shift_year_winter              = shift_year_winter,
     pick_first_survey_in_winter    = pick_first_survey_in_winter,
     pick_first_survey_in_year      = pick_first_survey_in_year,
     require_seven_fortnights       = require_seven_fortnights,
@@ -30,30 +29,30 @@ process_funs <- function() {
 
 }
 
-#' Shift year winter
+#' Pick first survey in winter
 #'
-#' Transpose early winter months to following calendar year
+#' Pick first winter survey in each year discarding subsequent surveys
+#'
+#' @details This function moves `surveys` occurring in December ahead one year.
+#'   This enables all December surveys to be grouped with subsequent surveys
+#'   occurring in the January of the same winter. Surveys are then grouped by
+#'   location and year then ordered by date. Then all but the first survey in
+#'   each group is removed. If two or more surveys share the same date and
+#'   location then one is picked at random and the rest are removed. This
+#'   function works on the assumption that surveys occur in winter from December
+#'   to January and that the `surveys` data includes at least `day`, `month` and
+#'   `year` (as integers) and `location_id`.
 #'
 #' @export
 #' @inheritParams process_funs
-shift_year_winter <- function(surveys) {
+pick_first_survey_in_winter <- function(surveys) {
 
-  dplyr::mutate(
+  surveys <- dplyr::mutate(
     surveys,
     year = ifelse(
       .data[["month"]] == 12L, .data[["year"]] + 1L, .data[["year"]]
     )
   )
-
-}
-
-#' Pick first survey in winter
-#'
-#' Pick first winter survey in each year discarding subsequent surveys
-#'
-#' @export
-#' @inheritParams process_funs
-pick_first_survey_in_winter <- function(surveys) {
 
   surveys <- dplyr::group_by(surveys, .data[["location_id"]], .data[["year"]])
 
@@ -69,6 +68,12 @@ pick_first_survey_in_winter <- function(surveys) {
 #' Pick first survey in year
 #'
 #' Pick first survey in each year discarding subsequent surveys
+#'
+#' @details This function groups `surveys` by location and year then orders
+#'   them by date. All but the first survey in each group is removed. If two or
+#'   more surveys share the same date and location then one is picked at random
+#'   and the rest are removed. The function assumes the `surveys` data at least
+#'   `day`, `month` and `year` (as integers) and `location_id`.
 #'
 #' @export
 #' @inheritParams process_funs
@@ -87,8 +92,18 @@ pick_first_survey_in_year <- function(surveys) {
 
 #' Require seven fortnights
 #'
-#' Divide year into approximate 2 week blocks selecting blocks 11-17 and
+#' Divide year into approximate 2 week blocks selecting blocks 10-16 and
 #' discarding locations without a survey in each remaining block
+#'
+#' @details This function assigns each survey to an approximate fortnight. Where
+#'  a fortnight is defined as all the days before the 16th day of each month and
+#'  all the days after the 15th day of each month. Then all the surveys falling
+#'  outside of the date range of the seven fortnights from the second fortnight
+#'  of May to the second fortnight of August are removed. Surveys are then
+#'  grouped by location and year and all surveys belonging to groups that do not
+#'  have at least one surveys occurring in the seven remaining fortnights are
+#'  discarded. The function assumes the `surveys` data at least `day`, `month`
+#'  and `year` (as integers) and `location_id`.
 #'
 #' @export
 #' @inheritParams process_funs
