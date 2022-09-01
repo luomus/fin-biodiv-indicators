@@ -59,7 +59,6 @@ reference:
       - require_seven_fortnights
       - require_two_years
       - set_start_year
-      - shift_year_winter
       - sum_by_event
       - sum_over_sections
       - zero_fill

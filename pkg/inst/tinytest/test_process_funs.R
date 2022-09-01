@@ -8,13 +8,8 @@ expect_equal(
 )
 
 expect_equal(
-  pick_first_survey_in_winter(df),
-  tibble(location_id = "", year = 1:2, month = 11:12, day = 1)
-)
-
-expect_equal(
-  shift_year_winter(df),
-  transform(df, year = year + c(rep(0, 11), 1))
+  pick_first_survey_in_winter(subset(df, month %in% 11:12)),
+  tibble(location_id = "", year = c(1, 3), month = 11:12, day = 1)
 )
 
 expect_equal(

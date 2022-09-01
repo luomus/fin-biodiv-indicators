@@ -1,6 +1,8 @@
 FROM rstudio/plumber:v1.2.0
 
-RUN  echo "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula select true" | debconf-set-selections \
+RUN  echo \
+     "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula" \
+     "select true" | debconf-set-selections \
   && apt-get update -qq \
   && apt-get install -y ttf-mscorefonts-installer libpq-dev nano \
   && fc-cache -f
@@ -27,7 +29,7 @@ RUN  install2.r -e \
        tinytest \
        tidyr
 
-RUN  R -e "remotes::install_github('luomus/finbif@73564aa5')" \
+RUN  R -e "remotes::install_github('luomus/finbif@ddf7fe1b')" \
   && R -e "remotes::install_github('MarcoEnea/speedglm')" \
   && R -e "remotes::install_github('RetoSchmucki/rbms')"
 
