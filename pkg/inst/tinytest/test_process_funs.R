@@ -13,11 +13,6 @@ expect_equal(
 )
 
 expect_equal(
-  shift_year_winter(df),
-  transform(df, year = year + c(rep(0, 11), 1))
-)
-
-expect_equal(
   set_start_year(df, list(start_year = 2)),
   data.frame(location_id = "", year = 2, month = 1:6 * 2, day = 1)
 )
