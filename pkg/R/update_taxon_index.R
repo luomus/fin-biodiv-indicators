@@ -15,9 +15,11 @@ update_taxon_index <- function(index, model, taxon, db) {
 
   surveys <- get_from_db(db, "surveys", index)
 
-  counts <- get_from_db(db, "counts", index, taxon[["code"]])
+  index_base <- sub("_north|_south", "", index)
 
-  model_spec <- config::get("model", config = index)[[model]]
+  counts <- get_from_db(db, "counts", index_base, taxon[["code"]])
+
+  model_spec <- config::get("model", config = index_base)[[model]]
 
   for (i in model_spec[["surveys_process"]]) {
 
@@ -42,13 +44,15 @@ update_taxon_index <- function(index, model, taxon, db) {
 
   counts <- dplyr::filter(counts, .data[["year"]] < next_year)
 
-  use_after_date <- config::get("use_data_after", config = index)
+  use_after_date <- config::get("use_data_after", config = index_base)
 
   use_after_date <- paste(current_year, use_after_date, sep = "-")
 
   use_current_year <- Sys.Date() >= as.Date(use_after_date)
 
-  use_current_year_env <- as.logical(Sys.getenv(paste0(index, "_UCY"), "true"))
+  use_current_year_env <- as.logical(
+    Sys.getenv(paste0(index_base, "_UCY"), "true")
+  )
 
   use_current_year <- use_current_year && use_current_year_env
 

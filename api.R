@@ -78,13 +78,14 @@ function(index) {
 #* @tag data
 #* @get /data/<index:str>
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
-#* @param model:str Which model (trim, rbms, etc.).
+#* @param model:str Which model (trim, rbms, etc.)?
 #* @param taxon:str Shortcode for a taxon (see [/taxa](#get-/taxa)).
+#* @param region:str Which region, north, south or none (whole of Finland: default)?
 #* @response 200 A json object
 #* @response 400 A json object
 #* @response 404 A json object
 #* @serializer unboxedJSON
-function(index, model = "default", taxon = "none", res) {
+function(index, model = "default", taxon = "none", region = "none", res) {
 
   has_output <- check_input(index, model, taxon)
 
@@ -95,7 +96,7 @@ function(index, model = "default", taxon = "none", res) {
 
   }
 
-  ans <- get_output("data", index, model, taxon, pool)
+  ans <- get_output("data", index, model, taxon, region, pool)
 
   if (is.raw(ans)) {
 
@@ -115,13 +116,14 @@ function(index, model = "default", taxon = "none", res) {
 #* @tag data
 #* @get /csv/<index:str>
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
-#* @param model:str Which model (trim, rbms, etc.).
+#* @param model:str Which model (trim, rbms, etc.)?
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
+#* @param region:str Which region, north, south or none (whole of Finland: default)?
 #* @response 200 A csv file
 #* @response 400 A json object
 #* @response 404 A json object
 #* @serializer csv
-function(index, model = "default", taxon = "none", res) {
+function(index, model = "default", taxon = "none", region = "none", res) {
 
   has_output <- check_input(index, model, taxon)
 
@@ -132,7 +134,7 @@ function(index, model = "default", taxon = "none", res) {
 
   }
 
-  ans <- get_output("data_csv", index, model, taxon, pool)
+  ans <- get_output("data_csv", index, model, taxon, region, pool)
 
   if (is.raw(ans)) {
 
@@ -148,18 +150,18 @@ function(index, model = "default", taxon = "none", res) {
 
 }
 
-
 #* Get count summary for an index
 #* @tag data
 #* @get /count-summary/<index:str>
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
-#* @param model:str Which model (trim, rbms, etc.).
+#* @param model:str Which model (trim, rbms, etc.)?
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
+#* @param region:str Which region, north, south or none (whole of Finland: default)?
 #* @response 200 A json object
 #* @response 400 A json object
 #* @response 404 A json object
 #* @serializer unboxedJSON
-function(index, model = "default", taxon = "none", res) {
+function(index, model = "default", taxon = "none", region = "none", res) {
 
   has_output <- check_input(index, model, taxon)
 
@@ -170,7 +172,7 @@ function(index, model = "default", taxon = "none", res) {
 
   }
 
-  ans <- get_output("count_summary", index, model, taxon, pool)
+  ans <- get_output("count_summary", index, model, taxon, region, pool)
 
   if (is.raw(ans)) {
 
@@ -190,13 +192,14 @@ function(index, model = "default", taxon = "none", res) {
 #* @tag data
 #* @get /trends/<index:str>
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
-#* @param model:str Which model (trim, rbms, etc.).
+#* @param model:str Which model (trim, rbms, etc.)?
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
+#* @param region:str Which region, north, south or none (whole of Finland: default)?
 #* @response 200 A json object
 #* @response 400 A json object
 #* @response 404 A json object
 #* @serializer unboxedJSON
-function(index, model = "default", taxon = "none", res) {
+function(index, model = "default", taxon = "none", region = "none", res) {
 
   has_output <- check_input(index, model, taxon)
 
@@ -207,7 +210,7 @@ function(index, model = "default", taxon = "none", res) {
 
   }
 
-  ans <- get_output("trends", index, model, taxon, pool)
+  ans <- get_output("trends", index, model, taxon, region, pool)
 
   if (is.raw(ans)) {
 
@@ -227,12 +230,13 @@ function(index, model = "default", taxon = "none", res) {
 #* @tag graphics
 #* @get /svg/<index:str>
 #* @param index:str Shortcode for index (see [/indices](#get-/indices)).
-#* @param model:str Which model (trim, rbms, etc.).
+#* @param model:str Which model (trim, rbms, etc.)?
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
+#* @param region:str Which region, north, south or none (whole of Finland: default)?
 #* @response 200 An svg file
 #* @response 400 A json object
 #* @response 404 A json object
-function(index, model = "default", taxon = "none", res) {
+function(index, model = "default", taxon = "none", region = "none", res) {
 
   has_output <- check_input(index, model, taxon)
 
@@ -244,7 +248,7 @@ function(index, model = "default", taxon = "none", res) {
 
   }
 
-  ans <- get_output("svg", index, model, taxon, pool)
+  ans <- get_output("svg", index, model, taxon, region, pool)
 
   if (is.raw(ans)) {
 

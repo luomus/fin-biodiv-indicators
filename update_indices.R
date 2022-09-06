@@ -88,17 +88,21 @@ for (index in indices) {
 
       for (model in models) {
 
-        message(
-          sprintf(
-            "INFO [%s] Updating %s model for %s (%s index)...",
-            Sys.time(),
-            model,
-            taxon[["binomial"]],
-            index
-          )
-        )
+        for (i in paste0(index, c("", "_north", "_south"))) {
 
-        update_taxon_index(index, model, taxon, pool)
+          message(
+            sprintf(
+              "INFO [%s] Updating %s model for %s (%s index)...",
+              Sys.time(),
+              model,
+              taxon[["binomial"]],
+              i
+            )
+          )
+
+          update_taxon_index(i, model, taxon, pool)
+
+        }
 
       }
 
@@ -112,41 +116,48 @@ for (index in indices) {
 
     for (model in models) {
 
-      message(
-        sprintf(
-          "INFO [%s] Updating combined %s model for %s index...", Sys.time(),
-          model, index
-        )
-      )
+      for (i in c("", "_north", "_south")) {
 
-      needs_update <- TRUE
-
-      if (!is.null(src)) {
-
-        last_mod <- dplyr::tbl(pool, "output_cache_time")
-
-        src_model <- names(config::get("model", config = src))[[1L]]
-
-        last_mod_src <- dplyr::filter(
-          last_mod, .data[["index"]] == !!paste(src, src_model, sep = "_")
+        message(
+          sprintf(
+            "INFO [%s] Updating combined %s model for %s index...", Sys.time(),
+            model, paste0(index, i)
+          )
         )
 
-        last_mod_src <- dplyr::pull(last_mod_src, .data[["time"]])
+        needs_update <- TRUE
 
-        last_mod_index <- dplyr::filter(
-          last_mod, .data[["index"]] == !!paste(index, model, sep = "_")
-        )
+        if (!is.null(src)) {
 
-        last_mod_index <- dplyr::pull(last_mod_index, .data[["time"]])
+          last_mod <- dplyr::tbl(pool, "output_cache_time")
 
-        needs_update <-
-          !isFALSE(last_mod_src > last_mod_index) || do_update(index, "output")
+          src_model <- names(config::get("model", config = src))[[1L]]
 
-      }
+          last_mod_src <- dplyr::filter(
+            last_mod,
+            .data[["index"]] == !!paste(paste0(src, i), src_model, sep = "_")
+          )
 
-      if (needs_update) {
+          last_mod_src <- dplyr::pull(last_mod_src, .data[["time"]])
 
-        update_index(index, model, pool)
+          last_mod_index <- dplyr::filter(
+            last_mod,
+            .data[["index"]] == !!paste(paste0(index, i), model, sep = "_")
+          )
+
+          last_mod_index <- dplyr::pull(last_mod_index, .data[["time"]])
+
+          needs_update <-
+            !isFALSE(last_mod_src > last_mod_index) ||
+              do_update(paste0(index, i), "output")
+
+        }
+
+        if (needs_update) {
+
+          update_index(paste0(index, i), model, pool)
+
+        }
 
       }
 

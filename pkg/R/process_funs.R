@@ -200,7 +200,7 @@ format_date <- function(surveys) {
 #' @inheritParams process_funs
 combine_with_surveys <- function(counts, surveys, ...) {
 
-  dplyr::left_join(counts, surveys, by = "document_id")
+  dplyr::inner_join(counts, surveys, by = "document_id")
 
 }
 

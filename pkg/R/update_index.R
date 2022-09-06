@@ -39,6 +39,8 @@ cti <- function(index, cti, model, db) {
 
   surveys <- get_from_db(con, "surveys", index)
 
+  index_base <- sub("_north|_south", "", index)
+
   model_spec <- config::get("model", config = cti)[[model]]
 
   for (i in model_spec[["surveys_process"]]) {
@@ -47,9 +49,9 @@ cti <- function(index, cti, model, db) {
 
   }
 
-  taxa <- config::get("taxa", config = index)
+  taxa <- config::get("taxa", config = index_base)
 
-  extra_taxa <- config::get("extra_taxa", config = index)
+  extra_taxa <- config::get("extra_taxa", config = index_base)
 
   codes <- vapply(taxa, getElement, "", "code")
 
@@ -57,13 +59,13 @@ cti <- function(index, cti, model, db) {
 
   codes <- c(codes, extra_codes)
 
-  select <- config::get("counts", config = index)[["selection"]]
+  select <- config::get("counts", config = index_base)[["selection"]]
 
-  abundance <- config::get("counts", config = index)[["abundance"]]
+  abundance <- config::get("counts", config = index_base)[["abundance"]]
 
   select[select == abundance] <- "abundance"
 
-  counts <- get_from_db(con, "counts", index, codes, c("index", select))
+  counts <- get_from_db(con, "counts", index_base, codes, c("index", select))
 
   for (i in model_spec[["counts_process"]]) {
 
@@ -83,7 +85,7 @@ cti <- function(index, cti, model, db) {
 
   sti <- unlist(c(sti, extra_sti))
 
-  sti_df <- data.frame(index = paste(index, codes, sep = "_"), sti = sti)
+  sti_df <- data.frame(index = paste(index_base, codes, sep = "_"), sti = sti)
 
   sti_df <- dplyr::copy_to(con, sti_df, overwrite = TRUE)
 
@@ -135,12 +137,14 @@ cti <- function(index, cti, model, db) {
 
 geometric_mean <- function(index, model, db) {
 
+  index_base <- sub("_north|_south", "", index)
+
   n <- 1000L
   maxcv <- 3
   minindex <- .01
   trunc <- 10
 
-  taxa <- config::get("taxa", config = index)
+  taxa <- config::get("taxa", config = index_base)
 
   taxa <- vapply(taxa, getElement, "", "code")
 
@@ -154,7 +158,7 @@ geometric_mean <- function(index, model, db) {
 
   nyears <- length(years)
 
-  base <- config::get("model", config = index)[[model]][["base_year"]]
+  base <- config::get("model", config = index_base)[[model]][["base_year"]]
 
   base <- which(years == base)
 
@@ -330,6 +334,8 @@ overall_abundance <- function(index, oa, model, db) {
 
   surveys <- get_from_db(db, "surveys", index)
 
+  index_base <- sub("_north|_south", "", index)
+
   model_spec <- config::get("model", config = oa)[[model]]
 
   for (i in model_spec[["surveys_process"]]) {
@@ -338,9 +344,9 @@ overall_abundance <- function(index, oa, model, db) {
 
   }
 
-  taxa <- config::get("taxa", config = index)
+  taxa <- config::get("taxa", config = index_base)
 
-  extra_taxa <- config::get("extra_taxa", config = index)
+  extra_taxa <- config::get("extra_taxa", config = index_base)
 
   codes <- vapply(taxa, getElement, "", "code")
 
@@ -348,9 +354,9 @@ overall_abundance <- function(index, oa, model, db) {
 
   codes <- c(codes, extra_codes)
 
-  select <- config::get("counts", config = index)[["selection"]]
+  select <- config::get("counts", config = index_base)[["selection"]]
 
-  counts <- get_from_db(db, "counts", index, codes, c("index", select))
+  counts <- get_from_db(db, "counts", index_base, codes, c("index", select))
 
   for (i in model_spec[["counts_process"]]) {
 
