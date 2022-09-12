@@ -36,11 +36,17 @@ pool::dbWriteTable(con, "redundant", data.frame(index = character()))
 
 expect_true(check_input("bf", "rbms", "MX.60914"))
 
-expect_inherits(get_output("data", "bf", "rbms", "MX.60914", con), "raw")
+expect_inherits(
+  get_output("data", "bf", "rbms", "MX.60914", "none", con), "list"
+)
 
-expect_inherits(get_output("data", "bf", "trim", "MX.MISSING", con), "list")
+expect_inherits(
+  get_output("data", "bf", "trim", "MX.MISSING", "none", con), "list"
+)
 
-expect_inherits(get_output("data", "bf", "trim", "MX.60916", con), "list")
+expect_inherits(
+  get_output("data", "bf", "trim", "MX.60916", "none", con), "list"
+)
 
 expect_null(clean_cache(con))
 
