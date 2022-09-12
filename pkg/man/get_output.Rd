@@ -4,7 +4,7 @@
 \alias{get_output}
 \title{Get output}
 \usage{
-get_output(output, index, model, taxon, db)
+get_output(output, index, model, taxon, region, db)
 }
 \arguments{
 \item{output}{Character. Which type of output?}
@@ -14,6 +14,8 @@ get_output(output, index, model, taxon, db)
 \item{model}{Character. Which model to use?}
 
 \item{taxon}{Character. Which taxon?}
+
+\item{region}{Character. Which region?}
 
 \item{db}{Connection. Database from which to get output.}
 }

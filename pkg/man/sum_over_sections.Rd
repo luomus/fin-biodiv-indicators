@@ -14,3 +14,9 @@ sum_over_sections(counts, ...)
 \description{
 Sum counts over the sections of surveys
 }
+\details{
+This functions groups count data by \code{document_id} (the IDs of the
+individual surveys). If multiple taxa \code{counts} are input then data is also
+grouped by taxa. Counts are then summed across survey sections when count
+data has been provided as surveys split into parts.
+}

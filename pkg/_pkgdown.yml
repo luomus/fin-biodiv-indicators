@@ -7,6 +7,9 @@ template:
     font-size-base: "1rem"
     base_font:
       google: "Roboto"
+repo:
+  url:
+    source: https://github.com/luomus/fin-biodiv-indicators/blob/HEAD/pkg/
 home:
   title: "Finnish Biodiversity Indicators"
 destination: docs

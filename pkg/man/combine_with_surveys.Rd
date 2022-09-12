@@ -16,3 +16,8 @@ combine_with_surveys(counts, surveys, ...)
 \description{
 Combine count data with survey data
 }
+\details{
+This function combines \code{counts} and \code{surveys} data. It performs an
+inner join of \code{counts} on \code{surveys} by \code{document_id}. The function assumes
+that both \code{counts} and \code{surveys} data include \code{document_id}.
+}
