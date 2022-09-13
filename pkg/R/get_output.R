@@ -21,7 +21,7 @@ get_output <- function(output, index, model, taxon, region, db) {
     model, "default" = names(config::get("model", config = index))[[1L]], model
   )
 
-  region <- switch(region, north = region, south = region, NA_character_)
+  region <- switch(region, north = region, south = region, NULL)
 
   index <- paste(c(index, model, taxon, region), collapse = "_")
 

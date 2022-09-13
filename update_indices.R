@@ -116,7 +116,7 @@ for (index in indices) {
 
     for (model in models) {
 
-      for (i in c("", "_north", "_south")) {
+      for (i in list(NULL, "north", "south")) {
 
         message(
           sprintf(
@@ -135,14 +135,14 @@ for (index in indices) {
 
           last_mod_src <- dplyr::filter(
             last_mod,
-            .data[["index"]] == !!paste(paste0(src, i), src_model, sep = "_")
+            .data[["index"]] == !!paste(c(src, i, src_model), collapse = "_")
           )
 
           last_mod_src <- dplyr::pull(last_mod_src, .data[["time"]])
 
           last_mod_index <- dplyr::filter(
             last_mod,
-            .data[["index"]] == !!paste(paste0(index, i), model, sep = "_")
+            .data[["index"]] == !!paste(index, i, model, collapse = "_")
           )
 
           last_mod_index <- dplyr::pull(last_mod_index, .data[["time"]])
@@ -155,7 +155,7 @@ for (index in indices) {
 
         if (needs_update) {
 
-          update_index(paste0(index, i), model, pool)
+          update_index(paste(c(index, i), collapse = "_"), model, i, pool)
 
         }
 

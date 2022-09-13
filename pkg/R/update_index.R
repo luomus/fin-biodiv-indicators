@@ -4,17 +4,22 @@
 #'
 #' @param index Character. Update which index?
 #' @param model Character. Which model to use?
+#' @param region Character. Which region?
 #' @param db Connection. Database in which to update index.
 #'
 #' @importFrom config get
 #' @export
 
-update_index <- function(index, model, db) {
+update_index <- function(index, model, region, db) {
 
-  from <- config::get("from", config = index)
+  index_base <- sub("_north|_south", "", index)
+
+  from <- config::get("from", config = index_base)
+
+  from <- paste(c(from, region), collapse = "_")
 
   df <- switch(
-    config::get("combine", config = index),
+    config::get("combine", config = index_base),
     cti = cti(from, index, model, db),
     geometric_mean = geometric_mean(index, model, db),
     overall_abundance = overall_abundance(from, index, model, db)
@@ -41,7 +46,9 @@ cti <- function(index, cti, model, db) {
 
   index_base <- sub("_north|_south", "", index)
 
-  model_spec <- config::get("model", config = cti)[[model]]
+  cti_base <- sub("_north|_south", "", cti)
+
+  model_spec <- config::get("model", config = cti_base)[[model]]
 
   for (i in model_spec[["surveys_process"]]) {
 
@@ -336,7 +343,9 @@ overall_abundance <- function(index, oa, model, db) {
 
   index_base <- sub("_north|_south", "", index)
 
-  model_spec <- config::get("model", config = oa)[[model]]
+  oa_base <- sub("_north|_south", "", oa)
+
+  model_spec <- config::get("model", config = oa_base)[[model]]
 
   for (i in model_spec[["surveys_process"]]) {
 

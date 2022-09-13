@@ -65,7 +65,7 @@ update_taxon_index <- function(index, model, taxon, db) {
   }
 
   model_data <- tryCatch(
-    run_model(index, taxon, surveys, counts, model),
+    run_model(index_base, taxon, surveys, counts, model),
     error = err_msg
   )
 

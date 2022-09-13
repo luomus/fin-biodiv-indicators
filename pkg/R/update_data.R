@@ -79,6 +79,8 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
 
         index <- paste(index, i, sep = "_")
 
+        data[["index"]] <- index
+
         set_cache(index, type, data[regions == i, ], db)
 
         set_cache(
