@@ -77,14 +77,16 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
 
       for (i in c("north", "south")) {
 
-        index <- paste(index, i, sep = "_")
+        index_region <- paste(index, i, sep = "_")
 
-        data[["index"]] <- index
+        data[["index"]] <- index_region
 
-        set_cache(index, type, data[regions == i, ], db)
+        set_cache(index_region, type, data[regions == i, ], db)
 
         set_cache(
-          index, cache_date, data.frame(index = index, date = Sys.Date()), db
+          index_region, cache_date,
+          data.frame(index = index_region, date = Sys.Date()),
+          db
         )
 
       }
