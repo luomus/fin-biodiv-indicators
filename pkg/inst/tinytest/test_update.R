@@ -28,6 +28,8 @@ expect_null(update_taxon_index("bf", "trim", list(code = "MX.MISSING"), con))
 
 expect_null(update_index("bf", "trim", NULL, con))
 
+expect_null(update_index("bf_south", "trim", NULL, con))
+
 expect_null(update_index("bfcti", "lmer", NULL, con))
 
 expect_null(update_index("bfoa", "glmer", NULL, con))

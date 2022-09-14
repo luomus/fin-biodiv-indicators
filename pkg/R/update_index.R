@@ -18,14 +18,35 @@ update_index <- function(index, model, region, db) {
 
   from <- paste(c(from, region), collapse = "_")
 
-  df <- switch(
-    config::get("combine", config = index_base),
-    cti = cti(from, index, model, db),
-    geometric_mean = geometric_mean(index, model, db),
-    overall_abundance = overall_abundance(from, index, model, db)
+  df <- tryCatch(
+    switch(
+      config::get("combine", config = index_base),
+      cti = cti(from, index, model, db),
+      geometric_mean = geometric_mean(index, model, db),
+      overall_abundance = overall_abundance(from, index, model, db)
+    ),
+    error = err_msg
   )
 
-  cache_outputs(paste(index, model, sep = "_"), df, db)
+  index_model <- paste(index, model, sep = "_")
+
+  if (!inherits(df, "error")) {
+
+    cache_outputs(index_model, df, db)
+
+    set_cache(
+      index_model, "model_state",
+      data.frame(index = index_model, state = "success", time = Sys.time()), db
+    )
+
+  } else {
+
+    set_cache(
+      index_model, "model_state",
+      data.frame(index = index_model, state = "fail", time = Sys.time()), db
+    )
+
+  }
 
   invisible(NULL)
 
