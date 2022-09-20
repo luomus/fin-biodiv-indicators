@@ -23,7 +23,7 @@ get_output <- function(output, index, model, taxon, region, db) {
 
   region <- switch(region, north = region, south = region, NULL)
 
-  index <- paste(c(index, model, taxon, region), collapse = "_")
+  index <- paste(c(index, region, model, taxon), collapse = "_")
 
   ans <- dplyr::tbl(db, output)
 
