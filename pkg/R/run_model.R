@@ -207,7 +207,9 @@ rbms <- function(
   index_mc <- do.call(rbind, index_mc)
 
   index_mc <- dplyr::mutate(
-    index_mc, mc = log(.data[["COL_INDEX"]]), time = .data[["M_YEAR"]]
+    index_mc,
+    mc = log(pmax(1 / 100, .data[["COL_INDEX"]])),
+    time = .data[["M_YEAR"]]
   )
 
   index_mc <- dplyr::group_by(index_mc, .data[["BOOTi"]])
