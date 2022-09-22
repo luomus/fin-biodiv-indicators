@@ -122,13 +122,13 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 #* @response 200 A csv file
 #* @response 400 A json object
 #* @response 404 A json object
-#* @serializer csv
 function(index, model = "default", taxon = "none", region = "none", res) {
 
   has_output <- check_input(index, model, taxon)
 
   if (!has_output) {
 
+    res[["serializer"]] <- plumber::serializer_unboxed_json()
     res[["status"]] <- 404L
     return("Not found")
 
@@ -138,10 +138,12 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 
   if (is.raw(ans)) {
 
+    res[["serializer"]] <- plumber::serializer_csv()
     ans <- unserialize(ans)
 
   } else {
 
+    res[["serializer"]] <- plumber::serializer_unboxed_json()
     res[["status"]] <- 400L
 
   }
