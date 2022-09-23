@@ -18,14 +18,17 @@ update_index <- function(index, model, region, db) {
 
   from <- paste(c(from, region), collapse = "_")
 
-  df <- tryCatch(
-    switch(
-      config::get("combine", config = index_base),
-      cti = cti(from, index, model, db),
-      geometric_mean = geometric_mean(index, model, db),
-      overall_abundance = overall_abundance(from, index, model, db)
+  df <- withCallingHandlers(
+    tryCatch(
+      switch(
+        config::get("combine", config = index_base),
+        cti = cti(from, index, model, db),
+        geometric_mean = geometric_mean(index, model, db),
+        overall_abundance = overall_abundance(from, index, model, db)
+      ),
+      error = err_msg
     ),
-    error = err_msg
+    warning = warn_msg
   )
 
   index_model <- paste(index, model, sep = "_")

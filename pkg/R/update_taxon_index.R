@@ -64,9 +64,12 @@ update_taxon_index <- function(index, model, taxon, db) {
 
   }
 
-  model_data <- tryCatch(
-    run_model(index_base, taxon, surveys, counts, model),
-    error = err_msg
+  model_data <- withCallingHandlers(
+    tryCatch(
+      run_model(index_base, taxon, surveys, counts, model),
+      error = err_msg
+    ),
+    warning = warn_msg
   )
 
   cond <- !inherits(model_data, "error")
@@ -102,8 +105,28 @@ update_taxon_index <- function(index, model, taxon, db) {
 
 err_msg <- function(x) {
 
-  message(sprintf("ERROR [%s] %s", Sys.time(), x[["message"]]))
+  message(
+    sprintf(
+      "ERROR [%s] %s",
+      Sys.time(),
+      gsub("\n|\r|\r\n", "; ", x[["message"]])
+    )
+  )
 
   x
+
+}
+
+warn_msg <- function(x) {
+
+  message(
+    sprintf(
+      "WARNING [%s] %s",
+      Sys.time(),
+      gsub("\n|\r|\r\n", "; ", x[["message"]])
+    )
+  )
+
+  invokeRestart("muffleWarning")
 
 }
