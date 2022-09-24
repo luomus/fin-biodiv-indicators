@@ -29,6 +29,8 @@ run_trim <- function(index, taxon, counts) {
 
   args[["object"]] <- dplyr::collect(counts)
 
+  stopifnot("No count data available", nrow(args[["object"]]) > 0L)
+
   args[["object"]][["abundance"]] <- as.integer(args[["object"]][["abundance"]])
 
   args[["count_col"]] <- "abundance"
@@ -159,6 +161,8 @@ rbms <- function(
   )
 
   counts <- dplyr::collect(counts)
+
+  stopifnot("No count data available", nrow(counts) > 0L)
 
   ts_season_count <- rbms::ts_monit_count_site(
     m_season_visit = ts_season_visit, m_count = counts
