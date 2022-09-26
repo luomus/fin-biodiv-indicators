@@ -162,11 +162,11 @@ rbms <- function(
 
   counts <- dplyr::collect(counts)
 
-  stopifnot("No count data available" = nrow(counts) > 0L)
-
   ts_season_count <- rbms::ts_monit_count_site(
     m_season_visit = ts_season_visit, m_count = counts
   )
+
+  stopifnot("No count data available" = nrow(ts_season_count) > 0L)
 
   ts_flight_curve <- rbms::flight_curve(
     ts_season_count = ts_season_count,
