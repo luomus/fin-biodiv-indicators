@@ -16,3 +16,8 @@ set_start_year(counts, taxon, ...)
 \description{
 Discard counts from years before the start year
 }
+\details{
+This function sets a start year for a taxon \code{counts}. If a variable
+\code{start_year} has been configured for the given taxon all count data prior
+to the \code{start_year} is removed.
+}

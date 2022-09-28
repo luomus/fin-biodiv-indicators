@@ -12,3 +12,8 @@ format_date(surveys)
 \description{
 Combine year, month, day of survey into a single date string
 }
+\details{
+This function combines survey \code{year}, \code{month} and \code{day} into a
+character string with \code{-} as a separator. The function assumes that survey
+data includes \code{year}, \code{month} and \code{day}.
+}

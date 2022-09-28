@@ -27,6 +27,8 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
 
   select <- config::get(type, config = index)[["selection"]]
 
+  select <- switch(type, surveys = c(select, "municipality"), select)
+
   abundance <- config::get("counts", config = index)[["abundance"]]
 
   index <- paste(c(index, taxon[["code"]]), collapse = "_")
@@ -61,11 +63,35 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
 
     data[["index"]] <- index
 
+    regions <- switch(type, surveys = to_region(data[["municipality"]]), NULL)
+
+    data[["municipality"]] <- NULL
+
     set_cache(index, type, data, db)
 
     set_cache(
       index, cache_date, data.frame(index = index, date = Sys.Date()), db
     )
+
+    if (!is.null(regions)) {
+
+      for (i in c("north", "south")) {
+
+        index_region <- paste(index, i, sep = "_")
+
+        data[["index"]] <- index_region
+
+        set_cache(index_region, type, data[regions == i, ], db)
+
+        set_cache(
+          index_region, cache_date,
+          data.frame(index = index_region, date = Sys.Date()),
+          db
+        )
+
+      }
+
+    }
 
     TRUE
 
@@ -74,5 +100,11 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
     FALSE
 
   }
+
+}
+
+to_region <- function(x) {
+
+  as.vector(municipalities[x])
 
 }

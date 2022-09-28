@@ -33,14 +33,14 @@ process_funs <- function() {
 #'
 #' Pick first winter survey in each year discarding subsequent surveys
 #'
-#' @details This function moves `surveys` occurring in December ahead one year.
+#' @details This function moves surveys occurring in December ahead one `year`.
 #'   This enables all December surveys to be grouped with subsequent surveys
 #'   occurring in the January of the same winter. Surveys are then grouped by
-#'   location and year then ordered by date. Then all but the first survey in
-#'   each group is removed. If two or more surveys share the same date and
-#'   location then one is picked at random and the rest are removed. This
-#'   function works on the assumption that surveys occur in winter from December
-#'   to January and that the `surveys` data includes at least `day`, `month` and
+#'   `location_id` and `year` and then ordered by date. Then all but the first
+#'   survey in each group is removed. If two or more surveys share the same date
+#'   and `location_id` then one is picked at random and the rest are removed.
+#'   This function works on the assumption that surveys are in winter from
+#'   December to January and that the `surveys` data includes `day`, `month` and
 #'   `year` (as integers) and `location_id`.
 #'
 #' @export
@@ -69,11 +69,11 @@ pick_first_survey_in_winter <- function(surveys) {
 #'
 #' Pick first survey in each year discarding subsequent surveys
 #'
-#' @details This function groups `surveys` by location and year then orders
+#' @details This function groups surveys by `location_id` and `year` then orders
 #'   them by date. All but the first survey in each group is removed. If two or
-#'   more surveys share the same date and location then one is picked at random
-#'   and the rest are removed. The function assumes the `surveys` data at least
-#'   `day`, `month` and `year` (as integers) and `location_id`.
+#'   more surveys share the same date and `location_id` then one is picked at
+#'   random and the rest are removed. The function assumes that the `surveys`
+#'   data includes `day`, `month` and `year` (as integers) and `location_id`.
 #'
 #' @export
 #' @inheritParams process_funs
@@ -92,18 +92,18 @@ pick_first_survey_in_year <- function(surveys) {
 
 #' Require seven fortnights
 #'
-#' Divide year into approximate 2 week blocks selecting blocks 10-16 and
+#' Divide year into approximate 2 week blocks, selecting blocks 10-16 and
 #' discarding locations without a survey in each remaining block
 #'
-#' @details This function assigns each survey to an approximate fortnight. Where
-#'  a fortnight is defined as all the days before the 16th day of each month and
-#'  all the days after the 15th day of each month. Then all the surveys falling
-#'  outside of the date range of the seven fortnights from the second fortnight
-#'  of May to the second fortnight of August are removed. Surveys are then
-#'  grouped by location and year and all surveys belonging to groups that do not
-#'  have at least one surveys occurring in the seven remaining fortnights are
-#'  discarded. The function assumes the `surveys` data at least `day`, `month`
-#'  and `year` (as integers) and `location_id`.
+#' @details This function assigns each survey to an approximate fortnight. A
+#'  fortnight is defined as all the days before the 16th `day` of each `month`
+#'  and all the days after the 15th `day` of each `month`. Then all the surveys
+#'  falling outside of the date range of the seven fortnights from the second
+#'  fortnight of May to the second fortnight of August are removed. Surveys are
+#'  then grouped by `location_id` and `year` and all surveys belonging to groups
+#'  that do not have at least one survey occurring in each of the seven
+#'  remaining fortnights are discarded. The function assumes that the `surveys`
+#'  data has `day`, `month` and `year` (as integers) and `location_id`.
 #'
 #' @export
 #' @inheritParams process_funs
@@ -137,6 +137,10 @@ require_seven_fortnights <- function(surveys) {
 #'
 #' Discard locations with less than two survey years
 #'
+#' @details This function groups `surveys` by `location_id` and then removes all
+#'  surveys for locations that do not have data in more than one `year`. The
+#'  function assumes that `surveys` has data for `location_id` and `year`.
+#'
 #' @export
 #' @inheritParams process_funs
 require_two_years <- function(surveys) {
@@ -161,6 +165,14 @@ require_two_years <- function(surveys) {
 #'
 #' Pick first survey in each fortnight discarding subsequent surveys
 #'
+#' @details This function groups surveys by `location_id`, `year` and
+#'  `fortnight`then orders them by date. All but the first survey in each group
+#'   is removed. If two or more surveys share the same date and `location_id`
+#'   then one is picked at random and the rest are removed. The function assumes
+#'   that the `surveys` data includes `day`, and `year` (as integers) and
+#'   `location_id`, and has been processed by the function
+#'   `require_seven_fortnights`.
+#'
 #' @export
 #' @inheritParams process_funs
 pick_first_survey_in_fortnight <- function(surveys) {
@@ -181,6 +193,10 @@ pick_first_survey_in_fortnight <- function(surveys) {
 #'
 #' Combine year, month, day of survey into a single date string
 #'
+#' @details This function combines survey `year`, `month` and `day` into a
+#'   character string with `-` as a separator. The function assumes that survey
+#'   data includes `year`, `month` and `day`.
+#'
 #' @export
 #' @inheritParams process_funs
 format_date <- function(surveys) {
@@ -196,11 +212,15 @@ format_date <- function(surveys) {
 #'
 #' Combine count data with survey data
 #'
+#' @details This function combines `counts` and `surveys` data. It performs an
+#'   inner join of `counts` on `surveys` by `document_id`. The function assumes
+#'   that both `counts` and `surveys` data include `document_id`.
+#'
 #' @export
 #' @inheritParams process_funs
 combine_with_surveys <- function(counts, surveys, ...) {
 
-  dplyr::left_join(counts, surveys, by = "document_id")
+  dplyr::inner_join(counts, surveys, by = "document_id")
 
 }
 
@@ -208,6 +228,12 @@ combine_with_surveys <- function(counts, surveys, ...) {
 #'
 #' Combine count data with survey data filling missing surveys in count data
 #' with zero counts.
+#'
+#' @details This function combines `counts` and `surveys` data. It performs a
+#'   right outer join of `counts` on `surveys` by `document_id`. Then all
+#'   surveys with no corresponding data for abundance are filled with zero. The
+#'   function assumes that both `counts` and `surveys` data include
+#'   `document_id` and that `counts` data includes `abundance`.
 #'
 #' @export
 #' @inheritParams process_funs
@@ -227,6 +253,10 @@ zero_fill <- function(counts, surveys, ...) {
 #'
 #' Discard locations where taxa always had zero abundance
 #'
+#' @details This function groups `counts` by `location_id` and then removes all
+#    locations where abundance is always zero. The function assumes that
+#'   `counts` includes `location_id` and `abundance`.
+#'
 #' @export
 #' @inheritParams process_funs
 remove_all_zero_locations <- function(counts, ...) {
@@ -244,6 +274,11 @@ remove_all_zero_locations <- function(counts, ...) {
 #' Sum over sections
 #'
 #' Sum counts over the sections of surveys
+#'
+#' @details This functions groups count data by `document_id` (the IDs of the
+#'  individual surveys). If multiple taxa `counts` are input then data is also
+#'  grouped by taxa. Counts are then summed across survey sections when count
+#'  data has been provided as surveys split into parts.
 #'
 #' @export
 #' @inheritParams process_funs
@@ -268,6 +303,10 @@ sum_over_sections <- function(counts, ...) {
 #'
 #' Sum the counts over the surveys or taxa in each year
 #'
+#' @details This functions groups count data by `location_id` and `year`. If
+#'  multiple taxa `counts` are input then data is also grouped by taxa. Counts
+#'  are then summed across the survey events at the locations and years.
+#'
 #' @export
 #' @inheritParams process_funs
 sum_by_event <- function(counts, ...) {
@@ -290,6 +329,10 @@ sum_by_event <- function(counts, ...) {
 #' Set start year
 #'
 #' Discard counts from years before the start year
+#'
+#' @details This function sets a start year for a taxon `counts`. If a variable
+#'  `start_year` has been configured for the given taxon all count data prior
+#'  to the `start_year` is removed.
 #'
 #' @export
 #' @inheritParams process_funs

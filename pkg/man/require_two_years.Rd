@@ -12,3 +12,8 @@ require_two_years(surveys)
 \description{
 Discard locations with less than two survey years
 }
+\details{
+This function groups \code{surveys} by \code{location_id} and then removes all
+surveys for locations that do not have data in more than one \code{year}. The
+function assumes that \code{surveys} has data for \code{location_id} and \code{year}.
+}

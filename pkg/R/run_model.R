@@ -29,6 +29,8 @@ run_trim <- function(index, taxon, counts) {
 
   args[["object"]] <- dplyr::collect(counts)
 
+  stopifnot("No count data available" = nrow(args[["object"]]) > 0L)
+
   args[["object"]][["abundance"]] <- as.integer(args[["object"]][["abundance"]])
 
   args[["count_col"]] <- "abundance"
@@ -164,6 +166,8 @@ rbms <- function(
     m_season_visit = ts_season_visit, m_count = counts
   )
 
+  stopifnot("No count data available" = nrow(ts_season_count) > 0L)
+
   ts_flight_curve <- rbms::flight_curve(
     ts_season_count = ts_season_count,
     NbrSample       = NbrSample,
@@ -207,7 +211,9 @@ rbms <- function(
   index_mc <- do.call(rbind, index_mc)
 
   index_mc <- dplyr::mutate(
-    index_mc, mc = log(.data[["COL_INDEX"]]), time = .data[["M_YEAR"]]
+    index_mc,
+    mc = log(pmax(1 / 100, .data[["COL_INDEX"]])),
+    time = .data[["M_YEAR"]]
   )
 
   index_mc <- dplyr::group_by(index_mc, .data[["BOOTi"]])

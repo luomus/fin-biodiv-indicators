@@ -14,3 +14,8 @@ sum_by_event(counts, ...)
 \description{
 Sum the counts over the surveys or taxa in each year
 }
+\details{
+This functions groups count data by \code{location_id} and \code{year}. If
+multiple taxa \code{counts} are input then data is also grouped by taxa. Counts
+are then summed across the survey events at the locations and years.
+}

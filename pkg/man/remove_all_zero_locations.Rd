@@ -14,3 +14,7 @@ remove_all_zero_locations(counts, ...)
 \description{
 Discard locations where taxa always had zero abundance
 }
+\details{
+This function groups \code{counts} by \code{location_id} and then removes all
+\code{counts} includes \code{location_id} and \code{abundance}.
+}

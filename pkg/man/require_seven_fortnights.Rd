@@ -10,17 +10,17 @@ require_seven_fortnights(surveys)
 \item{surveys}{Survey data.}
 }
 \description{
-Divide year into approximate 2 week blocks selecting blocks 10-16 and
+Divide year into approximate 2 week blocks, selecting blocks 10-16 and
 discarding locations without a survey in each remaining block
 }
 \details{
-This function assigns each survey to an approximate fortnight. Where
-a fortnight is defined as all the days before the 16th day of each month and
-all the days after the 15th day of each month. Then all the surveys falling
-outside of the date range of the seven fortnights from the second fortnight
-of May to the second fortnight of August are removed. Surveys are then
-grouped by location and year and all surveys belonging to groups that do not
-have at least one surveys occurring in the seven remaining fortnights are
-discarded. The function assumes the \code{surveys} data at least \code{day}, \code{month}
-and \code{year} (as integers) and \code{location_id}.
+This function assigns each survey to an approximate fortnight. A
+fortnight is defined as all the days before the 16th \code{day} of each \code{month}
+and all the days after the 15th \code{day} of each \code{month}. Then all the surveys
+falling outside of the date range of the seven fortnights from the second
+fortnight of May to the second fortnight of August are removed. Surveys are
+then grouped by \code{location_id} and \code{year} and all surveys belonging to groups
+that do not have at least one survey occurring in each of the seven
+remaining fortnights are discarded. The function assumes that the \code{surveys}
+data has \code{day}, \code{month} and \code{year} (as integers) and \code{location_id}.
 }

@@ -49,6 +49,8 @@ clean_cache <- function(db) {
 
   indices <- vapply(config::get("indices"), getElement, "", "code")
 
+  indices <- c(indices, paste(indices, c("north", "south"), sep = "_"))
+
   sep <- list(sep = "_")
 
   taxa <- .mapply(
@@ -89,11 +91,21 @@ clean_cache <- function(db) {
 
   taxa_model_indices <- do.call(c, c(model_indices, taxa_model_indices))
 
+  taxa_model_indices <- c(
+    taxa_model_indices,
+    paste(taxa_model_indices, c("north", "south"), sep = "_")
+  )
+
   extra_taxa_model_indices <- .mapply(
     outer, list(model_indices, extra_taxa), c(list(FUN = paste), sep)
   )
 
   extra_taxa_model_indices <- do.call(c, c(extra_taxa_model_indices))
+
+  extra_taxa_model_indices <- c(
+    extra_taxa_model_indices,
+    paste(extra_taxa_model_indices, c("north", "south"), sep = "_")
+  )
 
   clean_indices(index_tables, db_tables, indices, db)
 

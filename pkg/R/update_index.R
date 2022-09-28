@@ -4,23 +4,52 @@
 #'
 #' @param index Character. Update which index?
 #' @param model Character. Which model to use?
+#' @param region Character. Which region?
 #' @param db Connection. Database in which to update index.
 #'
 #' @importFrom config get
 #' @export
 
-update_index <- function(index, model, db) {
+update_index <- function(index, model, region, db) {
 
-  from <- config::get("from", config = index)
+  index_base <- sub("_north|_south", "", index)
 
-  df <- switch(
-    config::get("combine", config = index),
-    cti = cti(from, index, model, db),
-    geometric_mean = geometric_mean(index, model, db),
-    overall_abundance = overall_abundance(from, index, model, db)
+  from <- config::get("from", config = index_base)
+
+  from <- paste(c(from, region), collapse = "_")
+
+  df <- withCallingHandlers(
+    tryCatch(
+      switch(
+        config::get("combine", config = index_base),
+        cti = cti(from, index, model, db),
+        geometric_mean = geometric_mean(index, model, db),
+        overall_abundance = overall_abundance(from, index, model, db)
+      ),
+      error = err_msg
+    ),
+    warning = warn_msg
   )
 
-  cache_outputs(paste(index, model, sep = "_"), df, db)
+  index_model <- paste(index, model, sep = "_")
+
+  if (!inherits(df, "error")) {
+
+    cache_outputs(index_model, df, db)
+
+    set_cache(
+      index_model, "model_state",
+      data.frame(index = index_model, state = "success", time = Sys.time()), db
+    )
+
+  } else {
+
+    set_cache(
+      index_model, "model_state",
+      data.frame(index = index_model, state = "fail", time = Sys.time()), db
+    )
+
+  }
 
   invisible(NULL)
 
@@ -39,7 +68,11 @@ cti <- function(index, cti, model, db) {
 
   surveys <- get_from_db(con, "surveys", index)
 
-  model_spec <- config::get("model", config = cti)[[model]]
+  index_base <- sub("_north|_south", "", index)
+
+  cti_base <- sub("_north|_south", "", cti)
+
+  model_spec <- config::get("model", config = cti_base)[[model]]
 
   for (i in model_spec[["surveys_process"]]) {
 
@@ -47,9 +80,9 @@ cti <- function(index, cti, model, db) {
 
   }
 
-  taxa <- config::get("taxa", config = index)
+  taxa <- config::get("taxa", config = index_base)
 
-  extra_taxa <- config::get("extra_taxa", config = index)
+  extra_taxa <- config::get("extra_taxa", config = index_base)
 
   codes <- vapply(taxa, getElement, "", "code")
 
@@ -57,13 +90,13 @@ cti <- function(index, cti, model, db) {
 
   codes <- c(codes, extra_codes)
 
-  select <- config::get("counts", config = index)[["selection"]]
+  select <- config::get("counts", config = index_base)[["selection"]]
 
-  abundance <- config::get("counts", config = index)[["abundance"]]
+  abundance <- config::get("counts", config = index_base)[["abundance"]]
 
   select[select == abundance] <- "abundance"
 
-  counts <- get_from_db(con, "counts", index, codes, c("index", select))
+  counts <- get_from_db(con, "counts", index_base, codes, c("index", select))
 
   for (i in model_spec[["counts_process"]]) {
 
@@ -83,7 +116,7 @@ cti <- function(index, cti, model, db) {
 
   sti <- unlist(c(sti, extra_sti))
 
-  sti_df <- data.frame(index = paste(index, codes, sep = "_"), sti = sti)
+  sti_df <- data.frame(index = paste(index_base, codes, sep = "_"), sti = sti)
 
   sti_df <- dplyr::copy_to(con, sti_df, overwrite = TRUE)
 
@@ -135,12 +168,14 @@ cti <- function(index, cti, model, db) {
 
 geometric_mean <- function(index, model, db) {
 
+  index_base <- sub("_north|_south", "", index)
+
   n <- 1000L
   maxcv <- 3
   minindex <- .01
   trunc <- 10
 
-  taxa <- config::get("taxa", config = index)
+  taxa <- config::get("taxa", config = index_base)
 
   taxa <- vapply(taxa, getElement, "", "code")
 
@@ -154,7 +189,7 @@ geometric_mean <- function(index, model, db) {
 
   nyears <- length(years)
 
-  base <- config::get("model", config = index)[[model]][["base_year"]]
+  base <- config::get("model", config = index_base)[[model]][["base_year"]]
 
   base <- which(years == base)
 
@@ -330,7 +365,11 @@ overall_abundance <- function(index, oa, model, db) {
 
   surveys <- get_from_db(db, "surveys", index)
 
-  model_spec <- config::get("model", config = oa)[[model]]
+  index_base <- sub("_north|_south", "", index)
+
+  oa_base <- sub("_north|_south", "", oa)
+
+  model_spec <- config::get("model", config = oa_base)[[model]]
 
   for (i in model_spec[["surveys_process"]]) {
 
@@ -338,9 +377,9 @@ overall_abundance <- function(index, oa, model, db) {
 
   }
 
-  taxa <- config::get("taxa", config = index)
+  taxa <- config::get("taxa", config = index_base)
 
-  extra_taxa <- config::get("extra_taxa", config = index)
+  extra_taxa <- config::get("extra_taxa", config = index_base)
 
   codes <- vapply(taxa, getElement, "", "code")
 
@@ -348,9 +387,9 @@ overall_abundance <- function(index, oa, model, db) {
 
   codes <- c(codes, extra_codes)
 
-  select <- config::get("counts", config = index)[["selection"]]
+  select <- config::get("counts", config = index_base)[["selection"]]
 
-  counts <- get_from_db(db, "counts", index, codes, c("index", select))
+  counts <- get_from_db(db, "counts", index_base, codes, c("index", select))
 
   for (i in model_spec[["counts_process"]]) {
 
