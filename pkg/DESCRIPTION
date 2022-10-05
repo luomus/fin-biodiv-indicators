@@ -1,6 +1,6 @@
 Package: fbi
 Title: Finnish Biodiversity Indicators
-Version: 0.10.0
+Version: 0.10.1
 Authors@R: c(
     person(given = "Finnish Museum of Natural History - Luomus",
            role = "cph"),
