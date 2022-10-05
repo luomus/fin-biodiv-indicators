@@ -199,11 +199,13 @@ rbms <- function(
 
   bootsample <- rbms::boot_sample(data = sindex, boot_n = boot_n)
 
-  index_mc <- mapply(
-    rbms::collated_index,
-    bootID = seq_len(boot_n),
-    MoreArgs = list(data = sindex, s_sp = 1L, boot_ind = bootsample),
-    SIMPLIFY = FALSE
+  index_mc <- suppressWarnings(
+    mapply(
+      rbms::collated_index,
+      bootID = seq_len(boot_n),
+      MoreArgs = list(data = sindex, s_sp = 1L, boot_ind = bootsample),
+      SIMPLIFY = FALSE
+    )
   )
 
   index_mc <- lapply(index_mc, getElement, "col_index")
