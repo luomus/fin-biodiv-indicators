@@ -17,14 +17,14 @@ run_model <- function(index, taxon, surveys, counts, model) {
 
 #' @importFrom config get
 #' @importFrom rtrim count_summary index overall trim
-#' @importFrom dplyr collect .data select
+#' @importFrom dplyr all_of collect .data select
 
 run_trim <- function(index, taxon, counts) {
 
   args <- config::get("model", config = index)[["trim"]][["args"]]
 
   counts <- dplyr::select(
-    counts, .data[["abundance"]], .data[["location_id"]], .data[["year"]]
+    counts, dplyr::all_of(c("abundance", "location_id", "year"))
   )
 
   args[["object"]] <- dplyr::collect(counts)
@@ -85,8 +85,8 @@ run_rbms <- function(index, taxon, surveys, counts) {
 
 }
 
-#' @importFrom dplyr arrange collect .data filter group_by lag lead mutate
-#' @importFrom dplyr select summarise
+#' @importFrom dplyr all_of arrange collect .data filter group_by lag lead
+#' @importFrom dplyr mutate select summarise
 #' @importFrom rbms boot_sample collated_index flight_curve impute_count
 #' @importFrom rbms site_index ts_dwmy_table ts_monit_count_site ts_monit_season
 #' @importFrom rbms ts_monit_site
@@ -118,7 +118,8 @@ rbms <- function(
 ) {
 
   surveys <- dplyr::select(
-    surveys, site_id = .data[["location_id"]], .data[["year"]], .data[["date"]]
+    surveys,
+    site_id = dplyr::all_of("location_id"), dplyr::all_of(c("year", "date"))
   )
 
   surveys <- dplyr::collect(surveys)
@@ -153,11 +154,9 @@ rbms <- function(
 
   counts <- dplyr::select(
     counts,
-    count = .data[["abundance"]],
-    site_id = .data[["location_id"]],
-    .data[["year"]],
-    .data[["date"]],
-    .data[["species"]]
+    count = dplyr::all_of("abundance"),
+    site_id = dplyr::all_of("location_id"),
+    dplyr::all_of(c("year", "date", "species"))
   )
 
   counts <- dplyr::collect(counts)

@@ -7,8 +7,8 @@
 #' @param taxon Taxon configuration.
 #' @param ... Additional arguments.
 #'
-#' @importFrom dplyr dense_rank filter group_by inner_join left_join mutate
-#' @importFrom dplyr right_join select slice_min summarise ungroup
+#' @importFrom dplyr any_of between .data dense_rank filter group_by inner_join
+#' @importFrom dplyr mutate right_join select slice_min summarise ungroup
 #' @export
 process_funs <- function() {
 
@@ -155,7 +155,7 @@ require_two_years <- function(surveys) {
     surveys, max(.data[["year_rank"]], na.rm = TRUE) >= 2L
   )
 
-  surveys <- dplyr::select(surveys, !.data[["year_rank"]])
+  surveys <- dplyr::select(surveys, -dplyr::any_of("year_rank"))
 
   dplyr::ungroup(surveys)
 

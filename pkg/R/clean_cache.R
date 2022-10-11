@@ -5,7 +5,7 @@
 #' @param db Connection. Database cache.
 #'
 #' @importFrom config get
-#' @importFrom dplyr distinct pull tbl
+#' @importFrom dplyr all_of .data distinct pull tbl
 #' @importFrom pool dbExecute dbListTables dbRemoveTable
 #' @export
 
@@ -127,7 +127,7 @@ clean_indices <- function(tables, db_tables, indices, db) {
 
     db_indices <- dplyr::distinct(db_indices, .data[["index"]])
 
-    db_indices <- dplyr::pull(db_indices, .data[["index"]])
+    db_indices <- dplyr::pull(db_indices, dplyr::all_of("index"))
 
     indices_to_drop <- setdiff(db_indices, indices)
 
