@@ -134,6 +134,8 @@ mrb:
     binomial: Tringa nebularia
   - code: MX.35182
     binomial: Emberiza schoeniclus
+  - code: MX.26921
+    binomial: Lagopus lagopus
   filters:
     date_range_ymd:
     - "1981-01-01"
