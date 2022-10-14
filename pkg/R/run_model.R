@@ -49,6 +49,8 @@ run_trim <- function(index, taxon, counts) {
 
   base <- which(trim[["time.id"]] == base)
 
+  base <- max(base, 1L)
+
   model_data <- rtrim::index(trim, base = base)
 
   model_data <- data.frame(
@@ -125,6 +127,8 @@ rbms <- function(
   surveys <- dplyr::collect(surveys)
 
   base <- which(sort(unique(surveys[["year"]])) == byr)
+
+  base <- max(base, 1L)
 
   init_year <- min(surveys[["year"]])
 
