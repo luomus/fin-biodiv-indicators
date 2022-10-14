@@ -162,7 +162,7 @@ cti <- function(index, cti, model, db) {
 }
 
 #' @importFrom config get
-#' @importFrom dplyr arrange .data collect count distinct group_by filter
+#' @importFrom dplyr all_of arrange .data collect count distinct group_by filter
 #' @importFrom dplyr full_join inner_join lag lead mutate pull right_join
 #' @importFrom dplyr row_number summarise sql tbl ungroup
 
@@ -195,7 +195,7 @@ geometric_mean <- function(index, model, db) {
 
   esab <- nyears - base + 1L
 
-  nrows <- dplyr::pull(dplyr::count(df))
+  nrows <- dplyr::pull(dplyr::count(df), dplyr::all_of("n"))
 
   df <- dplyr::mutate(
     df,

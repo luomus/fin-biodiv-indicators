@@ -89,7 +89,7 @@ flb:
   use_data_after: "10-01"
   model:
     trim:
-      base_year: 2006
+      base_year: 2000
       surveys_process:
       - pick_first_survey_in_year
       - require_two_years
@@ -134,6 +134,8 @@ mrb:
     binomial: Tringa nebularia
   - code: MX.35182
     binomial: Emberiza schoeniclus
+  - code: MX.26921
+    binomial: Lagopus lagopus
   filters:
     date_range_ymd:
     - "1981-01-01"
@@ -154,7 +156,7 @@ mrb:
   use_data_after: "10-01"
   model:
     trim:
-      base_year: 2006
+      base_year: 2000
       surveys_process:
       - pick_first_survey_in_year
       - require_two_years
@@ -210,7 +212,7 @@ mtb:
   use_data_after: "10-01"
   model:
     trim:
-      base_year: 1996
+      base_year: 2000
       surveys_process:
       - pick_first_survey_in_year
       - require_two_years
@@ -899,7 +901,7 @@ ftb:
   use_data_after: "10-01"
   model:
     trim:
-      base_year: 2006
+      base_year: 2000
       surveys_process:
       - pick_first_survey_in_year
       - require_two_years
@@ -1439,7 +1441,7 @@ wb:
   use_data_after: "03-01"
   model:
     trim:
-      base_year: 1959
+      base_year: 2000
       surveys_process:
       - pick_first_survey_in_winter
       counts_process:
@@ -1751,7 +1753,7 @@ bf:
   use_data_after: "10-01"
   model:
     rbms:
-      base_year: 2001
+      base_year: 2000
       surveys_process:
       - format_date
       counts_process:
@@ -1760,7 +1762,7 @@ bf:
     trim:
       args:
         overdisp: true
-      base_year: 2001
+      base_year: 2000
       surveys_process:
       - require_seven_fortnights
       - require_two_years

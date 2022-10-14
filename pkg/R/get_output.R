@@ -10,7 +10,7 @@
 #' @param db Connection. Database from which to get output.
 #'
 #' @importFrom config get
-#' @importFrom dplyr .data filter pull select tbl
+#' @importFrom dplyr .data all_of filter pull select tbl
 #' @export
 
 get_output <- function(output, index, model, taxon, region, db) {
@@ -29,9 +29,7 @@ get_output <- function(output, index, model, taxon, region, db) {
 
   ans <- dplyr::filter(ans, .data[["index"]] == !!index)
 
-  ans <- dplyr::select(ans, .data[["data"]])
-
-  ans <- dplyr::pull(ans)
+  ans <- dplyr::pull(ans, dplyr::all_of("data"))
 
   if (length(ans) < 1L) {
 
@@ -39,7 +37,7 @@ get_output <- function(output, index, model, taxon, region, db) {
 
     ans <- dplyr::filter(ans, .data[["index"]] == !!index)
 
-    ans <- dplyr::select(ans, .data[["state"]], .data[["time"]])
+    ans <- dplyr::select(ans, dplyr::all_of(c("state", "time")))
 
     ans <- dplyr::collect(ans)
 

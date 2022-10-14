@@ -1,5 +1,5 @@
 #' @importFrom pool dbExistsTable
-#' @importFrom dplyr .data filter pull tbl
+#' @importFrom dplyr all_of .data filter pull tbl
 
 last_cached <- function(index, table, db) {
 
@@ -11,7 +11,7 @@ last_cached <- function(index, table, db) {
 
     last_cache_on <- dplyr::filter(last_cache_on, .data[["index"]] == !!index)
 
-    last_cache_on <- dplyr::pull(last_cache_on, .data[["date"]])
+    last_cache_on <- dplyr::pull(last_cache_on, dplyr::all_of("date"))
 
     if (length(last_cache_on) > 0L) ans <- last_cache_on
 
