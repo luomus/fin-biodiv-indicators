@@ -74,11 +74,11 @@ cti <- function(index, cti, model, db) {
 
   model_spec <- config::get("model", config = cti_base)[[model]]
 
-  for (i in model_spec[["surveys_process"]]) {
-
-    surveys <- do.call(process_funs()[[i]], list(surveys))
-
-  }
+  surveys <- apply_process(
+    model_spec[["surveys_process"]],
+    what = "surveys",
+    surveys = surveys
+  )
 
   taxa <- config::get("taxa", config = index_base)
 
@@ -98,13 +98,12 @@ cti <- function(index, cti, model, db) {
 
   counts <- get_from_db(con, "counts", index_base, codes, c("index", select))
 
-  for (i in model_spec[["counts_process"]]) {
-
-    counts <- do.call(
-      process_funs()[[i]], list(counts = counts, surveys = surveys)
-    )
-
-  }
+  counts <- apply_process(
+    model_spec[["counts_process"]],
+    what = "counts",
+    counts = counts,
+    surveys = surveys
+  )
 
   sti <- lapply(taxa, getElement, "sti")
 
@@ -371,11 +370,11 @@ overall_abundance <- function(index, oa, model, db) {
 
   model_spec <- config::get("model", config = oa_base)[[model]]
 
-  for (i in model_spec[["surveys_process"]]) {
-
-    surveys <- do.call(process_funs()[[i]], list(surveys))
-
-  }
+  surveys <- apply_process(
+    model_spec[["surveys_process"]],
+    what = "surveys",
+    surveys = surveys
+  )
 
   taxa <- config::get("taxa", config = index_base)
 
@@ -391,13 +390,12 @@ overall_abundance <- function(index, oa, model, db) {
 
   counts <- get_from_db(db, "counts", index_base, codes, c("index", select))
 
-  for (i in model_spec[["counts_process"]]) {
-
-    counts <- do.call(
-      process_funs()[[i]], list(counts = counts, surveys = surveys)
-    )
-
-  }
+  counts <- apply_process(
+    model_spec[["counts_process"]],
+    what = "counts",
+    counts = counts,
+    surveys = surveys
+  )
 
   data <- dplyr::group_by(counts, .data[["location_id"]], .data[["year"]])
 

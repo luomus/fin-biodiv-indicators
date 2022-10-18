@@ -45,7 +45,7 @@ process_funs <- function() {
 #'
 #' @export
 #' @inheritParams process_funs
-pick_first_survey_in_winter <- function(surveys) {
+pick_first_survey_in_winter <- function(surveys, ...) {
 
   surveys <- dplyr::mutate(
     surveys,
@@ -77,7 +77,7 @@ pick_first_survey_in_winter <- function(surveys) {
 #'
 #' @export
 #' @inheritParams process_funs
-pick_first_survey_in_year <- function(surveys) {
+pick_first_survey_in_year <- function(surveys, ...) {
 
   surveys <- dplyr::group_by(surveys, .data[["location_id"]], .data[["year"]])
 
@@ -107,7 +107,7 @@ pick_first_survey_in_year <- function(surveys) {
 #'
 #' @export
 #' @inheritParams process_funs
-require_seven_fortnights <- function(surveys) {
+require_seven_fortnights <- function(surveys, ...) {
 
   surveys <- dplyr::mutate(
     surveys,
@@ -143,7 +143,7 @@ require_seven_fortnights <- function(surveys) {
 #'
 #' @export
 #' @inheritParams process_funs
-require_two_years <- function(surveys) {
+require_two_years <- function(surveys, ...) {
 
   surveys <- dplyr::group_by(surveys, .data[["location_id"]])
 
@@ -175,7 +175,7 @@ require_two_years <- function(surveys) {
 #'
 #' @export
 #' @inheritParams process_funs
-pick_first_survey_in_fortnight <- function(surveys) {
+pick_first_survey_in_fortnight <- function(surveys, ...) {
 
   surveys <- dplyr::group_by(
     surveys, .data[["location_id"]], .data[["year"]], .data[["fortnight"]]
@@ -199,7 +199,7 @@ pick_first_survey_in_fortnight <- function(surveys) {
 #'
 #' @export
 #' @inheritParams process_funs
-format_date <- function(surveys) {
+format_date <- function(surveys, ...) {
 
   dplyr::mutate(
     surveys,

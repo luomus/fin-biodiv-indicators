@@ -16,3 +16,10 @@ expect_equal(
   set_start_year(df, list(start_year = 2)),
   data.frame(location_id = "", year = 2, month = 1:6 * 2, day = 1)
 )
+
+expect_equal(
+  fbi:::apply_process(
+    list(list(format_date = list(list(dummy = NULL)))), "surveys", surveys = df
+  ),
+  fbi:::apply_process("format_date", "surveys", surveys = df)
+)
