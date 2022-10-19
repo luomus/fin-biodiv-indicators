@@ -23,3 +23,14 @@ expect_equal(
   ),
   fbi:::apply_process("format_date", "surveys", surveys = df)
 )
+
+df <- tibble(
+  location_id = "", year = 1, region = "x", ordinal_day_start = 1:10,
+  ordinal_day_end = 2:11
+)
+
+expect_equal(require_minimum_weeks(df, region = "x", min_weeks = 0)[-6], df)
+
+expect_equal(require_minimum_weeks(df, min_weeks = 0)[-6], df)
+
+expect_equal(require_minimum_gaps(df), df)

@@ -8,7 +8,7 @@
 #' @param ... Additional arguments.
 #'
 #' @importFrom dplyr any_of between .data dense_rank filter group_by inner_join
-#' @importFrom dplyr mutate right_join select slice_min summarise ungroup
+#' @importFrom dplyr lag mutate right_join select slice_min summarise ungroup
 #' @export
 process_funs <- function() {
 
@@ -19,6 +19,8 @@ process_funs <- function() {
     require_two_years              = require_two_years,
     pick_first_survey_in_fortnight = pick_first_survey_in_fortnight,
     format_date                    = format_date,
+    require_minimum_weeks          = require_minimum_weeks,
+    require_minimum_gaps           = require_minimum_gaps,
     combine_with_surveys           = combine_with_surveys,
     zero_fill                      = zero_fill,
     remove_all_zero_locations      = remove_all_zero_locations,
@@ -205,6 +207,88 @@ format_date <- function(surveys, ...) {
     surveys,
     date = paste(.data[["year"]], .data[["month"]], .data[["day"]], sep = "-")
   )
+
+}
+
+#' Require minimum weeks
+#'
+#' Remove survey site-years from a region covering less than a minimum number of
+#' weeks.
+#'
+#' @details This function groups surveys data by `location_id` and `year`. It
+#'   then removes groups where the survey period is less than a minimum number
+#'   of weeks for a given `region`. If `region` is missing then the filter
+#'   applies to all regions. The function takes two arguments: `min_weeks` and
+#'   `region`. It expects the `surveys` data to have at least `location_id`,
+#'   `year`, `region`, `ordinal_day_start` and `ordinal_day_end`.
+#'
+#' @export
+#' @inheritParams process_funs
+require_minimum_weeks <- function(surveys, ...) {
+
+  args <- list(...)
+
+  surveys <- dplyr::group_by(surveys, .data[["location_id"]], .data[["year"]])
+
+  surveys <- dplyr::mutate(
+    surveys,
+    n_days =
+      max(.data[["ordinal_day_end"]], na.rm = TRUE) -
+      min(.data[["ordinal_day_start"]], na.rm = TRUE)
+  )
+
+  if (is.null(args[["region"]])) {
+
+    surveys <- dplyr::filter(
+      surveys, .data[["n_days"]] >= !!args[["min_weeks"]] * 7L
+    )
+
+  } else {
+
+    surveys <- dplyr::filter(
+      surveys,
+      .data[["region"]] == !!args[["region"]] &
+        .data[["n_days"]] >= !!args[["min_weeks"]] * 7L
+    )
+
+  }
+
+  dplyr::ungroup(surveys)
+
+}
+
+#' Require minimum gaps
+#'
+#' Remove survey site-years that too many or to large sampling gaps.
+#'
+#' @details This function groups surveys data by `location_id` and `year`. It
+#'   then removes groups where the survey period has too many or too large
+#'   sampling gaps. Where too many is defined as a total gap length over the
+#'   `year` of 21 days and too large is any single sampling gap of more than
+#'   7 days. The function expects the `surveys` data to have at least
+#'   `location_id`, `year`, `ordinal_day_start` and `ordinal_day_end`.
+#'
+#' @export
+#' @inheritParams process_funs
+require_minimum_gaps <- function(surveys, ...) {
+
+  surveys <- dplyr::group_by(surveys, .data[["location_id"]], .data[["year"]])
+
+  surveys <- window_arrange(surveys, .data[["ordinal_day_start"]])
+
+  surveys <- dplyr::filter(
+    surveys,
+    sum(
+      .data[["ordinal_day_start"]] - dplyr::lag(.data[["ordinal_day_end"]]),
+      na.rm = TRUE
+    ) <= 7L * 3L &
+      max(
+        .data[["ordinal_day_start"]] - dplyr::lag(.data[["ordinal_day_end"]]),
+        na.rm = TRUE
+      ) <= 7L
+  )
+
+  dplyr::ungroup(surveys)
 
 }
 
