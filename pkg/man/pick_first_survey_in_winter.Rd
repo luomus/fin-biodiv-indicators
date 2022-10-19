@@ -4,10 +4,12 @@
 \alias{pick_first_survey_in_winter}
 \title{Pick first survey in winter}
 \usage{
-pick_first_survey_in_winter(surveys)
+pick_first_survey_in_winter(surveys, ...)
 }
 \arguments{
 \item{surveys}{Survey data.}
+
+\item{...}{Additional arguments.}
 }
 \description{
 Pick first winter survey in each year discarding subsequent surveys

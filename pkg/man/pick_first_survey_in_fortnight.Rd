@@ -4,10 +4,12 @@
 \alias{pick_first_survey_in_fortnight}
 \title{Pick first survey in fortnight}
 \usage{
-pick_first_survey_in_fortnight(surveys)
+pick_first_survey_in_fortnight(surveys, ...)
 }
 \arguments{
 \item{surveys}{Survey data.}
+
+\item{...}{Additional arguments.}
 }
 \description{
 Pick first survey in each fortnight discarding subsequent surveys

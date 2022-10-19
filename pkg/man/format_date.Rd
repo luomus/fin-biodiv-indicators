@@ -4,10 +4,12 @@
 \alias{format_date}
 \title{Format date}
 \usage{
-format_date(surveys)
+format_date(surveys, ...)
 }
 \arguments{
 \item{surveys}{Survey data.}
+
+\item{...}{Additional arguments.}
 }
 \description{
 Combine year, month, day of survey into a single date string
