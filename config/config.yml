@@ -20,6 +20,8 @@ default:
     name: Farmland butterflies community temperature index
   - code: bfoa
     name: Butterfly overall abundance
+  - code: mf
+    name: Moths
   surveys:
     selection:
     - document_id
@@ -1799,3 +1801,171 @@ bfoa:
       - sum_over_sections
       - combine_with_surveys
       - sum_by_event
+
+mf:
+  taxa:
+  - code: MX.62409
+    binomial: Autographa macrogamma
+  - code: MX.62324
+    binomial: Catocala adultera
+  - code: MX.61875
+    binomial: Dysstroma latefasciatum
+  - code: MX.61891
+    binomial: Heterothera serraria
+  - code: MX.62656
+    binomial: Hillia iris
+  - code: MX.61462
+    binomial: Laothoe amurensis
+  - code: MX.61559
+    binomial: Macaria loricaria
+  - code: MX.61768
+    binomial: Timandra griseata
+  - code: MX.61822
+    binomial: Xanthorhoe annotinata
+  - code: MX.62577
+    binomial: Caradrina montana
+  - code: MX.61785
+    binomial: Carsia sororiata
+  - code: MX.61949
+    binomial: Coenocalpe lapidata
+  - code: MX.61873
+    binomial: Dysstroma infuscatum
+  - code: MX.61686
+    binomial: Elophos vittaria
+  - code: MX.62067
+    binomial: Eupithecia conterminata
+  - code: MX.61855
+    binomial: Lampropteryx otregiata
+  - code: MX.62002
+    binomial: Martania taeniata
+  - code: MX.61981
+    binomial: Venusia cambrica
+  - code: MX.61819
+    binomial: Xanthorhoe decoloraria
+  - code: MX.63101
+    binomial: Xestia alpicola
+  - code: MX.63093
+    binomial: Xestia rhaetica
+  - code: MX.63090
+    binomial: Xestia speciosa
+  - code: MX.61583
+    binomial: Alcis jubatus
+  - code: MX.61788
+    binomial: Aplocera praeformata
+  - code: MX.63033
+    binomial: Chersotis cuprea
+  - code: MX.61898
+    binomial: Colostygia aptata
+  - code: MX.62716
+    binomial: Dasypolia templi
+  - code: MX.61910
+    binomial: Entephria caesiata
+  - code: MX.61680
+    binomial: Gnophos obfuscatus
+  - code: MX.61933
+    binomial: Hydriomena ruberata
+  - code: MX.61743
+    binomial: Scopula incanata
+  - code: MX.61888
+    binomial: Thera cognata
+  - code: MX.63120
+    binomial: Xestia collina
+  - code: MX.62746
+    binomial: Amphipoea lucens
+  - code: MX.62814
+    binomial: Apamea rubrirena
+  - code: MX.61586
+    binomial: Arichanna melanaria
+  - code: MX.62413
+    binomial: Autographa buraetica
+  - code: MX.62523
+    binomial: Brachionycha nubeculosa
+  - code: MX.62737
+    binomial: Celaena haworthii
+  - code: MX.63065
+    binomial: Coenophila subrosea
+  - code: MX.61710
+    binomial: Epirranthis diversata
+  - code: MX.61867
+    binomial: Eulithis populata
+  - code: MX.61866
+    binomial: Eulithis testata
+  - code: MX.62011
+    binomial: Eupithecia abietaria
+  - code: MX.62056
+    binomial: Eupithecia gelidata
+  - code: MX.62038
+    binomial: Eupithecia goossensiata
+  - code: MX.62068
+    binomial: Eupithecia lanceata
+  - code: MX.62998
+    binomial: Euxoa cursoria
+  - code: MX.62612
+    binomial: Hyppa rectilinea
+  - code: MX.61523
+    binomial: Jodis putata
+  - code: MX.62679
+    binomial: Lithophane consocia
+  - code: MX.62681
+    binomial: Lithophane lamda
+  - code: MX.61610
+    binomial: Lycia pomonaria
+  - code: MX.61560
+    binomial: Macaria brunneata
+  - code: MX.62354
+    binomial: Nola aerugula
+  - code: MX.63067
+    binomial: Protolampra sobrina
+  - code: MX.61747
+    binomial: Scopula ternata
+  - code: MX.61927
+    binomial: Spargania luctuata
+  - code: MX.62684
+    binomial: Xylena solidaginis
+  filters:
+    collection:
+    - HR.4511
+  surveys:
+    selection:
+    - document_id
+    - location_id
+    - year
+    - region
+    - ordinal_day_start
+    - ordinal_day_end
+    has_value:
+    - document_id
+    - location_id
+    - year
+    - region
+    - ordinal_day_start
+    - ordinal_day_end
+  counts:
+    selection:
+    - document_id
+    - abundance
+    has_value:
+    - document_id
+    - abundance
+  combine: geometric_mean
+  use_data_after: "11-01"
+  model:
+    trim:
+      base_year: 2000
+      surveys_process:
+      - require_minimum_weeks:
+        - min_weeks: 27
+      - require_minimum_weeks:
+        - region: "Kainuu"
+        - min_weeks: 24
+      - require_minimum_weeks:
+        - region: "Pohjois-Pohjanmaa"
+        - min_weeks: 24
+      - require_minimum_weeks:
+        - region: "Lappi"
+        - min_weeks: 16
+      - require_minimum_gaps
+      counts_process:
+      - zero_fill
+      - sum_by_event
+      - remove_all_zero_locations
