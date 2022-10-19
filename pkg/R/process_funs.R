@@ -240,7 +240,7 @@ require_minimum_weeks <- function(surveys, ...) {
   if (is.null(args[["region"]])) {
 
     surveys <- dplyr::filter(
-      surveys, .data[["n_days"]] >= !!args[["min_weeks"]] * 7L
+      surveys, .data[["n_days"]] >= !!as.integer(args[["min_weeks"]]) * 7L
     )
 
   } else {
@@ -248,7 +248,7 @@ require_minimum_weeks <- function(surveys, ...) {
     surveys <- dplyr::filter(
       surveys,
       .data[["region"]] == !!args[["region"]] &
-        .data[["n_days"]] >= !!args[["min_weeks"]] * 7L
+        .data[["n_days"]] >= !!as.integer(args[["min_weeks"]]) * 7L
     )
 
   }
