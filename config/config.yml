@@ -1937,7 +1937,6 @@ mf:
     - document_id
     - location_id
     - year
-    - region
     - ordinal_day_start
     - ordinal_day_end
   counts:
