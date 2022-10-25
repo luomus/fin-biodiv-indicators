@@ -1945,7 +1945,7 @@ mf:
     - abundance
     has_value:
     - document_id
-    - abundance
+    - abundance_interpreted
   combine: geometric_mean
   use_data_after: "11-01"
   model:
