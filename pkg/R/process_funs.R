@@ -277,6 +277,7 @@ require_minimum_gaps <- function(surveys, ...) {
   surveys <- window_arrange(surveys, .data[["ordinal_day_start"]])
 
   surveys <- mutate(
+    surveys,
     gap = .data[["ordinal_day_start"]] - dplyr::lag(.data[["ordinal_day_end"]])
   )
 
