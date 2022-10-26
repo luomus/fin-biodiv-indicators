@@ -217,10 +217,9 @@ format_date <- function(surveys, ...) {
 #'
 #' @details This function groups surveys data by `location_id` and `year`. It
 #'   then removes groups where the survey period is less than a minimum number
-#'   of weeks for a given `region`. If `region` is missing then the filter
-#'   applies to all regions. The function takes two arguments: `min_weeks` and
-#'   `region`. It expects the `surveys` data to have at least `location_id`,
-#'   `year`, `region`, `ordinal_day_start` and `ordinal_day_end`.
+#'   of weeks for a given `region`. It expects the `surveys` data to have at
+#'   least `location_id`, `year`, `region`, `ordinal_day_start` and
+#'   `ordinal_day_end`.
 #'
 #' @export
 #' @inheritParams process_funs
@@ -237,21 +236,26 @@ require_minimum_weeks <- function(surveys, ...) {
       min(.data[["ordinal_day_start"]], na.rm = TRUE)
   )
 
-  if (is.null(args[["region"]])) {
+  surveys <- dplyr::mutate(
+    surveys,
+    keep = .data[["n_days"]] >= !!as.integer(args[["all"]][["min_weeks"]]) * 7L
+  )
 
-    surveys <- dplyr::filter(
-      surveys, .data[["n_days"]] >= !!as.integer(args[["min_weeks"]]) * 7L
-    )
+  for (reg in args[["regions"]]) {
 
-  } else {
-
-    surveys <- dplyr::filter(
+    surveys <- dplyr::mutate(
       surveys,
-      .data[["region"]] == !!args[["region"]] &
-        .data[["n_days"]] >= !!as.integer(args[["min_weeks"]]) * 7L
+      keep =
+        .data[["keep"]] |
+        .data[["region"]] == !!reg[["region"]] &
+        .data[["n_days"]] >= !!as.integer(reg[["min_weeks"]]) * 7L
     )
 
   }
+
+  surveys <- dplyr::filter(surveys, .data[["keep"]])
+
+  surveys <- dplyr::select(surveys, -dplyr::all_of(c("keep", "n_days")))
 
   dplyr::ungroup(surveys)
 

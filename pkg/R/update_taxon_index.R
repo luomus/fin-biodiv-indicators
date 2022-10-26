@@ -122,7 +122,7 @@ apply_process <- function(
 
       fn <- names(s)
 
-      args <- c(args, unlist(s[[fn]], recursive = FALSE))
+      args <- c(args, s[[fn]])
 
     }
 

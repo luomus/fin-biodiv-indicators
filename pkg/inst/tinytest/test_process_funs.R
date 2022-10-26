@@ -29,8 +29,11 @@ df <- tibble(
   ordinal_day_end = 2:11
 )
 
-expect_equal(require_minimum_weeks(df, region = "x", min_weeks = 0)[-6], df)
-
-expect_equal(require_minimum_weeks(df, min_weeks = 0)[-6], df)
+expect_equal(
+  require_minimum_weeks(
+    df, all = c(min_weeks = 0), regions = list(c(region = "x", min_weeks = 0))
+  ),
+  df
+)
 
 expect_equal(require_minimum_gaps(df), df)

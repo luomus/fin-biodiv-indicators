@@ -1953,16 +1953,15 @@ mf:
       base_year: 2000
       surveys_process:
       - require_minimum_weeks:
-        - min_weeks: 27
-      - require_minimum_weeks:
-        - region: "Kainuu"
-        - min_weeks: 24
-      - require_minimum_weeks:
-        - region: "Pohjois-Pohjanmaa"
-        - min_weeks: 24
-      - require_minimum_weeks:
-        - region: "Lappi"
-        - min_weeks: 16
+          all:
+          - min_weeks: 27
+          regions:
+          - min_weeks: 24
+            region: "Kainuu"
+          - min_weeks: 24
+            region: "Pohjois-Pohjanmaa"
+          - min_weeks: 16
+            region: "Lappi"
       - require_minimum_gaps
       counts_process:
       - zero_fill
