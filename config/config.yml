@@ -1953,8 +1953,7 @@ mf:
       base_year: 2000
       surveys_process:
       - require_minimum_weeks:
-          all:
-          - min_weeks: 27
+          all: 27
           regions:
           - min_weeks: 24
             region: "Kainuu"

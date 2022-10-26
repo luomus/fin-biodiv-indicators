@@ -238,7 +238,7 @@ require_minimum_weeks <- function(surveys, ...) {
 
   surveys <- dplyr::mutate(
     surveys,
-    keep = .data[["n_days"]] >= !!as.integer(args[["all"]][["min_weeks"]]) * 7L
+    keep = .data[["n_days"]] >= !!as.integer(args[["all"]][[1L]]) * 7L
   )
 
   for (reg in args[["regions"]]) {
