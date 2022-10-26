@@ -18,8 +18,7 @@ weeks.
 \details{
 This function groups surveys data by \code{location_id} and \code{year}. It
 then removes groups where the survey period is less than a minimum number
-of weeks for a given \code{region}. If \code{region} is missing then the filter
-applies to all regions. The function takes two arguments: \code{min_weeks} and
-\code{region}. It expects the \code{surveys} data to have at least \code{location_id},
-\code{year}, \code{region}, \code{ordinal_day_start} and \code{ordinal_day_end}.
+of weeks for a given \code{region}. It expects the \code{surveys} data to have at
+least \code{location_id}, \code{year}, \code{region}, \code{ordinal_day_start} and
+\code{ordinal_day_end}.
 }
