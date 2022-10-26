@@ -276,17 +276,17 @@ require_minimum_gaps <- function(surveys, ...) {
 
   surveys <- window_arrange(surveys, .data[["ordinal_day_start"]])
 
+  surveys <- mutate(
+    gap = .data[["ordinal_day_start"]] - dplyr::lag(.data[["ordinal_day_end"]])
+  )
+
   surveys <- dplyr::filter(
     surveys,
-    sum(
-      .data[["ordinal_day_start"]] - dplyr::lag(.data[["ordinal_day_end"]]),
-      na.rm = TRUE
-    ) <= 7L * 3L &
-      max(
-        .data[["ordinal_day_start"]] - dplyr::lag(.data[["ordinal_day_end"]]),
-        na.rm = TRUE
-      ) <= 7L
+    sum(.data[["gap"]], na.rm = TRUE) <= 21L &
+    max(.data[["gap"]], na.rm = TRUE) <= 7L
   )
+
+  surveys <- dplyr::select(surveys, -dplyr::any_of("gap"))
 
   dplyr::ungroup(surveys)
 
