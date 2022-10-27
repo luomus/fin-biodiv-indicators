@@ -59,6 +59,8 @@ reference:
       - pick_first_survey_in_winter
       - pick_first_survey_in_year
       - remove_all_zero_locations
+      - require_minimum_gaps
+      - require_minimum_weeks
       - require_seven_fortnights
       - require_two_years
       - set_start_year

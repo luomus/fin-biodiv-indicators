@@ -4,10 +4,12 @@
 \alias{require_seven_fortnights}
 \title{Require seven fortnights}
 \usage{
-require_seven_fortnights(surveys)
+require_seven_fortnights(surveys, ...)
 }
 \arguments{
 \item{surveys}{Survey data.}
+
+\item{...}{Additional arguments.}
 }
 \description{
 Divide year into approximate 2 week blocks, selecting blocks 10-16 and

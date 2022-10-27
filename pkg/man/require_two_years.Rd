@@ -4,10 +4,12 @@
 \alias{require_two_years}
 \title{Require at least two years}
 \usage{
-require_two_years(surveys)
+require_two_years(surveys, ...)
 }
 \arguments{
 \item{surveys}{Survey data.}
+
+\item{...}{Additional arguments.}
 }
 \description{
 Discard locations with less than two survey years

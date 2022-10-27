@@ -21,20 +21,19 @@ update_taxon_index <- function(index, model, taxon, db) {
 
   model_spec <- config::get("model", config = index_base)[[model]]
 
-  for (i in model_spec[["surveys_process"]]) {
+  surveys <- apply_process(
+    model_spec[["surveys_process"]],
+    what = "surveys",
+    surveys = surveys
+  )
 
-    surveys <- do.call(process_funs()[[i]], list(surveys))
-
-  }
-
-  for (i in model_spec[["counts_process"]]) {
-
-    counts <- do.call(
-      process_funs()[[i]],
-      list(counts = counts, surveys = surveys, taxon = taxon)
-    )
-
-  }
+  counts <- apply_process(
+    model_spec[["counts_process"]],
+    what = "counts",
+    counts = counts,
+    surveys = surveys,
+    taxon = taxon
+  )
 
   current_year <- as.integer(format(Sys.Date(), "%Y"))
 
@@ -100,6 +99,38 @@ update_taxon_index <- function(index, model, taxon, db) {
   }
 
   invisible(NULL)
+
+}
+
+apply_process <- function(
+  spec, what, counts = NULL, surveys = NULL, taxon = NULL
+) {
+
+  ans <- switch(what, counts = counts, surveys = surveys)
+
+  for (s in spec) {
+
+    fn <- s
+
+    args <-  switch(
+      what,
+      counts = list(counts = ans, surveys = surveys, taxon = taxon),
+      surveys = list(counts = counts, surveys = ans, taxon = taxon)
+    )
+
+    if (is.list(s)) {
+
+      fn <- names(s)
+
+      args <- c(args, s[[fn]])
+
+    }
+
+    ans <- do.call(process_funs()[[fn]], args)
+
+  }
+
+  ans
 
 }
 
