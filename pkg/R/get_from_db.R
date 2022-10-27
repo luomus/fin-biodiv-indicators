@@ -6,9 +6,11 @@ get_from_db <- function(db, tbl, index, taxa, select) {
 
   if (missing(select)) {
 
-    select <- config::get(tbl, config = index)[["selection"]]
+    index_base <- sub("_north|_south", "", index)
 
-    abundance <- config::get(tbl, config = index)[["abundance"]]
+    select <- config::get(tbl, config = index_base)[["selection"]]
+
+    abundance <- config::get(tbl, config = index_base)[["abundance"]]
 
     select[select == abundance] <- "abundance"
 
