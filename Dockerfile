@@ -1,14 +1,16 @@
-FROM rstudio/plumber:v1.2.0
+FROM rocker/r-ver:4.2.2
 
 RUN  echo \
      "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula" \
      "select true" | debconf-set-selections \
   && apt-get update -qq \
-  && apt-get install -y ttf-mscorefonts-installer libpq-dev nano \
+  && apt-get install -y libpq-dev libsodium-dev ttf-mscorefonts-installer nano \
   && fc-cache -f
 
 HEALTHCHECK --interval=1m --timeout=10s \
   CMD curl -sfI -o /dev/null 0.0.0.0:8000/healthz || exit 1
+
+ENV OPENBLAS_NUM_THREADS 1
 
 RUN  install2.r -e \
        arm \
@@ -19,9 +21,11 @@ RUN  install2.r -e \
        ggplot2 \
        lme4 \
        logger \
+       plumber \
        pool \
        rapidoc \
        readr \
+       remotes \
        RPostgres \
        rtrim \
        svglite \
@@ -43,7 +47,6 @@ COPY pkg /home/user/fbi
 COPY config/config.yml /home/user/config.yml
 
 ENV HOME /home/user
-ENV OPENBLAS_NUM_THREADS 1
 
 WORKDIR /home/user
 
