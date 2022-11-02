@@ -1,4 +1,4 @@
-FROM rocker/r-ver:4.2.2
+FROM rocker/r-ver:4.2.1
 
 RUN  echo \
      "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula" \
