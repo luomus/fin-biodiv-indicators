@@ -74,6 +74,23 @@ function(index) {
 
 }
 
+#* Get the configuration of an index
+#* @tag config
+#* @get /config/<index:str>
+#* @param index:str Shortcode for multi-taxa index (see [/indices](#get-/indices)).
+#* @response 200 A json array
+#* @serializer unboxedJSON
+function(index) {
+
+  ans <- config::get(config = index)
+
+  ans[["taxa"]] <- NULL
+  ans[["extra_taxa"]] <- NULL
+
+  ans
+
+}
+
 #* Get data for an index
 #* @tag data
 #* @get /data/<index:str>
@@ -323,6 +340,10 @@ function(pr) {
         list(
           name = "list",
           description = "Endpoints to list available indices"
+        ),
+        list(
+          name = "config",
+          description = "Endpoints to show index congfiguration"
         ),
         list(
           name = "data",
