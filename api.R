@@ -84,9 +84,16 @@ function(index) {
 
   ans <- config::get(config = index)
 
+  ans[["indices"]] <- NULL
   ans[["taxa"]] <- NULL
   ans[["extra_taxa"]] <- NULL
-  ans[["indices"]] <- NULL
+
+  if (hasName(ans, "from")) {
+
+    ans[["surveys"]] <- NULL
+    ans[["counts"]] <- NULL
+
+  }
 
   ans
 
