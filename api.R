@@ -86,6 +86,7 @@ function(index) {
 
   ans[["taxa"]] <- NULL
   ans[["extra_taxa"]] <- NULL
+  ans[["indices"]] <- NULL
 
   ans
 
