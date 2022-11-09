@@ -52,8 +52,8 @@ function() {
 #* Get list of taxa available for an indicator
 #* @tag lists
 #* @get /taxa/<index:str>
-#* @param index:str Shortcode for multi-taxa indicator (see [/indices](#get-/indices)).
-#* @response 200 A json array
+#* @param index:str Shortcode for multi-taxa indicator (see [/indices](#get-/indices "Get list of available indicators")).
+#* @response 200 A json array response
 #* @serializer unboxedJSON
 function(index) {
 
@@ -393,6 +393,11 @@ function(pr) {
         spec
       }
 
+      set_example <- function(spec, path, arg, example) {
+        spec$paths[[path]]$get$parameters[[arg]]$example <- example
+        spec
+      }
+
       spec <- set_description(
         spec,
         "/indices",
@@ -416,10 +421,10 @@ function(pr) {
             required = c("code", "name"),
             properties = list(
               code = list(
-                type = "string", description = "Multi-taxa indicator shortcode"
+                type = "string", description = "Multi-taxa indicator shortcode."
               ),
               name = list(
-                type = "string", description = "Multi-taxa indicator name"
+                type = "string", description = "Multi-taxa indicator name."
               )
             )
           )
@@ -434,6 +439,64 @@ function(pr) {
           "Gets the taxa that are included in a",
           "given indicator. To list the available indicators see",
           "[/indices](#get-/indices \"Get list of available indicators\"). "
+        )
+      )
+
+      spec <- set_example(spec, "/taxa/{index}", 1, "wb")
+
+      spec <- set_response_null(spec, "/taxa/{index}")
+
+      spec <- set_schema(
+        spec,
+        "/taxa/{index}",
+        "200",
+        list(
+          type = "array",
+          items = list(
+            type = "object",
+            required = c("code", "binomial"),
+            properties = list(
+              code = list(
+                type = "string", description = "FinBIF taxon MX code identifier."
+              ),
+              extra_codes = list(
+                type = "array",
+                description =
+                  paste(
+                    "Extra FinBIF taxon MX code identifiers. These extra taxa",
+                    "will also be included in the single-taxa indicator."
+                  )
+              ),
+              subtaxa = list(
+                type = "boolean",
+                description = paste(
+                  "Whether the subtaxa of the taxa or extra taxa (see",
+                  "extra_codes) are included in the single-taxa indicator."
+                )
+              ),
+              binomial = list(
+                type = "string",
+                description = "Scientific name of the taxon."
+              ),
+              sti = list(
+                type = "number",
+                description = "Species temperature index."
+              )
+            )
+          )
+        ),
+        list(
+          list(
+            code = "MX.123",
+            extra_codes = c("MX.12", "MX.34"),
+            subtaxa = FALSE,
+            binomial = "Genus speciesa"
+          ),
+          list(
+            code = "MX.456",
+            binomial = "Genus speicesb",
+            sti = 7.1
+          )
         )
       )
 
