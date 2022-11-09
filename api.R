@@ -52,7 +52,8 @@ function() {
 #* Get list of taxa available for an indicator
 #* @tag lists
 #* @get /taxa/<index:str>
-#* @param index:str Shortcode for multi-taxa indicator (see [/indices](#get-/indices "Get list of available indicators")).
+#* @param index:str Shortcode for multi-taxa indicator (see
+#*   [/indices](#get-/indices "Get list of available indicators")).
 #* @response 200 A json array response
 #* @serializer unboxedJSON
 function(index) {
@@ -61,10 +62,11 @@ function(index) {
 
 }
 
-#* Get list of additional taxa available for (but not included in) an indicator
+#* Get list of taxa available for (but not included in) an indicator
 #* @tag lists
 #* @get /taxa-extra/<index:str>
-#* @param index:str Shortcode for multi-taxa indicator (see [/indices](#get-/indices "Get list of available indicators")).
+#* @param index:str Shortcode for multi-taxa indicator see
+#*   [/indices](#get-/indices "Get list of available indicators")).
 #* @response 200 A json array respone
 #* @serializer unboxedJSON
 function(index) {
@@ -76,7 +78,8 @@ function(index) {
 #* Get the configuration of an indicator
 #* @tag config
 #* @get /config/<index:str>
-#* @param index:str Shortcode for multi-taxa indicator (see [/indices](#get-/indices)).
+#* @param index:str Shortcode for multi-taxa indicator (see
+#*   [/indices](#get-/indices)).
 #* @response 200 A json array
 #* @serializer unboxedJSON
 function(index) {
@@ -104,7 +107,8 @@ function(index) {
 #* @param index:str Shortcode for indicator (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.)?
 #* @param taxon:str Shortcode for a taxon (see [/taxa](#get-/taxa)).
-#* @param region:str Which region, north, south or none (whole of Finland: default)?
+#* @param region:str Which region, north, south or none (whole of Finland:
+#*   default)?
 #* @response 200 A json object
 #* @response 400 A json object
 #* @response 404 A json object
@@ -142,7 +146,8 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 #* @param index:str Shortcode for indicator (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.)?
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
-#* @param region:str Which region, north, south or none (whole of Finland: default)?
+#* @param region:str Which region, north, south or none (whole of Finland:
+#*   default)?
 #* @response 200 A csv file
 #* @response 400 A json object
 #* @response 404 A json object
@@ -182,7 +187,8 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 #* @param index:str Shortcode for indicator (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.)?
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
-#* @param region:str Which region, north, south or none (whole of Finland: default)?
+#* @param region:str Which region, north, south or none (whole of Finland:
+#*   default)?
 #* @response 200 A json object
 #* @response 400 A json object
 #* @response 404 A json object
@@ -220,7 +226,8 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 #* @param index:str Shortcode for indicator (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.)?
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
-#* @param region:str Which region, north, south or none (whole of Finland: default)?
+#* @param region:str Which region, north, south or none (whole of Finland:
+#*   default)?
 #* @response 200 A json object
 #* @response 400 A json object
 #* @response 404 A json object
@@ -258,7 +265,8 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 #* @param index:str Shortcode for indicator (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.)?
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
-#* @param region:str Which region, north, south or none (whole of Finland: default)?
+#* @param region:str Which region, north, south or none (whole of Finland:
+#*   default)?
 #* @response 200 An svg file
 #* @response 400 A json object
 #* @response 404 A json object
@@ -388,8 +396,10 @@ function(pr) {
       }
 
       set_schema <- function(spec, path, resp, schema, example) {
-        spec$paths[[path]]$get$responses[[resp]]$content$`application/json`$schema <- schema
-        spec$paths[[path]]$get$responses[[resp]]$content$`application/json`$example <- example
+        content <- spec$paths[[path]]$get$responses[[resp]]$content
+        content$`application/json`$schema <- schema
+        content$`application/json`$example <- example
+        spec$paths[[path]]$get$responses[[resp]]$content <- content
         spec
       }
 
