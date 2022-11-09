@@ -38,8 +38,8 @@ function() {
 
 }
 
-#* Get list of available indices
-#* @tag list
+#* Get list of available indicators
+#* @tag lists
 #* @get /indices
 #* @response 200 A json array response
 #* @serializer unboxedJSON
@@ -49,10 +49,10 @@ function() {
 
 }
 
-#* Get list of taxa available for an index
-#* @tag list
+#* Get list of taxa available for an indicator
+#* @tag lists
 #* @get /taxa/<index:str>
-#* @param index:str Shortcode for multi-taxa index (see [/indices](#get-/indices)).
+#* @param index:str Shortcode for multi-taxa indicator (see [/indices](#get-/indices)).
 #* @response 200 A json array
 #* @serializer unboxedJSON
 function(index) {
@@ -61,10 +61,10 @@ function(index) {
 
 }
 
-#* Get list of taxa available for but not included in index
-#* @tag list
+#* Get list of taxa available for, but not included in, an indicator
+#* @tag lists
 #* @get /taxa-extra/<index:str>
-#* @param index:str Shortcode for multi-taxa index (see [/indices](#get-/indices)).
+#* @param index:str Shortcode for multi-taxa indicator (see [/indices](#get-/indices)).
 #* @response 200 A json array
 #* @serializer unboxedJSON
 function(index) {
@@ -73,10 +73,10 @@ function(index) {
 
 }
 
-#* Get the configuration of an index
+#* Get the configuration of an indicator
 #* @tag config
 #* @get /config/<index:str>
-#* @param index:str Shortcode for multi-taxa index (see [/indices](#get-/indices)).
+#* @param index:str Shortcode for multi-taxa indicator (see [/indices](#get-/indices)).
 #* @response 200 A json array
 #* @serializer unboxedJSON
 function(index) {
@@ -98,10 +98,10 @@ function(index) {
 
 }
 
-#* Get data for an index
+#* Get data for an indicator
 #* @tag data
 #* @get /data/<index:str>
-#* @param index:str Shortcode for index (see [/indices](#get-/indices)).
+#* @param index:str Shortcode for indicator (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.)?
 #* @param taxon:str Shortcode for a taxon (see [/taxa](#get-/taxa)).
 #* @param region:str Which region, north, south or none (whole of Finland: default)?
@@ -136,10 +136,10 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 
 }
 
-#* Get data for an index as a CSV
+#* Get data for an indicator as a CSV
 #* @tag data
 #* @get /csv/<index:str>
-#* @param index:str Shortcode for index (see [/indices](#get-/indices)).
+#* @param index:str Shortcode for indicator (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.)?
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
 #* @param region:str Which region, north, south or none (whole of Finland: default)?
@@ -176,10 +176,10 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 
 }
 
-#* Get count summary for an index
-#* @tag data
+#* Get count summary for an indicator
+#* @tag statistics
 #* @get /count-summary/<index:str>
-#* @param index:str Shortcode for index (see [/indices](#get-/indices)).
+#* @param index:str Shortcode for indicator (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.)?
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
 #* @param region:str Which region, north, south or none (whole of Finland: default)?
@@ -214,10 +214,10 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 
 }
 
-#* Get trend summary for an index
-#* @tag data
+#* Get trend summary for an indicator
+#* @tag statistics
 #* @get /trends/<index:str>
-#* @param index:str Shortcode for index (see [/indices](#get-/indices)).
+#* @param index:str Shortcode for indicator (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.)?
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
 #* @param region:str Which region, north, south or none (whole of Finland: default)?
@@ -252,10 +252,10 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 
 }
 
-#* Get svg for an index
+#* Get svg for an indicator
 #* @tag graphics
 #* @get /svg/<index:str>
-#* @param index:str Shortcode for index (see [/indices](#get-/indices)).
+#* @param index:str Shortcode for indicator (see [/indices](#get-/indices)).
 #* @param model:str Which model (trim, rbms, etc.)?
 #* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
 #* @param region:str Which region, north, south or none (whole of Finland: default)?
@@ -347,20 +347,27 @@ function(pr) {
 
       spec$tags <- list(
         list(
-          name = "list",
-          description = "Endpoints to list available indices"
+          name = "lists",
+          description = "Endpoints to list available biodiversity indicators"
         ),
         list(
           name = "config",
-          description = "Endpoints to show index congfiguration"
+          description = paste(
+            "Endpoints to show how multi-taxa biodiversity indicators are",
+            "configured"
+          )
         ),
         list(
           name = "data",
-          description = "Endpoints to get biodiversity index data"
+          description = "Endpoints to get biodiversity indicator output data"
+        ),
+        list(
+          name = "statistics",
+          description = "Endpoints to get biodiversity indicator statistics"
         ),
         list(
           name = "graphics",
-          description = "Endpoints to get biodiversity index graphics"
+          description = "Endpoints to get biodiversity indicator graphics"
         )
       )
 
@@ -374,17 +381,59 @@ function(pr) {
         spec
       }
 
+      set_response_null <- function(spec, path) {
+        spec$paths[[path]]$get$responses$default <- NULL
+        spec$paths[[path]]$get$responses$default$`500`$content <- NULL
+        spec
+      }
+
+      set_schema <- function(spec, path, resp, schema, example) {
+        spec$paths[[path]]$get$responses[[resp]]$content$`application/json`$schema <- schema
+        spec$paths[[path]]$get$responses[[resp]]$content$`application/json`$example <- example
+        spec
+      }
+
       spec <- set_description(
-        spec, "/indices", "Gets the available indices."
+        spec,
+        "/indices",
+        paste(
+          "Gets a list of the available multi-taxa indicators.",
+          "Returns both indicator names and short-codes that can be used as",
+          "indicator identifiers for other endpoints."
+        )
+      )
+
+      spec <- set_response_null(spec, "/indices")
+
+      spec <- set_schema(
+        spec,
+        "/indices",
+        "200",
+        list(
+          type = "array",
+          items = list(
+            type = "object",
+            required = c("code", "name"),
+            properties = list(
+              code = list(
+                type = "string", description = "Multi-taxa indicator shortcode"
+              ),
+              name = list(
+                type = "string", description = "Multi-taxa indicator name"
+              )
+            )
+          )
+        ),
+        data.frame(code = c("aa", "bb"), name = c("Indicator A", "Indicator B"))
       )
 
       spec <- set_description(
         spec,
         "/taxa/{index}",
         paste(
-          "Gets the taxa that make up a",
-          "given index<br>To list the available indices see",
-          "[/indices](#get-/indices)."
+          "Gets the taxa that are included in a",
+          "given indicator. To list the available indicators see",
+          "[/indices](#get-/indices \"Get list of available indicators\"). "
         )
       )
 
@@ -393,7 +442,7 @@ function(pr) {
         "/taxa-extra/{index}",
         paste(
           "Gets the taxa available for but not included in a",
-          "given index<br>To list the available indices see",
+          "given index<br>To list the available indicators see",
           "[/indices](#get-/indices)."
         )
       )
@@ -403,7 +452,7 @@ function(pr) {
         "/data/{index}",
         paste(
           "Gets the time series data for a taxa or ",
-          "multi-taxa index as JSON."
+          "multi-taxa indicator as JSON."
         )
       )
 
@@ -412,7 +461,7 @@ function(pr) {
         "/csv/{index}",
         paste(
           "Gets the time series data for a taxa or ",
-          "multi-taxa index as a CSV."
+          "multi-taxa indicator as a CSV."
         )
       )
 
@@ -420,7 +469,7 @@ function(pr) {
         spec,
         "/count-summary/{index}",
         paste(
-          "Gets a summary of the count data used as input for an index."
+          "Gets a summary of the count data used as input for an indicator."
         )
       )
 
@@ -428,7 +477,7 @@ function(pr) {
         spec,
         "/trends/{index}",
         paste(
-          "Gets a summary of the trends for index."
+          "Gets a summary of the trends for an indicator."
         )
       )
 
@@ -436,7 +485,7 @@ function(pr) {
         spec,
         "/svg/{index}",
         paste(
-          "Gets an svg image for an index."
+          "Gets an svg image for an indicator."
         )
       )
 
@@ -463,7 +512,7 @@ function(pr) {
     sort_tags = "false",
     sort_endpoints_by = "summary",
     allow_spec_file_load = "false",
-    goto_path = "get-/indices",
+    goto_path = "overview",
     update_route = "false",
     allow_authentication = "false",
     allow_server_selection = "false"
