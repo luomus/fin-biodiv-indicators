@@ -41,6 +41,7 @@ COPY entrypoint.sh /home/user/entrypoint.sh
 COPY init.R /home/user/init.R
 COPY update_indices.R /home/user/update_indices.R
 COPY api.R /home/user/api.R
+COPY api.md /home/user/api.md
 COPY config/favicon.ico /home/user/favicon.ico
 COPY config/robots.txt /home/user/robots.txt
 COPY pkg /home/user/fbi
