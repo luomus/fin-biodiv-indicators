@@ -1,5 +1,4 @@
 #* @apiTitle Finnish Biodiversity Indicators HTTP API
-#* @apiDescription Finnish biodiversity indicators is a service providing time series of abundance indices and related metrics for Finland. The input data for the indices are provided by the [Finnish Biodiversity Information Facility](https://laji.fi "FinBIF").
 #* @apiTOS https://laji.fi/en/about/845
 
 #* @filter cors
@@ -337,6 +336,8 @@ function(pr) {
     function(spec) {
 
       spec$info$version <- version
+
+      spec$info$description <- readChar("api.md", file.info("api.md")$size)
 
       spec$info$contact$name <- "laji.fi support"
       spec$info$contact$email <- "helpdesk@laji.fi"
