@@ -27,10 +27,10 @@ cors <- function(req, res) {
 }
 
 #* Check the liveness of the API
+#* @tag status
 #* @head /healthz
 #* @get /healthz
-#* @tag status
-#* @response 200 A json object
+#* @response 200 A json object response
 #* @serializer unboxedJSON
 function() {
 
@@ -52,45 +52,22 @@ function() {
 #* Get list of taxa available for an indicator
 #* @tag lists
 #* @get /taxa/<index:str>
-#* @param index:str Shortcode for multi-taxa indicator (see [/indices](#get-/indices "Get list of available indicators")).
+#* @param index:str Shortcode for multi-taxon indicator (see [/indices](#get-/indices "Get list of available indicators")).
 #* @response 200 A json array response
+#* @response 404 Not Found
 #* @serializer unboxedJSON
-function(index) {
+function(index, res) {
 
-  config::get("taxa", config = index)
+  indices <- vapply(config::get("indices"), getElement, "", "code")
 
-}
+  if (index %in% indices) {
 
-#* Get list of taxa available for an indicator (but not included in multi-taxa indicator)
-#* @tag lists
-#* @get /taxa-extra/<index:str>
-#* @param index:str Shortcode for multi-taxa indicator see [/indices](#get-/indices "Get list of available indicators")).
-#* @response 200 A json array respone
-#* @serializer unboxedJSON
-function(index) {
+    ans <- config::get("taxa", config = index)
 
-  config::get("extra_taxa", config = index)
+  } else {
 
-}
-
-#* Get the configuration of an indicator
-#* @tag config
-#* @get /config/<index:str>
-#* @param index:str Shortcode for multi-taxa indicator (see [/indices](#get-/indices)).
-#* @response 200 A json array
-#* @serializer unboxedJSON
-function(index) {
-
-  ans <- config::get(config = index)
-
-  ans[["indices"]] <- NULL
-  ans[["taxa"]] <- NULL
-  ans[["extra_taxa"]] <- NULL
-
-  if (hasName(ans, "from")) {
-
-    ans[["surveys"]] <- NULL
-    ans[["counts"]] <- NULL
+    res[["status"]] <- 404L
+    return("Not found")
 
   }
 
@@ -98,22 +75,85 @@ function(index) {
 
 }
 
-#* Get data for an indicator
+#* Get list of taxa available for an indicator (but not included in multi-taxon indicator)
+#* @tag lists
+#* @get /taxa-extra/<index:str>
+#* @param index:str Shortcode for multi-taxon indicator (see [/indices](#get-/indices "Get list of available indicators")).
+#* @response 200 A json array response
+#* @response 404 Not Found
+#* @serializer unboxedJSON
+function(index, res) {
+
+  indices <- vapply(config::get("indices"), getElement, "", "code")
+
+  if (index %in% indices) {
+
+    ans <- config::get("extra_taxa", config = index)
+
+  } else {
+
+    res[["status"]] <- 404L
+    return("Not found")
+
+  }
+
+  ans
+
+}
+
+#* Get the configuration of an indicator
+#* @tag config
+#* @get /config/<index:str>
+#* @param index:str Shortcode for multi-taxon indicator (see [/indices](#get-/indices "Get list of available indicators")).
+#* @response 200 A json array response
+#* @response 404 Not Found
+#* @serializer unboxedJSON
+function(index, res) {
+
+  indices <- vapply(config::get("indices"), getElement, "", "code")
+
+  if (index %in% indices) {
+
+    ans <- config::get(config = index)
+
+    ans[["indices"]] <- NULL
+    ans[["taxa"]] <- NULL
+    ans[["extra_taxa"]] <- NULL
+
+    if (hasName(ans, "from")) {
+
+      ans[["surveys"]] <- NULL
+      ans[["counts"]] <- NULL
+      ans[["filters"]] <- NULL
+
+    }
+
+  } else {
+
+    res[["status"]] <- 404L
+    return("Not found")
+
+  }
+
+  ans
+
+}
+
+#* Get data for an indicator as JSON
 #* @tag data
 #* @get /data/<index:str>
-#* @param index:str Shortcode for indicator (see [/indices](#get-/indices)).
-#* @param model:str Which model (trim, rbms, etc.)?
-#* @param taxon:str Shortcode for a taxon (see [/taxa](#get-/taxa)).
-#* @param region:str Which region, north, south or none (whole of Finland: default)?
-#* @response 200 A json object
-#* @response 400 A json object
-#* @response 404 A json object
+#* @param index:str Shortcode for multi-taxon indicator (see [/indices](#get-/indices "Get list of available indicators")).
+#* @param model:str Which model one of `trim`, `rbms`, etc. (`default` is first model declared in [configuration](#get-/config/-index- "Get the configuration of an indicator")).
+#* @param taxon:str FinBIF MX code identifier for a taxon (see [/taxa](#get-/taxa/-index- "Get list of taxa available for an indicator") or [/taxa-extra](#get-/taxa-extra/-index- "Get list of extra taxa available for an indicator")).
+#* @param region:str Which region: `north`, `south` or `none` (whole of Finland)?
+#* @response 200 A json object response
+#* @response 404 Not found
 #* @serializer unboxedJSON
 function(index, model = "default", taxon = "none", region = "none", res) {
 
   has_output <- check_input(index, model, taxon)
 
-  if (!has_output) {
+  if (!has_output || !region %in% c("none", "south", "north")) {
 
     res[["status"]] <- 404L
     return("Not found")
@@ -128,7 +168,7 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 
   } else {
 
-    res[["status"]] <- 400L
+    res[["status"]] <- 500L
 
   }
 
@@ -136,21 +176,20 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 
 }
 
-#* Get data for an indicator as a CSV
+#* Get data for an indicator as CSV
 #* @tag data
 #* @get /csv/<index:str>
-#* @param index:str Shortcode for indicator (see [/indices](#get-/indices)).
-#* @param model:str Which model (trim, rbms, etc.)?
-#* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
-#* @param region:str Which region, north, south or none (whole of Finland: default)?
-#* @response 200 A csv file
-#* @response 400 A json object
-#* @response 404 A json object
+#* @param index:str Shortcode for multi-taxon indicator (see [/indices](#get-/indices "Get list of available indicators")).
+#* @param model:str Which model one of `trim`, `rbms`, etc. (`default` is first model declared in [configuration](#get-/config/-index- "Get the configuration of an indicator")).
+#* @param taxon:str FinBIF MX code identifier for a taxon (see [/taxa](#get-/taxa/-index- "Get list of taxa available for an indicator") or [/taxa-extra](#get-/taxa-extra/-index- "Get list of extra taxa available for an indicator")).
+#* @param region:str Which region: `north`, `south` or `none` (whole of Finland)?
+#* @response 200 A csv file response
+#* @response 404 Not found
 function(index, model = "default", taxon = "none", region = "none", res) {
 
   has_output <- check_input(index, model, taxon)
 
-  if (!has_output) {
+  if (!has_output || !region %in% c("none", "south", "north")) {
 
     res[["serializer"]] <- plumber::serializer_unboxed_json()
     res[["status"]] <- 404L
@@ -168,7 +207,7 @@ function(index, model = "default", taxon = "none", region = "none", res) {
   } else {
 
     res[["serializer"]] <- plumber::serializer_unboxed_json()
-    res[["status"]] <- 400L
+    res[["status"]] <- 500L
 
   }
 
@@ -179,19 +218,18 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 #* Get count summary for an indicator
 #* @tag statistics
 #* @get /count-summary/<index:str>
-#* @param index:str Shortcode for indicator (see [/indices](#get-/indices)).
-#* @param model:str Which model (trim, rbms, etc.)?
-#* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
-#* @param region:str Which region, north, south or none (whole of Finland: default)?
-#* @response 200 A json object
-#* @response 400 A json object
-#* @response 404 A json object
+#* @param index:str Shortcode for multi-taxon indicator (see [/indices](#get-/indices "Get list of available indicators")).
+#* @param model:str Which model one of `trim`, `rbms`, etc. (`default` is first model declared in [configuration](#get-/config/-index- "Get the configuration of an indicator")).
+#* @param taxon:str FinBIF MX code identifier for a taxon (see [/taxa](#get-/taxa/-index- "Get list of taxa available for an indicator") or [/taxa-extra](#get-/taxa-extra/-index- "Get list of extra taxa available for an indicator")).
+#* @param region:str Which region: `north`, `south` or `none` (whole of Finland)?
+#* @response 200 A json object response
+#* @response 404 Not found
 #* @serializer unboxedJSON
 function(index, model = "default", taxon = "none", region = "none", res) {
 
   has_output <- check_input(index, model, taxon)
 
-  if (!has_output) {
+  if (!has_output || !region %in% c("none", "south", "north")) {
 
     res[["status"]] <- 404L
     return("Not found")
@@ -217,19 +255,18 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 #* Get trend summary for an indicator
 #* @tag statistics
 #* @get /trends/<index:str>
-#* @param index:str Shortcode for indicator (see [/indices](#get-/indices)).
-#* @param model:str Which model (trim, rbms, etc.)?
-#* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
-#* @param region:str Which region, north, south or none (whole of Finland: default)?
-#* @response 200 A json object
-#* @response 400 A json object
-#* @response 404 A json object
+#* @param index:str Shortcode for multi-taxon indicator (see [/indices](#get-/indices "Get list of available indicators")).
+#* @param model:str Which model one of `trim`, `rbms`, etc. (`default` is first model declared in [configuration](#get-/config/-index- "Get the configuration of an indicator")).
+#* @param taxon:str FinBIF MX code identifier for a taxon (see [/taxa](#get-/taxa/-index- "Get list of taxa available for an indicator") or [/taxa-extra](#get-/taxa-extra/-index- "Get list of extra taxa available for an indicator")).
+#* @param region:str Which region: `north`, `south` or `none` (whole of Finland)?
+#* @response 200 An json object response
+#* @response 404 Not found
 #* @serializer unboxedJSON
 function(index, model = "default", taxon = "none", region = "none", res) {
 
   has_output <- check_input(index, model, taxon)
 
-  if (!has_output) {
+  if (!has_output || !region %in% c("none", "south", "north")) {
 
     res[["status"]] <- 404L
     return("Not found")
@@ -255,18 +292,17 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 #* Get svg for an indicator
 #* @tag graphics
 #* @get /svg/<index:str>
-#* @param index:str Shortcode for indicator (see [/indices](#get-/indices)).
-#* @param model:str Which model (trim, rbms, etc.)?
-#* @param taxon:str Shortcode for taxon (see [/taxa](#get-/taxa)).
-#* @param region:str Which region, north, south or none (whole of Finland: default)?
-#* @response 200 An svg file
-#* @response 400 A json object
-#* @response 404 A json object
+#* @param index:str Shortcode for multi-taxon indicator (see [/indices](#get-/indices "Get list of available indicators")).
+#* @param model:str Which model one of `trim`, `rbms`, etc. (`default` is first model declared in [configuration](#get-/config/-index- "Get the configuration of an indicator")).
+#* @param taxon:str FinBIF MX code identifier for a taxon (see [/taxa](#get-/taxa/-index- "Get list of taxa available for an indicator") or [/taxa-extra](#get-/taxa-extra/-index- "Get list of extra taxa available for an indicator")).
+#* @param region:str Which region: `north`, `south` or `none` (whole of Finland)?
+#* @response 200 An svg file response
+#* @response 404 Not found
 function(index, model = "default", taxon = "none", region = "none", res) {
 
   has_output <- check_input(index, model, taxon)
 
-  if (!has_output) {
+  if (!has_output || !region %in% c("none", "south", "north")) {
 
     res[["serializer"]] <- plumber::serializer_unboxed_json()
     res[["status"]] <- 404L
@@ -353,7 +389,7 @@ function(pr) {
         list(
           name = "config",
           description = paste(
-            "Endpoints to show how multi-taxa biodiversity indicators are",
+            "Endpoints to show how multi-taxon biodiversity indicators are",
             "configured"
           )
         ),
@@ -384,6 +420,7 @@ function(pr) {
       set_response_null <- function(spec, path) {
         spec$paths[[path]]$get$responses$default <- NULL
         spec$paths[[path]]$get$responses$`500`$content <- NULL
+        spec$paths[[path]]$get$responses$`404`$content <- NULL
         spec
       }
 
@@ -404,9 +441,9 @@ function(pr) {
         spec,
         "/indices",
         paste(
-          "Gets a list of the available multi-taxa indicators.",
-          "Returns both indicator names and short-codes that can be used as",
-          "indicator identifiers for other endpoints."
+          "Gets a list of the available multi-taxon indicators. Returns both",
+          "indicator names and short-codes that can be used as indicator",
+          "identifiers for other endpoints."
         )
       )
 
@@ -423,10 +460,11 @@ function(pr) {
             required = c("code", "name"),
             properties = list(
               code = list(
-                type = "string", description = "Multi-taxa indicator shortcode."
+                type = "string",
+                description = "Multi-taxon indicator shortcode."
               ),
               name = list(
-                type = "string", description = "Multi-taxa indicator name."
+                type = "string", description = "Multi-taxon indicator name."
               )
             )
           )
@@ -438,10 +476,10 @@ function(pr) {
         spec,
         "/taxa/{index}",
         paste(
-          "Gets the taxa that are available as single-taxa indices and that",
-          "are included in a given multi-taxa indicator. To list the available",
-          "indicators see",
-          "[/indices](#get-/indices \"Get list of available indicators\")."
+          "Gets the taxa that are available as single-taxon indices and that",
+          "are included in a given multi-taxon indicator. To list the",
+          "available indicators see [/indices](#get-/indices \"Get list of",
+          "available indicators\")."
         )
       )
 
@@ -465,22 +503,28 @@ function(pr) {
               ),
               extra_codes = list(
                 type = "array",
-                description =
-                  paste(
-                    "Extra FinBIF taxon MX code identifiers. These extra taxa",
-                    "will also be included in the single-taxa indicator."
-                  )
+                description = paste(
+                  "Extra FinBIF taxon MX code identifiers. These extra taxa",
+                  "will also be included in the single-taxon indicator."
+                )
               ),
               subtaxa = list(
                 type = "boolean",
                 description = paste(
                   "Whether the subtaxa of the taxa or extra taxa (see",
-                  "extra_codes) are included in the single-taxa indicator."
+                  "extra_codes) are included in the single-taxon indicator."
                 )
               ),
               binomial = list(
                 type = "string",
                 description = "Scientific name of the taxon."
+              ),
+              start_year  = list(
+                type = "integer",
+                description = paste(
+                  "The taxon-specific base year for calucating relative",
+                  "abundance."
+                )
               ),
               sti = list(
                 type = "number",
@@ -508,8 +552,8 @@ function(pr) {
         spec,
         "/taxa-extra/{index}",
         paste(
-          "Gets the taxa that are available as single-taxa indices but",
-          "are not included in a given multi-taxa indicator. To list the",
+          "Gets the taxa that are available as single-taxon indices but",
+          "are not included in a given multi-taxon indicator. To list the",
           "available indicators see",
           "[/indices](#get-/indices \"Get list of available indicators\")."
         )
@@ -535,22 +579,28 @@ function(pr) {
               ),
               extra_codes = list(
                 type = "array",
-                description =
-                  paste(
-                    "Extra FinBIF taxon MX code identifiers. These extra taxa",
-                    "will also be included in the single-taxa indicator."
-                  )
+                description = paste(
+                  "Extra FinBIF taxon MX code identifiers. These extra taxa",
+                  "will also be included in the single-taxon indicator."
+                )
               ),
               subtaxa = list(
                 type = "boolean",
                 description = paste(
                   "Whether the subtaxa of the taxa or extra taxa (see",
-                  "extra_codes) are included in the single-taxa indicator."
+                  "extra_codes) are included in the single-taxon indicator."
                 )
               ),
               binomial = list(
                 type = "string",
                 description = "Scientific name of the taxon."
+              ),
+              start_year  = list(
+                type = "integer",
+                description = paste(
+                  "The taxon-specific base year for calucating relative",
+                  "abundance."
+                )
               ),
               sti = list(
                 type = "number",
@@ -576,10 +626,171 @@ function(pr) {
 
       spec <- set_description(
         spec,
+        "/config/{index}",
+        paste(
+          "Gets the configuration of a multi-taxon indicator and the",
+          "single-taxon indicators (if any) that belong to it."
+        )
+      )
+
+      spec <- set_example(spec, "/config/{index}", 1, "wb")
+
+      spec <- set_response_null(spec, "/config/{index}")
+
+      spec <- set_schema(
+        spec,
+        "/config/{index}",
+        "200",
+        list(
+          type = "object",
+          required = c("combine", "use_data_after", "model"),
+          properties = list(
+            surveys = list(
+              type = "object",
+              description = paste(
+                "Configuration for the survey site data of a multi-taxon",
+                "indicator and the single-taxon indicators that belong to it."
+              )
+            ),
+            counts = list(
+              type = "object",
+              description = paste(
+                "Configuration for the abundance data of a multi-taxon",
+                "indicator and the single-taxon indicators that belong to it."
+              )
+            ),
+            filters = list(
+              type = "object",
+              description = paste(
+                "The filters applied to the survey site and abundance data",
+                "of a multi-taxon indicator and the single-taxon indicators",
+                "that belong to it."
+              )
+            ),
+            from = list(
+              type = "string",
+              description = paste(
+                "The multi-taxon indicator from which the input data is",
+                "derived for a multi-taxon indicator without any single-taxon",
+                "indicators."
+              )
+            ),
+            combine = list(
+              type = "string",
+              description = paste(
+                "The method by which single-taxa data is combined to create a",
+                "a multi-taxon indicator."
+              )
+            ),
+            use_data_after  = list(
+              type = "string",
+              description = paste(
+                "The date after which the current year's data is allowed to",
+                "contribute to the indicator time-series. Format is 'MM-DD'."
+              )
+            ),
+            model = list(
+              type = "object",
+              description = paste(
+                "The configuration for the model(s) used to create the",
+                "indicators."
+              )
+            )
+          )
+        ),
+        list(
+          surveys = list(
+            selection = c("document_id", "location_id", "year", "month", "day"),
+            has_value = c("document_id", "location_id", "year", "month", "day")
+          ),
+          counts = list(
+            abundance = "pair_abundance",
+            selection = c("document_id", "pair_abundance"),
+            has_value = c("document_id", "pair_abundance")
+          ),
+          filters = list(
+            date_range_ymd = c("1979-01-01", ""),
+            location_tag = "farmland",
+            collection = c("HR.157", "HR.61")
+          ),
+          combine = "geometric_mean",
+          use_date_after = "10-01",
+          model = list(
+            trim = list(
+              base_year = 2000L,
+              surveys_process = c(
+                "pick_first_survey_in_year", "require_two_years"
+              ),
+              counts_process = c(
+                "zero_fill", "sum_by_event", "set_start_year",
+                "remove_all_zero_locations"
+              )
+            )
+          )
+        )
+      )
+
+      spec <- set_description(
+        spec,
         "/data/{index}",
         paste(
-          "Gets the time series data for a taxa or ",
-          "multi-taxa indicator as JSON."
+          "Gets the time series data for a single-taxon or ",
+          "multi-taxon indicator as JSON."
+        )
+      )
+
+      spec <- set_example(spec, "/data/{index}", 1, "wb")
+      spec <- set_example(spec, "/data/{index}", 2, "trim")
+      spec <- set_example(spec, "/data/{index}", 3, "none")
+      spec <- set_example(spec, "/data/{index}", 4, "none")
+
+      spec <- set_response_null(spec, "/data/{index}")
+
+      spec <- set_schema(
+        spec,
+        "/data/{index}",
+        "200",
+        list(
+          type = "object",
+          required = c(
+            "data", "pointStart", "pointInterval", "pointIntervalUnit"
+          ),
+          properties = list(
+            data = list(
+              type = "array",
+              description = paste(
+                "Indicator values in triplets with the first value the mean",
+                "estimate and the following two values representing",
+                "uncertainty of the indicator as lower and upper bounds -1 and",
+                "+1 standard deviation from the mean value respectively."
+              )
+            ),
+            pointStart = list(
+              type = "integer",
+              description = paste(
+                "The starting point of the time-series of indicator values."
+              )
+            ),
+            pointInterval = list(
+              type = "integer",
+              description = paste(
+                "The interval length between indicator time-series values."
+              )
+            ),
+            pointIntervalUnit = list(
+              type = "string",
+              description = paste(
+                "The units of interval length between indicator time-series",
+                "values."
+              )
+            )
+          )
+        ),
+        list(
+          data = list(c(1, 0, 0), c(.8, .6, 1)),
+          pointStart = 2000L,
+          pointInterval = 1,
+          pointIntervalUnit = "year"
         )
       )
 
@@ -587,10 +798,21 @@ function(pr) {
         spec,
         "/csv/{index}",
         paste(
-          "Gets the time series data for a taxa or ",
-          "multi-taxa indicator as a CSV."
+          "Gets the time series data for a single-taxon or multi-taxon",
+          "indicator as CSV. The CSV fields include: `time` (the",
+          "year), `mean` (the point estimate of the indicator), `sd` (the",
+          "degree of uncertainty in the indicator estimate as standard",
+          "deviations), `lower` (-1 standard deviation from the mean estimate)",
+          "and `upper` (+1 standard deviation from the mean estimate)."
         )
       )
+
+      spec <- set_response_null(spec, "/csv/{index}")
+
+      spec <- set_example(spec, "/csv/{index}", 1, "wb")
+      spec <- set_example(spec, "/csv/{index}", 2, "trim")
+      spec <- set_example(spec, "/csv/{index}", 3, "none")
+      spec <- set_example(spec, "/csv/{index}", 4, "none")
 
       spec <- set_description(
         spec,
@@ -600,6 +822,13 @@ function(pr) {
         )
       )
 
+      spec <- set_response_null(spec, "/count-summary/{index}")
+
+      spec <- set_example(spec, "/count-summary/{index}", 1, "wb")
+      spec <- set_example(spec, "/count-summary/{index}", 2, "trim")
+      spec <- set_example(spec, "/count-summary/{index}", 3, "none")
+      spec <- set_example(spec, "/count-summary/{index}", 4, "none")
+
       spec <- set_description(
         spec,
         "/trends/{index}",
@@ -608,6 +837,13 @@ function(pr) {
         )
       )
 
+      spec <- set_response_null(spec, "/trends/{index}")
+
+      spec <- set_example(spec, "/trends/{index}", 1, "wb")
+      spec <- set_example(spec, "/trends/{index}", 2, "trim")
+      spec <- set_example(spec, "/trends/{index}", 3, "none")
+      spec <- set_example(spec, "/trends/{index}", 4, "none")
+
       spec <- set_description(
         spec,
         "/svg/{index}",
@@ -615,6 +851,13 @@ function(pr) {
           "Gets an svg image for an indicator."
         )
       )
+
+      spec <- set_response_null(spec, "/svg/{index}")
+
+      spec <- set_example(spec, "/svg/{index}", 1, "wb")
+      spec <- set_example(spec, "/svg/{index}", 2, "trim")
+      spec <- set_example(spec, "/svg/{index}", 3, "none")
+      spec <- set_example(spec, "/svg/{index}", 4, "none")
 
       spec
 
