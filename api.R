@@ -318,14 +318,14 @@ function(
   if (is.raw(ans)) {
 
     fontsize <- sprintf("font-size: %spx", fontsize)
-    ans <- raw2char(ans)
+    ans <- rawTochar(ans)
     ans <- gsub("font-size: 8\\.80px", fontsize, ans)
 
     res[["setHeader"]]("Content-Type", "image/svg+xml")
     res[["setHeader"]]("Content-Encoding", "gzip")
     res[["setHeader"]]("Content-Disposition", "inline")
 
-    res[["body"]] <- char2raw(ans)
+    res[["body"]] <- charToraw(ans)
 
     res
 
