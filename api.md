@@ -23,14 +23,17 @@ different models including
 [RBMS](https://retoschmucki.github.io/rbms/ "rbms Website"). Single-taxon
 indicators "belong" to a multi-taxon indicator but an individual taxa can
 constitute more than one single-taxon indicator each "belonging" to a different
-multi-taxon indicator. For example, Goldcrest (_Regulus regulus_), belongs to
-both the Winter Bird indicator and the Forest Breeding Bird indicator and there
-are two corresponding single-taxon indicators for this species. Not all taxon
-that "belong" to a multi-taxon indicator contribute to the given indicator (see
+multi-taxon indicator. FFor example, [Goldcrest (_Regulus regulus_)
+](https://laji.fi/en/taxon/MX.33954 "Goldcrest - Regulus regulus")
+, belongs to both the Winter Bird indicator and the Forest Breeding Bird
+indicator and there are two corresponding single-taxon indicators for this 
+species. Not all taxon that "belong" to a multi-taxon indicator contribute to 
+the given indicator (see
 [/taxa-extra](#get-/taxa-extra/-index- "List of extra taxa available")). For
-example, there is a single-taxon indicator for Eurasian Sparrowhawk (_Accipiter
-nisus_) in winter that does not contribute the multi-taxon Winter Bird
-Indicator.
+example, there is a single-taxon indicator for
+[Eurasian Sparrowhawk (_Accipiter nisus_)
+](https://laji.fi/en/taxon/MX.26639 "Eurasian Sparrowhawk - Accipiter nisus")
+in winter that does not contribute the multi-taxon Winter Bird Indicator.
 
 #### **Multi-taxon indicators**
 
