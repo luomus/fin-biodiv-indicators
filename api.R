@@ -328,9 +328,11 @@ function(
       ans <- readBin(gcon, "raw", n = 100000)
       ans <- rawToChar(ans)
 
+      fontsize <- as.numeric(fontsize)
       fontsize <- sprintf("font-size: %spx", fontsize)
       ans <- gsub("font-size: 8\\.80px", fontsize, ans)
 
+      scale <- as.numeric(scale)
       width <- sprintf("width=\"%spt\"", round(720 * scale / 100, 2))
       height <- sprintf("height=\"%spt\"", round(576 * scale / 100, 2))
       ans <- gsub("width=\"720\\.00pt\"", width, ans)
