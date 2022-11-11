@@ -318,7 +318,7 @@ function(
   if (is.raw(ans)) {
 
     fontsize <- sprintf("font-size: %spx", fontsize)
-    ans <- rawToChar(ans)
+    ans <- rawToChar(ans[!ans == "00"])
     ans <- gsub("font-size: 8\\.80px", fontsize, ans)
 
     res[["setHeader"]]("Content-Type", "image/svg+xml")
