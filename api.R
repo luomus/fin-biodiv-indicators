@@ -296,9 +296,12 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 #* @param model:str Which model one of `trim`, `rbms`, etc. (`default` is first model declared in [configuration](#get-/config/-index- "Get the configuration of an indicator")).
 #* @param taxon:str FinBIF MX code identifier for a taxon (see [/taxa](#get-/taxa/-index- "Get list of taxa available for an indicator") or [/taxa-extra](#get-/taxa-extra/-index- "Get list of extra taxa available for an indicator")).
 #* @param region:str Which region: `north`, `south` or `none` (whole of Finland)?
+#* @param fontsize:double Font size (in px) of the axis labels.
 #* @response 200 An svg file response
 #* @response 404 Not found
-function(index, model = "default", taxon = "none", region = "none", res) {
+function(
+  index, model = "default", taxon = "none", region = "none", fontsize = 12, res
+) {
 
   has_output <- check_input(index, model, taxon)
 
@@ -314,11 +317,15 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 
   if (is.raw(ans)) {
 
+    fontsize <- sprintf("font-size: %spx", fontsize)
+    ans <- raw2char(ans)
+    ans <- gsub("font-size: 8\\.80px", fontsize, ans)
+
     res[["setHeader"]]("Content-Type", "image/svg+xml")
     res[["setHeader"]]("Content-Encoding", "gzip")
     res[["setHeader"]]("Content-Disposition", "inline")
 
-    res[["body"]] <- ans
+    res[["body"]] <- char2raw(ans)
 
     res
 
