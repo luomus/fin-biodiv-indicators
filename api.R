@@ -300,7 +300,7 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 #* @response 200 An svg file response
 #* @response 404 Not found
 function(
-  index, model = "default", taxon = "none", region = "none", fontsize = 12, res
+  index, model = "default", taxon = "none", region = "none", fontsize = 8.80, res
 ) {
 
   has_output <- check_input(index, model, taxon)
@@ -317,15 +317,29 @@ function(
 
   if (is.raw(ans)) {
 
-    fontsize <- sprintf("font-size: %spx", fontsize)
-    ans <- rawToChar(ans[!ans == "00"])
-    ans <- gsub("font-size: 8\\.80px", fontsize, ans)
+    if (fontsize != 8.8) {
+
+      fontsize <- sprintf("font-size: %spx", fontsize)
+      con <- rawConnection(ans)
+      on.exit(close(con))
+      gcon <- gzcon(con)
+      on.exit(close(gcon), add = TRUE)
+      ans <- readBin(gcon, "raw", n = 100000)
+      ans <- rawToChar(ans)
+      ans <- gsub("font-size: 8\\.80px", fontsize, ans)
+      tmp <- tempfile(fileext = ".svgz")
+      writeLines(ans, tmp)
+      svglite::create_svgz(tmp)
+      ans <- readBin(tmp, "raw", n = file.info(tmp)[["size"]])
+      on.exit(unlink(tmp), add = TRUE)
+
+    }
 
     res[["setHeader"]]("Content-Type", "image/svg+xml")
     res[["setHeader"]]("Content-Encoding", "gzip")
     res[["setHeader"]]("Content-Disposition", "inline")
 
-    res[["body"]] <- charToRaw(ans)
+    res[["body"]] <- ans
 
     res
 
@@ -865,6 +879,7 @@ function(pr) {
       spec <- set_example(spec, "/svg/{index}", 2, "trim")
       spec <- set_example(spec, "/svg/{index}", 3, "none")
       spec <- set_example(spec, "/svg/{index}", 4, "none")
+      spec <- set_example(spec, "/svg/{index}", 5, 8.8)
 
       spec
 
