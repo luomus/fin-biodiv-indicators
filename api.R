@@ -335,8 +335,8 @@ function(
       scale <- as.numeric(scale)
       width <- sprintf("width=\"%spt\"", round(720 * scale / 100, 2))
       height <- sprintf("height=\"%spt\"", round(576 * scale / 100, 2))
-      ans <- gsub("width=\"720\\.00pt\"", width, ans)
-      ans <- gsub("height=\"576\\.00pt\"", height, ans)
+      ans <- gsub("width='720\\.00pt'", width, ans)
+      ans <- gsub("height='576\\.00pt'", height, ans)
 
       tmp <- tempfile(fileext = ".svgz")
       writeLines(ans, tmp)
