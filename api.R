@@ -297,10 +297,12 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 #* @param taxon:str FinBIF MX code identifier for a taxon (see [/taxa](#get-/taxa/-index- "Get list of taxa available for an indicator") or [/taxa-extra](#get-/taxa-extra/-index- "Get list of extra taxa available for an indicator")).
 #* @param region:str Which region: `north`, `south` or `none` (whole of Finland)?
 #* @param fontsize:double Font size (in px) of the axis labels.
+#* @param scale:double Scale of image (%).
 #* @response 200 An svg file response
 #* @response 404 Not found
 function(
-  index, model = "default", taxon = "none", region = "none", fontsize = 8.80, res
+  index, model = "default", taxon = "none", region = "none", fontsize = 8.80,
+  scale = 100, res
 ) {
 
   has_output <- check_input(index, model, taxon)
@@ -317,15 +319,23 @@ function(
 
   if (is.raw(ans)) {
 
-    if (fontsize != 8.8) {
+    if (fontsize != 8.8 || scale != 100) {
 
-      fontsize <- sprintf("font-size: %spx", fontsize)
       con <- rawConnection(ans)
       on.exit(close(con))
+
       gcon <- gzcon(con)
       ans <- readBin(gcon, "raw", n = 100000)
       ans <- rawToChar(ans)
+
+      fontsize <- sprintf("font-size: %spx", fontsize)
       ans <- gsub("font-size: 8\\.80px", fontsize, ans)
+
+      width <- sprintf("width=\"%spt\"", round(720 * scale / 100, 2))
+      height <- sprintf("height=\"%spt\"", round(576 * scale / 100, 2))
+      ans <- gsub("width=\"720\\.00pt\"", width, ans)
+      ans <- gsub("height=\"576\\.00pt\"", height, ans)
+
       tmp <- tempfile(fileext = ".svgz")
       writeLines(ans, tmp)
       svglite::create_svgz(tmp)
@@ -879,6 +889,7 @@ function(pr) {
       spec <- set_example(spec, "/svg/{index}", 3, "none")
       spec <- set_example(spec, "/svg/{index}", 4, "none")
       spec <- set_example(spec, "/svg/{index}", 5, 8.8)
+      spec <- set_example(spec, "/svg/{index}", 6, 100)
 
       spec
 
