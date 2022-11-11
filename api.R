@@ -323,7 +323,6 @@ function(
       con <- rawConnection(ans)
       on.exit(close(con))
       gcon <- gzcon(con)
-      on.exit(close(gcon), add = TRUE)
       ans <- readBin(gcon, "raw", n = 100000)
       ans <- rawToChar(ans)
       ans <- gsub("font-size: 8\\.80px", fontsize, ans)
