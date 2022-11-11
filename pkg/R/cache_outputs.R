@@ -59,7 +59,7 @@ cache_outputs <- function(index, df, db) {
 
   on.exit(unlink(tmp))
 
-  svglite::svglite(tmp)
+  svglite::svglite(tmp, fix_text_size = FALSE)
 
   print(p)
 
