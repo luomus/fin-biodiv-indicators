@@ -386,8 +386,24 @@ function() {
 #* @get /
 function(res) {
 
+  path <- "/docs/"
+
+  if (length(unlist(packageVersion("fbi"))) > 3L) {
+
+    path <- "/docs/dev/index.html"
+
+  }
+
   res[["status"]] <- 303L
-  res[["setHeader"]]("Location", "/docs/")
+  res[["setHeader"]]("Location", path)
+
+}
+
+#* @get /docs/__docs__
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/__docs__/#overview")
 
 }
 
@@ -443,6 +459,7 @@ function(pr) {
       spec$paths$`/favicon.ico` <- NULL
       spec$paths$`/robots.txt` <- NULL
       spec$paths$`/` <- NULL
+      spec$paths$`/docs/__docs__` <- NULL
 
       set_description <- function(spec, path, description) {
         spec$paths[[path]]$get$description <- description

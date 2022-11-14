@@ -45,5 +45,12 @@ single-taxon indices that "belong" to the Winter Bird Community Temperature
 Index, this multi-taxon indicator is constructed from the taxa (and extra taxa)
 that fall under the Winter Bird indicator.
 
+::: {.pkgdown-release}
+![Biodiversity Indicator for Birds in Winter
+](https://indicators.laji.fi/svg/wb?fontsize=16&scale=60 "Winter Birds")
+:::
+
+::: {.pkgdown-devel}
 ![Biodiversity Indicator for Birds in Winter
 ](https://indicators-dev.laji.fi/svg/wb?fontsize=16&scale=60 "Winter Birds")
+:::

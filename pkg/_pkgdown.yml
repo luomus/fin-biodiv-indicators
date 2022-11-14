@@ -7,9 +7,11 @@ template:
     font-size-base: "1rem"
     base_font:
       google: "Roboto"
+development:
+  mode: auto
 repo:
   url:
-    source: https://github.com/luomus/fin-biodiv-indicators/blob/HEAD/pkg/
+    source: !expr if (length(unlist(packageVersion("fbi") > 3L))) "https://github.com/luomus/fin-biodiv-indicators/blob/dev/pkg/" else "https://github.com/luomus/fin-biodiv-indicators/blob/main/pkg/"
 home:
   title: "Finnish Biodiversity Indicators"
 destination: docs
@@ -20,7 +22,7 @@ navbar:
   components:
     api:
       text: API
-      href: ../__docs__/#overview
+      href: !expr if (length(unlist(packageVersion("fbi") > 3L))) "../../__docs__/#overview" else "../__docs__/#overview"
     articles:
       text: Example Indicators
       menu:
