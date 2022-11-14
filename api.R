@@ -101,7 +101,7 @@ function(index, res) {
 
 }
 
-#* Get the configuration of an indicator
+#* Get the configuration for an indicator
 #* @tag config
 #* @get /config/<index:str>
 #* @param index:str Shortcode for multi-taxon indicator (see [/indices](#get-/indices "Get list of available indicators")).
@@ -289,7 +289,7 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 
 }
 
-#* Get svg for an indicator
+#* Get image for an indicator as SVG
 #* @tag graphics
 #* @get /svg/<index:str>
 #* @param index:str Shortcode for multi-taxon indicator (see [/indices](#get-/indices "Get list of available indicators")).
@@ -821,7 +821,7 @@ function(pr) {
         list(
           data = list(c(1, 0, 0), c(.8, .6, 1)),
           pointStart = 2000L,
-          pointInterval = 1,
+          pointInterval = 1L,
           pointIntervalUnit = "year"
         )
       )
@@ -850,11 +850,78 @@ function(pr) {
         spec,
         "/count-summary/{index}",
         paste(
-          "Gets a summary of the count data used as input for an indicator."
+          "Gets a summary of the count data used as input for an indicator.",
+          "Summary depends on the type of indicator."
         )
       )
 
       spec <- set_response_null(spec, "/count-summary/{index}")
+
+      spec <- set_schema(
+        spec,
+        "/count-summary/{index}",
+        "200",
+        list(
+          type = "object",
+          properties = list(
+            taxa = list(
+              type = "integer",
+              description = paste(
+                "The number of taxa included in a multi-taxon indicator."
+              )
+            ),
+            sites = list(
+              type = "integer",
+              description = paste(
+                "The number of sites included in a single-taxon indicator."
+              )
+            ),
+            zero_counts = list(
+              type = "integer",
+              description = paste(
+                "The number of zero count observations for a single-taxon",
+                "indicator."
+              )
+            ),
+            positive_counts = list(
+              type = "integer",
+              description = paste(
+                "The number of positive count observations for a single-taxon",
+                "indicator."
+              )
+            ),
+            total_observed = list(
+              type = "integer",
+              description = paste(
+                "The number of count observations for a single-taxon",
+                "indicator."
+              )
+            ),
+            missing_counts = list(
+              type = "integer",
+              description = paste(
+                "The number of missing count observations for a single-taxon",
+                "indicator."
+              )
+            ),
+            total_counts = list(
+              type = "integer",
+              description = paste(
+                "The number of observation events for a single-taxon",
+                "indicator."
+              )
+            )
+          )
+        ),
+        list(
+          sites = 110L,
+          zero_counts = 31743L,
+          positive_counts = 3437L,
+          total_observed = 35180L,
+          missing_counts = 22473L,
+          total_counts = 57653L
+        )
+      )
 
       spec <- set_example(spec, "/count-summary/{index}", 1, "wb")
       spec <- set_example(spec, "/count-summary/{index}", 2, "trim")
@@ -865,11 +932,81 @@ function(pr) {
         spec,
         "/trends/{index}",
         paste(
-          "Gets a summary of the trends for an indicator."
+          "Gets a summary of overall trend for an indicator. The overall trend",
+          "summary is only available for single-taxon indicators calculated,
+          using rtrim."
         )
       )
 
       spec <- set_response_null(spec, "/trends/{index}")
+
+      spec <- set_schema(
+        spec,
+        "/trends/{index}",
+        "200",
+        list(
+          type = "object",
+          properties = list(
+            from = list(
+              type = "integer",
+              description = "The starting year of the overall trend."
+            ),
+            upto = list(
+              type = "integer",
+              description = "The ending year of the overall trend."
+            ),
+            add = list(
+              type = "number",
+              description = paste(
+                "The mean of the overall trend on the additive scale."
+              )
+            ),
+            se_add = list(
+              type = "number",
+              description = paste(
+                "The standard error of the mean of the overall trend on the",
+                "additive scale."
+              )
+            ),
+            mul = list(
+              type = "number",
+              description = paste(
+                "The mean of the overall trend on the multiplicative scale."
+              )
+            ),
+            se_mul = list(
+              type = "number",
+              description = paste(
+                "The standard error of the mean of the overall trend on the",
+                "multiplicative scale."
+              )
+            ),
+            p = list(
+              type = "number",
+              description = paste(
+                "The p-value of the overall trend on the multiplicative scale."
+              )
+            ),
+            meanning = list(
+              type = "string",
+              description = paste(
+                "An intepretation of the trend accounting for the sign of the",
+                "trend and its statistical significance."
+              )
+            )
+          )
+        ),
+        list(
+          from = 2000L,
+          upto = 2022L,
+          add = 0.1503,
+          se_add = 0.0297,
+          mul = 1.1622,
+          se_mul = 0.0345,
+          p = 0.0001,
+          meaning = "Strong increase (p<0.005)"
+        )
+      )
 
       spec <- set_example(spec, "/trends/{index}", 1, "wb")
       spec <- set_example(spec, "/trends/{index}", 2, "trim")
