@@ -53,7 +53,8 @@ cache_outputs <- function(index, df, db) {
     ggplot2::geom_line() +
     ggplot2::ylab(NULL) +
     ggplot2::xlab(NULL) +
-    ggplot2::theme_minimal()
+    ggplot2::theme_minimal() +
+    ggplot2::theme(plot.margin = ggplot2::unit(c(1L, 1L, 1L, 1L), "cm"))
 
   tmp <- tempfile(fileext = ".svgz")
 
