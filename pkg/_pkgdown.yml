@@ -17,12 +17,15 @@ home:
 destination: docs
 navbar:
   structure:
-    left:  [api, articles, walkthroughs, reference]
+    left:  [api, config, articles, walkthroughs, reference]
     right: [search, github]
   components:
     api:
       text: API
       href: !expr if (length(unlist(packageVersion("fbi") > 3L))) "../../__docs__/#overview" else "../__docs__/#overview"
+    config:
+      text: Configuration
+      href: articles/configuration.html
     articles:
       text: Example Indicators
       menu:

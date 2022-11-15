@@ -1,0 +1,40 @@
+---
+title: "Configuration"
+author: "William K. Morris"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Configuration}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```yml
+default:
+  indices:
+  - code: wb
+    name: Winter birds community temperature index
+  - code: bf
+    name: Farmland butterflies
+  - code: bfcti
+    name: Farmland butterflies community temperature index
+  - code: bfoa
+    name: Butterfly overall abundance
+  surveys:
+    selection:
+    - document_id
+    - location_id
+    - year
+    - month
+    - day
+    has_value:
+    - document_id
+    - location_id
+    - year
+    - month
+    - day
+  counts:
+    abundance: abundance
+  use_data_after: "01-01"
+```
