@@ -5,6 +5,16 @@ abundance indices and related metrics for Finland. The input data for the
 indices are provided by the
 [Finnish Biodiversity Information Facility](https://laji.fi/en/ "FinBIF").
 
+::: {.pkgdown-release}
+![Biodiversity Indicator for Birds in Winter (Whole of Finland)
+](https://indicators.laji.fi/svg/wb?fontsize=16&scale=60 "Winter Birds")
+:::
+
+::: {.pkgdown-devel}
+![Biodiversity Indicator for Birds in Winter (Whole of Finland)
+](https://indicators-dev.laji.fi/svg/wb?fontsize=16&scale=60 "Winter Birds")
+:::
+
 ## Indicator types
 
 Indicators are either single-taxon or multi-taxon. All indicators are calculated
@@ -44,13 +54,3 @@ input of another multi-taxon indicator. For example, while there are no
 single-taxon indices that "belong" to the Winter Bird Community Temperature
 Index, this multi-taxon indicator is constructed from the taxa (and extra taxa)
 that fall under the Winter Bird indicator.
-
-::: {.pkgdown-release}
-![Biodiversity Indicator for Birds in Winter
-](https://indicators.laji.fi/svg/wb?fontsize=16&scale=60 "Winter Birds")
-:::
-
-::: {.pkgdown-devel}
-![Biodiversity Indicator for Birds in Winter
-](https://indicators-dev.laji.fi/svg/wb?fontsize=16&scale=60 "Winter Birds")
-:::

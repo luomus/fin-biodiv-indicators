@@ -10,8 +10,36 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-![Community temperature indicator for winter birds](https://indicators.laji.fi/svg/wbcti "Winter Bird Community Temperature Index")
+```{r, include = FALSE}
+url <- "https://indicators%s.laji.fi/svg/%s?fontsize=16&scale=60"
+```
 
-![Community temperature indicator for summer birds](https://indicators.laji.fi/svg/sbcti "Summer Bird Community Temperature Index")
+::: {.pkgdown-release}
+![Community Temperature Indicator for Winter Birds (Whole of Finland)
+](`r sprintf(url, "", "wbcti")` "Winter Bird Community Temperature Index")
+:::
 
-![Community temperature indicator for farmland butterflies](https://indicators.laji.fi/svg/bfcti "Farmland Butterfly Community Temperature Index")
+::: {.pkgdown-devel}
+![Community Temperature Indicator for Winter Birds (Whole of Finland)
+](`r sprintf(url, "-dev", "wbcti")` "Winter Bird Community Temperature Index")
+:::
+
+::: {.pkgdown-release}
+![Community Temperature Indicator for Summer Birds (Whole of Finland)
+](`r sprintf(url, "", "sbcti")` "Summer Bird Community Temperature Index")
+:::
+
+::: {.pkgdown-devel}
+![Community Temperature Indicator for Summer Birds (Whole of Finland)
+](`r sprintf(url, "-dev", "sbcti")` "Summer Bird Community Temperature Index")
+:::
+
+::: {.pkgdown-release}
+![Community Temperature Indicator for Farmland Butterflies (Whole of Finland)
+](`r sprintf(url, "", "bfcti")` "Butterfly Community Temperature Index")
+:::
+
+::: {.pkgdown-devel}
+![Community Temperature Indicator for Farmland Butterflies (Whole of Finland)
+](`r sprintf(url, "-dev", "bfcti")` "Butterfly Community Temperature Index")
+:::

@@ -10,4 +10,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-![Biodiversity indicator for birds in winter](https://indicators.laji.fi/svg/wb "Winter Birds")
+::: {.pkgdown-release}
+![Biodiversity Indicator for Birds in Winter (Whole of Finland)
+](https://indicators.laji.fi/svg/wb?fontsize=16&scale=60 "Winter Birds")
+:::
+
+::: {.pkgdown-devel}
+![Biodiversity Indicator for Birds in Winter (Whole of Finland)
+](https://indicators-dev.laji.fi/svg/wb?fontsize=16&scale=60 "Winter Birds")
+:::
