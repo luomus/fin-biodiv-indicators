@@ -23,7 +23,7 @@ different models including
 [RBMS](https://retoschmucki.github.io/rbms/ "rbms Website"). Single-taxon
 indicators "belong" to a multi-taxon indicator but an individual taxa can
 constitute more than one single-taxon indicator each "belonging" to a different
-multi-taxon indicator. FFor example, [Goldcrest (_Regulus regulus_)
+multi-taxon indicator. For example, [Goldcrest (_Regulus regulus_)
 ](https://laji.fi/en/taxon/MX.33954 "Goldcrest - Regulus regulus")
 , belongs to both the Winter Bird indicator and the Forest Breeding Bird
 indicator and there are two corresponding single-taxon indicators for this 
