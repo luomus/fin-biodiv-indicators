@@ -1,4 +1,4 @@
-pkgs <- c("stats", "dplyr", "fbi", "pool", "RPostgres")
+pkgs <- c("stats", "dplyr", "fbi", "pool", "RPostgres", "tictoc")
 
 for (pkg in pkgs) {
 
@@ -32,6 +32,10 @@ do_update <- function(index, type = c("input", "output")) {
   isTRUE(ans)
 
 }
+
+timeout_in_secs <- as.integer(Sys.getenv("TIMEOUT_IN_HOURS")) * 60L * 60L
+
+start_timer <- tictoc::tic()
 
 message(sprintf("INFO [%s] Update starting...", Sys.time()))
 
@@ -110,6 +114,22 @@ for (index in indices) {
 
     index_update <- index_update || taxon_index_update
 
+    stop_timer <- tictoc::toc(quiet = TRUE)
+
+    tictoc::tic()
+
+    if (stop_timer[["toc"]] - start_timer > timeout_in_secs) {
+
+      message(
+        sprintf(
+          "INFO [%s] Reached time limit. Taxon update exiting", Sys.time()
+        )
+      )
+
+      break
+
+    }
+
   }
 
   if (index_update) {
@@ -161,7 +181,37 @@ for (index in indices) {
 
       }
 
+      stop_timer <- tictoc::toc(quiet = TRUE)
+
+      tictoc::tic()
+
+      if (stop_timer[["toc"]] - start_timer > timeout_in_secs) {
+
+        message(
+          sprintf(
+            "INFO [%s] Reached time limit. Index update exiting", Sys.time()
+          )
+        )
+
+        break
+
+      }
+
     }
+
+  }
+
+  stop_timer <- tictoc::toc(quiet = TRUE)
+
+  tictoc::tic()
+
+  if (stop_timer[["toc"]] - start_timer > timeout_in_secs) {
+
+    message(
+      sprintf("INFO [%s] Reached time limit. Job exiting", Sys.time())
+    )
+
+    break
 
   }
 

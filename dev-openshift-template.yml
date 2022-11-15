@@ -664,6 +664,8 @@ objects:
                 value: ${DEV_DB_PASSWORD}
               - name: PGHOST
                 value: ${DEV}-${DB}
+              - name: TIMEOUT_IN_HOURS
+                value: ${TIMEOUT_IN_HOURS}
             volumes:
             - name: ${DEV}-${VAR}
               persistentVolumeClaim:
