@@ -364,6 +364,9 @@ function(
 
 }
 
+#* @assets ./var/status /status
+list()
+
 #* @assets /usr/local/lib/R/site-library/finbif/help/figures
 list()
 

@@ -20,6 +20,8 @@ if (!dir.exists("var/logs")) {
 
 }
 
+if (!dir.exists("var/status")) dir.create("var/status")
+
 log_dir <- "var/logs"
 
 log_file <- tempfile("plumber_", log_dir, ".log")

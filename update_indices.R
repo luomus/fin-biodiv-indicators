@@ -1,181 +1,209 @@
-pkgs <- c("stats", "dplyr", "fbi", "pool", "RPostgres", "tictoc")
+tryCatch(
 
-for (pkg in pkgs) {
+  {
 
-  suppressPackageStartupMessages(
-    library(pkg, quietly = TRUE, character.only = TRUE)
-  )
+    pkgs <- c("stats", "dplyr", "fbi", "pool", "RPostgres", "tictoc")
 
-}
+    for (pkg in pkgs) {
 
-options(
-  finbif_use_cache = FALSE,
-  finbif_api_url = Sys.getenv("FINBIF_API"),
-  finbif_warehouse_query = Sys.getenv("FINBIF_WAREHOUSE_QUERY"),
-  finbif_email = Sys.getenv("FINBIF_EMAIL")
-)
-
-pool <- pool::dbPool(RPostgres::Postgres())
-
-do_update <- function(index, type = c("input", "output")) {
-
-  index <- sub("\\.", "", index)
-
-  type <- match.arg(type)
-
-  envvar <- paste(index, type, sep = "_")
-
-  ans <- Sys.getenv(envvar, FALSE)
-
-  ans <- as.logical(ans)
-
-  isTRUE(ans)
-
-}
-
-timeout_in_secs <- as.integer(Sys.getenv("TIMEOUT_IN_HOURS")) * 60L * 60L
-
-start_timer <- tictoc::tic()
-
-message(sprintf("INFO [%s] Update starting...", Sys.time()))
-
-config_copy <- file.copy("var/config.yml", "config.yml", TRUE)
-
-stopifnot("Copying config.yml failed" = config_copy)
-
-indices <- vapply(config::get("indices"), getElement, "", "code")
-
-for (index in indices) {
-
-  message(sprintf("INFO [%s] Updating %s index...", Sys.time(), index))
-
-  index_update <- TRUE
-
-  do_upd <- do_update(index)
-
-  src <- config::get("from", config = index)
-
-  if (is.null(src)) {
-
-    surveys <- update_data("surveys", index, NULL, pool, do_upd)
-
-    index_update <- FALSE
-
-  }
-
-  taxa <- config::get("taxa", config = index)
-
-  extra_taxa <- config::get("extra_taxa", config = index)
-
-  models <- names(config::get("model", config = index))
-
-  for (taxon in c(taxa, extra_taxa)) {
-
-    message(
-      sprintf(
-        "INFO [%s] Updating %s for %s index...",
-        Sys.time(),
-        taxon[["binomial"]],
-        index
+      suppressPackageStartupMessages(
+        library(pkg, quietly = TRUE, character.only = TRUE)
       )
+
+    }
+
+    options(
+      finbif_use_cache = FALSE,
+      finbif_api_url = Sys.getenv("FINBIF_API"),
+      finbif_warehouse_query = Sys.getenv("FINBIF_WAREHOUSE_QUERY"),
+      finbif_email = Sys.getenv("FINBIF_EMAIL")
     )
 
-    do_upd <- do_update(index) || do_update(taxon[["code"]])
+    pool <- pool::dbPool(RPostgres::Postgres())
 
-    counts <- update_data("counts", index, taxon, pool, do_upd)
+    do_update <- function(index, type = c("input", "output")) {
 
-    do_upd <- do_update(index, "output") || do_update(taxon[["code"]], "output")
+      index <- sub("\\.", "", index)
 
-    taxon_index_update <- surveys || counts || do_upd
+      type <- match.arg(type)
 
-    if (taxon_index_update) {
+      envvar <- paste(index, type, sep = "_")
 
-      for (model in models) {
+      ans <- Sys.getenv(envvar, FALSE)
 
-        for (i in paste0(index, c("", "_north", "_south"))) {
+      ans <- as.logical(ans)
+
+      isTRUE(ans)
+
+    }
+
+    timeout_in_secs <- as.integer(Sys.getenv("TIMEOUT_IN_HOURS")) * 60L * 60L
+
+    start_timer <- tictoc::tic()
+
+    message(sprintf("INFO [%s] Update starting...", Sys.time()))
+
+    config_copy <- file.copy("var/config.yml", "config.yml", TRUE)
+
+    stopifnot("Copying config.yml failed" = config_copy)
+
+    indices <- vapply(config::get("indices"), getElement, "", "code")
+
+    for (index in indices) {
+
+      message(sprintf("INFO [%s] Updating %s index...", Sys.time(), index))
+
+      index_update <- TRUE
+
+      do_upd <- do_update(index)
+
+      src <- config::get("from", config = index)
+
+      if (is.null(src)) {
+
+        surveys <- update_data("surveys", index, NULL, pool, do_upd)
+
+        index_update <- FALSE
+
+      }
+
+      taxa <- config::get("taxa", config = index)
+
+      extra_taxa <- config::get("extra_taxa", config = index)
+
+      models <- names(config::get("model", config = index))
+
+      for (taxon in c(taxa, extra_taxa)) {
+
+        message(
+          sprintf(
+            "INFO [%s] Updating %s for %s index...",
+            Sys.time(),
+            taxon[["binomial"]],
+            index
+          )
+        )
+
+        do_upd <- do_update(index) || do_update(taxon[["code"]])
+
+        counts <- update_data("counts", index, taxon, pool, do_upd)
+
+        do_upd <- do_update(index, "output")
+
+        do_upd <- do_upd || do_update(taxon[["code"]], "output")
+
+        taxon_index_update <- surveys || counts || do_upd
+
+        if (taxon_index_update) {
+
+          for (model in models) {
+
+            for (i in paste0(index, c("", "_north", "_south"))) {
+
+              message(
+                sprintf(
+                  "INFO [%s] Updating %s model for %s (%s index)...",
+                  Sys.time(),
+                  model,
+                  taxon[["binomial"]],
+                  i
+                )
+              )
+
+              update_taxon_index(i, model, taxon, pool)
+
+            }
+
+          }
+
+        }
+
+        index_update <- index_update || taxon_index_update
+
+        stop_timer <- tictoc::toc(quiet = TRUE)
+
+        tictoc::tic()
+
+        if (stop_timer[["toc"]] - start_timer > timeout_in_secs) {
 
           message(
             sprintf(
-              "INFO [%s] Updating %s model for %s (%s index)...",
-              Sys.time(),
-              model,
-              taxon[["binomial"]],
-              i
+              "INFO [%s] Reached time limit. Taxon update exiting", Sys.time()
             )
           )
 
-          update_taxon_index(i, model, taxon, pool)
+          break
 
         }
 
       }
 
-    }
+      if (index_update) {
 
-    index_update <- index_update || taxon_index_update
+        for (model in models) {
 
-    stop_timer <- tictoc::toc(quiet = TRUE)
+          for (i in list(NULL, "north", "south")) {
 
-    tictoc::tic()
+            message(
+              sprintf(
+                "INFO [%s] Updating combined %s model for %s index...",
+                Sys.time(),
+                model,
+                paste0(index, i)
+              )
+            )
 
-    if (stop_timer[["toc"]] - start_timer > timeout_in_secs) {
+            needs_update <- TRUE
 
-      message(
-        sprintf(
-          "INFO [%s] Reached time limit. Taxon update exiting", Sys.time()
-        )
-      )
+            if (!is.null(src)) {
 
-      break
+              last_mod <- dplyr::tbl(pool, "output_cache_time")
 
-    }
+              src_mdl <- names(config::get("model", config = src))[[1L]]
 
-  }
+              last_mod_src <- dplyr::filter(
+                last_mod,
+                .data[["index"]] == !!paste(c(src, i, src_mdl), collapse = "_")
+              )
 
-  if (index_update) {
+              last_mod_src <- dplyr::pull(last_mod_src, .data[["time"]])
 
-    for (model in models) {
+              last_mod_index <- dplyr::filter(
+                last_mod,
+                .data[["index"]] == !!paste(index, i, model, collapse = "_")
+              )
 
-      for (i in list(NULL, "north", "south")) {
+              last_mod_index <- dplyr::pull(last_mod_index, .data[["time"]])
 
-        message(
-          sprintf(
-            "INFO [%s] Updating combined %s model for %s index...", Sys.time(),
-            model, paste0(index, i)
-          )
-        )
+              needs_update <-
+                !isFALSE(last_mod_src > last_mod_index) ||
+                  do_update(paste0(index, i), "output")
 
-        needs_update <- TRUE
+            }
 
-        if (!is.null(src)) {
+            if (needs_update) {
 
-          last_mod <- dplyr::tbl(pool, "output_cache_time")
+              update_index(paste(c(index, i), collapse = "_"), model, i, pool)
 
-          src_model <- names(config::get("model", config = src))[[1L]]
+            }
 
-          last_mod_src <- dplyr::filter(
-            last_mod,
-            .data[["index"]] == !!paste(c(src, i, src_model), collapse = "_")
-          )
+          }
 
-          last_mod_src <- dplyr::pull(last_mod_src, .data[["time"]])
+          stop_timer <- tictoc::toc(quiet = TRUE)
 
-          last_mod_index <- dplyr::filter(
-            last_mod,
-            .data[["index"]] == !!paste(index, i, model, collapse = "_")
-          )
+          tictoc::tic()
 
-          last_mod_index <- dplyr::pull(last_mod_index, .data[["time"]])
+          if (stop_timer[["toc"]] - start_timer > timeout_in_secs) {
 
-          needs_update <-
-            !isFALSE(last_mod_src > last_mod_index) ||
-              do_update(paste0(index, i), "output")
+            message(
+              sprintf(
+                "INFO [%s] Reached time limit. Index update exiting", Sys.time()
+              )
+            )
 
-        }
+            break
 
-        if (needs_update) {
-
-          update_index(paste(c(index, i), collapse = "_"), model, i, pool)
+          }
 
         }
 
@@ -188,9 +216,7 @@ for (index in indices) {
       if (stop_timer[["toc"]] - start_timer > timeout_in_secs) {
 
         message(
-          sprintf(
-            "INFO [%s] Reached time limit. Index update exiting", Sys.time()
-          )
+          sprintf("INFO [%s] Reached time limit. Job exiting", Sys.time())
         )
 
         break
@@ -199,24 +225,22 @@ for (index in indices) {
 
     }
 
-  }
+    pool::poolClose(pool)
 
-  stop_timer <- tictoc::toc(quiet = TRUE)
+    message(sprintf("INFO [%s] Update complete", Sys.time()))
 
-  tictoc::tic()
+  },
+  error = function(e) {
 
-  if (stop_timer[["toc"]] - start_timer > timeout_in_secs) {
+    message(sprintf("ERROR [%s] %s", Sys.time(), e[["message"]]))
 
-    message(
-      sprintf("INFO [%s] Reached time limit. Job exiting", Sys.time())
-    )
-
-    break
+    "false"
 
   }
 
-}
+) |>
+cat(file = "var/status/success.txt")
 
-pool::poolClose(pool)
-
-message(sprintf("INFO [%s] Update complete", Sys.time()))
+cat(
+  format(Sys.time(), usetz = TRUE), file = "var/status/last-update.txt"
+)
