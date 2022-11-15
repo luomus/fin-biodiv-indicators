@@ -63,7 +63,9 @@ p$registerHooks(
 
       if (res$status >= 400L) log_fn <- log_error
 
-      if (identical(req$PATH_INFO, "/healthz")) log_fn <- function(.) {}
+      if (identical(req[["PATH_INFO"]], "/healthz")) log_fn <- \(.) {}
+
+      if (identical(req[["HTTP_USER_AGENT"]], "Zabbix")) log_fn <- \(.) {}
 
       log_fn(
         paste0(
