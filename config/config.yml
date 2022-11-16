@@ -2693,6 +2693,7 @@ mf:
     - ordinal_day_end
     has_value:
     - document_id
+    - location_id
     - year
     - ordinal_day_start
     - ordinal_day_end
