@@ -756,6 +756,7 @@ function(pr) {
           )
         ),
         list(
+          name = "Biodiversity indicator",
           surveys = list(
             selection = c("document_id", "location_id", "year", "month", "day"),
             has_value = c("document_id", "location_id", "year", "month", "day")
