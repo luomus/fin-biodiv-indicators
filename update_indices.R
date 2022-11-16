@@ -49,7 +49,7 @@ tryCatch(
 
     indices <- vapply(get_indices(), getElement, "", "code")
 
-    for (index in indices) {
+    for (index in sample(indices)) {
 
       message(sprintf("INFO [%s] Updating %s index...", Sys.time(), index))
 
@@ -73,7 +73,7 @@ tryCatch(
 
       models <- names(config::get("model", config = index))
 
-      for (taxon in c(taxa, extra_taxa)) {
+      for (taxon in sample(c(taxa, extra_taxa))) {
 
         message(
           sprintf(
