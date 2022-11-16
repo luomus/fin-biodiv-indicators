@@ -12,6 +12,14 @@ for (pkg in pkgs) {
 
 Sys.setenv(R_CONFIG_FILE = "var/config.yml")
 
+if (!file.exists("/home/user/var/config.yml")) {
+
+  config <- file.copy("/home/user/config.yml", "/home/user/var/config.yml")
+
+  stopifnot("Config not found" = config)
+
+}
+
 if (!dir.exists("var/logs")) {
 
   log_dir <- dir.create("var/logs", recursive = TRUE)

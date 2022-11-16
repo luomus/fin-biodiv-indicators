@@ -47,7 +47,7 @@ clean_cache <- function(db) {
 
   }
 
-  indices <- vapply(config::get("indices"), getElement, "", "code")
+  indices <- vapply(get_indices(), getElement, "", "code")
 
   indices <- c(indices, paste(indices, c("north", "south"), sep = "_"))
 

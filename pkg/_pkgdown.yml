@@ -78,6 +78,7 @@ reference:
     contents:
       - check_input
       - clean_cache
+      - get_indices
       - get_output
       - process_funs
       - update_data

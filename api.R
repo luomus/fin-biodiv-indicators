@@ -45,7 +45,7 @@ function() {
 #* @serializer unboxedJSON
 function() {
 
-  config::get("indices")
+  get_indices()
 
 }
 
@@ -58,7 +58,7 @@ function() {
 #* @serializer unboxedJSON
 function(index, res) {
 
-  indices <- vapply(config::get("indices"), getElement, "", "code")
+  indices <- vapply(get_indices(), getElement, "", "code")
 
   if (index %in% indices) {
 
@@ -84,7 +84,7 @@ function(index, res) {
 #* @serializer unboxedJSON
 function(index, res) {
 
-  indices <- vapply(config::get("indices"), getElement, "", "code")
+  indices <- vapply(get_indices(), getElement, "", "code")
 
   if (index %in% indices) {
 
@@ -110,13 +110,12 @@ function(index, res) {
 #* @serializer unboxedJSON
 function(index, res) {
 
-  indices <- vapply(config::get("indices"), getElement, "", "code")
+  indices <- vapply(get_indices(), getElement, "", "code")
 
   if (index %in% indices) {
 
     ans <- config::get(config = index)
 
-    ans[["indices"]] <- NULL
     ans[["taxa"]] <- NULL
     ans[["extra_taxa"]] <- NULL
 
@@ -695,8 +694,14 @@ function(pr) {
         "200",
         list(
           type = "object",
-          required = c("combine", "use_data_after", "model"),
+          required = c("name", "combine", "use_data_after", "model"),
           properties = list(
+            name = list(
+              type = "string",
+              description = paste(
+                "Name of the indicator."
+              )
+            ),
             surveys = list(
               type = "object",
               description = paste(

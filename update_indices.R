@@ -47,7 +47,7 @@ tryCatch(
 
     stopifnot("Copying config.yml failed" = config_copy)
 
-    indices <- vapply(config::get("indices"), getElement, "", "code")
+    indices <- vapply(get_indices(), getElement, "", "code")
 
     for (index in indices) {
 

@@ -1,27 +1,4 @@
 default:
-  indices:
-  - code: flb
-    name: Farmland birds
-  - code: mrb
-    name: Mire birds
-  - code: mtb
-    name: Mountain birds
-  - code: ftb
-    name: Forest birds
-  - code: sbcti
-    name: Summer birds community temperature index
-  - code: wb
-    name: Winter birds
-  - code: wbcti
-    name: Winter birds community temperature index
-  - code: bf
-    name: Farmland butterflies
-  - code: bfcti
-    name: Farmland butterflies community temperature index
-  - code: bfoa
-    name: Butterfly overall abundance
-  - code: mf
-    name: Moths
   surveys:
     selection:
     - document_id
@@ -40,6 +17,7 @@ default:
   use_data_after: "01-01"
 
 flb:
+  name: Farmland birds
   taxa:
   - code: MX.27328
     binomial: Crex crex
@@ -102,6 +80,7 @@ flb:
       - remove_all_zero_locations
 
 mrb:
+  name: Mire birds
   taxa:
   - code: MX.32213
     binomial: Anthus pratensis
@@ -169,6 +148,7 @@ mrb:
       - remove_all_zero_locations
 
 mtb:
+  name: Mountain birds
   taxa:
   - code: MX.26921
     binomial: Lagopus lagopus
@@ -225,6 +205,7 @@ mtb:
       - remove_all_zero_locations
 
 ftb:
+  name: Forest birds
   taxa:
   - code: MX.36287
     binomial: Carduelis spinus
@@ -914,6 +895,7 @@ ftb:
       - remove_all_zero_locations
 
 sbcti:
+  name: Summer birds community temperature index
   from: ftb
   combine: cti
   model:
@@ -925,6 +907,7 @@ sbcti:
       - sum_by_event
 
 wb:
+  name: Winter birds
   taxa:
   - code: MX.34535
     binomial: Poecile montanus
@@ -1452,6 +1435,7 @@ wb:
       - remove_all_zero_locations
 
 wbcti:
+  name: Winter birds community temperature index
   from: wb
   combine: cti
   model:
@@ -1462,6 +1446,7 @@ wbcti:
       - combine_with_surveys
 
 bf:
+  name: Farmland butterflies
   taxa:
   - code: MX.60914
     binomial: Aglais io
@@ -1777,6 +1762,7 @@ bf:
       - remove_all_zero_locations
 
 bfcti:
+  name: Farmland butterflies community temperature index
   from: bf
   combine: cti
   model:
@@ -1790,6 +1776,7 @@ bfcti:
       - sum_by_event
 
 bfoa:
+  name: Butterfly overall abundance
   from: bf
   combine: overall_abundance
   model:
@@ -1803,6 +1790,7 @@ bfoa:
       - sum_by_event
 
 mf:
+  name: Moths
   taxa:
   - code: MX.62409
     binomial: Autographa macrogamma

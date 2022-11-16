@@ -28,7 +28,8 @@ Imports:
     rbms,
     rtrim,
     stats,
-    svglite
+    svglite,
+    yaml
 License: MIT + file LICENSE
 URL: https://github.com/luomus/fin-biodiv-indicators, https://indicators.laji.fi
 BugReports: https://github.com/luomus/fin-biodiv-indicators/issues

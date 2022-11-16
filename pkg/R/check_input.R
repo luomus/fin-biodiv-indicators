@@ -11,7 +11,7 @@
 
 check_input <- function(index, model, taxon) {
 
-  has_index <- index %in% vapply(config::get("indices"), getElement, "", "code")
+  has_index <- index %in% vapply(get_indices(), getElement, "", "code")
 
   models <- names(config::get("model", index))
 
