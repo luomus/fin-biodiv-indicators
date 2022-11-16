@@ -18,30 +18,60 @@ here](https://conf-fbi-dev.rahtiapp.fi/ "FBI configuration"){.pkgdown-devel}
 (requires authentification)
 
 ```yml
-default:
-  indices:
-  - code: wb
-    name: Winter birds community temperature index
-  - code: bf
-    name: Farmland butterflies
-  - code: bfcti
-    name: Farmland butterflies community temperature index
-  - code: bfoa
-    name: Butterfly overall abundance
-  surveys:
+bf:
+  name: Farmland butterflies
+  taxa:
+  - code: MX.60914
+    binomial: Aglais io
+    sti: 8.84
+  - code: MX.60735
+    binomial: Pyrgus malvae
+    sti: 8.74
+    start_year: 2000
+  - code: MX.60809
+    binomial: Satyrium pruni
+    sti: 8.31
+    start_year: 2000
+  - code: MX.60877
+    binomial: Speyeria aglaja
+    sti: 7.79
+  extra_taxa:
+  - code: MX.60858
+    binomial: Agriades optilete
+    sti: 4.19
+  filters:
+    collection: HR.3431
+  counts:
     selection:
     - document_id
-    - location_id
-    - year
-    - month
-    - day
+    - section
+    - abundance
     has_value:
+    - section
     - document_id
-    - location_id
-    - year
-    - month
-    - day
-  counts:
-    abundance: abundance
-  use_data_after: "01-01"
+    - abundance_interpreted
+  combine: geometric_mean
+  use_data_after: "10-01"
+  model:
+    rbms:
+      base_year: 2000
+      surveys_process:
+      - format_date
+      counts_process:
+      - sum_over_sections
+      - combine_with_surveys
+    trim:
+      args:
+        overdisp: true
+      base_year: 2000
+      surveys_process:
+      - require_seven_fortnights
+      - require_two_years
+      - pick_first_survey_in_fortnight
+      counts_process:
+      - sum_over_sections
+      - zero_fill
+      - sum_by_event
+      - set_start_year
+      - remove_all_zero_locations
 ```

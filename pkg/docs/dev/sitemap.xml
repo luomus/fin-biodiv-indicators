@@ -1,117 +1,117 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/dev/LICENSE-text.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/dev/articles/alpine-birds.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/articles/alpine-birds.html</loc>
   </url>
   <url>
-    <loc>/dev/articles/butterfly-abundance.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/articles/butterfly-abundance.html</loc>
   </url>
   <url>
-    <loc>/dev/articles/community-temperature-indices.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/articles/community-temperature-indices.html</loc>
   </url>
   <url>
-    <loc>/dev/articles/configuration.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/articles/configuration.html</loc>
   </url>
   <url>
-    <loc>/dev/articles/farmland-birds.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/articles/farmland-birds.html</loc>
   </url>
   <url>
-    <loc>/dev/articles/farmland-butterflies.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/articles/farmland-butterflies.html</loc>
   </url>
   <url>
-    <loc>/dev/articles/forest-birds.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/articles/forest-birds.html</loc>
   </url>
   <url>
-    <loc>/dev/articles/index.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/articles/index.html</loc>
   </url>
   <url>
-    <loc>/dev/articles/indicator-walkthrough.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/articles/indicator-walkthrough.html</loc>
   </url>
   <url>
-    <loc>/dev/articles/mire-birds.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/articles/mire-birds.html</loc>
   </url>
   <url>
-    <loc>/dev/articles/moths.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/articles/moths.html</loc>
   </url>
   <url>
-    <loc>/dev/articles/winter-birds.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/articles/winter-birds.html</loc>
   </url>
   <url>
-    <loc>/dev/authors.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/authors.html</loc>
   </url>
   <url>
-    <loc>/dev/index.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/index.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/check_input.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/check_input.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/clean_cache.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/clean_cache.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/combine_with_surveys.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/combine_with_surveys.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/format_date.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/format_date.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/get_indices.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/get_indices.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/get_output.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/get_output.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/index.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/index.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pick_first_survey_in_fortnight.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/pick_first_survey_in_fortnight.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pick_first_survey_in_winter.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/pick_first_survey_in_winter.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/pick_first_survey_in_year.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/pick_first_survey_in_year.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/process_funs.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/process_funs.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/remove_all_zero_locations.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/remove_all_zero_locations.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/require_minimum_gaps.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/require_minimum_gaps.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/require_minimum_weeks.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/require_minimum_weeks.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/require_seven_fortnights.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/require_seven_fortnights.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/require_two_years.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/require_two_years.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/set_start_year.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/set_start_year.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/sum_by_event.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/sum_by_event.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/sum_over_sections.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/sum_over_sections.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/update_data.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/update_data.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/update_index.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/update_index.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/update_taxon_index.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/update_taxon_index.html</loc>
   </url>
   <url>
-    <loc>/dev/reference/zero_fill.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/reference/zero_fill.html</loc>
   </url>
 </urlset>
