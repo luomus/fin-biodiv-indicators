@@ -10,6 +10,13 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+The FinBIF Biodiversity Indicators Service (FBI) is configured using a
+[`YAML`](https://yaml.org/spec/1.2.2/ "YAML Spec 1.2.2") file. The file can be
+accessed and edited
+[here](https://conf-fbi.rahtiapp.fi/ "FBI configuration"){.pkgdown-release}[
+here](https://conf-fbi-dev.rahtiapp.fi/ "FBI configuration"){.pkgdown-devel}
+(requires authentification)
+
 ```yml
 default:
   indices:
