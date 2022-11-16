@@ -10,68 +10,137 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, include = FALSE}
+url <- paste0(
+  "https://raw.githubusercontent.com/luomus/fin-biodiv-indicators/%s",
+  "/config/config.yml"
+)
+```
+
 The FinBIF Biodiversity Indicators Service (FBI) is configured using a
-[`YAML`](https://yaml.org/spec/1.2.2/ "YAML Spec 1.2.2") file. The file can be
-accessed and edited
+[`YAML`](https://yaml.org/spec/1.2.2/ "YAML Spec 1.2.2") file. The "live" config
+file can be accessed and edited
 [here](https://conf-fbi.rahtiapp.fi/ "FBI configuration"){.pkgdown-release}[
 here](https://conf-fbi-dev.rahtiapp.fi/ "FBI configuration"){.pkgdown-devel}
-(requires authentification)
+(requires authentification) while the "source" version of
+[the file](`r sprintf(url, "main")`){.pkgdown-release}[
+the file](`r sprintf(url, "dev")`){.pkgdown-devel} is stored in the FBI
+code repository. The FBI service uses the "live" editable version of the config
+file. But, the source version should be kept up to date as possible and
+treated as a backup. When the service application is initialised, the source
+version of the config file is used as a starting configuration.
 
-```yml
-bf:
-  name: Farmland butterflies
+Each multi-taxon indicator has its own block in the configuration file. For
+example, the Farmland Breeding Bird indicator, and the single-taxon indicators
+that belong to it, are configured using the parameters outlined below,
+where the top-level key, `flb`, is the short-code of the indicator.
+
+<details closed>
+<summary><span title=''>Click to show/hide configuration</span></summary>
+```yaml
+flb:
+  name: Farmland birds
   taxa:
-  - code: MX.60914
-    binomial: Aglais io
-    sti: 8.84
-  - code: MX.60735
-    binomial: Pyrgus malvae
-    sti: 8.74
-    start_year: 2000
-  - code: MX.60809
-    binomial: Satyrium pruni
-    sti: 8.31
-    start_year: 2000
-  - code: MX.60877
-    binomial: Speyeria aglaja
-    sti: 7.79
-  extra_taxa:
-  - code: MX.60858
-    binomial: Agriades optilete
-    sti: 4.19
+  - code: MX.27328
+    binomial: Crex crex
+    start_year: 2006
+  - code: MX.27527
+    binomial: Vanellus vanellus
+  - code: MX.27613
+    binomial: Numenius arquata
+  - code: MX.32065
+    binomial: Alauda arvensis
+  - code: MX.32132
+    binomial: Hirundo rustica
+  - code: MX.32163
+    binomial: Delichon urbicum
+  - code: MX.32213
+    binomial: Anthus pratensis
+  - code: MX.32949
+    binomial: Saxicola rubetra
+  - code: MX.33117
+    binomial: Turdus pilaris
+  - code: MX.33936
+    binomial: Sylvia communis
+  - code: MX.37142
+    binomial: Corvus monedula
+  - code: MX.36817
+    binomial: Sturnus vulgaris
+  - code: MX.36589
+    binomial: Passer montanus
+    start_year: 2006
+  - code: MX.35154
+    binomial: Emberiza hortulana
   filters:
-    collection: HR.3431
-  counts:
+    date_range_ymd:
+    - "1979-01-01"
+    - ""
+    location_tag: farmland
+    collection:
+    - HR.157
+    - HR.61
+  surveys:
     selection:
     - document_id
-    - section
-    - abundance
+    - location_id
+    - year
+    - month
+    - day
     has_value:
-    - section
     - document_id
-    - abundance_interpreted
+    - location_id
+    - year
+    - month
+    - day
+  counts:
+    abundance: pair_abundance
+    selection:
+    - document_id
+    - pair_abundance
+    has_value:
+    - document_id
+    - pair_abundance
   combine: geometric_mean
   use_data_after: "10-01"
   model:
-    rbms:
-      base_year: 2000
-      surveys_process:
-      - format_date
-      counts_process:
-      - sum_over_sections
-      - combine_with_surveys
     trim:
-      args:
-        overdisp: true
       base_year: 2000
       surveys_process:
-      - require_seven_fortnights
+      - pick_first_survey_in_year
       - require_two_years
-      - pick_first_survey_in_fortnight
       counts_process:
-      - sum_over_sections
       - zero_fill
       - sum_by_event
       - set_start_year
       - remove_all_zero_locations
 ```
+</details>
+
+## Defaults
+
+Default parameters that apply to all indicators can be specified in a special
+block with the top-level key, `default` (see below). Defaults can be overwritten by
+specifying different values the parameters in the indicator blocks.
+
+<details closed>
+<summary><span title=''>Click to show/hide defaults</span></summary>
+```yaml
+default:
+  surveys:
+    selection:
+    - document_id
+    - location_id
+    - year
+    - month
+    - day
+    has_value:
+    - document_id
+    - location_id
+    - year
+    - month
+    - day
+  counts:
+    abundance: abundance
+  use_data_after: "01-01"
+```
+</details>
