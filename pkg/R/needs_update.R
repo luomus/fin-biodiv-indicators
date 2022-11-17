@@ -16,7 +16,7 @@ needs_update <- function(index, filter, table, db) {
 
     last_cached_on <- last_cached(index, table, db)
 
-    out_of_date <- last_mod_date > last_cached_on
+    out_of_date <- !isTRUE(last_cached_on > last_mod_date)
 
     current_year <- as.integer(format(Sys.Date(), "%Y"))
 
