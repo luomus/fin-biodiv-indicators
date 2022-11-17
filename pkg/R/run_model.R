@@ -185,11 +185,13 @@ rbms <- function(
     verbose         = FALSE
   )
 
-  impt_counts <- rbms::impute_count(
-    ts_season_count = ts_season_count,
-    ts_flight_curve = ts_flight_curve[["pheno"]],
-    TimeUnit        = FlightCurveTimeUnit,
-    MultiVisit      = MultiVisit
+  impt_counts <- suppressWarnings(
+    rbms::impute_count(
+      ts_season_count = ts_season_count,
+      ts_flight_curve = ts_flight_curve[["pheno"]],
+      TimeUnit        = FlightCurveTimeUnit,
+      MultiVisit      = MultiVisit
+    )
   )
 
   count_summary <- rtrim::count_summary(

@@ -10,6 +10,30 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-![Biodiversity indicator for farmland butterflies using rbms model](https://indicators.laji.fi/svg/bf?model=rbms "Farmland Butterflies (rbms)")
+```{r, include = FALSE}
+url <- "https://indicators%s.laji.fi/svg/bf?model=%s&fontsize=16&scale=60"
+```
 
-![Biodiversity indicator for farmland butterflies using rtrim model](https://indicators.laji.fi/svg/bf?model=trim "Farmland Butterflies (rtrim)")
+::: {.pkgdown-release}
+![
+Biodiversity Indicator for Farmland Butterflies (Whole of Finland: rbms Model)
+](`r sprintf(url, "", "rbms")` "Farmland Butterflies (rbms)")
+:::
+
+::: {.pkgdown-development}
+![
+Biodiversity Indicator for Farmland Butterflies (Whole of Finland: rbms Model)
+](`r sprintf(url, "-dev", "rbms")` "Farmland Butterflies (rbms)")
+:::
+
+::: {.pkgdown-release}
+![
+Biodiversity Indicator for Farmland Butterflies (Whole of Finland: rtrim Model)
+](`r sprintf(url, "", "trim")` "Farmland Butterflies (rtrim)")
+:::
+
+::: {.pkgdown-development}
+![
+Biodiversity Indicator for Farmland Butterflies (Whole of Finland: rtrim Model)
+](`r sprintf(url, "-dev", "trim")` "Farmland Butterflies (rtrim)")
+:::

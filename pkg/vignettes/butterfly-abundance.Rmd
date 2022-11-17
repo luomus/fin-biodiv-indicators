@@ -10,4 +10,16 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-![Biodiversity indicator for butterfly abundance](https://indicators.laji.fi/svg/bfoa "Butterfly Abundance")
+```{r, include = FALSE}
+url <- "https://indicators%s.laji.fi/svg/bfoa?&fontsize=16&scale=60"
+```
+
+::: {.pkgdown-release}
+![Biodiversity Indicator for Butterfly Abundance (Whole of Finland)
+](`r sprintf(url, "")` "Butterfly Abundance")
+:::
+
+::: {.pkgdown-devel}
+![Biodiversity Indicator for Forest Breeding Birds (Whole of Finland)
+](`r sprintf(url, "-dev")` "Butterfly Abundance")
+:::

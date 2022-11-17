@@ -10,4 +10,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-![Biodiversity indicator for alpine breeding birds](https://indicators.laji.fi/svg/mtb "Alpine Birds")
+::: {.pkgdown-release}
+![Biodiversity Indicator for Alpine Breeding Birds (Whole of Finland)
+](https://indicators.laji.fi/svg/mtb?fontsize=16&scale=60 "Alpine Birds")
+:::
+
+::: {.pkgdown-devel}
+![Biodiversity Indicator for Alpine Breeding Birds (Whole of Finland)
+](https://indicators-dev.laji.fi/svg/mtb?fontsize=16&scale=60 "Alpine Birds")
+:::

@@ -10,4 +10,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-![Biodiversity indicator for forest breeding birds](https://indicators.laji.fi/svg/ftb "Forest Birds")
+::: {.pkgdown-release}
+![Biodiversity Indicator for Forest Breeding Birds (Whole of Finland)
+](https://indicators.laji.fi/svg/ftb?fontsize=16&scale=60 "Forest Birds")
+:::
+
+::: {.pkgdown-devel}
+![Biodiversity Indicator for Forest Breeding Birds (Whole of Finland)
+](https://indicators-dev.laji.fi/svg/ftb?fontsize=16&scale=60 "Forest Birds")
+:::

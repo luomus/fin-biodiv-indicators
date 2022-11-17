@@ -1,15 +1,20 @@
-pandoc: '2.18'
+pandoc: 2.19.2
 pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   alpine-birds: alpine-birds.html
   butterfly-abundance: butterfly-abundance.html
   community-temperature-indices: community-temperature-indices.html
+  configuration: configuration.html
   farmland-birds: farmland-birds.html
   farmland-butterflies: farmland-butterflies.html
   forest-birds: forest-birds.html
   indicator-walkthrough: indicator-walkthrough.html
   mire-birds: mire-birds.html
+  moths: moths.html
   winter-birds: winter-birds.html
-last_built: 2022-10-27T08:09Z
+last_built: 2022-11-17T13:45Z
+urls:
+  reference: https://indicators-dev.laji.fi/docs/dev/reference
+  article: https://indicators-dev.laji.fi/docs/dev/articles
 

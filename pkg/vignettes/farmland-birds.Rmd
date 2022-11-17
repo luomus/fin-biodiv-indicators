@@ -10,4 +10,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-![Biodiversity indicator for farmland breeding birds](https://indicators.laji.fi/svg/flb "Farmland Birds")
+::: {.pkgdown-release}
+![Biodiversity Indicator for Farmland Breeding Birds (Whole of Finland)
+](https://indicators.laji.fi/svg/flb?fontsize=16&scale=60 "Farmland Birds")
+:::
+
+::: {.pkgdown-devel}
+![Biodiversity Indicator for Farmland Breeding Birds (Whole of Finland)
+](https://indicators-dev.laji.fi/svg/flb?fontsize=16&scale=60 "Farmland Birds")
+:::

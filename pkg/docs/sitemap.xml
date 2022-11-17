@@ -1,114 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/404.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/articles/alpine-birds.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/articles/alpine-birds.html</loc>
   </url>
   <url>
-    <loc>/articles/butterfly-abundance.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/articles/butterfly-abundance.html</loc>
   </url>
   <url>
-    <loc>/articles/community-temperature-indices.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/articles/community-temperature-indices.html</loc>
   </url>
   <url>
-    <loc>/articles/farmland-birds.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/articles/configuration.html</loc>
   </url>
   <url>
-    <loc>/articles/farmland-butterflies.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/articles/farmland-birds.html</loc>
   </url>
   <url>
-    <loc>/articles/forest-birds.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/articles/farmland-butterflies.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/articles/forest-birds.html</loc>
   </url>
   <url>
-    <loc>/articles/indicator-walkthrough.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/articles/index.html</loc>
   </url>
   <url>
-    <loc>/articles/mire-birds.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/articles/indicator-walkthrough.html</loc>
   </url>
   <url>
-    <loc>/articles/winter-birds.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/articles/mire-birds.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/articles/moths.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/articles/winter-birds.html</loc>
   </url>
   <url>
-    <loc>/reference/check_input.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/authors.html</loc>
   </url>
   <url>
-    <loc>/reference/clean_cache.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/index.html</loc>
   </url>
   <url>
-    <loc>/reference/combine_with_surveys.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/check_input.html</loc>
   </url>
   <url>
-    <loc>/reference/format_date.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/clean_cache.html</loc>
   </url>
   <url>
-    <loc>/reference/get_output.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/combine_with_surveys.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/format_date.html</loc>
   </url>
   <url>
-    <loc>/reference/pick_first_survey_in_fortnight.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/get_indices.html</loc>
   </url>
   <url>
-    <loc>/reference/pick_first_survey_in_winter.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/get_output.html</loc>
   </url>
   <url>
-    <loc>/reference/pick_first_survey_in_year.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/process_funs.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/pick_first_survey_in_fortnight.html</loc>
   </url>
   <url>
-    <loc>/reference/remove_all_zero_locations.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/pick_first_survey_in_winter.html</loc>
   </url>
   <url>
-    <loc>/reference/require_minimum_gaps.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/pick_first_survey_in_year.html</loc>
   </url>
   <url>
-    <loc>/reference/require_minimum_weeks.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/process_funs.html</loc>
   </url>
   <url>
-    <loc>/reference/require_seven_fortnights.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/remove_all_zero_locations.html</loc>
   </url>
   <url>
-    <loc>/reference/require_two_years.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/require_minimum_gaps.html</loc>
   </url>
   <url>
-    <loc>/reference/set_start_year.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/require_minimum_weeks.html</loc>
   </url>
   <url>
-    <loc>/reference/shift_year_winter.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/require_seven_fortnights.html</loc>
   </url>
   <url>
-    <loc>/reference/sum_by_event.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/require_two_years.html</loc>
   </url>
   <url>
-    <loc>/reference/sum_over_sections.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/set_start_year.html</loc>
   </url>
   <url>
-    <loc>/reference/update_data.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/shift_year_winter.html</loc>
   </url>
   <url>
-    <loc>/reference/update_index.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/sum_by_event.html</loc>
   </url>
   <url>
-    <loc>/reference/update_taxon_index.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/sum_over_sections.html</loc>
   </url>
   <url>
-    <loc>/reference/zero_fill.html</loc>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/update_data.html</loc>
+  </url>
+  <url>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/update_index.html</loc>
+  </url>
+  <url>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/update_taxon_index.html</loc>
+  </url>
+  <url>
+    <loc>https://indicators-dev.laji.fi/docs/dev/reference/zero_fill.html</loc>
   </url>
 </urlset>

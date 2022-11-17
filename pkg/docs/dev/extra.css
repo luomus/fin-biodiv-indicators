@@ -1,0 +1,39 @@
+body {
+  padding-top: 50px;
+}
+
+.page-header, .template-home .page-header {
+  min-height: 54px;
+}
+
+.navbar-nav .nav-item > .nav-link {
+  padding: 1rem;
+}
+
+.navbar-dark .navbar-nav .active > .nav-link {
+  background-color: #2691D9;
+}
+
+.ref-description img {
+  display: none;
+}
+
+.navbar-dark input[type="search"] {
+  background-color: #2691D9;
+  padding-left: 0.5rem;
+}
+
+.figure {
+  width: 100%;
+  text-align: center;
+  font-style: italic;
+  font-size: smaller;
+  text-indent: 0;
+  border: thin silver solid;
+  margin: 0.5em;
+  padding: 0.5em;
+}
+
+img {
+  margin-bottom: 1.5em;
+}

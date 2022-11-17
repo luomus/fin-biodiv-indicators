@@ -12,6 +12,14 @@ for (pkg in pkgs) {
 
 Sys.setenv(R_CONFIG_FILE = "var/config.yml")
 
+if (!file.exists("/home/user/var/config.yml")) {
+
+  config <- file.copy("/home/user/config.yml", "/home/user/var/config.yml")
+
+  stopifnot("Config not found" = config)
+
+}
+
 if (!dir.exists("var/logs")) {
 
   log_dir <- dir.create("var/logs", recursive = TRUE)
@@ -19,6 +27,8 @@ if (!dir.exists("var/logs")) {
   stopifnot("Log dir creation failed" = log_dir)
 
 }
+
+if (!dir.exists("var/status")) dir.create("var/status")
 
 log_dir <- "var/logs"
 
@@ -61,7 +71,9 @@ p$registerHooks(
 
       if (res$status >= 400L) log_fn <- log_error
 
-      if (identical(req$PATH_INFO, "/healthz")) log_fn <- function(.) {}
+      if (identical(req[["PATH_INFO"]], "/healthz")) log_fn <- \(.) {}
+
+      if (identical(req[["HTTP_USER_AGENT"]], "Zabbix")) log_fn <- \(.) {}
 
       log_fn(
         paste0(

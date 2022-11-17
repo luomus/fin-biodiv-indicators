@@ -118,6 +118,8 @@ parameters:
     required: true
   - name: FINBIF_EMAIL
     required: true
+  - name: TIMEOUT_IN_HOURS
+    required: true
   - name: GITHUB_SECRET
     required: true
     generate: expression
@@ -661,6 +663,8 @@ objects:
                 value: ${DB_PASSWORD}
               - name: PGHOST
                 value: ${DB}
+              - name: TIMEOUT_IN_HOURS
+                value: ${TIMEOUT_IN_HOURS}
             volumes:
             - name: ${VAR}
               persistentVolumeClaim:

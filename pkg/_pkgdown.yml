@@ -7,20 +7,27 @@ template:
     font-size-base: "1rem"
     base_font:
       google: "Roboto"
+url: !expr if (length(unlist(packageVersion("fbi") > 3L))) "https://indicators-dev.laji.fi/docs/dev/" else "https://indicators.laji.fi/docs/"
+development:
+  mode: auto
 repo:
   url:
-    source: https://github.com/luomus/fin-biodiv-indicators/blob/HEAD/pkg/
+    home: https://github.com/luomus/fin-biodiv-indicators/
+    source: !expr if (length(unlist(packageVersion("fbi") > 3L))) "https://github.com/luomus/fin-biodiv-indicators/blob/dev/pkg/" else "https://github.com/luomus/fin-biodiv-indicators/blob/main/pkg/"
 home:
   title: "Finnish Biodiversity Indicators"
 destination: docs
 navbar:
   structure:
-    left:  [api, articles, walkthroughs, reference]
+    left:  [api, config, articles, walkthroughs, reference]
     right: [search, github]
   components:
     api:
       text: API
-      href: ../__docs__/#overview
+      href: !expr if (length(unlist(packageVersion("fbi") > 3L))) "../../__docs__/#overview" else "../__docs__/#overview"
+    config:
+      text: Configuration
+      href: articles/configuration.html
     articles:
       text: Example Indicators
       menu:
@@ -34,6 +41,8 @@ navbar:
         href: articles/forest-birds.html
       - text: Mire Birds
         href: articles/mire-birds.html
+      - text: Moths
+        href: articles/moths.html
       - text: Farmland Butterflies
         href: articles/farmland-butterflies.html
       - text: Butterfly Overall Abundance
@@ -71,6 +80,7 @@ reference:
     contents:
       - check_input
       - clean_cache
+      - get_indices
       - get_output
       - process_funs
       - update_data

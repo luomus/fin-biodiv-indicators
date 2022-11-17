@@ -1,27 +1,4 @@
 default:
-  indices:
-  - code: flb
-    name: Farmland birds
-  - code: mrb
-    name: Mire birds
-  - code: mtb
-    name: Mountain birds
-  - code: ftb
-    name: Forest birds
-  - code: sbcti
-    name: Summer birds community temperature index
-  - code: wb
-    name: Winter birds
-  - code: wbcti
-    name: Winter birds community temperature index
-  - code: bf
-    name: Farmland butterflies
-  - code: bfcti
-    name: Farmland butterflies community temperature index
-  - code: bfoa
-    name: Butterfly overall abundance
-  - code: mf
-    name: Moths
   surveys:
     selection:
     - document_id
@@ -40,6 +17,7 @@ default:
   use_data_after: "01-01"
 
 flb:
+  name: Farmland birds
   taxa:
   - code: MX.27328
     binomial: Crex crex
@@ -102,6 +80,7 @@ flb:
       - remove_all_zero_locations
 
 mrb:
+  name: Mire birds
   taxa:
   - code: MX.32213
     binomial: Anthus pratensis
@@ -169,6 +148,7 @@ mrb:
       - remove_all_zero_locations
 
 mtb:
+  name: Mountain birds
   taxa:
   - code: MX.26921
     binomial: Lagopus lagopus
@@ -225,6 +205,7 @@ mtb:
       - remove_all_zero_locations
 
 ftb:
+  name: Forest birds
   taxa:
   - code: MX.36287
     binomial: Carduelis spinus
@@ -914,6 +895,7 @@ ftb:
       - remove_all_zero_locations
 
 sbcti:
+  name: Summer birds community temperature index
   from: ftb
   combine: cti
   model:
@@ -925,6 +907,7 @@ sbcti:
       - sum_by_event
 
 wb:
+  name: Winter birds
   taxa:
   - code: MX.34535
     binomial: Poecile montanus
@@ -1452,6 +1435,7 @@ wb:
       - remove_all_zero_locations
 
 wbcti:
+  name: Winter birds community temperature index
   from: wb
   combine: cti
   model:
@@ -1462,6 +1446,7 @@ wbcti:
       - combine_with_surveys
 
 bf:
+  name: Farmland butterflies
   taxa:
   - code: MX.60914
     binomial: Aglais io
@@ -1777,6 +1762,7 @@ bf:
       - remove_all_zero_locations
 
 bfcti:
+  name: Farmland butterflies community temperature index
   from: bf
   combine: cti
   model:
@@ -1790,6 +1776,7 @@ bfcti:
       - sum_by_event
 
 bfoa:
+  name: Butterfly overall abundance
   from: bf
   combine: overall_abundance
   model:
@@ -1803,125 +1790,896 @@ bfoa:
       - sum_by_event
 
 mf:
+  name: Moths
   taxa:
-  - code: MX.62409
-    binomial: Autographa macrogamma
+  - code: MX.61533
+    binomial: Abraxas grossulariatus
+  - code: MX.61535
+    binomial: Abraxas sylvatus
+  - code: MX.61801
+    binomial: Acasis appensata
+  - code: MX.61800
+    binomial: Acasis viretata
+  - code: MX.61387
+    binomial: Achlya flavicornis
+  - code: MX.59930
+    binomial: Acossus terebra
+  - code: MX.62450
+    binomial: Acronicta aceris
+  - code: MX.62446
+    binomial: Acronicta alni
+  - code: MX.62458
+    binomial: Acronicta auricoma
+  - code: MX.62459
+    binomial: Acronicta cinerea
+  - code: MX.62447
+    binomial: Acronicta cuspis
+  - code: MX.62459
+    binomial: Acronicta euphorbiae
+  - code: MX.62451
+    binomial: Acronicta leporina
+  - code: MX.62453
+    binomial: Acronicta megacephala
+  - code: MX.62457
+    binomial: Acronicta menyanthidis
+  - code: MX.62449
+    binomial: Acronicta psi
+  - code: MX.62461
+    binomial: Acronicta rumicis
+  - code: MX.62455
+    binomial: Acronicta strigosa
+  - code: MX.62448
+    binomial: Acronicta tridens
+  - code: MX.61601
+    binomial: Aethalura punctulata
+  - code: MX.61449
+    binomial: Aglia tau
+  - code: MX.61619
+    binomial: Agriopis aurantiaria
+  - code: MX.61620
+    binomial: Agriopis marginaria
+  - code: MX.62658
+    binomial: Agrochola lychnidis
+  - code: MX.61582
+    binomial: Alcis deversatus
+  - code: MX.61583
+    binomial: Alcis jubatus
+  - code: MX.61581
+    binomial: Alcis repandatus
+  - code: MX.62525
+    binomial: Allophyes oxyacanthae
+  - code: MX.61667
+    binomial: Alsophila aescularia
+  - code: MX.62746
+    binomial: Amphipoea lucens
+  - code: MX.62626
+    binomial: Amphipyra berbera
+  - code: MX.62629
+    binomial: Amphipyra livida
+  - code: MX.62628
+    binomial: Amphipyra perflua
+  - code: MX.62625
+    binomial: Amphipyra pyramidea
+  - code: MX.62630
+    binomial: Amphipyra tragopoginis
+  - code: MX.63133
+    binomial: Anaplectoides prasinus
+  - code: MX.62661
+    binomial: Anchoscelis helvola
+  - code: MX.61670
+    binomial: Angerona prunaria
+  - code: MX.62974
+    binomial: Anorthoa munda
+  - code: MX.61923
+    binomial: Anticlea derivata
+  - code: MX.62796
+    binomial: Apamea epomidion
+  - code: MX.62800
+    binomial: Apamea illyria
+  - code: MX.62814
+    binomial: Apamea rubrirena
+  - code: MX.62802
+    binomial: Apamea scolopacina
+  - code: MX.61635
+    binomial: Apeira syringaria
+  - code: MX.61500
+    binomial: Archiearis notha
+  - code: MX.61499
+    binomial: Archiearis parthenias
+  - code: MX.62255
+    binomial: Arctia menetriesii
+  - code: MX.62177
+    binomial: Arctornis l-nigrum
+  - code: MX.61586
+    binomial: Arichanna melanaria
+  - code: MX.61974
+    binomial: Asthena albulata
+  - code: MX.61975
+    binomial: Asthena anseraria
+  - code: MX.62221
+    binomial: Atolmis rubricollis
+  - code: MX.61971
+    binomial: Baptria tibiale subsp. borealis
+  - code: MX.61970
+    binomial: Baptria tibiale subsp. fennica
+  - code: MX.62365
+    binomial: Bena bicolorana
+  - code: MX.61615
+    binomial: Biston betularius
+  - code: MX.61614
+    binomial: Biston stratarius
+  - code: MX.62723
+    binomial: Blepharita amica
+  - code: MX.62523
+    binomial: Brachionycha nubeculosa
+  - code: MX.62672
+    binomial: Brachylomia viminalis
+  - code: MX.62556
+    binomial: Bryophila raptricula
+  - code: MX.61622
+    binomial: Bupalus piniarius
+  - code: MX.61529
+    binomial: Cabera exanthemata
+  - code: MX.61528
+    binomial: Cabera pusaria
+  - code: MX.62170
+    binomial: Calliteara abietis
+  - code: MX.62171
+    binomial: Calliteara pudibunda
+  - code: MX.62548
+    binomial: Callopistria juventina
+  - code: MX.62284
+    binomial: Calyptra thalictri
+  - code: MX.61657
+    binomial: Campaea margaritaria
   - code: MX.62324
     binomial: Catocala adultera
+  - code: MX.324966
+    binomial: Catocala electa
+  - code: MX.62325
+    binomial: Catocala elocata
+  - code: MX.62322
+    binomial: Catocala fraxini
+  - code: MX.62328
+    binomial: Catocala fulminea
+  - code: MX.62323
+    binomial: Catocala nupta
+  - code: MX.62326
+    binomial: Catocala promissa
+  - code: MX.62321
+    binomial: Catocala sponsa
+  - code: MX.61638
+    binomial: Cepphis advenaria
+  - code: MX.63127
+    binomial: Cerastis leucographa
+  - code: MX.63126
+    binomial: Cerastis rubricosa
+  - code: MX.62128
+    binomial: Cerura erminea
+  - code: MX.62127
+    binomial: Cerura vinula
+  - code: MX.61880
+    binomial: Chloroclysta miata
+  - code: MX.61879
+    binomial: Chloroclysta siterata
+  - code: MX.62077
+    binomial: Chloroclystis v-ata ssp. v-ata
+  - code: MX.62654
+    binomial: Cirrhia gilvago
+  - code: MX.62652
+    binomial: Cirrhia icteritia
+  - code: MX.62653
+    binomial: Cirrhia ocellaris
+  - code: MX.61577
+    binomial: Cleora cinctaria
+  - code: MX.61678
+    binomial: Cleorodes lichenarius
+  - code: MX.62091
+    binomial: Clostera anachoreta
+  - code: MX.62092
+    binomial: Clostera anastomosis
+  - code: MX.62090
+    binomial: Clostera curtula
+  - code: MX.62093
+    binomial: Clostera pigra
+  - code: MX.62155
+    binomial: Colobochyla salicalis
+  - code: MX.62476
+    binomial: Colocasia coryli
+  - code: MX.61898
+    binomial: Colostygia aptata
+  - code: MX.61899
+    binomial: Colostygia olivata
+  - code: MX.61900
+    binomial: Colostygia pectinataria
+  - code: MX.61664
+    binomial: Colotois pennaria
+  - code: MX.61507
+    binomial: Comibaena bajularia
+  - code: MX.62670
+    binomial: Conistra erythrocephala
+  - code: MX.62669
+    binomial: Conistra rubiginea
+  - code: MX.62667
+    binomial: Conistra rubiginosa
+  - code: MX.62666
+    binomial: Conistra vaccinii
+  - code: MX.62247
+    binomial: Coscinia cribraria
+  - code: MX.62639
+    binomial: Cosmia affinis
+  - code: MX.62643
+    binomial: Cosmia contusa
+  - code: MX.62640
+    binomial: Cosmia pyralina
+  - code: MX.62642
+    binomial: Cosmia trapezina
+  - code: MX.61427
+    binomial: Cosmotriche lobulina
+  - code: MX.61430
+    binomial: Cosmotriche lobulina subsp. junia
+  - code: MX.61429
+    binomial: Cosmotriche lobulina subsp. lobulina
+  - code: MX.59928
+    binomial: Cossus cossus
+  - code: MX.62463
+    binomial: Craniophora ligustri
+  - code: MX.61704
+    binomial: Crocallis elinguaria
+  - code: MX.61759
+    binomial: Cyclophora albipunctata
+  - code: MX.61757
+    binomial: Cyclophora annularia
+  - code: MX.61764
+    binomial: Cyclophora linearia
+  - code: MX.61756
+    binomial: Cyclophora pendularia
+  - code: MX.61761
+    binomial: Cyclophora porata
+  - code: MX.61762
+    binomial: Cyclophora punctaria
+  - code: MX.61760
+    binomial: Cyclophora quercimontaria
+  - code: MX.62716
+    binomial: Dasypolia templi
+  - code: MX.61579
+    binomial: Deileptenia ribeata
+  - code: MX.62434
+    binomial: Deltote pygarga
+  - code: MX.61420
+    binomial: Dendrolimus pini
+  - code: MX.63074
+    binomial: Diarsia brunnea
+  - code: MX.63073
+    binomial: Diarsia dahlii
+  - code: MX.63071
+    binomial: Diarsia mendica
+  - code: MX.62645
+    binomial: Dicycla oo
+  - code: MX.62468
+    binomial: Diloba caeruleocephala
+  - code: MX.61395
+    binomial: Drepana curvatula
+  - code: MX.61394
+    binomial: Drepana falcataria
+  - code: MX.62705
+    binomial: Dryobotodes eremita
+  - code: MX.61872
+    binomial: Dysstroma citratum
   - code: MX.61875
     binomial: Dysstroma latefasciatum
+  - code: MX.61874
+    binomial: Dysstroma truncatum
+  - code: MX.62359
+    binomial: Earias clorana
+  - code: MX.61919
+    binomial: Earophila badiata
+  - code: MX.61860
+    binomial: Ecliptopera capitata
+  - code: MX.61859
+    binomial: Ecliptopera silaceata
+  - code: MX.61592
+    binomial: Ectropis crepuscularia
+  - code: MX.62233
+    binomial: Eilema complanum
+  - code: MX.62234
+    binomial: Eilema depressum
+  - code: MX.62229
+    binomial: Eilema griseolum
+  - code: MX.62236
+    binomial: Eilema lurideolum
+  - code: MX.62232
+    binomial: Eilema lutarellum
+  - code: MX.62228
+    binomial: Eilema sororculum
+  - code: MX.61893
+    binomial: Electrophaes corylata
+  - code: MX.61686
+    binomial: Elophos vittarius
+  - code: MX.61603
+    binomial: Ematurga atomaria
+  - code: MX.62633
+    binomial: Enargia paleacea
+  - code: MX.61445
+    binomial: Endromis versicolora
+  - code: MX.61700
+    binomial: Ennomos alniarius
+  - code: MX.61699
+    binomial: Ennomos autumnarius
+  - code: MX.61702
+    binomial: Ennomos erosarius
+  - code: MX.61701
+    binomial: Ennomos fuscantarius
+  - code: MX.4984494
+    binomial: Ennomos quercinarius
+  - code: MX.61910
+    binomial: Entephria caesiata
+  - code: MX.61646
+    binomial: Epione repandaria
+  - code: MX.61647
+    binomial: Epione vespertaria
+  - code: MX.61710
+    binomial: Epirranthis diversata
+  - code: MX.61966
+    binomial: Epirrita autumnata
+  - code: MX.61965
+    binomial: Epirrita christyi
+  - code: MX.61964
+    binomial: Epirrita dilutata
+  - code: MX.61617
+    binomial: Erannis defoliaria
+  - code: MX.61409
+    binomial: Eriogaster lanestris
+  - code: MX.62395
+    binomial: Euchalcia modestoides
+  - code: MX.62394
+    binomial: Euchalcia variabilis
+  - code: MX.63079
+    binomial: Eugnorisma depunctum
+  - code: MX.61867
+    binomial: Eulithis populata
+  - code: MX.61865
+    binomial: Eulithis prunata
+  - code: MX.61870
+    binomial: Eulithis pyropata
+  - code: MX.61866
+    binomial: Eulithis testata
+  - code: MX.61849
+    binomial: Euphyia biangulata
+  - code: MX.61851
+    binomial: Euphyia unangulata
+  - code: MX.62011
+    binomial: Eupithecia abietaria
+  - code: MX.62027
+    binomial: Eupithecia actaeata
+  - code: MX.62014
+    binomial: Eupithecia analoga
+  - code: MX.62067
+    binomial: Eupithecia conterminata
+  - code: MX.62062
+    binomial: Eupithecia dodoneata
+  - code: MX.62025
+    binomial: Eupithecia egenaria
+  - code: MX.62018
+    binomial: Eupithecia exiguata
+  - code: MX.62036
+    binomial: Eupithecia expallidata
+  - code: MX.62059
+    binomial: Eupithecia fraxinata
+  - code: MX.62056
+    binomial: Eupithecia gelidata
+  - code: MX.62030
+    binomial: Eupithecia groenblomi
+  - code: MX.62009
+    binomial: Eupithecia immundata
+  - code: MX.62054
+    binomial: Eupithecia indigata
+  - code: MX.62059
+    binomial: Eupithecia innotata
+  - code: MX.62031
+    binomial: Eupithecia intricata
+  - code: MX.62008
+    binomial: Eupithecia inturbata
+  - code: MX.62017
+    binomial: Eupithecia irriguata
+  - code: MX.62068
+    binomial: Eupithecia lanceata
+  - code: MX.62065
+    binomial: Eupithecia lariciata
+  - code: MX.62057
+    binomial: Eupithecia nanata
+  - code: MX.62058
+    binomial: Eupithecia ochridata
+  - code: MX.62010
+    binomial: Eupithecia plumbeolata
+  - code: MX.62063
+    binomial: Eupithecia pusillata
+  - code: MX.62028
+    binomial: Eupithecia selinata
+  - code: MX.62066
+    binomial: Eupithecia tantillaria
+  - code: MX.62007
+    binomial: Eupithecia tenuiata
+  - code: MX.62029
+    binomial: Eupithecia trisignaria
+  - code: MX.62061
+    binomial: Eupithecia virgaureata
+  - code: MX.62688
+    binomial: Eupsilia transversa
+  - code: MX.63131
+    binomial: Eurois occultus
+  - code: MX.61862
+    binomial: Eustroma reticulatum
+  - code: MX.61390
+    binomial: Falcaria lacertinaria
+  - code: MX.62692
+    binomial: Fissipunctia ypsillon
+  - code: MX.62122
+    binomial: Furcula bicuspis
+  - code: MX.62124
+    binomial: Furcula bifida
+  - code: MX.62123
+    binomial: Furcula furcula
+  - code: MX.61436
+    binomial: Gastropacha populifolia
+  - code: MX.61435
+    binomial: Gastropacha quercifolia
+  - code: MX.58531
+    binomial: Gazoryctra ganna
+  - code: MX.61504
+    binomial: Geometra papilionaria
+  - code: MX.62120
+    binomial: Gluphisia crenata
+  - code: MX.61680
+    binomial: Gnophos obfuscatus
+  - code: MX.62703
+    binomial: Griposia aprilina
+  - code: MX.62070
+    binomial: Gymnoscelis rufifasciata
+  - code: MX.62166
+    binomial: Gynaephora fascelina
+  - code: MX.61376
+    binomial: Habrosyne pyritoides
+  - code: MX.61514
+    binomial: Hemithea aestivaria
+  - code: MX.62192
+    binomial: Herminia grisealis
+  - code: MX.62191
+    binomial: Herminia tarsicrinalis
+  - code: MX.62190
+    binomial: Herminia tarsipennalis
   - code: MX.61891
     binomial: Heterothera serraria
   - code: MX.62656
     binomial: Hillia iris
-  - code: MX.61462
-    binomial: Laothoe amurensis
-  - code: MX.61559
-    binomial: Macaria loricaria
-  - code: MX.61768
-    binomial: Timandra griseata
-  - code: MX.61822
-    binomial: Xanthorhoe annotinata
-  - code: MX.62577
-    binomial: Caradrina montana
-  - code: MX.61785
-    binomial: Carsia sororiata
-  - code: MX.61949
-    binomial: Coenocalpe lapidata
-  - code: MX.61873
-    binomial: Dysstroma infuscatum
-  - code: MX.61686
-    binomial: Elophos vittaria
-  - code: MX.62067
-    binomial: Eupithecia conterminata
-  - code: MX.61855
-    binomial: Lampropteryx otregiata
-  - code: MX.62002
-    binomial: Martania taeniata
-  - code: MX.61981
-    binomial: Venusia cambrica
-  - code: MX.61819
-    binomial: Xanthorhoe decoloraria
-  - code: MX.63101
-    binomial: Xestia alpicola
-  - code: MX.63093
-    binomial: Xestia rhaetica
-  - code: MX.63090
-    binomial: Xestia speciosa
-  - code: MX.61583
-    binomial: Alcis jubatus
-  - code: MX.61788
-    binomial: Aplocera praeformata
-  - code: MX.63033
-    binomial: Chersotis cuprea
-  - code: MX.61898
-    binomial: Colostygia aptata
-  - code: MX.62716
-    binomial: Dasypolia templi
-  - code: MX.61910
-    binomial: Entephria caesiata
-  - code: MX.61680
-    binomial: Gnophos obfuscatus
+  - code: MX.61952
+    binomial: Horisme tersata
+  - code: MX.61985
+    binomial: Hydrelia flammeolaria
+  - code: MX.61983
+    binomial: Hydrelia sylvata
+  - code: MX.61930
+    binomial: Hydriomena furcata
+  - code: MX.61931
+    binomial: Hydriomena impluviata
   - code: MX.61933
     binomial: Hydriomena ruberata
-  - code: MX.61743
-    binomial: Scopula incanata
-  - code: MX.61888
-    binomial: Thera cognata
-  - code: MX.63120
-    binomial: Xestia collina
-  - code: MX.62746
-    binomial: Amphipoea lucens
-  - code: MX.62814
-    binomial: Apamea rubrirena
-  - code: MX.61586
-    binomial: Arichanna melanaria
-  - code: MX.62413
-    binomial: Autographa buraetica
-  - code: MX.62523
-    binomial: Brachionycha nubeculosa
-  - code: MX.62737
-    binomial: Celaena haworthii
-  - code: MX.63065
-    binomial: Coenophila subrosea
-  - code: MX.61710
-    binomial: Epirranthis diversata
-  - code: MX.61867
-    binomial: Eulithis populata
-  - code: MX.61866
-    binomial: Eulithis testata
-  - code: MX.62011
-    binomial: Eupithecia abietaria
-  - code: MX.62056
-    binomial: Eupithecia gelidata
-  - code: MX.62038
-    binomial: Eupithecia goossensiata
-  - code: MX.62068
-    binomial: Eupithecia lanceata
-  - code: MX.62998
-    binomial: Euxoa cursoria
+  - code: MX.61661
+    binomial: Hylaea fasciaria
+  - code: MX.62151
+    binomial: Hypena crassalis
+  - code: MX.61590
+    binomial: Hypomecis punctinalis
+  - code: MX.61589
+    binomial: Hypomecis roboraria
   - code: MX.62612
     binomial: Hyppa rectilinea
+  - code: MX.61719
+    binomial: Idaea biselata
+  - code: MX.62635
+    binomial: Ipimorpha retusa
+  - code: MX.62636
+    binomial: Ipimorpha subtusa
+  - code: MX.61522
+    binomial: Jodis lactearia
   - code: MX.61523
     binomial: Jodis putata
+  - code: MX.58539
+    binomial: Korscheltellus fusconebulosus
+  - code: MX.58538
+    binomial: Korscheltellus lupulinus
+  - code: MX.62864
+    binomial: Lacanobia splendens
+  - code: MX.61855
+    binomial: Lampropteryx otregiata
+  - code: MX.61854
+    binomial: Lampropteryx suffumata
+  - code: MX.61462
+    binomial: Laothoe amurensis
+  - code: MX.61461
+    binomial: Laothoe populi
+  - code: MX.61416
+    binomial: Lasiocampa quercus
+  - code: MX.62923
+    binomial: Lasionycta secedens
+  - code: MX.62304
+    binomial: Laspeyria flexula
+  - code: MX.62662
+    binomial: Leptologia lota
+  - code: MX.62663
+    binomial: Leptologia macilenta
+  - code: MX.62110
+    binomial: Leucodonta bicoloria
+  - code: MX.62175
+    binomial: Leucoma salicis
+  - code: MX.61542
+    binomial: Ligdia adustata
   - code: MX.62679
     binomial: Lithophane consocia
+  - code: MX.62678
+    binomial: Lithophane furcifera
   - code: MX.62681
     binomial: Lithophane lamda
+  - code: MX.62677
+    binomial: Lithophane ornitopus
+  - code: MX.62674
+    binomial: Lithophane semibrunnea
+  - code: MX.62675
+    binomial: Lithophane socia
+  - code: MX.62224
+    binomial: Lithosia quadra
+  - code: MX.61794
+    binomial: Lobophora halterata
+  - code: MX.61538
+    binomial: Lomaspilis marginata
+  - code: MX.61539
+    binomial: Lomaspilis opis
+  - code: MX.61626
+    binomial: Lomographa bimaculata
+  - code: MX.61627
+    binomial: Lomographa temerata
+  - code: MX.61612
+    binomial: Lycia hirtaria
   - code: MX.61610
     binomial: Lycia pomonaria
+  - code: MX.63069
+    binomial: Lycophotia porphyrea
+  - code: MX.62180
+    binomial: Lymantria dispar
+  - code: MX.62179
+    binomial: Lymantria monacha
+  - code: MX.61553
+    binomial: Macaria alternata
+  - code: MX.61557
+    binomial: Macaria artesiaria
   - code: MX.61560
     binomial: Macaria brunneata
-  - code: MX.62354
-    binomial: Nola aerugula
+  - code: MX.61556
+    binomial: Macaria liturata
+  - code: MX.61559
+    binomial: Macaria loricaria
+  - code: MX.61552
+    binomial: Macaria notata
+  - code: MX.61555
+    binomial: Macaria signaria
+  - code: MX.61558
+    binomial: Macaria wauaria
+  - code: MX.61958
+    binomial: Malacodea regelaria
+  - code: MX.62002
+    binomial: Martania taeniata
+  - code: MX.62348
+    binomial: Meganola albula
+  - code: MX.62347
+    binomial: Meganola strigula
+  - code: MX.61925
+    binomial: Mesoleuca albicillata
+  - code: MX.61988
+    binomial: Mesotype didymata
+  - code: MX.61989
+    binomial: Mesotype parallelolineata
+  - code: MX.62210
+    binomial: Miltochrista miniata
+  - code: MX.61457
+    binomial: Mimas tiliae
+  - code: MX.62725
+    binomial: Mniotype adusta
+  - code: MX.62726
+    binomial: Mniotype bathensis
+  - code: MX.62727
+    binomial: Mniotype satura
+  - code: MX.62442
+    binomial: Moma alpium
+  - code: MX.63129
+    binomial: Naenia typica
+  - code: MX.62353
+    binomial: Nola confusalis
+  - code: MX.62352
+    binomial: Nola cucullatella
+  - code: MX.62099
+    binomial: Notodonta dromedarius
+  - code: MX.62098
+    binomial: Notodonta torva
+  - code: MX.62100
+    binomial: Notodonta tritophus
+  - code: MX.62102
+    binomial: Notodonta ziczac
+  - code: MX.62373
+    binomial: Nycteola asiatica
+  - code: MX.62372
+    binomial: Nycteola degenerana
+  - code: MX.62371
+    binomial: Nycteola revayana
+  - code: MX.61385
+    binomial: Ochropacha duplaris
+  - code: MX.61438
+    binomial: Odonestis pruni
+  - code: MX.61696
+    binomial: Odontopera bidentata
+  - code: MX.62112
+    binomial: Odontosia carmelita
+  - code: MX.62113
+    binomial: Odontosia sieversii
+  - code: MX.61960
+    binomial: Operophtera brumata
+  - code: MX.61961
+    binomial: Operophtera fagata
+  - code: MX.61708
+    binomial: Opisthograptis luteolata
+  - code: MX.62160
+    binomial: Orgyia antiqua
+  - code: MX.62969
+    binomial: Orthosia cerasi
+  - code: MX.62963
+    binomial: Orthosia cruda
+  - code: MX.62961
+    binomial: Orthosia gothica
+  - code: MX.62972
+    binomial: Orthosia gracilis
+  - code: MX.62959
+    binomial: Orthosia incerta
+  - code: MX.62965
+    binomial: Orthosia miniosa
+  - code: MX.62966
+    binomial: Orthosia opima
+  - code: MX.62967
+    binomial: Orthosia populeti
+  - code: MX.61706
+    binomial: Ourapteryx sambucaria
+  - code: MX.62793
+    binomial: Pabulatrix pabulatricula
+  - code: MX.62956
+    binomial: Panolis flammea
+  - code: MX.62471
+    binomial: Panthea coenobita
+  - code: MX.62874
+    binomial: Papestra biren
+  - code: MX.62183
+    binomial: Paracolax tristalis
+  - code: MX.61597
+    binomial: Paradarisa consonaria
+  - code: MX.63058
+    binomial: Paradiarsia punicea
+  - code: MX.62314
+    binomial: Parascotia fuliginaria
+  - code: MX.62690
+    binomial: Parastichtis suspecta
+  - code: MX.61599
+    binomial: Parectropis similaria
+  - code: MX.62081
+    binomial: Pasiphila chloerata
+  - code: MX.62083
+    binomial: Pasiphila debiliata
+  - code: MX.62082
+    binomial: Pasiphila rectangulata
+  - code: MX.62198
+    binomial: Pechipogo strigilata
+  - code: MX.62218
+    binomial: Pelosia muscerda
+  - code: MX.61885
+    binomial: Pennithera firmata
+  - code: MX.61571
+    binomial: Peribatodes rhomboidarius
+  - code: MX.61572
+    binomial: Peribatodes secundarius
+  - code: MX.62133
+    binomial: Peridea anceps
+  - code: MX.61632
+    binomial: Petrophora chlorosata
+  - code: MX.62131
+    binomial: Phalera bucephala
+  - code: MX.62115
+    binomial: Pheosia gnoma
+  - code: MX.62116
+    binomial: Pheosia tremula
+  - code: MX.61606
+    binomial: Phigalia pilosaria
+  - code: MX.61937
+    binomial: Philereme transversata
+  - code: MX.61936
+    binomial: Philereme vetulata
+  - code: MX.61433
+    binomial: Phyllodesma ilicifolium
+  - code: MX.58536
+    binomial: Phymatopus hecta
+  - code: MX.61654
+    binomial: Plagodis dolabraria
+  - code: MX.61653
+    binomial: Plagodis pulveraria
+  - code: MX.61882
+    binomial: Plemyria rubiginata
+  - code: MX.61404
+    binomial: Poecilocampa populi
+  - code: MX.62848
+    binomial: Polia hepatica
+  - code: MX.62856
+    binomial: Polia lamuta
+  - code: MX.62851
+    binomial: Polia nebulosa
   - code: MX.63067
     binomial: Protolampra sobrina
+  - code: MX.62368
+    binomial: Pseudoips prasinanus
+  - code: MX.61650
+    binomial: Pseudopanthera macularia
+  - code: MX.61797
+    binomial: Pterapherapteryx sexalata
+  - code: MX.62104
+    binomial: Pterostoma palpinum
+  - code: MX.62107
+    binomial: Ptilodon capucinus
+  - code: MX.62118
+    binomial: Ptilophora plumigera
+  - code: MX.62088
+    binomial: Pygaera timon
+  - code: MX.62529
+    binomial: Pyrrhia exprimens
+  - code: MX.61940
+    binomial: Rheumaptera hastata
+  - code: MX.61941
+    binomial: Rheumaptera subhastata
+  - code: MX.61944
+    binomial: Rheumaptera undulata
+  - code: MX.62593
+    binomial: Rusina ferruginea
+  - code: MX.61397
+    binomial: Sabra harpagula
+  - code: MX.61453
+    binomial: Saturnia pavonia
+  - code: MX.62295
+    binomial: Schrankia costaestrigalis
+  - code: MX.62297
+    binomial: Schrankia taenialis
+  - code: MX.62140
+    binomial: Scoliopteryx libatrix
+  - code: MX.62139
+    binomial: Scoliopteryx sp.
+  - code: MX.61748
+    binomial: Scopula floslactata
+  - code: MX.61745
+    binomial: Scopula frigidaria
+  - code: MX.61736
+    binomial: Scopula nigropunctata
   - code: MX.61747
     binomial: Scopula ternata
-  - code: MX.61927
-    binomial: Spargania luctuata
+  - code: MX.61640
+    binomial: Selenia dentaria
+  - code: MX.61642
+    binomial: Selenia lunularia
+  - code: MX.61644
+    binomial: Selenia tetralunaria
+  - code: MX.61459
+    binomial: Smerinthus ocellatus
+  - code: MX.61475
+    binomial: Sphinx pinastri
+  - code: MX.62173
+    binomial: Sphrageidus similis
+  - code: MX.62136
+    binomial: Stauropus fagi
+  - code: MX.61544
+    binomial: Stegania cararia
+  - code: MX.62664
+    binomial: Sunira circellaris
+  - code: MX.62516
+    binomial: Sympistis heliophila
+  - code: MX.62426
+    binomial: Syngrapha ain
+  - code: MX.62424
+    binomial: Syngrapha interrogationis
+  - code: MX.61380
+    binomial: Tethea ocularis
+  - code: MX.61381
+    binomial: Tethea or
+  - code: MX.61383
+    binomial: Tetheella fluctuosa
+  - code: MX.61888
+    binomial: Thera cognata
+  - code: MX.61889
+    binomial: Thera juniperata
+  - code: MX.61887
+    binomial: Thera obeliscata
+  - code: MX.61886
+    binomial: Thera variata
+  - code: MX.61374
+    binomial: Thyatira batis
+  - code: MX.62648
+    binomial: Tiliacea aurago
+  - code: MX.62647
+    binomial: Tiliacea citrago
+  - code: MX.61406
+    binomial: Trichiura crataegi
+  - code: MX.61805
+    binomial: Trichopteryx carpinata
+  - code: MX.61804
+    binomial: Trichopteryx polycommata
+  - code: MX.62474
+    binomial: Trichosea ludifica
+  - code: MX.61946
+    binomial: Triphosa dubitata
+  - code: MX.62317
+    binomial: Trisateles emortualis
+  - code: MX.61980
+    binomial: Venusia blomeri
+  - code: MX.61981
+    binomial: Venusia cambrica
+  - code: MX.62560
+    binomial: Victrix umovii
+  - code: MX.61392
+    binomial: Watsonalla binaria
+  - code: MX.62650
+    binomial: Xanthia togata
+  - code: MX.61822
+    binomial: Xanthorhoe annotinata
+  - code: MX.61826
+    binomial: Xanthorhoe biriviata
+  - code: MX.61819
+    binomial: Xanthorhoe decoloraria
+  - code: MX.61825
+    binomial: Xanthorhoe ferrugata
+  - code: MX.61817
+    binomial: Xanthorhoe quadrifasiata
+  - code: MX.61824
+    binomial: Xanthorhoe spadicearia
+  - code: MX.63101
+    binomial: Xestia alpicola
+  - code: MX.63107
+    binomial: Xestia atrata
+  - code: MX.63118
+    binomial: Xestia baja
+  - code: MX.63095
+    binomial: Xestia borealis
+  - code: MX.63100
+    binomial: Xestia brunneopicta
+  - code: MX.63120
+    binomial: Xestia collina
+  - code: MX.63098
+    binomial: Xestia distensa
+  - code: MX.63112
+    binomial: Xestia ditrapezium
+  - code: MX.63099
+    binomial: Xestia gelida
+  - code: MX.63097
+    binomial: Xestia laetabilis
+  - code: MX.63093
+    binomial: Xestia rhaetica
+  - code: MX.63096
+    binomial: Xestia sincera
+  - code: MX.63090
+    binomial: Xestia speciosa
+  - code: MX.63109
+    binomial: Xestia tecta
+  - code: MX.63113
+    binomial: Xestia triangulum
+  - code: MX.62686
+    binomial: Xylena exsoleta
   - code: MX.62684
     binomial: Xylena solidaginis
+  - code: MX.62685
+    binomial: Xylena vetusta
+  - code: MX.62823
+    binomial: Xylomoia strix
+  - code: MX.59933
+    binomial: Zeuzera pyrina
   filters:
     collection:
     - HR.4511
@@ -1935,6 +2693,7 @@ mf:
     - ordinal_day_end
     has_value:
     - document_id
+    - location_id
     - year
     - ordinal_day_start
     - ordinal_day_end
