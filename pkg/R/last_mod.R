@@ -9,7 +9,7 @@ last_mod <- function(filter) {
 
   ans <- as.Date(NULL)
 
-  if (nrow(res) > 1L) {
+  if (nrow(res) > 0L) {
 
     ans <- as.Date(res[[1L, 1L]])
 
