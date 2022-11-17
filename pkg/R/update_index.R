@@ -188,6 +188,8 @@ geometric_mean <- function(index, model, db) {
 
   nyears <- length(years)
 
+  ntaxa <- length(dplyr::pull(dplyr::distinct(df, .data[["index"]])))
+
   base <- config::get("model", config = index_base)[[model]][["base_year"]]
 
   base <- which(years == base)
@@ -349,7 +351,7 @@ geometric_mean <- function(index, model, db) {
 
   df <- dplyr::collect(df)
 
-  attr(df, "count_summary") <- list(taxa = length(taxa))
+  attr(df, "count_summary") <- list(taxa = ntaxa)
 
   df
 
