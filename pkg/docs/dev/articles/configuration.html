@@ -108,15 +108,15 @@ file can be accessed and edited <a href="https://conf-fbi-dev.rahtiapp.fi/" clas
 “source” version of <a href="https://raw.githubusercontent.com/luomus/fin-biodiv-indicators/dev/config/config.yml" class="external-link pkgdown-devel">the file</a> is stored in the FBI code repository.
 The FBI service uses the “live” editable version of the config file.
 But, the source version should be kept up to date as possible and
-treated as a backup. When the service application is initialised the
+treated as a backup. When the service application is initialised, the
 source version of the config file is used as a starting
 configuration.</p>
-<p>Each multi-taxon indicator has its own block in the configuration
+<p>Each multi-taxon indicator has its own object in the configuration
 file. For example, the Farmland Breeding Bird indicator, and the
 single-taxon indicators that belong to it, are configured using the
 parameters outlined below, where the top-level key, <code>flb</code>, is
 the short-code of the indicator.</p>
-<details closed><summary><span title="">Click to show/hide configuration</span>
+<details closed><summary><span title="">Click to show/hide example configuration</span>
 </summary><div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">flb</span><span class="kw">:</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Farmland birds</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">taxa</span><span class="kw">:</span></span>
@@ -196,10 +196,10 @@ the short-code of the indicator.</p>
 <h2 id="defaults">Defaults<a class="anchor" aria-label="anchor" href="#defaults"></a>
 </h2>
 <p>Default parameters that apply to all indicators can be specified in a
-special block with the top-level key, <code>default</code> (see below).
-Defaults can be overwritten by specifying different values the
-parameters in the indicator blocks.</p>
-<details closed><summary><span title="">Click to show/hide defaults</span>
+special object with the top-level key, <code>default</code> (see below).
+Defaults can be overwritten by specifying different parameters value for
+the indicator objects.</p>
+<details closed><summary><span title="">Click to show/hide example defaults</span>
 </summary><div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">default</span><span class="kw">:</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">surveys</span><span class="kw">:</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">selection</span><span class="kw">:</span></span>
@@ -218,6 +218,156 @@ parameters in the indicator blocks.</p>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="fu">abundance</span><span class="kw">:</span><span class="at"> abundance</span></span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="at">  </span><span class="fu">use_data_after</span><span class="kw">:</span><span class="at"> </span><span class="st">"01-01"</span></span></code></pre></div>
 </details>
+</div>
+<div class="section level2">
+<h2 id="sections">Sections<a class="anchor" aria-label="anchor" href="#sections"></a>
+</h2>
+<p>The following describes each section of the multi-taxon indicator
+objects in more detail.</p>
+<div class="section level3">
+<h3 id="name">Name<a class="anchor" aria-label="anchor" href="#name"></a>
+</h3>
+<p>A string giving the long-form name of a multi-taxon indicator.</p>
+</div>
+<div class="section level3">
+<h3 id="taxa">Taxa<a class="anchor" aria-label="anchor" href="#taxa"></a>
+</h3>
+<p>An array defining the taxa that are included in the multi-taxon
+indicator and for which single-taxon indicators will be calculated.</p>
+<p>Each element of the array must include:</p>
+<ul>
+<li>
+<code>code</code>: a string indicating a FinBIF taxon MX code (e.g,
+<code>MX.27328</code>).</li>
+<li>
+<code>binomial</code>: a string indicating a scientific taxon name
+(e.g., <code>Crex crex</code>).</li>
+</ul>
+<p>And optionally include one or more of:</p>
+<ul>
+<li>
+<code>extra_codes</code>: an array of FinBIF taxon MX codes to
+include along with the nominal taxon declared with
+<code>code</code>.</li>
+<li>
+<code>subtaxa</code>: a boolean indicating whether to include
+observations of the child taxa of the taxa declared with
+<code>code</code> and <code>extra_codes</code>.</li>
+<li>
+<code>start_year</code>: an integer indicating the year observation
+data of the taxa should begin. Observation data from before this year
+will be excluded. Note that if <code>start_year</code> is greater than
+<code>base_year</code> (see section <a href="#model" title="Section model">Model</a>) than <code>base_year</code> for the
+taxon will be set to <code>start_year</code>.</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="extra-taxa">Extra taxa<a class="anchor" aria-label="anchor" href="#extra-taxa"></a>
+</h3>
+<p>An array defining the taxa that are not included in the parent
+multi-taxon indicator but for which single-taxon indicators will be
+calculated.</p>
+<p>Each element of the array is configured in the same way as <a href="#taxa" title="Section taxa"><code>taxa</code></a> above.</p>
+</div>
+<div class="section level3">
+<h3 id="from">From<a class="anchor" aria-label="anchor" href="#from"></a>
+</h3>
+<p>Multi-taxon indicators can have no constituent single-taxon
+indicators. In this case, the <code>from</code> section indicates which
+other multi-taxon indicator (in the form of a short-code) the input data
+comes from.</p>
+</div>
+<div class="section level3">
+<h3 id="filters">Filters<a class="anchor" aria-label="anchor" href="#filters"></a>
+</h3>
+<p>The <code>filters</code> section is an object defining a list of
+filters to apply to the observation data from FinBIF. See the finbif R
+package <a href="https://finbif-docs-dev.netlify.app/reference/filters.html" class="external-link pkgdown-devel" title="finbif docs">documentation</a> for
+details.</p>
+</div>
+<div class="section level3">
+<h3 id="surveys">Surveys<a class="anchor" aria-label="anchor" href="#surveys"></a>
+</h3>
+<p>The <code>surveys</code> section defines which fields are selected
+when getting survey data from FinBIF. Fields are selected with the key
+<code>selection</code> as an array (see the finbif R package <a href="https://finbif-docs-dev.netlify.app/reference/variables.html" class="external-link pkgdown-devel" title="finbif docs">documentation</a> for
+available fields). Under a second key, <code>has_value</code>, an array
+indicates which fields must not have null values when filtering
+records.</p>
+</div>
+<div class="section level3">
+<h3 id="counts">Counts<a class="anchor" aria-label="anchor" href="#counts"></a>
+</h3>
+<p>The <code>counts</code> section defines which fields are selected
+when accessing count data from FinBIF. This sections uses the
+<code>selection</code> and <code>has_value</code> key in the same manner
+as <a href="#Surveys" title="Section surveys"><code>above</code></a>.</p>
+<p>An additional key, <code>abundance</code>, is used to indicate which
+field is used as the abundance (counts) data.</p>
+</div>
+<div class="section level3">
+<h3 id="combine">Combine<a class="anchor" aria-label="anchor" href="#combine"></a>
+</h3>
+<p>The section <code>combine</code> defines how single-taxon indicator
+data is combined to form a multi-taxon indicator. Options include:</p>
+<ul>
+<li>
+<code>geometric_mean</code>: combines relative abundance as the
+geometric mean abundance.</li>
+<li>
+<code>cti</code>: combine abundances as a community temperature
+index.</li>
+<li>
+<code>overall_abundance</code>: combine abundance as total abundance
+for the taxon group.</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="use-data-after">Use data after<a class="anchor" aria-label="anchor" href="#use-data-after"></a>
+</h3>
+<p>The section <code>use_data_after</code> defines what calendar date
+(in the form <code>"MM-DD"</code>) data collected during the current
+year should start being included in the indicator.</p>
+</div>
+<div class="section level3">
+<h3 id="model">Model<a class="anchor" aria-label="anchor" href="#model"></a>
+</h3>
+<p>The <code>model</code> section defines how single- or multi-taxon
+indicators are calculated from the survey and count data sourced from
+FinBIF. The section consists of one or more model objects where the
+object keys indicate the model being used. Models include:</p>
+<ul>
+<li>
+<code>trim</code>: Trends and Indices for Monitoring data model (via
+<a href="https://github.com/SNStatComp/rtrim" title="rtrim GitHub repository" class="external-link">rtrim</a>)</li>
+<li>
+<code>rbms</code>: Generalised abundance indices for butterfly
+monitoring count data ( via <a href="https://retoschmucki.github.io/rbms/" title="rbms" class="external-link">rbms</a>)</li>
+<li>
+<code>lmer</code>: Linear Mixed Effects Regression (via <a href="https://github.com/lme4/lme4/" title="lme4 GitHub repository" class="external-link">lme4</a>)</li>
+<li>
+<code>glmer</code>: Generalised Linear Mixed Effects Regression (via
+<a href="https://github.com/lme4/lme4/" title="lme4 GitHub repository" class="external-link">lme4</a>)</li>
+</ul>
+<p>Each element of the <code>model</code> section must include:</p>
+<ul>
+<li>
+<code>surveys_process</code>: An array of survey data processing
+functions (see <a href="../reference/index.html#processing-functions" title="Process functions">processing</a> )</li>
+<li>
+<code>counts_process</code> An array of count data processing
+functions (see <a href="../reference/index.html#processing-functions" title="Process functions">processing</a> )</li>
+</ul>
+<p>And optionally include:</p>
+<ul>
+<li>
+<code>base_year</code>: an integer indicating the base year of the
+indicator.</li>
+<li>
+<code>args</code>: additional arguments passed to the modelling
+function.</li>
+</ul>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
