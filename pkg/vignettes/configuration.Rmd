@@ -181,7 +181,7 @@ And optionally include one or more of:
 - `start_year`: an integer indicating the year observation data of the taxa
   should begin. Observation data from before this year will be excluded. Note
   that if `start_year` is greater than `base_year` (see section
-  [Model](#model "Section model")) than `base_year` for the taxon will be set
+  [Model](#model "Section model")) then `base_year` for the taxon will be set
   to `start_year`.
 
 ### Extra taxa
