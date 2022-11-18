@@ -87,6 +87,8 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
 
         index_region <- paste(index, i, sep = "_")
 
+        index_data <- character()
+
         if (nrow(data[regions == i, ]) > 0L) {
 
           index_data <- index_region
