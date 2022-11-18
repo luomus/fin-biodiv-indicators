@@ -61,7 +61,15 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
       )
     )
 
-    data[["index"]] <- index
+    index_data <- character()
+
+    if (nrow(data) > 0L) {
+
+      index_data <- index
+
+    }
+
+    data[["index"]] <- index_data
 
     regions <- switch(type, surveys = to_region(data[["municipality"]]), NULL)
 
@@ -79,7 +87,13 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
 
         index_region <- paste(index, i, sep = "_")
 
-        data[["index"]] <- index_region
+        if (nrow(data[regions == i, ]) > 0L) {
+
+          index_data <- index_region
+
+        }
+
+        data[["index"]] <- index_data
 
         set_cache(index_region, type, data[regions == i, ], db)
 
