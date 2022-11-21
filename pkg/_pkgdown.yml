@@ -54,6 +54,10 @@ navbar:
       menu:
       - text: Single-taxon indicator (trim)
         href: articles/single-taxon-indicator-trim.html
+      - text: Single-taxon indicator (rbms)
+        href: articles/single-taxon-indicator-rbms.html
+      - text: Multi-taxon indicator (trim)
+        href: articles/multi-taxon-indicator-trim.html
     reference:
       text: Function Reference
       href: reference/index.html
