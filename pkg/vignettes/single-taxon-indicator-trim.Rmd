@@ -23,13 +23,19 @@ library(rtrim, quietly = TRUE)
 
 
 ```r
+select <- c("document_id", "location_id", "year", "month", "day")
+```
+
+
+```r
 filter <- list(
   location_tag = "farmland",
   collection = c(
     "Point counts of breeding terrestrial birds",
     "Line transect censuses of breeding birds"
   ),
-  date_range_ymd = c("1979-01-01", "")
+  date_range_ymd = c("1979-01-01", ""),
+  has_value = select
 )
 ```
 
@@ -37,7 +43,7 @@ filter <- list(
 ```r
 surveys <- finbif_occurrence(
   filter = filter,
-  select = c("document_id", "location_id", "year", "month", "day"),
+  select = select,
   aggregate = "events",
   aggregate_counts = FALSE,
   n = "all",
@@ -50,6 +56,11 @@ surveys <- finbif_occurrence(
 surveys <- pick_first_survey_in_year(surveys)
 
 surveys <- require_two_years(surveys)
+```
+
+
+```r
+filter$has_value <- c("document_id", "abundance_interpreted")
 ```
 
 
@@ -79,7 +90,7 @@ model <- trim(abundance ~ location_id + year, counts)
 
 
 ```r
-index <- index(model, base = 28)
+index <- index(model, base = 2000)
 ```
 
 

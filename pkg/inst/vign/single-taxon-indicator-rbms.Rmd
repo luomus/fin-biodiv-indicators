@@ -1,0 +1,212 @@
+---
+title: "Single-taxon indicator (rbms)"
+author: "William K. Morris"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Single-taxon indicator (rbms)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(fig.path = "figure/")
+knitr::opts_knit$set(base.dir = "pkg/vignettes/")
+```
+
+```{r pkgs, message = FALSE}
+library(dplyr, quietly = TRUE)
+library(fbi, quietly = TRUE)
+library(finbif, quietly = TRUE)
+library(ggplot2, quietly = TRUE)
+library(lubridate, quietly = TRUE)
+library(rbms, quietly = TRUE)
+```
+
+```{r survey-select}
+select <- c("document_id", "location_id", "year", "month", "day")
+```
+
+```{r survey-filter}
+filter <- list(
+  collection = "Butterflies in Finnish agricultural landscapes",
+  has_value = select
+)
+```
+
+```{r surveys}
+surveys <- finbif_occurrence(
+  filter = filter,
+  select = select,
+  aggregate = "events",
+  aggregate_counts = FALSE,
+  n = "all",
+  quiet = TRUE
+)
+```
+
+```{r process-survyes}
+surveys <- format_date(surveys)
+```
+
+```{r count-filter}
+filter[["has_value"]] <-  c("document_id", "section", "abundance_interpreted")
+```
+
+```{r counts}
+counts <- finbif_occurrence(
+  taxa = "Aglais urticae",
+  filter = filter,
+  select = c("document_id", "section", "abundance"),
+  n = "all",
+  quiet = TRUE
+)
+```
+
+```{r process-counts}
+counts <- sum_over_sections(counts, surveys)
+
+counts <- combine_with_surveys(counts, surveys)
+```
+
+```{r model}
+StartMonth <- 4
+EndMonth <- 9
+StartDay <- 1
+EndDay <- 30
+Anchor <- TRUE
+AnchorLength <- 14
+AnchorLag <- 14
+AnchorTimeUnit <- "d"
+NbrSample <- 500
+MinVisit <- 5
+MinOccur <- 2
+MinNbrSite <- 5
+MaxTrial <- 4
+GamFamily <- "nb"
+FlightCurveTimeUnit <- "w"
+MultiVisit <- "mean"
+MinFC <- 0.10
+boot_n <- 200
+
+surveys <- select(surveys, site_id = location_id, year, date)
+
+base <- which(sort(unique(surveys[["year"]])) == 2000)
+
+init_year <- min(surveys[["year"]])
+
+last_year <- max(surveys[["year"]])
+
+nyears <- last_year - init_year + 1
+
+ts_date <- ts_dwmy_table(InitYear = init_year, LastYear = last_year)
+
+ts_season <- ts_monit_season(
+  d_series     = ts_date,
+  StartMonth   = StartMonth,
+  EndMonth     = EndMonth,
+  StartDay     = StartDay,
+  EndDay       = EndDay,
+  Anchor       = Anchor,
+  AnchorLength = AnchorLength,
+  AnchorLag    = AnchorLag,
+  TimeUnit     = AnchorTimeUnit
+)
+
+ts_season_visit <- ts_monit_site(m_visit = surveys, ts_season = ts_season)
+
+counts <- mutate(counts, species = 1)
+
+counts <- select(
+  counts, count = abundance, site_id = location_id, year, date, species
+)
+
+counts <- collect(counts)
+
+ts_season_count <- ts_monit_count_site(
+  m_season_visit = ts_season_visit, m_count = counts
+)
+
+ts_flight_curve <- flight_curve(
+  ts_season_count = ts_season_count,
+  NbrSample       = NbrSample,
+  MinVisit        = MinVisit,
+  MinOccur        = MinOccur,
+  MinNbrSite      = MinNbrSite,
+  MaxTrial        = MaxTrial,
+  GamFamily       = GamFamily,
+  SpeedGam        = FALSE,
+  TimeUnit        = FlightCurveTimeUnit,
+  MultiVisit      = MultiVisit,
+  verbose         = FALSE
+)
+
+impt_counts <- impute_count(
+  ts_season_count = ts_season_count,
+  ts_flight_curve = ts_flight_curve[["pheno"]],
+  TimeUnit        = FlightCurveTimeUnit,
+  MultiVisit      = MultiVisit
+)
+
+sindex <- site_index(butterfly_count = impt_counts, MinFC = MinFC)
+
+bootsample <- boot_sample(data = sindex, boot_n = boot_n)
+```
+
+```{r index}
+index_mc <- mapply(
+  collated_index,
+  bootID = seq_len(boot_n),
+  MoreArgs = list(data = sindex, s_sp = 1, boot_ind = bootsample),
+  SIMPLIFY = FALSE
+)
+
+index_mc <- lapply(index_mc, getElement, "col_index")
+
+index_mc <- do.call(rbind, index_mc)
+
+index_mc <- mutate(index_mc, mc = log(pmax(1 / 100, COL_INDEX)), time = M_YEAR)
+
+index_mc <- group_by(index_mc, BOOTi)
+
+index_mc <- arrange(index_mc, time)
+
+index_mc <- mutate(index_mc, mcf = lead(mc) - mc)
+
+index_mc <- mutate(index_mc, mcf = lead(mcf, base - 1))
+
+index_mc <- mutate(index_mc, mcf = lag(mcf, base, 0))
+
+index_mc <- mutate(index_mc, mcf = cumsum(mcf))
+
+index_mc <- arrange(index_mc, -time)
+
+index_mc <- mutate(index_mc, mcb = lead(mc) - mc)
+
+index_mc <- mutate(index_mc, mcb = lead(mcb, nyears - base))
+
+index_mc <- mutate(index_mc, mcb = lag(mcb, nyears - base + 1, 0))
+
+index_mc <- mutate(index_mc, mcb = cumsum(mcb))
+
+index_mc <- group_by(index_mc, time)
+
+index <- summarise(
+  index_mc,
+  mean = exp(mean(mcf)) * exp(mean(mcb)),
+  sd = sd(mcf) * exp(mean(mcf)) + sd(mcb) * exp(mean(mcb))
+)
+
+index <- mutate(index, lower = mean - sd, upper = mean + sd)
+```
+
+```{r plot-single-taxon-rbms}
+ggplot(index) +
+aes(x = parse_date_time(time, "Y"), y = mean, ymin = lower, ymax = upper) +
+geom_ribbon(alpha = .2) +
+geom_line() +
+ylab(NULL) +
+xlab(NULL) +
+theme_minimal()
+```
