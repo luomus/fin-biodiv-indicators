@@ -19,7 +19,7 @@ home:
 destination: docs
 navbar:
   structure:
-    left:  [api, config, articles, walkthroughs, reference]
+    left:  [api, config, articles, demos, reference]
     right: [search, github]
   components:
     api:
@@ -49,11 +49,11 @@ navbar:
         href: articles/butterfly-abundance.html
       - text: Community Temperature Indices
         href: articles/community-temperature-indices.html
-    walkthroughs:
-      text: Code Walkthroughs
+    demos:
+      text: Code Demos
       menu:
-      - text: Indicator Walkthrough
-        href: articles/indicator-walkthrough.html
+      - text: Single-taxon indicator (trim)
+        href: articles/single-taxon-indicator-trim.html
     reference:
       text: Function Reference
       href: reference/index.html

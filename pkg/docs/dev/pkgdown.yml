@@ -9,11 +9,11 @@ articles:
   farmland-birds: farmland-birds.html
   farmland-butterflies: farmland-butterflies.html
   forest-birds: forest-birds.html
-  indicator-walkthrough: indicator-walkthrough.html
   mire-birds: mire-birds.html
   moths: moths.html
+  single-taxon-indicator-trim: single-taxon-indicator-trim.html
   winter-birds: winter-birds.html
-last_built: 2022-11-17T13:54Z
+last_built: 2022-11-21T09:42Z
 urls:
   reference: https://indicators-dev.laji.fi/docs/dev/reference
   article: https://indicators-dev.laji.fi/docs/dev/articles
