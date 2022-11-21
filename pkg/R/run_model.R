@@ -231,45 +231,29 @@ rbms <- function(
     index_mc, mcf = dplyr::lead(.data[["mc"]]) - .data[["mc"]]
   )
 
+  index_mc <- dplyr::mutate(
+    index_mc, mcf = dplyr::lead(.data[["mcf"]], base - 1L)
+  )
+
+  index_mc <- dplyr::mutate(index_mc, mcf = dplyr::lag(.data[["mcf"]], base, 0))
+
+  index_mc <- dplyr::mutate(index_mc, mcf = cumsum(.data[["mcf"]]))
+
   index_mc <- dplyr::arrange(index_mc, -.data[["time"]])
 
   index_mc <- dplyr::mutate(
     index_mc, mcb = dplyr::lead(.data[["mc"]]) - .data[["mc"]]
   )
 
-  index_mc <- dplyr::arrange(index_mc, .data[["time"]])
-
   index_mc <- dplyr::mutate(
-    index_mc,
-    mcf = dplyr::lead(.data[["mcf"]], base - 1L)
+    index_mc, mcb = dplyr::lead(.data[["mcb"]], nyears - base)
   )
 
   index_mc <- dplyr::mutate(
-    index_mc,
-    mcf = dplyr::lag(.data[["mcf"]], base, 0)
+    index_mc, mcb = dplyr::lag(.data[["mcb"]], nyears - base + 1L, 0)
   )
 
-  index_mc <- dplyr::mutate(
-    index_mc,
-    mcf = cumsum(.data[["mcf"]])
-  )
-
-  index_mc <- dplyr::arrange(index_mc, -.data[["time"]])
-
-  index_mc <- dplyr::mutate(
-    index_mc,
-    mcb = dplyr::lead(.data[["mcb"]], nyears - base)
-  )
-
-  index_mc <- dplyr::mutate(
-    index_mc,
-    mcb = dplyr::lag(.data[["mcb"]], nyears - base + 1L, 0)
-  )
-
-  index_mc <- dplyr::mutate(
-    index_mc,
-    mcb = cumsum(.data[["mcb"]])
-  )
+  index_mc <- dplyr::mutate(index_mc, mcb = cumsum(.data[["mcb"]]))
 
   index_mc <- dplyr::group_by(index_mc, .data[["time"]])
 
