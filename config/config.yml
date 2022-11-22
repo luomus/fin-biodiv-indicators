@@ -1899,9 +1899,9 @@ mf:
   - code: MX.62221
     binomial: Atolmis rubricollis
   - code: MX.61971
-    binomial: Baptria tibiale subsp. borealis
+    binomial: Baptria tibiale borealis
   - code: MX.61970
-    binomial: Baptria tibiale subsp. fennica
+    binomial: Baptria tibiale fennica
   - code: MX.62365
     binomial: Bena bicolorana
   - code: MX.61615
@@ -1963,7 +1963,7 @@ mf:
   - code: MX.61879
     binomial: Chloroclysta siterata
   - code: MX.62077
-    binomial: Chloroclystis v-ata ssp. v-ata
+    binomial: Chloroclystis v-ata v-ata
   - code: MX.62654
     binomial: Cirrhia gilvago
   - code: MX.62652
@@ -2017,9 +2017,9 @@ mf:
   - code: MX.61427
     binomial: Cosmotriche lobulina
   - code: MX.61430
-    binomial: Cosmotriche lobulina subsp. junia
+    binomial: Cosmotriche lobulina junia
   - code: MX.61429
-    binomial: Cosmotriche lobulina subsp. lobulina
+    binomial: Cosmotriche lobulina lobulina
   - code: MX.59928
     binomial: Cossus cossus
   - code: MX.62463
@@ -2552,8 +2552,6 @@ mf:
     binomial: Schrankia taenialis
   - code: MX.62140
     binomial: Scoliopteryx libatrix
-  - code: MX.62139
-    binomial: Scoliopteryx sp.
   - code: MX.61748
     binomial: Scopula floslactata
   - code: MX.61745
