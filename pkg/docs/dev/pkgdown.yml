@@ -4,6 +4,7 @@ pkgdown_sha: ~
 articles:
   alpine-birds: alpine-birds.html
   butterfly-abundance: butterfly-abundance.html
+  community-temperature-index: community-temperature-index.html
   community-temperature-indices: community-temperature-indices.html
   configuration: configuration.html
   farmland-birds: farmland-birds.html
@@ -15,7 +16,7 @@ articles:
   single-taxon-indicator-rbms: single-taxon-indicator-rbms.html
   single-taxon-indicator-trim: single-taxon-indicator-trim.html
   winter-birds: winter-birds.html
-last_built: 2022-11-21T12:49Z
+last_built: 2022-11-22T07:27Z
 urls:
   reference: https://indicators-dev.laji.fi/docs/dev/reference
   article: https://indicators-dev.laji.fi/docs/dev/articles

@@ -58,6 +58,8 @@ navbar:
         href: articles/single-taxon-indicator-rbms.html
       - text: Multi-taxon indicator (trim)
         href: articles/multi-taxon-indicator-trim.html
+      - text: Community temperature index
+        href: articles/community-temperature-index.html
     reference:
       text: Function Reference
       href: reference/index.html
