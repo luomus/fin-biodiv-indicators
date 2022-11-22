@@ -1,11 +1,11 @@
 ---
-title: "Community temperature index"
+title: "Overall abundance"
 author: "William K. Morris"
 output: 
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Community temperature index}
+  %\VignetteIndexEntry{Overall abundance}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -31,9 +31,7 @@ select <- c("document_id", "location_id", "year", "month", "day")
 
 ```{r survey-filter}
 filter <- list(
-  collection = "Winter Bird Census",
-  date_range_ymd = c("1958-12-01", ""),
-  date_range_md= c("12-01", "01-31"),
+  collection = "Butterflies in Finnish agricultural landscapes",
   has_value = select
 )
 ```
@@ -50,61 +48,67 @@ surveys <- finbif_occurrence(
 ```
 
 ```{r process-survyes}
-surveys <- pick_first_survey_in_winter(surveys)
+surveys <- require_seven_fortnights(surveys)
+
+surveys <- pick_first_survey_in_fortnight(surveys)
 ```
 
 ```{r count-filter}
-filter[["has_value"]] <- c("document_id", "abundance_interpreted")
+filter[["has_value"]] <- c("document_id", "section", "abundance_interpreted")
 ```
 
 ```{r taxa}
-sti <- c(
-  "Poecile montanus" = -7.51,
-  "Regulus regulus" = -4.23,
-  "Lophophanes cristatus" = -5.90,
-  "Certhia familiaris" = -6.89
+taxa <- c(
+  "Aglais urticae",
+  "Boloria euphrosyne",
+  "Lycaena virgaureae",
+  "Polygonia c-album"
 )
 ```
 
 ```{r counts}
 counts <- lapply(
-  names(sti),
+  taxa,
   finbif_occurrence,
   filter = filter,
-  select = c("scientific_name", "document_id", "abundance"),
+  select = c("scientific_name", "document_id", "section", "abundance"),
   n = "all",
   quiet = TRUE
 )
 ```
 
 ```{r process-counts}
+counts <- lapply(counts, sum_over_sections)
+
 counts <- lapply(counts, combine_with_surveys, surveys)
+
+counts <- lapply(counts, sum_by_event)
 
 counts <- do.call(rbind, counts)
 
-counts[["sti"]] <- sti[counts[["scientific_name"]]]
-
 counts <- group_by(counts, location_id, year)
+
+counts <- summarise(counts, abundance = sum(abundance), .groups = "drop")
 ```
 
 ```{r model}
-cti_data <- summarise(
-  counts, cti = sum(abundance * sti) / sum(abundance), groups = ".drop"
+model <- glmer(
+  abundance ~ (1 | location_id) + (1 | year), counts, family = "poisson"
 )
-
-model <- lmer(cti ~ (1 | location_id) + (1 | year), cti_data)
 ```
 
 ```{r index}
-cti <- data.frame(index = coef(model)[["year"]], se = se.coef(model)[["year"]])
+index <- data.frame(
+  index = coef(model)[["year"]], se = se.coef(model)[["year"]]
+)
 
-cti[["time"]] <- as.integer(row.names(cti))
+index[["time"]] <- as.integer(row.names(index))
 
-names(cti) <- c("index", "se", "time")
+names(index) <- c("index", "se", "time")
 ```
 
-```{r plot-cti}
-ggplot(cti) +
+```{r plot-overall-abundance}
+ggplot(index) +
 aes(
   x = parse_date_time(time, "Y"),
   y = index,

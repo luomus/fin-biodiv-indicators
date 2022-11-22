@@ -60,6 +60,8 @@ navbar:
         href: articles/multi-taxon-indicator-trim.html
       - text: Community temperature index
         href: articles/community-temperature-index.html
+      - text: Overall abundance
+        href: articles/overall-abundance.html
     reference:
       text: Function Reference
       href: reference/index.html
