@@ -5,6 +5,12 @@ abundance indices and related metrics for Finland. The input data for the
 indices are provided by the
 [Finnish Biodiversity Information Facility](https://laji.fi "FinBIF").
 
+## Install the R package
+```r
+install.packages("remotes")
+remotes::install_github("luomus/fin-biodiv-indicators", subdir = "pkg")
+```
+
 ## Documentation
 See [here](https://indicators.laji.fi/) for details.
 
