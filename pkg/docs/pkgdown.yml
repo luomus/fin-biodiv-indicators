@@ -17,8 +17,8 @@ articles:
   single-taxon-indicator-rbms: single-taxon-indicator-rbms.html
   single-taxon-indicator-trim: single-taxon-indicator-trim.html
   winter-birds: winter-birds.html
-last_built: 2022-11-22T15:25Z
+last_built: 2022-11-22T15:52Z
 urls:
-  reference: https://indicators-dev.laji.fi/docs/dev/reference
-  article: https://indicators-dev.laji.fi/docs/dev/articles
+  reference: https://indicators.laji.fi/docs/reference
+  article: https://indicators.laji.fi/docs/articles
 
