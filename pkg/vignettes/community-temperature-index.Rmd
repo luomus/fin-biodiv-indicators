@@ -1,32 +1,49 @@
 ---
-title: "Multi-taxon indicator (trim)"
+title: "Community temperature index"
 author: "William K. Morris"
 output: 
   rmarkdown::html_vignette:
     toc: true
 vignette: >
-  %\VignetteIndexEntry{Multi-taxon indicator (trim)}
+  %\VignetteIndexEntry{Community temperature index}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 
 
+This documents outlines how a multi-taxon indicator (Community temperature index
+for Finnish Birds in Winter) can be calculated in R.
+
+## Load packages
+
+The following packages are required. All packages are available on
+[CRAN](https://cran.r-project.org/) apart from `{fbi}` which can be installed
+from GitHub.
+
 
 ```r
-library(dplyr, quietly = TRUE)
-library(fbi, quietly = TRUE)
-library(finbif, quietly = TRUE)
-library(ggplot2, quietly = TRUE)
-library(lubridate, quietly = TRUE)
-library(lme4, quietly = TRUE)
-library(arm, quietly = TRUE)
+library(dplyr)
+library(fbi)
+library(finbif)
+library(ggplot2)
+library(lubridate)
+library(lme4)
+library(arm)
 ```
+
+## Survey data
+
+These five fields are required for the survey data.
 
 
 ```r
 select <- c("document_id", "location_id", "year", "month", "day")
 ```
+
+These filters restrict the survey data to the Dec-Jan "Winter Bird Census"
+monitoring dataset from December 1958 onwards where the selected data fields
+have no missing data.
 
 
 ```r
@@ -37,6 +54,8 @@ filter <- list(
   has_value = select
 )
 ```
+
+The survey data can now downloaded from FinBIF.
 
 
 ```r
@@ -50,15 +69,33 @@ surveys <- finbif_occurrence(
 )
 ```
 
+A single processing function is applied to the survey data to limit each site
+to the first survey of the year (where year is the period Dec-Jan).
+
 
 ```r
 surveys <- pick_first_survey_in_winter(surveys)
 ```
 
+## Count data
+
+Count data requires two fields to be selected: the survey identifier
+(`document_id`) and the measure of abundance (`abundance_interpreted`).
+
 
 ```r
-filter[["has_value"]] <- c("document_id", "abundance_interpreted")
+select <- c("document_id", abundance = "abundance_interpreted")
 ```
+
+The count data requires the same filters as the survey data (though the filter
+`has_value` needs to be redefined).
+
+
+```r
+filter[["has_value"]] <- select
+```
+
+A set of taxa and their species temperature index values is defined.
 
 
 ```r
@@ -70,42 +107,49 @@ sti <- c(
 )
 ```
 
+The count data for these taxa can now be downloaded from FinBIF.
+
 
 ```r
 counts <- lapply(
   names(sti),
   finbif_occurrence,
   filter = filter,
-  select = c("scientific_name", "document_id", "abundance"),
+  select = select,
   n = "all",
   quiet = TRUE
 )
 ```
 
+The count data is then combined with the survey data and the species temperature
+indices.
+
 
 ```r
 counts <- lapply(counts, combine_with_surveys, surveys)
 
+counts <- mapply(mutate, counts, sp = names(sti), SIMPLIFY = FALSE)
+
 counts <- do.call(rbind, counts)
 
-counts[["sti"]] <- sti[counts[["scientific_name"]]]
-
-counts <- group_by(counts, location_id, year)
+counts[["sti"]] <- sti[counts[["sp"]]]
 ```
+
+# Create Index
+
+A community temperature index for each year is created by fitting a linear mixed
+effects regression model to the combined data.
 
 
 ```r
-cti_data <- summarise(counts, cti = sum(abundance * sti) / sum(abundance))
-```
+cti_data <- summarise(
+  group_by(counts, location_id, year),
+  cti = sum(abundance * sti) / sum(abundance), .groups = "drop"
+)
 
+cti <- lmer(cti ~ (1 | location_id) + (1 | year), cti_data)
 
-```r
-model <- lmer(cti ~ (1 | location_id) + (1 | year), cti_data)
-```
-
-
-```r
-cti <- data.frame(index = coef(model)[["year"]], se = se.coef(model)[["year"]])
+cti <- data.frame(index = coef(cti)[["year"]], se = se.coef(cti)[["year"]])
 
 cti[["time"]] <- as.integer(row.names(cti))
 
@@ -128,4 +172,4 @@ xlab(NULL) +
 theme_minimal()
 ```
 
-![plot of chunk plot-cti](figure/plot-cti-1.png)
+![Community Temperature Index for Winter Birds in Finland](figure/plot-cti-1.png)

@@ -12,21 +12,38 @@ vignette: >
 
 
 
+This documents outlines how a multi-taxon indicator (Farmland Butterfly
+Abundance) can be calculated in R.
+
+## Load packages
+
+The following packages are required. All packages are available on
+[CRAN](https://cran.r-project.org/) apart from `{fbi}` which can be installed
+from GitHub.
+
 
 ```r
-library(dplyr, quietly = TRUE)
-library(fbi, quietly = TRUE)
-library(finbif, quietly = TRUE)
-library(ggplot2, quietly = TRUE)
-library(lubridate, quietly = TRUE)
-library(lme4, quietly = TRUE)
-library(arm, quietly = TRUE)
+library(dplyr)
+library(fbi)
+library(finbif)
+library(ggplot2)
+library(lubridate)
+library(lme4)
+library(arm)
 ```
+
+## Survey data
+
+These five fields are required for the survey data.
 
 
 ```r
 select <- c("document_id", "location_id", "year", "month", "day")
 ```
+
+These filters restrict the survey data to the "Butterflies in Finnish
+agricultural landscapes" dataset with the selected data fields have no missing
+data.
 
 
 ```r
@@ -35,6 +52,8 @@ filter <- list(
   has_value = select
 )
 ```
+
+The survey data can now downloaded from FinBIF.
 
 
 ```r
@@ -48,6 +67,10 @@ surveys <- finbif_occurrence(
 )
 ```
 
+Two processing functions are applied to the survey data to first limit the
+surveys to sites where at least seven fortnights have been surveyed and limit
+each site's surveys to the first survey in each fortnight.
+
 
 ```r
 surveys <- require_seven_fortnights(surveys)
@@ -55,10 +78,26 @@ surveys <- require_seven_fortnights(surveys)
 surveys <- pick_first_survey_in_fortnight(surveys)
 ```
 
+## Count data
+
+Count data requires three fields to be selected: the survey identifier
+(`document_id`) the survey site section (`section`) and the measure of abundance
+(`abundance_interpreted`).
+
 
 ```r
-filter[["has_value"]] <- c("document_id", "section", "abundance_interpreted")
+select <- c("document_id", "section", abundance = "abundance_interpreted")
 ```
+
+The count data requires the same filters as the survey data (though the filter
+`has_value` needs to be redefined).
+
+
+```r
+filter[["has_value"]] <- select
+```
+
+A set of taxa contributing to the total abundance is selected.
 
 
 ```r
@@ -70,17 +109,23 @@ taxa <- c(
 )
 ```
 
+The count data for these taxa can now be downloaded from FinBIF.
+
 
 ```r
 counts <- lapply(
   taxa,
   finbif_occurrence,
   filter = filter,
-  select = c("scientific_name", "document_id", "section", "abundance"),
+  select = select,
   n = "all",
   quiet = TRUE
 )
 ```
+
+Three processing functions are applied to the count data to: sum the counts
+over the survey site sections; combine the count and survey data together; amd
+sum over the counts for each site-year combination.
 
 
 ```r
@@ -89,6 +134,13 @@ counts <- lapply(counts, sum_over_sections)
 counts <- lapply(counts, combine_with_surveys, surveys)
 
 counts <- lapply(counts, sum_by_event)
+```
+
+The count data can then be summed across the taxa.
+
+
+```r
+counts <- mapply(mutate, counts, sp = taxa, SIMPLIFY = FALSE)
 
 counts <- do.call(rbind, counts)
 
@@ -97,15 +149,17 @@ counts <- group_by(counts, location_id, year)
 counts <- summarise(counts, abundance = sum(abundance), .groups = "drop")
 ```
 
+# Create Index
+
+A index of total abundance for each year is created by fitting a generalised
+linear mixed effects regression model to the combined data.
+
 
 ```r
 model <- glmer(
   abundance ~ (1 | location_id) + (1 | year), counts, family = "poisson"
 )
-```
 
-
-```r
 index <- data.frame(
   index = coef(model)[["year"]], se = se.coef(model)[["year"]]
 )
@@ -131,4 +185,4 @@ xlab(NULL) +
 theme_minimal()
 ```
 
-![plot of chunk plot-overall-abundance](figure/plot-overall-abundance-1.png)
+![Overall abundance of Farmland Butterflies in Finland](figure/plot-overall-abundance-1.png)
