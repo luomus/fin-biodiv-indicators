@@ -16,6 +16,7 @@ Description: Finnish biodiversity indicators is a service providing time series
 LazyData: true
 Depends: R (>= 3.5.0)
 Imports:
+    arm,
     blob,
     config,
     dbplyr,

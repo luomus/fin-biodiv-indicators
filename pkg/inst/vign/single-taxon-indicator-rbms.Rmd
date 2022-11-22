@@ -15,18 +15,35 @@ knitr::opts_chunk$set(fig.path = "figure/")
 knitr::opts_knit$set(base.dir = "pkg/vignettes/")
 ```
 
+This documents outlines how a single-taxon indicator (_Aglais urticae_
+on farms in Finland) can be calculated in R using the RBMS method.
+
+## Load packages
+
+The following packages are required. All packages are available on
+[CRAN](https://cran.r-project.org/) apart from `{fbi}` and `{rbms}` which can be
+installed from GitHub.
+
 ```{r pkgs, message = FALSE}
-library(dplyr, quietly = TRUE)
-library(fbi, quietly = TRUE)
-library(finbif, quietly = TRUE)
-library(ggplot2, quietly = TRUE)
-library(lubridate, quietly = TRUE)
-library(rbms, quietly = TRUE)
+library(dplyr)
+library(fbi)
+library(finbif)
+library(ggplot2)
+library(lubridate)
+library(rbms)
 ```
+
+## Survey data
+
+These five fields are required for the survey data.
 
 ```{r survey-select}
 select <- c("document_id", "location_id", "year", "month", "day")
 ```
+
+These filters restrict the survey data to the "Butterflies in Finnish
+agricultural landscapes" dataset with the selected data fields have no missing
+data.
 
 ```{r survey-filter}
 filter <- list(
@@ -34,6 +51,8 @@ filter <- list(
   has_value = select
 )
 ```
+
+The survey data can now downloaded from FinBIF.
 
 ```{r surveys}
 surveys <- finbif_occurrence(
@@ -46,29 +65,59 @@ surveys <- finbif_occurrence(
 )
 ```
 
+
+A single processing function is applied to the survey data to convert the year
+month and day fields into a single date field.
+
 ```{r process-survyes}
 surveys <- format_date(surveys)
 ```
 
-```{r count-filter}
-filter[["has_value"]] <-  c("document_id", "section", "abundance_interpreted")
+## Count data
+
+Count data requires three fields to be selected: the survey identifier
+(`document_id`) the survey site section (`section`) and the measure of abundance
+(`abundance_interpreted`).
+
+```{r count-select}
+select <- c("document_id", "section", abundance = "abundance_interpreted")
 ```
+
+The count data requires the same filters as the survey data (though the filter
+`has_value` needs to be redefined).
+
+```{r count-filter}
+filter[["has_value"]] <- select
+```
+
+The count data for _Aglais urticae_ (Small tortoiseshell) can now be downloaded
+from FinBIF.
 
 ```{r counts}
 counts <- finbif_occurrence(
   taxa = "Aglais urticae",
   filter = filter,
-  select = c("document_id", "section", "abundance"),
+  select = select ,
   n = "all",
   quiet = TRUE
 )
 ```
+
+Two processing functions are applied to the count data to: sum the counts
+over the survey site sections; and combine the count and survey data together.
 
 ```{r process-counts}
 counts <- sum_over_sections(counts, surveys)
 
 counts <- combine_with_surveys(counts, surveys)
 ```
+
+# Fit RBMS Model
+
+An RBMS model is used to estimate the change in abundance over time (see 
+[RBMS documentation
+](https://retoschmucki.github.io/rbms/articles/Get_Started_2.html) for details)
+with uncertainty estimated via bootstrapping.
 
 ```{r model}
 StartMonth <- 4
@@ -91,8 +140,6 @@ MinFC <- 0.10
 boot_n <- 200
 
 surveys <- select(surveys, site_id = location_id, year, date)
-
-base <- which(sort(unique(surveys[["year"]])) == 2000)
 
 init_year <- min(surveys[["year"]])
 
@@ -122,8 +169,6 @@ counts <- select(
   counts, count = abundance, site_id = location_id, year, date, species
 )
 
-counts <- collect(counts)
-
 ts_season_count <- ts_monit_count_site(
   m_season_visit = ts_season_visit, m_count = counts
 )
@@ -152,15 +197,22 @@ impt_counts <- impute_count(
 sindex <- site_index(butterfly_count = impt_counts, MinFC = MinFC)
 
 bootsample <- boot_sample(data = sindex, boot_n = boot_n)
-```
 
-```{r index}
 index_mc <- mapply(
   collated_index,
   bootID = seq_len(boot_n),
   MoreArgs = list(data = sindex, s_sp = 1, boot_ind = bootsample),
   SIMPLIFY = FALSE
 )
+```
+
+# Create Index
+
+An index of change in relative abundance with uncertainty derived from the
+bootstrapped estimates can be created by setting the base year to the year 2000.
+
+```{r index}
+base <- which(sort(unique(surveys[["year"]])) == 2000)
 
 index_mc <- lapply(index_mc, getElement, "col_index")
 
@@ -202,6 +254,7 @@ index <- mutate(index, lower = mean - sd, upper = mean + sd)
 ```
 
 ```{r plot-single-taxon-rbms}
+#| fig.cap: Relative abundance of Small tortoiseshell on Farms in Finland (calculated using RBMS)
 ggplot(index) +
 aes(x = parse_date_time(time, "Y"), y = mean, ymin = lower, ymax = upper) +
 geom_ribbon(alpha = .2) +
