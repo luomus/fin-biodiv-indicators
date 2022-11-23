@@ -321,7 +321,7 @@ function(index, model = "default", taxon = "none", region = "none", res) {
        ""
      )
 
-     ans <- data.frame(as.vector(taxa), state = as.vector(state))
+     ans <- data.frame(taxon = as.vector(taxa), state = as.vector(state))
 
   } else if (taxon == "extra") {
 
