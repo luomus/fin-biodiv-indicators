@@ -9,8 +9,8 @@ run_model <- function(index, taxon, surveys, counts, model) {
 
   switch(
     model,
-    trim = run_trim(index, taxon, counts),
-    rbms = run_rbms(index, taxon, surveys, counts)
+    trim = run_trim(index, counts),
+    rbms = run_rbms(index, surveys, counts)
   )
 
 }
@@ -19,7 +19,7 @@ run_model <- function(index, taxon, surveys, counts, model) {
 #' @importFrom rtrim count_summary index overall trim
 #' @importFrom dplyr all_of collect .data select
 
-run_trim <- function(index, taxon, counts) {
+run_trim <- function(index, counts) {
 
   args <- config::get("model", config = index)[["trim"]][["args"]]
 
@@ -73,7 +73,7 @@ run_trim <- function(index, taxon, counts) {
 
 #' @importFrom config get
 
-run_rbms <- function(index, taxon, surveys, counts) {
+run_rbms <- function(index, surveys, counts) {
 
   args <- config::get("model", config = index)[["rbms"]][["args"]]
 
