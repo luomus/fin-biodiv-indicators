@@ -1,6 +1,5 @@
 ---
 title: "Community Temperature Indices"
-author: "William K. Morris"
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -14,6 +13,10 @@ vignette: >
 url <- "https://indicators%s.laji.fi/svg/%s?fontsize=16&scale=60"
 ```
 
+## {.tabset .tabset-fade .tabset-pills}
+
+### Winter Birds
+
 ::: {.pkgdown-release}
 ![Community Temperature Indicator for Winter Birds (Whole of Finland)
 ](`r sprintf(url, "", "wbcti")` "Winter Bird Community Temperature Index")
@@ -24,6 +27,8 @@ url <- "https://indicators%s.laji.fi/svg/%s?fontsize=16&scale=60"
 ](`r sprintf(url, "-dev", "wbcti")` "Winter Bird Community Temperature Index")
 :::
 
+### Summer Birds
+
 ::: {.pkgdown-release}
 ![Community Temperature Indicator for Summer Birds (Whole of Finland)
 ](`r sprintf(url, "", "sbcti")` "Summer Bird Community Temperature Index")
@@ -33,6 +38,8 @@ url <- "https://indicators%s.laji.fi/svg/%s?fontsize=16&scale=60"
 ![Community Temperature Indicator for Summer Birds (Whole of Finland)
 ](`r sprintf(url, "-dev", "sbcti")` "Summer Bird Community Temperature Index")
 :::
+
+### Farmland Butterflies
 
 ::: {.pkgdown-release}
 ![Community Temperature Indicator for Farmland Butterflies (Whole of Finland)

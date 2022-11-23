@@ -1,6 +1,5 @@
 ---
 title: "Alpine Bird Indicator"
-author: "William K. Morris"
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -10,12 +9,16 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+## {.tabset .tabset-fade .tabset-pills}
+
+### Northern Finland
+
 ::: {.pkgdown-release}
-![Biodiversity Indicator for Alpine Breeding Birds (Whole of Finland)
-](https://indicators.laji.fi/svg/mtb?fontsize=16&scale=60 "Alpine Birds")
+![Biodiversity Indicator for Alpine Breeding Birds (Northern Finland)
+](https://indicators.laji.fi/svg/mtb?region=north&fontsize=16&scale=60 "Alpine Birds (Northern Finland)")
 :::
 
 ::: {.pkgdown-devel}
-![Biodiversity Indicator for Alpine Breeding Birds (Whole of Finland)
-](https://indicators-dev.laji.fi/svg/mtb?fontsize=16&scale=60 "Alpine Birds")
+![Biodiversity Indicator for Alpine Breeding Birds (Northern Finland)
+](https://indicators-dev.laji.fi/svg/mtb?region=north&fontsize=16&scale=60 "Alpine Birds (Northern Finland)")
 :::

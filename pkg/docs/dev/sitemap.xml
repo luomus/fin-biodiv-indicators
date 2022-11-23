@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/CODE_OF_CONDUCT.html</loc>
+  </url>
+  <url>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/CONTRIBUTING.html</loc>
+  </url>
+  <url>
     <loc>https://indicators-dev.laji.fi/docs/dev/dev/LICENSE-text.html</loc>
   </url>
   <url>
@@ -44,6 +50,9 @@
   </url>
   <url>
     <loc>https://indicators-dev.laji.fi/docs/dev/dev/articles/overall-abundance.html</loc>
+  </url>
+  <url>
+    <loc>https://indicators-dev.laji.fi/docs/dev/dev/articles/overview.html</loc>
   </url>
   <url>
     <loc>https://indicators-dev.laji.fi/docs/dev/dev/articles/single-taxon-indicator-rbms.html</loc>

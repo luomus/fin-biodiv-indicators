@@ -243,7 +243,7 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 
   } else {
 
-    res[["status"]] <- 400L
+    res[["status"]] <- 500L
 
   }
 
@@ -280,7 +280,68 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 
   } else {
 
-    res[["status"]] <- 400L
+    res[["status"]] <- 500L
+
+  }
+
+  ans
+
+}
+
+#* Get a state or list of states for indicators
+#* @tag statistics
+#* @get /state/<index:str>
+#* @param index:str Shortcode for multi-taxon indicator (see [/indices](#get-/indices "Get list of available indicators")).
+#* @param model:str Which model one of `trim`, `rbms`, etc. (`default` is first model declared in [configuration](#get-/config/-index- "Get the configuration of an indicator")).
+#* @param taxon:str FinBIF MX code identifier for a taxon (see [/taxa](#get-/taxa/-index- "Get list of taxa available for an indicator") or [/taxa-extra](#get-/taxa-extra/-index- "Get list of extra taxa available for an indicator")). Or `all` (for all taxa used by the multi-taxon index) or `extra` for all extra taxa.
+#* @param region:str Which region: `north`, `south` or `none` (whole of Finland)?
+#* @response 200 An json object response
+#* @response 404 Not found
+#* @serializer unboxedJSON
+function(index, model = "default", taxon = "none", region = "none", res) {
+
+  has_output <- check_input(index, model, taxon)
+
+  if (!has_output || !region %in% c("none", "south", "north")) {
+
+    res[["status"]] <- 404L
+    return("Not found")
+
+  }
+
+  if (taxon == "all") {
+
+     taxa <- config::get("taxa", config = index)
+
+     taxa <- vapply(taxa, getElement, "", "code")
+
+     state <- vapply(
+       taxa,
+       \(x) get_output("model_state", index, model, x, region, pool),
+       ""
+     )
+
+     ans <- data.frame(taxon = as.vector(taxa), state = as.vector(state))
+
+  } else if (taxon == "extra") {
+
+    taxa <- config::get("extra_taxa", config = index)
+
+    taxa <- vapply(taxa, getElement, "", "code")
+
+    state <- vapply(
+      taxa,
+      \(x) get_output("model_state", index, model, x, region, pool),
+      ""
+    )
+
+    ans <- data.frame(taxon = as.vector(taxa), state = as.vector(state))
+
+  } else {
+
+    state <- get_output("model_state", index, model, taxon, region, pool)
+
+    ans <- data.frame(state = state)
 
   }
 
@@ -871,6 +932,58 @@ function(pr) {
       spec <- set_example(spec, "/csv/{index}", 2, "trim")
       spec <- set_example(spec, "/csv/{index}", 3, "none")
       spec <- set_example(spec, "/csv/{index}", 4, "none")
+
+      spec <- set_description(
+        spec,
+        "/state/{index}",
+        paste(
+          "Gets an indication of the success or failure of an indicator",
+          "calulation."
+        )
+      )
+
+      spec <- set_response_null(spec, "/state/{index}")
+
+      spec <- set_schema(
+        spec,
+        "/state/{index}",
+        "200",
+        list(
+          type = "array",
+          items = list(
+            type = "object",
+            required = "state",
+            properties = list(
+              taxon = list(
+                type = "string",
+                description = "FinBIF taxon MX code identifier."
+              ),
+              state = list(
+                type = "string",
+                description = paste(
+                  "'success' or 'fail'. Indicating if the indicator was",
+                  "calculated or not."
+                )
+              )
+            )
+          )
+        ),
+        list(
+          list(
+            taxon = "MX.123",
+            state = "success"
+          ),
+          list(
+            taxon = "MX.456",
+            state = "fail"
+          )
+        )
+      )
+
+      spec <- set_example(spec, "/state/{index}", 1, "wb")
+      spec <- set_example(spec, "/state/{index}", 2, "trim")
+      spec <- set_example(spec, "/state/{index}", 3, "all")
+      spec <- set_example(spec, "/state/{index}", 4, "none")
 
       spec <- set_description(
         spec,

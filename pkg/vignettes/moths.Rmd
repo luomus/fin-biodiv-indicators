@@ -1,6 +1,5 @@
 ---
 title: "Moth Indicator"
-author: "William K. Morris"
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -10,12 +9,40 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+## {.tabset .tabset-fade .tabset-pills}
+
+### Finland
+
 ::: {.pkgdown-release}
 ![Biodiversity Indicator for Moths (Whole of Finland)
-](https://indicators.laji.fi/svg/mf?fontsize=16&scale=60 "Moths")
+](https://indicators.laji.fi/svg/mf?fontsize=16&scale=60 "Moths (Whole of Finland)")
 :::
 
 ::: {.pkgdown-devel}
 ![Biodiversity Indicator for Moths (Whole of Finland)
-](https://indicators-dev.laji.fi/svg/mf?fontsize=16&scale=60 "Moths")
+](https://indicators-dev.laji.fi/svg/mf?fontsize=16&scale=60 "Moths (Whole of Finland)")
+:::
+
+### Northern Finland
+
+::: {.pkgdown-release}
+![Biodiversity Indicator for Moths (Northern Finland)
+](https://indicators.laji.fi/svg/mf?region=north&fontsize=16&scale=60 "Moths (Northern Finland)")
+:::
+
+::: {.pkgdown-devel}
+![Biodiversity Indicator for Moths (Northern Finland)
+](https://indicators-dev.laji.fi/svg/mf?region=north&fontsize=16&scale=60 "Moths (Northern Finland)")
+:::
+
+### Southern Finland
+
+::: {.pkgdown-release}
+![Biodiversity Indicator for Moths (Southern Finland)
+](https://indicators.laji.fi/svg/mf?region=south&fontsize=16&scale=60 "Moths (Southern Finland)")
+:::
+
+::: {.pkgdown-devel}
+![Biodiversity Indicator for Moths (Southern Finland)
+](https://indicators-dev.laji.fi/svg/mf?region=south&fontsize=16&scale=60 "Moths (Southern Finland)")
 :::

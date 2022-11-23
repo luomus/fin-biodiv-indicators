@@ -14,10 +14,11 @@ articles:
   moths: moths.html
   multi-taxon-indicator-trim: multi-taxon-indicator-trim.html
   overall-abundance: overall-abundance.html
+  overview: overview.html
   single-taxon-indicator-rbms: single-taxon-indicator-rbms.html
   single-taxon-indicator-trim: single-taxon-indicator-trim.html
   winter-birds: winter-birds.html
-last_built: 2022-11-22T15:52Z
+last_built: 2022-11-23T13:34Z
 urls:
   reference: https://indicators.laji.fi/docs/reference
   article: https://indicators.laji.fi/docs/articles

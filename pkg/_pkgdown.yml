@@ -19,9 +19,12 @@ home:
 destination: docs
 navbar:
   structure:
-    left:  [api, config, articles, demos, reference]
+    left:  [overview, api, config, articles, demos, reference]
     right: [search, github]
   components:
+    overview:
+      text: Overview
+      href: articles/overview.html
     api:
       text: API
       href: !expr if (length(unlist(packageVersion("fbi"))) > 3L) "../../__docs__/#overview" else "../__docs__/#overview"
@@ -29,7 +32,7 @@ navbar:
       text: Configuration
       href: articles/configuration.html
     articles:
-      text: Example Indicators
+      text: Indicators
       menu:
       - text: Winter Birds
         href: articles/winter-birds.html

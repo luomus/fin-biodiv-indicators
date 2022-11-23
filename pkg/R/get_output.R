@@ -29,7 +29,7 @@ get_output <- function(output, index, model, taxon, region, db) {
 
   ans <- dplyr::filter(ans, .data[["index"]] == !!index)
 
-  ans <- dplyr::pull(ans, dplyr::all_of("data"))
+  ans <- dplyr::pull(ans, dplyr::any_of(c("data", "state")))
 
   if (length(ans) < 1L) {
 

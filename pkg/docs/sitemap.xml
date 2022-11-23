@@ -4,6 +4,12 @@
     <loc>https://indicators.laji.fi/docs/404.html</loc>
   </url>
   <url>
+    <loc>https://indicators.laji.fi/docs/CODE_OF_CONDUCT.html</loc>
+  </url>
+  <url>
+    <loc>https://indicators.laji.fi/docs/CONTRIBUTING.html</loc>
+  </url>
+  <url>
     <loc>https://indicators.laji.fi/docs/LICENSE-text.html</loc>
   </url>
   <url>
@@ -47,6 +53,9 @@
   </url>
   <url>
     <loc>https://indicators.laji.fi/docs/articles/overall-abundance.html</loc>
+  </url>
+  <url>
+    <loc>https://indicators.laji.fi/docs/articles/overview.html</loc>
   </url>
   <url>
     <loc>https://indicators.laji.fi/docs/articles/single-taxon-indicator-rbms.html</loc>
