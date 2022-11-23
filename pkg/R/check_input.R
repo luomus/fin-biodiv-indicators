@@ -21,7 +21,7 @@ check_input <- function(index, model, taxon) {
 
   etaxa <- vapply(config::get("extra_taxa", index), getElement, "", "code")
 
-  has_taxon <- taxon %in% c(taxa, etaxa, "none")
+  has_taxon <- taxon %in% c(taxa, etaxa, "none", "all", "extra")
 
   has_index && has_model && has_taxon
 
