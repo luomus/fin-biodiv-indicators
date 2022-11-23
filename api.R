@@ -243,7 +243,7 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 
   } else {
 
-    res[["status"]] <- 400L
+    res[["status"]] <- 500L
 
   }
 
@@ -280,11 +280,36 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 
   } else {
 
-    res[["status"]] <- 400L
+    res[["status"]] <- 500L
 
   }
 
   ans
+
+}
+
+#* Get the state of an indicator calculation
+#* @tag statistics
+#* @get /state/<index:str>
+#* @param index:str Shortcode for multi-taxon indicator (see [/indices](#get-/indices "Get list of available indicators")).
+#* @param model:str Which model one of `trim`, `rbms`, etc. (`default` is first model declared in [configuration](#get-/config/-index- "Get the configuration of an indicator")).
+#* @param taxon:str FinBIF MX code identifier for a taxon (see [/taxa](#get-/taxa/-index- "Get list of taxa available for an indicator") or [/taxa-extra](#get-/taxa-extra/-index- "Get list of extra taxa available for an indicator")).
+#* @param region:str Which region: `north`, `south` or `none` (whole of Finland)?
+#* @response 200 An json object response
+#* @response 404 Not found
+#* @serializer unboxedJSON
+function(index, model = "default", taxon = "none", region = "none", res) {
+
+  has_output <- check_input(index, model, taxon)
+
+  if (!has_output || !region %in% c("none", "south", "north")) {
+
+    res[["status"]] <- 404L
+    return("Not found")
+
+  }
+
+  get_output("model_state", index, model, taxon, region, pool)
 
 }
 
