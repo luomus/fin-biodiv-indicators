@@ -357,10 +357,8 @@ geometric_mean <- function(index, model, db) {
 
 }
 
-#' @importFrom arm se.ranef
 #' @importFrom config get
 #' @importFrom dplyr .data collect group_by summarise
-#' @importFrom stats coef
 
 overall_abundance <- function(index, oa, model, db) {
 
@@ -403,7 +401,7 @@ overall_abundance <- function(index, oa, model, db) {
 
   data <- dplyr::summarise(
     data,
-    overall_abundance = sum(.data[["abundance"]], na.rm = TRUE),
+    abundance = sum(.data[["abundance"]], na.rm = TRUE),
     .groups = "drop"
   )
 
@@ -417,21 +415,11 @@ overall_abundance <- function(index, oa, model, db) {
 
   data <- dplyr::collect(data)
 
-  mod <- lme4::glmer(
-    overall_abundance ~ (1 | location_id) + (1 | year), data, family = "poisson"
+  df <- run_trim(index, data)
+
+  attr(df, "count_summary") <- c(
+    attr(df, "count_summary"), taxa = length(codes)
   )
-
-  df <- data.frame(stats::coef(mod)[["year"]], arm::se.coef(mod)[["year"]])
-
-  df <- data.frame(
-    time  = as.integer(rownames(df)),
-    mean  = df[[1L]],
-    sd    = df[[2L]],
-    lower = df[[1L]] - df[[2L]],
-    upper = df[[1L]] + df[[2L]]
-  )
-
-  attr(df, "count_summary") <- list(taxa = length(codes))
 
   df
 

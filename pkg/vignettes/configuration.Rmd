@@ -255,8 +255,6 @@ Models include:
   via [rbms](https://retoschmucki.github.io/rbms/ "rbms"))
 - `lmer`: Linear Mixed Effects Regression (via 
   [lme4](https://github.com/lme4/lme4/ "lme4 GitHub repository"))
-- `glmer`: Generalised Linear Mixed Effects Regression (via
-  [lme4](https://github.com/lme4/lme4/ "lme4 GitHub repository"))
 
 Each element of the `model` section must include:
 

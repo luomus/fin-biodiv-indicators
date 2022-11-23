@@ -1790,8 +1790,10 @@ bfoa:
   from: bf
   combine: overall_abundance
   model:
-    glmer:
-      units: "Log Total Number of Butterflies"
+    trim:
+      units: "Relative abundance"
+      args:
+        overdisp: true
       surveys_process:
       - require_seven_fortnights
       - pick_first_survey_in_fortnight
