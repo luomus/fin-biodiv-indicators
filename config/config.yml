@@ -69,6 +69,7 @@ flb:
   use_data_after: "10-01"
   model:
     trim:
+      units: "Relative abundance"
       base_year: 2000
       surveys_process:
       - pick_first_survey_in_year
@@ -137,6 +138,7 @@ mrb:
   use_data_after: "10-01"
   model:
     trim:
+      units: "Relative abundance"
       base_year: 2000
       surveys_process:
       - pick_first_survey_in_year
@@ -194,6 +196,7 @@ mtb:
   use_data_after: "10-01"
   model:
     trim:
+      units: "Relative abundance"
       base_year: 2000
       surveys_process:
       - pick_first_survey_in_year
@@ -884,6 +887,7 @@ ftb:
   use_data_after: "10-01"
   model:
     trim:
+      units: "Relative abundance"
       base_year: 2000
       surveys_process:
       - pick_first_survey_in_year
@@ -900,6 +904,7 @@ sbcti:
   combine: cti
   model:
     lmer:
+      units: "Degrees Celsius"
       surveys_process:
       - pick_first_survey_in_year
       counts_process:
@@ -1426,6 +1431,7 @@ wb:
   use_data_after: "03-01"
   model:
     trim:
+      units: "Relative abundance"
       base_year: 2000
       surveys_process:
       - pick_first_survey_in_winter
@@ -1440,6 +1446,7 @@ wbcti:
   combine: cti
   model:
     lmer:
+      units: "Degrees Celsius"
       surveys_process:
       - pick_first_survey_in_winter
       counts_process:
@@ -1740,6 +1747,7 @@ bf:
   use_data_after: "10-01"
   model:
     rbms:
+      units: "Relative abundance"
       base_year: 2000
       surveys_process:
       - format_date
@@ -1747,6 +1755,7 @@ bf:
       - sum_over_sections
       - combine_with_surveys
     trim:
+      units: "Relative abundance"
       args:
         overdisp: true
       base_year: 2000
@@ -1767,6 +1776,7 @@ bfcti:
   combine: cti
   model:
     lmer:
+      units: "Degrees Celsius"
       surveys_process:
       - require_seven_fortnights
       - pick_first_survey_in_fortnight
@@ -1781,6 +1791,7 @@ bfoa:
   combine: overall_abundance
   model:
     glmer:
+      units: "Log Total Number of Butterflies"
       surveys_process:
       - require_seven_fortnights
       - pick_first_survey_in_fortnight
@@ -2706,6 +2717,7 @@ mf:
   use_data_after: "11-01"
   model:
     trim:
+      units: "Relative abundance"
       base_year: 2000
       surveys_process:
       - require_minimum_weeks:
