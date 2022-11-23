@@ -1,6 +1,5 @@
 ---
 title: "Farmland Butterfly Indicator"
-author: "William K. Morris"
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -14,6 +13,10 @@ vignette: >
 url <- "https://indicators%s.laji.fi/svg/bf?model=%s&fontsize=16&scale=60"
 ```
 
+## {.tabset .tabset-fade .tabset-pills}
+
+### RBMS
+
 ::: {.pkgdown-release}
 ![
 Biodiversity Indicator for Farmland Butterflies (Whole of Finland: rbms Model)
@@ -25,6 +28,8 @@ Biodiversity Indicator for Farmland Butterflies (Whole of Finland: rbms Model)
 Biodiversity Indicator for Farmland Butterflies (Whole of Finland: rbms Model)
 ](`r sprintf(url, "-dev", "rbms")` "Farmland Butterflies (rbms)")
 :::
+
+### TRIM
 
 ::: {.pkgdown-release}
 ![

@@ -1,6 +1,5 @@
 ---
 title: "Forest Bird Indicator"
-author: "William K. Morris"
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -10,12 +9,40 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+## {.tabset .tabset-fade .tabset-pills}
+
+### Finland
+
 ::: {.pkgdown-release}
 ![Biodiversity Indicator for Forest Breeding Birds (Whole of Finland)
-](https://indicators.laji.fi/svg/ftb?fontsize=16&scale=60 "Forest Birds")
+](https://indicators.laji.fi/svg/ftb?fontsize=16&scale=60 "Forest Birds (Whole of Finland)")
 :::
 
 ::: {.pkgdown-devel}
 ![Biodiversity Indicator for Forest Breeding Birds (Whole of Finland)
-](https://indicators-dev.laji.fi/svg/ftb?fontsize=16&scale=60 "Forest Birds")
+](https://indicators-dev.laji.fi/svg/ftb?fontsize=16&scale=60 "Forest Birds (Whole of Finland)")
+:::
+
+### Northern Finland
+
+::: {.pkgdown-release}
+![Biodiversity Indicator for Forest Breeding Birds (Northern Finland)
+](https://indicators.laji.fi/svg/ftb?region=north&fontsize=16&scale=60 "Forest Birds (Northern Finland)")
+:::
+
+::: {.pkgdown-devel}
+![Biodiversity Indicator for Forest Breeding Birds (Northern Finland)
+](https://indicators-dev.laji.fi/svg/ftb?region=north&fontsize=16&scale=60 "Forest Birds (Northern Finland)")
+:::
+
+### Southern Finland
+
+::: {.pkgdown-release}
+![Biodiversity Indicator for Forest Breeding Birds (Southern Finland)
+](https://indicators.laji.fi/svg/ftb?region=south&fontsize=16&scale=60 "Forest Birds (Southern Finland)")
+:::
+
+::: {.pkgdown-devel}
+![Biodiversity Indicator for Forest Breeding Birds (Southern Finland)
+](https://indicators-dev.laji.fi/svg/ftb?region=south&fontsize=16&scale=60 "Forest Birds (Southern Finland)")
 :::

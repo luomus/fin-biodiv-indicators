@@ -1,6 +1,5 @@
 ---
 title: "Butterfly Abundance Indicator"
-author: "William K. Morris"
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -10,16 +9,40 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-url <- "https://indicators%s.laji.fi/svg/bfoa?&fontsize=16&scale=60"
-```
+## {.tabset .tabset-fade .tabset-pills}
+
+### Finland
 
 ::: {.pkgdown-release}
 ![Biodiversity Indicator for Butterfly Abundance (Whole of Finland)
-](`r sprintf(url, "")` "Butterfly Abundance")
+](https://indicators.laji.fi/svg/bfoa?fontsize=16&scale=60 "Butterfly Abundance (Whole of Finland)")
 :::
 
 ::: {.pkgdown-devel}
-![Biodiversity Indicator for Forest Breeding Birds (Whole of Finland)
-](`r sprintf(url, "-dev")` "Butterfly Abundance")
+![Biodiversity Indicator for Butterfly Abundance (Whole of Finland)
+](https://indicators-dev.laji.fi/svg/bfoa?fontsize=16&scale=60 "Butterfly Abundance (Whole of Finland)")
+:::
+
+### Northern Finland
+
+::: {.pkgdown-release}
+![Biodiversity Indicator for Butterfly Abundance (Northern Finland)
+](https://indicators.laji.fi/svg/bfoa?region=north&fontsize=16&scale=60 "Butterfly Abundance (Northern Finland)")
+:::
+
+::: {.pkgdown-devel}
+![Biodiversity Indicator for Butterfly Abundance (Northern Finland)
+](https://indicators-dev.laji.fi/svg/bfoa?region=north&fontsize=16&scale=60 "Butterfly Abundance (Northern Finland)")
+:::
+
+### Southern Finland
+
+::: {.pkgdown-release}
+![Biodiversity Indicator for Butterfly Abundance (Southern Finland)
+](https://indicators.laji.fi/svg/bfoa?region=south&fontsize=16&scale=60 "Butterfly Abundance (Southern Finland)")
+:::
+
+::: {.pkgdown-devel}
+![Biodiversity Indicator for Butterfly Abundance (Southern Finland)
+](https://indicators-dev.laji.fi/svg/bfoa?region=south&fontsize=16&scale=60 "Butterfly Abundance (Southern Finland)")
 :::

@@ -1,6 +1,5 @@
 ---
 title: "Single-taxon indicator (trim)"
-author: "William K. Morris"
 output: 
   rmarkdown::html_vignette:
     toc: true
