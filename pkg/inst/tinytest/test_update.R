@@ -32,7 +32,7 @@ expect_null(update_index("bf_south", "trim", NULL, con))
 
 expect_null(update_index("bfcti", "lmer", NULL, con))
 
-expect_null(update_index("bfoa", "glmer", NULL, con))
+expect_null(update_index("bfoa", "trim", NULL, con))
 
 pool::dbWriteTable(con, "redundant", data.frame(index = character()))
 
