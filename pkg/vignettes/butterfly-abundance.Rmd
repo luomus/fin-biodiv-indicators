@@ -23,18 +23,6 @@ vignette: >
 ](https://indicators-dev.laji.fi/svg/bfoa?fontsize=16&scale=60 "Butterfly Abundance (Whole of Finland)")
 :::
 
-### Northern Finland
-
-::: {.pkgdown-release}
-![Biodiversity Indicator for Butterfly Abundance (Northern Finland)
-](https://indicators.laji.fi/svg/bfoa?region=north&fontsize=16&scale=60 "Butterfly Abundance (Northern Finland)")
-:::
-
-::: {.pkgdown-devel}
-![Biodiversity Indicator for Butterfly Abundance (Northern Finland)
-](https://indicators-dev.laji.fi/svg/bfoa?region=north&fontsize=16&scale=60 "Butterfly Abundance (Northern Finland)")
-:::
-
 ### Southern Finland
 
 ::: {.pkgdown-release}
