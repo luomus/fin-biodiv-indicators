@@ -415,7 +415,7 @@ overall_abundance <- function(index, oa, model, db) {
 
   data <- dplyr::collect(data)
 
-  df <- run_trim(index, data)
+  df <- run_trim(oa_base, data)
 
   attr(df, "count_summary") <- c(
     attr(df, "count_summary"), taxa = length(codes)
