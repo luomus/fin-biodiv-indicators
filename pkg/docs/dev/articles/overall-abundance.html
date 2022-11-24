@@ -120,8 +120,7 @@ Butterfly Abundance) can be calculated in R.</p>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/luomus/finbif" class="external-link">finbif</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://lubridate.tidyverse.org" class="external-link">lubridate</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://CRAN.R-project.org/package=arm" class="external-link">arm</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/markvanderloo/rtrim" class="external-link">rtrim</a></span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="survey-data">Survey data<a class="anchor" aria-label="anchor" href="#survey-data"></a>
@@ -209,28 +208,18 @@ together; amd sum over the counts for each site-year combination.</p>
 <div class="section level2">
 <h2 id="create-index">Create Index<a class="anchor" aria-label="anchor" href="#create-index"></a>
 </h2>
-<p>A index of total abundance for each year is created by fitting a
-generalised linear mixed effects regression model to the combined
-data.</p>
+<p>An index of total abundance for each year is created by fitting a
+TRIM model to the combined data and setting the base year to the year
+2000.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">glmer</a></span><span class="op">(</span></span>
-<span>  <span class="va">abundance</span> <span class="op">~</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">location_id</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">year</span><span class="op">)</span>, <span class="va">counts</span>, family <span class="op">=</span> <span class="st">"poisson"</span></span>
-<span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rtrim/man/trim.html" class="external-link">trim</a></span><span class="op">(</span><span class="va">abundance</span> <span class="op">~</span> <span class="va">location_id</span> <span class="op">+</span> <span class="va">year</span>, <span class="va">counts</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">index</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  index <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">[[</span><span class="st">"year"</span><span class="op">]</span><span class="op">]</span>, se <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/arm/man/se.coef.html" class="external-link">se.coef</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">[[</span><span class="st">"year"</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">index</span><span class="op">[[</span><span class="st">"time"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html" class="external-link">as.integer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html" class="external-link">row.names</a></span><span class="op">(</span><span class="va">index</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">index</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"index"</span>, <span class="st">"se"</span>, <span class="st">"time"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">index</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rtrim/man/index.html" class="external-link">index</a></span><span class="op">(</span><span class="va">model</span>, base <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">index</span><span class="op">)</span> <span class="op">+</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span>
-<span>  x <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/parse_date_time.html" class="external-link">parse_date_time</a></span><span class="op">(</span><span class="va">time</span>, <span class="st">"Y"</span><span class="op">)</span>,</span>
-<span>  y <span class="op">=</span> <span class="va">index</span>,</span>
-<span>  ymin <span class="op">=</span> <span class="va">index</span> <span class="op">-</span> <span class="va">se</span>,</span>
-<span>  ymax <span class="op">=</span> <span class="va">index</span> <span class="op">+</span> <span class="va">se</span></span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://lubridate.tidyverse.org/reference/parse_date_time.html" class="external-link">parse_date_time</a></span><span class="op">(</span><span class="va">time</span>, <span class="st">"Y"</span><span class="op">)</span>, y <span class="op">=</span> <span class="va">imputed</span>,</span>
+<span>  ymin <span class="op">=</span> <span class="va">imputed</span> <span class="op">-</span> <span class="va">se_imp</span>, ymax <span class="op">=</span> <span class="va">imputed</span> <span class="op">+</span> <span class="va">se_imp</span></span>
 <span><span class="op">)</span> <span class="op">+</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">geom_ribbon</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.2</span><span class="op">)</span> <span class="op">+</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
