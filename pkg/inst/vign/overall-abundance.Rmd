@@ -29,8 +29,7 @@ library(fbi)
 library(finbif)
 library(ggplot2)
 library(lubridate)
-library(lme4)
-library(arm)
+library(rtrim)
 ```
 
 ## Survey data
@@ -142,31 +141,21 @@ counts <- summarise(counts, abundance = sum(abundance), .groups = "drop")
 
 # Create Index
 
-A index of total abundance for each year is created by fitting a generalised
-linear mixed effects regression model to the combined data.
+An index of total abundance for each year is created by fitting a TRIM
+model to the combined data and setting the base year to the year 2000.
 
 ```{r index}
-model <- glmer(
-  abundance ~ (1 | location_id) + (1 | year), counts, family = "poisson"
-)
+model <- trim(abundance ~ location_id + year, counts)
 
-index <- data.frame(
-  index = coef(model)[["year"]], se = se.coef(model)[["year"]]
-)
-
-index[["time"]] <- as.integer(row.names(index))
-
-names(index) <- c("index", "se", "time")
+index <- index(model, base = 2000)
 ```
 
 ```{r plot-overall-abundance}
 #| fig.cap: Overall abundance of Farmland Butterflies in Finland
 ggplot(index) +
 aes(
-  x = parse_date_time(time, "Y"),
-  y = index,
-  ymin = index - se,
-  ymax = index + se
+  x = parse_date_time(time, "Y"), y = imputed,
+  ymin = imputed - se_imp, ymax = imputed + se_imp
 ) +
 geom_ribbon(alpha = .2) +
 geom_line() +
