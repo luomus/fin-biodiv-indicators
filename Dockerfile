@@ -1,4 +1,4 @@
-FROM rocker/r-ver:4.2.1
+FROM rocker/r-ver:4.2.1@sha256:84dbe29c3218221af453eca9bf95249d605920d9aa03598fcc96767242b7ea5e
 
 RUN  echo \
      "ttf-mscorefonts-installer msttcorefonts/accepted-mscorefonts-eula" \
@@ -33,7 +33,7 @@ RUN  install2.r -e \
        tinytest \
        tidyr
 
-RUN  R -e "remotes::install_github('luomus/finbif@f41023e5')" \
+RUN  R -e "remotes::install_github('luomus/finbif@e78adc5e')" \
   && R -e "remotes::install_github('MarcoEnea/speedglm')" \
   && R -e "remotes::install_github('RetoSchmucki/rbms')"
 
