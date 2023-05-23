@@ -1,4 +1,4 @@
-FROM rocker/r-ver:4.1.2
+FROM rocker/r-ver:4.2.1@sha256:84dbe29c3218221af453eca9bf95249d605920d9aa03598fcc96767242b7ea5e
 
 RUN install2.r -s -e \
       bslib \

@@ -231,6 +231,8 @@ tryCatch(
 
     message(sprintf("INFO [%s] Update complete", Sys.time()))
 
+    "true"
+
   },
   error = function(e) {
 
