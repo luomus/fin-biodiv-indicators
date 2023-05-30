@@ -33,9 +33,9 @@ RUN  install2.r -e \
        tinytest \
        tidyr
 
-RUN  R -e "remotes::install_github('luomus/finbif@f2a76919')" \
-  && R -e "remotes::install_github('MarcoEnea/speedglm')" \
-  && R -e "remotes::install_github('RetoSchmucki/rbms')"
+RUN  R -e "remotes::install_github('luomus/finbif@eae5f3a8')" \
+  && R -e "remotes::install_github('MarcoEnea/speedglm@4a15e74')" \
+  && R -e "remotes::install_github('RetoSchmucki/rbms@a1c5b43')"
 
 COPY entrypoint.sh /home/user/entrypoint.sh
 COPY init.R /home/user/init.R
