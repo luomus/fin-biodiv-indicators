@@ -8,8 +8,8 @@ COPY config/favicon.ico /home/user/favicon.ico
 COPY config/config.yml /home/user/config.yml
 COPY pkg /home/user/pkg
 
-RUN  RUN R -e "renv::restore()" \
-  && sed -i 's/RapiDoc/FinBIF to GBIF/g' \
+RUN R -e "renv::restore()" \
+  && sed -i 's/RapiDoc/fin-biodiv-indicators/g' \
     `R --slave -e "cat(.libPaths()[[1]])"`/rapidoc/dist/index.html \
   && mkdir -p /home/user/coverage /home/user/var /home/user/tmp \
   && chgrp -R 0 /home/user \
