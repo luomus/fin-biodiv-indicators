@@ -9,7 +9,7 @@ COPY config/config.yml /home/user/config.yml
 COPY pkg /home/user/pkg
 
 RUN R -e "renv::restore()" \
-  && sed -i 's/RapiDoc/fin-biodiv-indicators/g' \
+  && sed -i 's/RapiDoc/Finnish Biodiversity Indicators/g' \
     `R --slave -e "cat(.libPaths()[[1]])"`/rapidoc/dist/index.html \
   && mkdir -p /home/user/coverage /home/user/var /home/user/tmp \
   && chgrp -R 0 /home/user \
