@@ -1,6 +1,17 @@
 #* @apiTitle Finnish Biodiversity Indicators HTTP API
 #* @apiTOS https://laji.fi/en/about/845
 
+suppressPackageStartupMessages({
+
+  library(DBI, quietly = TRUE)
+  library(dplyr, quietly = TRUE)
+  library(fbi, quietly = TRUE)
+  library(pool, quietly = TRUE)
+  library(rapidoc, quietly = TRUE)
+  library(RPostgres, quietly = TRUE)
+
+})
+
 Sys.setenv(R_CONFIG_FILE = "var/config.yml")
 
 options(

@@ -1181,6 +1181,16 @@
       ],
       "Hash": "690bc058ea2b1b8a407d3cfe3dce3ef9"
     },
+    "rapidoc": {
+      "Package": "rapidoc",
+      "Version": "8.4.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "jsonlite"
+      ],
+      "Hash": "576f303483fd25cda71f6c4e16682d1c"
+    },
     "rappdirs": {
       "Package": "rappdirs",
       "Version": "0.3.3",
