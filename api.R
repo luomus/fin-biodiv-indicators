@@ -1,7 +1,7 @@
 #* @apiTitle Finnish Biodiversity Indicators HTTP API
 #* @apiTOS https://laji.fi/en/about/845
 
-ys.setenv(R_CONFIG_FILE = "var/config.yml")
+Sys.setenv(R_CONFIG_FILE = "var/config.yml")
 
 options(
   finbif_rate_limit = Inf,
