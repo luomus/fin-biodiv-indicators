@@ -505,7 +505,7 @@ function(res) {
 
 }
 
-#* @assets ./fbi/docs /docs
+#* @assets ./pkg/docs /docs
 list()
 
 #* @plumber
