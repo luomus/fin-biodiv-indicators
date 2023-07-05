@@ -255,7 +255,7 @@ geometric_mean <- function(index, model, db) {
     mcf = dplyr::lead(.data[["mc"]], 1L, NA_real_) - .data[["mc"]]
   )
 
-  df <- window_arrange(df, -.data[["time"]])
+  df <- window_arrange(df, desc(.data[["time"]]))
 
   df <- dplyr::mutate(
     df,
@@ -311,7 +311,7 @@ geometric_mean <- function(index, model, db) {
 
   df <- dplyr::mutate(df, mcf = cumsum(.data[["mcf"]]))
 
-  df <- window_arrange(df, -.data[["time"]])
+  df <- window_arrange(df, desc(.data[["time"]]))
 
   df <- dplyr::mutate(df, mcb = dplyr::lead(.data[["mcb"]], nyears - base))
 
