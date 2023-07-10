@@ -85,19 +85,21 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
 
       for (i in c("north", "south")) {
 
+        ind_i <- !is.na(regions) & regions == i
+
         index_region <- paste(index, i, sep = "_")
 
         index_data <- character()
 
-        if (nrow(data[regions == i, ]) > 0L) {
+        if (nrow(data[ind_i, ]) > 0L) {
 
           index_data <- index_region
 
         }
 
-        data[["index"]] <- index_data
+        data[ind_i, "index"] <- index_data
 
-        set_cache(index_region, type, data[regions == i, ], db)
+        set_cache(index_region, type, data[ind_i, ], db)
 
         set_cache(
           index_region, cache_date,
