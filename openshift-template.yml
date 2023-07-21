@@ -1,6 +1,5 @@
-# Deploy: oc process -f openshift-template.yml --param-file=.env | oc create -f -
 kind: Template
-apiVersion: v1
+apiVersion: template.openshift.io/v1
 parameters:
   - name: APP
     required: true
@@ -278,7 +277,7 @@ objects:
         - image: ${APP}:${TAG}
           name: ${APP}
           ports:
-          - containerPort: ${APP_PORT}
+          - containerPort: ${{APP_PORT}}
           volumeMounts:
           - mountPath: ${HOME}/${VAR}
             name: ${VAR}
@@ -356,7 +355,7 @@ objects:
           - mountPath: ${DB_DIR}
             name: ${DB}
           ports:
-            - containerPort: ${DB_PORT}
+            - containerPort: ${{DB_PORT}}
           env:
           - name: MODE
             value: ${DB}
@@ -413,7 +412,7 @@ objects:
         - image: ${CONF}:${TAG}
           name: ${CONF}
           ports:
-          - containerPort: ${SHINY_PORT}
+          - containerPort: ${{SHINY_PORT}}
           volumeMounts:
           - mountPath: ${HOME}/${VAR}
             name: ${VAR}
@@ -462,7 +461,7 @@ objects:
         - image: ${LOG}:${TAG}
           name: ${LOG}
           ports:
-          - containerPort: ${SHINY_PORT}
+          - containerPort: ${{SHINY_PORT}}
           volumeMounts:
           - mountPath: ${HOME}/${VAR}
             name: ${VAR}
@@ -527,7 +526,7 @@ objects:
   spec:
     ports:
     - name: ${APP_PORT}
-      port: ${APP_PORT}
+      port: ${{APP_PORT}}
       protocol: TCP
       targetPort: ${{APP_PORT}}
     selector:
@@ -542,7 +541,7 @@ objects:
   spec:
     ports:
     - name: ${SHINY_PORT}
-      port: ${SHINY_PORT}
+      port: ${{SHINY_PORT}}
       protocol: TCP
       targetPort: ${{SHINY_PORT}}
     selector:
@@ -557,7 +556,7 @@ objects:
   spec:
     ports:
     - name: ${SHINY_PORT}
-      port: ${SHINY_PORT}
+      port: ${{SHINY_PORT}}
       protocol: TCP
       targetPort: ${{SHINY_PORT}}
     selector:
@@ -572,7 +571,7 @@ objects:
   spec:
     ports:
     - name: ${DB_PORT}
-      port: ${DB_PORT}
+      port: ${{DB_PORT}}
       targetPort: ${{DB_PORT}}
     selector:
       app: ${APP}
@@ -586,7 +585,7 @@ objects:
   spec:
     host: ${SUBDOMAIN}.${HOST}
     port:
-      targetPort: ${APP_PORT}
+      targetPort: ${{APP_PORT}}
     tls:
       termination: edge
     to:
@@ -602,7 +601,7 @@ objects:
   spec:
     host: ${LOG_SUBDOMAIN}.${LOG_HOST}
     port:
-      targetPort: ${SHINY_PORT}
+      targetPort: ${{SHINY_PORT}}
     tls:
       termination: edge
     to:
@@ -618,7 +617,7 @@ objects:
   spec:
     host: ${CONF_SUBDOMAIN}.${CONF_HOST}
     port:
-      targetPort: ${SHINY_PORT}
+      targetPort: ${{SHINY_PORT}}
     tls:
       termination: edge
     to:
