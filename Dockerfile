@@ -11,4 +11,3 @@ COPY pkg /home/user/pkg
 RUN  R -e "renv::restore()" \
   && R -e 'remotes::install_local(dependencies = FALSE, upgrade = FALSE)' \
   && permissions.sh
-
