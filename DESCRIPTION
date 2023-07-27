@@ -1,0 +1,48 @@
+Package: fbi
+Title: Finnish Biodiversity Indicators
+Version: 0.11.2.9000
+Authors@R: c(
+    person(given = "Finnish Museum of Natural History - Luomus",
+           role = "cph"),
+    person(given = "William K.",
+           family = "Morris",
+           role = c("aut", "cre"),
+           email = "willi@mmorris.email",
+           comment = c(ORCID = "0000-0002-8686-4154"))
+    )
+Description: Finnish biodiversity indicators is a service providing time series
+    of abundance indices and related metrics for Finland. The input data for the
+    indices are provided by the Finnish Biodiversity Information Facility.
+LazyData: true
+Depends: R (>= 3.5.0)
+Imports:
+    arm,
+    blob,
+    config,
+    dbplyr,
+    dplyr,
+    finbif,
+    ggplot2,
+    grDevices,
+    lme4,
+    lubridate,
+    pool,
+    rbms,
+    rtrim,
+    stats,
+    svglite,
+    yaml
+Suggests:
+    knitr,
+    rmarkdown,
+    tinytest,
+    DBI,
+    RPostgres
+License: MIT + file LICENSE
+URL: https://github.com/luomus/fin-biodiv-indicators, https://indicators.laji.fi
+VignetteBuilder:
+    knitr
+BugReports: https://github.com/luomus/fin-biodiv-indicators/issues
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3

@@ -1,3 +1,6 @@
+docs/
+man/
+inst/tinytest/cache
 .Rproj.user
 .Rhistory
 .RData

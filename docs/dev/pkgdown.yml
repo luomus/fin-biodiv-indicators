@@ -1,0 +1,25 @@
+pandoc: 3.1.1
+pkgdown: 2.0.7
+pkgdown_sha: ~
+articles:
+  alpine-birds: alpine-birds.html
+  butterfly-abundance: butterfly-abundance.html
+  community-temperature-index: community-temperature-index.html
+  community-temperature-indices: community-temperature-indices.html
+  configuration: configuration.html
+  farmland-birds: farmland-birds.html
+  farmland-butterflies: farmland-butterflies.html
+  forest-birds: forest-birds.html
+  mire-birds: mire-birds.html
+  moths: moths.html
+  multi-taxon-indicator-trim: multi-taxon-indicator-trim.html
+  overall-abundance: overall-abundance.html
+  overview: overview.html
+  single-taxon-indicator-rbms: single-taxon-indicator-rbms.html
+  single-taxon-indicator-trim: single-taxon-indicator-trim.html
+  winter-birds: winter-birds.html
+last_built: 2023-07-27T08:59Z
+urls:
+  reference: https://indicators-dev.laji.fi/docs/dev/reference
+  article: https://indicators-dev.laji.fi/docs/dev/articles
+
