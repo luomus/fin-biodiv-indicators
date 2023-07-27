@@ -31,6 +31,8 @@ Imports:
     stats,
     svglite,
     yaml
+Remotes:
+    RetoSchmucki/rbms
 Suggests:
     knitr,
     rmarkdown,
