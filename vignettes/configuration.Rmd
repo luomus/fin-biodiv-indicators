@@ -12,7 +12,7 @@ vignette: >
 ```{r, include = FALSE}
 url <- paste0(
   "https://raw.githubusercontent.com/luomus/fin-biodiv-indicators/%s",
-  "/config/config.yml"
+  "/config.yml"
 )
 
 fb_rel <- "https://luomus.github.io/finbif/"
@@ -20,13 +20,10 @@ fb_dev <- "https://finbif-docs-dev.netlify.app/"
 ```
 
 The FinBIF Biodiversity Indicators Service (FBI) is configured using a
-[`YAML`](https://yaml.org/spec/1.2.2/ "YAML Spec 1.2.2") file. The "live" config
+[`YAML`](https://yaml.org/spec/1.2.2/ "YAML Spec 1.2.2") file. The config
 file can be accessed and edited
-[here](https://conf-fbi.rahtiapp.fi/ "FBI configuration"){.pkgdown-release}[
-here](https://conf-fbi-dev.rahtiapp.fi/ "FBI configuration"){.pkgdown-devel}
-(requires authentification) while the "source" version of
-[the file](`r sprintf(url, "main")`){.pkgdown-release}[
-the file](`r sprintf(url, "dev")`){.pkgdown-devel} is stored in the FBI
+[here](`r sprintf(url, "main")`){.pkgdown-release}[here
+](`r sprintf(url, "dev")`){.pkgdown-devel} and is stored in the FBI
 code repository. The FBI service uses the "live" editable version of the config
 file. But, the source version should be kept up to date as possible and
 treated as a backup. When the service application is initialised, the source

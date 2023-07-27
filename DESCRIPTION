@@ -13,7 +13,6 @@ Authors@R: c(
 Description: Finnish biodiversity indicators is a service providing time series
     of abundance indices and related metrics for Finland. The input data for the
     indices are provided by the Finnish Biodiversity Information Facility.
-LazyData: true
 Depends: R (>= 3.5.0)
 Imports:
     arm,

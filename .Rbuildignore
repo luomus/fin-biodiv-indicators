@@ -28,4 +28,5 @@
 ^update_indices\.R$
 ^var$
 ^\.renvignore$
-
+^config\.yml$
+^favicon.ico$

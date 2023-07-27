@@ -12,7 +12,7 @@ suppressPackageStartupMessages({
 
 })
 
-Sys.setenv(R_CONFIG_FILE = "var/config.yml")
+Sys.setenv(R_CONFIG_FILE = "config.yml")
 
 options(
   finbif_rate_limit = Inf,

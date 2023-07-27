@@ -30,9 +30,6 @@ parameters:
   - name: TMP_DIR
     required: true
     value: tmp
-  - name: VAR
-    required: true
-    value: var
   - name: SHINY_PORT
     required: true
     value: "3838"
@@ -59,9 +56,6 @@ parameters:
   - name: DB_MODE
     required: true
     value: primary
-  - name: CONF
-    required: true
-    value: config
   - name: JOB_CMD
     required: true
     value: '["Rscript", "--vanilla", "update_indices.R"]'
@@ -87,8 +81,6 @@ parameters:
     required: true
     value: "3Gi"
   - name: HOST
-    required: true
-  - name: CONF_HOST
     required: true
   - name: DB_PASSWORD
     required: true
@@ -116,17 +108,6 @@ objects:
 - kind: PersistentVolumeClaim
   apiVersion: v1
   metadata:
-    name: ${VAR}-${BRANCH}
-  spec:
-    accessModes:
-    - ReadWriteMany
-    persistentVolumeReclaimPolicy: Retain
-    resources:
-      requests:
-        storage: ${SMALL_STORAGE}
-- kind: PersistentVolumeClaim
-  apiVersion: v1
-  metadata:
     name: ${DB}-${BRANCH}
   spec:
     storageClassName: ${STORAGE_CLASS}
@@ -140,15 +121,6 @@ objects:
   apiVersion: v1
   metadata:
     name: ${APP}-${BRANCH}
-    labels:
-      app: ${APP}
-  spec:
-    lookupPolicy:
-      local: true
-- kind: ImageStream
-  apiVersion: v1
-  metadata:
-    name: ${CONF}-${BRANCH}
     labels:
       app: ${APP}
   spec:
@@ -170,30 +142,6 @@ objects:
       git:
         uri: https://github.com/luomus/${APP}.git
         ref: ${BRANCH}
-    strategy:
-      type: Docker
-    triggers:
-    - type: ConfigChange
-    - type: GitHub
-      github:
-        secret: ${GITHUB_SECRET}
-- kind: BuildConfig
-  apiVersion: v1
-  metadata:
-    name: ${CONF}-${BRANCH}
-    labels:
-      app: ${APP}
-  spec:
-    output:
-      to:
-        kind: ImageStreamTag
-        name: ${CONF}-${BRANCH}:latest
-    source:
-      type: Git
-      git:
-        uri: https://github.com/luomus/${APP}.git
-        ref: ${BRANCH}
-      contextDir: ${CONF}
     strategy:
       type: Docker
     triggers:
@@ -224,8 +172,6 @@ objects:
           ports:
           - containerPort: ${{APP_PORT}}
           volumeMounts:
-          - mountPath: ${HOME}/${VAR}
-            name: ${VAR}-${BRANCH}
           - mountPath: ${HOME}/${TMP_DIR}
             name: ${TMP_DIR}
           livenessProbe:
@@ -258,9 +204,6 @@ objects:
           - name: FINBIF_EMAIL
             value: ${FINBIF_EMAIL}
         volumes:
-        - name: ${VAR}-${BRANCH}
-          persistentVolumeClaim:
-            claimName: ${VAR}-${BRANCH}
         - name: ${TMP_DIR}
           emptyDir:
             medium: Memory
@@ -338,55 +281,6 @@ objects:
             claimName: ${DB}-${BRANCH}
     triggers:
     - type: ConfigChange
-- kind: DeploymentConfig
-  apiVersion: v1
-  metadata:
-    name: ${CONF}-${BRANCH}
-    labels:
-      app: ${APP}
-  spec:
-    replicas: 1
-    selector:
-      app: ${APP}
-      deploymentconfig: ${CONF}-${BRANCH}
-    template:
-      metadata:
-        labels:
-          app: ${APP}
-          deploymentconfig: ${CONF}-${BRANCH}
-      spec:
-        containers:
-        - image: ${CONF}-${BRANCH}:latest
-          name: ${CONF}-${BRANCH}
-          ports:
-          - containerPort: ${{SHINY_PORT}}
-          volumeMounts:
-          - mountPath: ${HOME}/${VAR}
-            name: ${VAR}-${BRANCH}
-          livenessProbe:
-            httpGet:
-              port: ${{SHINY_PORT}}
-            failureThreshold: ${{FAILURE_THRESHOLD}}
-            periodSeconds: ${{LIVENESS_PERIOD}}
-          readinessProbe:
-            httpGet:
-              port: ${{SHINY_PORT}}
-            initialDelaySeconds: ${{READINESS_PERIOD}}
-            periodSeconds: ${{READINESS_PERIOD}}
-        volumes:
-        - name: ${VAR}-${BRANCH}
-          persistentVolumeClaim:
-            claimName: ${VAR}-${BRANCH}
-    triggers:
-    - type: ConfigChange
-    - type: ImageChange
-      imageChangeParams:
-        automatic: true
-        containerNames:
-        - ${CONF}-${BRANCH}
-        from:
-          kind: ImageStreamTag
-          name: ${CONF}-${BRANCH}:latest
 - kind: Service
   apiVersion: v1
   metadata:
@@ -401,20 +295,6 @@ objects:
     selector:
       app: ${APP}
       deploymentconfig: ${APP}-${BRANCH}
-- kind: Service
-  apiVersion: v1
-  metadata:
-    name: ${CONF}-${BRANCH}
-    labels:
-      app: ${APP}
-  spec:
-    ports:
-    - name: ${SHINY_PORT}
-      port: ${{SHINY_PORT}}
-      targetPort: ${{SHINY_PORT}}
-    selector:
-      app: ${APP}
-      deploymentconfig: ${CONF}-${BRANCH}
 - kind: Service
   apiVersion: v1
   metadata:
@@ -445,22 +325,6 @@ objects:
       kind: Service
       name: ${APP}-${BRANCH}
     wildcardPolicy: None
-- kind: Route
-  apiVersion: v1
-  metadata:
-    name: ${CONF}-${BRANCH}
-    labels:
-      app: ${APP}
-  spec:
-    host: ${CONF_HOST}
-    port:
-      targetPort: ${{SHINY_PORT}}
-    tls:
-      termination: edge
-    to:
-      kind: Service
-      name: ${CONF}-${BRANCH}
-    wildcardPolicy: None
 - kind: CronJob
   apiVersion: batch/v1beta1
   metadata:
@@ -481,9 +345,6 @@ objects:
             - name: ${APP}-${BRANCH}
               image: ${APP}-${BRANCH}:latest
               command: ${{JOB_CMD}}
-              volumeMounts:
-              - mountPath: ${HOME}/${VAR}
-                name: ${VAR}-${BRANCH}
               env:
               - name: FINBIF_ACCESS_TOKEN
                 value: ${FINBIF_ACCESS_TOKEN}
@@ -501,8 +362,4 @@ objects:
                 value: ${DB}
               - name: TIMEOUT_IN_HOURS
                 value: ${TIMEOUT_IN_HOURS}
-            volumes:
-            - name: ${VAR}-${BRANCH}
-              persistentVolumeClaim:
-                claimName: ${VAR}-${BRANCH}
             restartPolicy: Never

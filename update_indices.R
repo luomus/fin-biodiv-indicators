@@ -43,10 +43,6 @@ tryCatch(
 
     message(sprintf("INFO [%s] Update starting...", Sys.time()))
 
-    config_copy <- file.copy("var/config.yml", "config.yml", TRUE)
-
-    stopifnot("Copying config.yml failed" = config_copy)
-
     Sys.setenv(R_CONFIG_FILE = "config.yml")
 
     indices <- vapply(get_indices(), getElement, "", "code")
