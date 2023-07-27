@@ -20,46 +20,48 @@ BRANCH=$(git symbolic-ref --short -q HEAD)
 
 if [ "$BRANCH" != "main" ]; then
 
-HOST=$HOST_DEV
-FINBIF_ACCESS_TOKEN=$DEV_FINBIF_ACCESS_TOKEN
-FINBIF_API=$DEV_FINBIF_API
-GBIF_INSTALLATION=$DEV_GBIF_INSTALLATION
-GBIF_PASS=$DEV_GBIF_PASS
-GBIF_API=$DEV_GBIF_API
+HOST=$DEV_HOST
+DB_PASSWORD=$DEV_DB_PASSWORD
+DB_PRIMARY_PASSWORD=$DEV_DB_PRIMARY_PASSWORD
+DB_ROOT_PASSWORD=$DEV_DB_ROOT_PASSWORD
 
 fi
 
-if [ $i = "volume-var" ]; then
+if [ $i = "volume" ]; then
 
 ITEM=".items[0]"
 
-elif [ $i = "volume-archive" ]; then
+elif [ $i = "image" ]; then
 
 ITEM=".items[1]"
 
-elif [ $i = "image" ]; then
+elif [ $i = "build" ]; then
 
 ITEM=".items[2]"
 
-elif [ $i = "build" ]; then
+elif [ $i = "deploy-app" ]; then
 
 ITEM=".items[3]"
 
-elif [ $i = "deploy" ]; then
+elif [ $i = "deploy-db" ]; then
 
 ITEM=".items[4]"
 
-elif [ $i = "service" ]; then
+elif [ $i = "service-app" ]; then
 
 ITEM=".items[5]"
 
-elif [ $i = "route" ]; then
+elif [ $i = "service-db" ]; then
 
 ITEM=".items[6]"
 
-elif [ $i = "job" ]; then
+elif [ $i = "route" ]; then
 
 ITEM=".items[7]"
+
+elif [ $i = "job" ]; then
+
+ITEM=".items[8]"
 
 else
 
@@ -70,11 +72,12 @@ fi
 oc process -f $f \
 -p BRANCH=$BRANCH \
 -p HOST=$HOST \
+-p DB_PASSWORD=$DB_PASSWORD \
+-p DB_PRIMARY_PASSWORD=$DB_PRIMARY_PASSWORD \
+-p DB_ROOT_PASSWORD=$DB_ROOT_PASSWORD \
 -p FINBIF_ACCESS_TOKEN=$FINBIF_ACCESS_TOKEN \
 -p FINBIF_API=$FINBIF_API \
--p GBIF_USER=$GBIF_USER \
--p GBIF_ORG=$GBIF_ORG \
--p GBIF_INSTALLATION=$GBIF_INSTALLATION \
--p GBIF_PASS=$GBIF_PASS \
--p GBIF_API=$GBIF_API \
+-p FINBIF_WAREHOUSE_QUERY=$FINBIF_WAREHOUSE_QUERY \
+-p FINBIF_EMAIL=$FINBIF_EMAIL \
+-p TIMEOUT_IN_HOURS=$TIMEOUT_IN_HOURS \
 | jq $ITEM

@@ -188,13 +188,13 @@ objects:
             periodSeconds: ${{READINESS_PERIOD}}
           env:
           - name: PAGE_TITLE
-            value: ${APP_TITLE}
+            value: ${PAGE_TITLE}
           - name: PGUSER
             value: ${DB}
           - name: PGPASSWORD
             value: ${DB_PASSWORD}
           - name: PGHOST
-            value: ${DB}
+            value: ${DB}-${BRANCH}
           - name: FINBIF_ACCESS_TOKEN
             value: ${FINBIF_ACCESS_TOKEN}
           - name: FINBIF_API
