@@ -374,9 +374,14 @@
     },
     "dbplyr": {
       "Package": "dbplyr",
-      "Version": "2.3.3",
-      "Source": "Repository",
-      "Repository": "CRAN",
+      "Version": "2.3.3.9000",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "tidyverse",
+      "RemoteRepo": "dbplyr",
+      "RemoteRef": "main",
+      "RemoteSha": "5fa44101527f8ef5f9e3c1cdc703e6880a80bc0f",
       "Requirements": [
         "DBI",
         "R",
@@ -398,7 +403,7 @@
         "vctrs",
         "withr"
       ],
-      "Hash": "d6fd1b1440c1cacc6623aaa4e9fe352b"
+      "Hash": "924b051bcaca6b950d3c21ea3cacd87c"
     },
     "desc": {
       "Package": "desc",
@@ -530,32 +535,6 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "f7736a18de97dea803bde0a2daaafb27"
-    },
-    "fbi": {
-      "Package": "fbi",
-      "Version": "0.11.2.9000",
-      "Source": "Local",
-      "RemoteType": "local",
-      "RemoteUrl": "./pkg",
-      "Requirements": [
-        "R",
-        "arm",
-        "blob",
-        "config",
-        "dbplyr",
-        "dplyr",
-        "finbif",
-        "ggplot2",
-        "grDevices",
-        "lubridate",
-        "pool",
-        "rbms",
-        "rtrim",
-        "stats",
-        "svglite",
-        "yaml"
-      ],
-      "Hash": "a5a2e331fd9e523e55455ac2f2ebc0d2"
     },
     "finbif": {
       "Package": "finbif",
