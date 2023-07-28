@@ -359,7 +359,7 @@ objects:
               - name: PGPASSWORD
                 value: ${DB_PASSWORD}
               - name: PGHOST
-                value: ${DB}
+                value: ${DB}-${BRANCH}
               - name: TIMEOUT_IN_HOURS
                 value: ${TIMEOUT_IN_HOURS}
             restartPolicy: Never
