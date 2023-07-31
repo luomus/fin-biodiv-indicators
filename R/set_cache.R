@@ -1,6 +1,5 @@
 #' @importFrom pool dbAppendTable dbExecute dbExistsTable dbListFields
 #' @importFrom pool dbWriteTable
-#' @importFrom dplyr .data filter pull tbl
 
 set_cache <- function(index, table, df, db) {
 

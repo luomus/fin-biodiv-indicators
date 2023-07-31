@@ -260,11 +260,13 @@ rbms <- function(
   index <- dplyr::summarise(
     index_mc,
     mean =
-      exp(mean(.data[["mcf"]])) *
-      exp(mean(.data[["mcb"]])),
+      exp(mean(.data[["mcf"]], na.rm = TRUE)) *
+      exp(mean(.data[["mcb"]], na.rm = TRUE)),
     sd =
-      stats::sd(.data[["mcf"]]) * exp(mean(.data[["mcf"]])) +
-      stats::sd(.data[["mcb"]]) * exp(mean(.data[["mcb"]]))
+      stats::sd(.data[["mcf"]], na.rm = TRUE) *
+        exp(mean(.data[["mcf"]], na.rm = TRUE)) +
+      stats::sd(.data[["mcb"]], na.rm = TRUE) *
+        exp(mean(.data[["mcb"]], na.rm = TRUE))
   )
 
   index <- dplyr::mutate(
