@@ -81,12 +81,12 @@ function(req, res) {
 
 #* Register result of job
 #* @tag status
-#* @get /healthz
+#* @get /job
 #* @response 200 A json object response
 #* @serializer unboxedJSON
 function(status) {
 
-  cat(status, file = "var/status/success.txt")
+  cat(status, file = "status/success.txt")
 
   cat(format(Sys.time(), usetz = TRUE), file = "status/last-update.txt")
 
