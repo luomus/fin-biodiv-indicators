@@ -102,6 +102,10 @@ parameters:
     required: true
     generate: expression
     from: "[a-zA-Z0-9]{20}"
+  - name: JOB_SECRET
+    required: true
+    generate: expression
+    from: "[a-zA-Z0-9]{64}"
 metadata:
   name: ${APP}
 objects:
@@ -203,6 +207,8 @@ objects:
             value: ${FINBIF_WAREHOUSE_QUERY}
           - name: FINBIF_EMAIL
             value: ${FINBIF_EMAIL}
+          - name: JOB_SECRET
+            value: ${JOB_SECRET}
         volumes:
         - name: ${TMP_DIR}
           emptyDir:
@@ -362,4 +368,10 @@ objects:
                 value: ${DB}-${BRANCH}
               - name: TIMEOUT_IN_HOURS
                 value: ${TIMEOUT_IN_HOURS}
+              - name: JOB_SECRET
+                value: ${JOB_SECRET}
+              - name: APP_HOSTNAME
+                value: ${BRANCH}-${APP}.${APP}.svc
+              - name: APP_PORT
+                value: ${APP_PORT}
             restartPolicy: Never

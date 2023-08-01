@@ -61,6 +61,39 @@ cors <- function(req, res) {
 
 }
 
+#* @filter secret
+function(req, res) {
+
+  secret <- identical(req[["argsQuery"]][["secret"]], Sys.getenv("JOB_SECRET"))
+
+  if (grepl("job", req[["PATH_INFO"]]) && !secret) {
+
+    res[["status"]] <- 401
+    list(error = "Access token required")
+
+  } else {
+
+    forward()
+
+  }
+
+}
+
+#* Register result of job
+#* @tag status
+#* @get /healthz
+#* @response 200 A json object response
+#* @serializer unboxedJSON
+function(status) {
+
+  cat(status, file = "var/status/success.txt")
+
+  cat(format(Sys.time(), usetz = TRUE), file = "status/last-update.txt")
+
+  "success"
+
+}
+
 #* Check the liveness of the API
 #* @tag status
 #* @head /healthz

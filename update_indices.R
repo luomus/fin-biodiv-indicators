@@ -1,4 +1,4 @@
-tryCatch(
+res <- tryCatch(
 
   {
 
@@ -238,4 +238,9 @@ tryCatch(
 
   }
 
+)
+
+httr::GET(
+  paste0(Sys.getenv("APP_HOSTNAME"), ":", Sys.getenv("APP_PORT")),
+  query = list(job = res)
 )
