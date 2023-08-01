@@ -8,6 +8,5 @@ inst/tinytest/cache
 .env
 cov/
 sandbox/
-var/
 doc/
 /Meta/

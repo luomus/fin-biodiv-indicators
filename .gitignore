@@ -5,6 +5,5 @@
 .env
 cov/
 sandbox/
-var/
 doc/
 /Meta/

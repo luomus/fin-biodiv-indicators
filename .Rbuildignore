@@ -26,7 +26,6 @@
 ^oc-process\.sh$
 ^template\.yml$
 ^update_indices\.R$
-^var$
 ^\.renvignore$
 ^config\.yml$
 ^favicon.ico$
