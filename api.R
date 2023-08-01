@@ -505,7 +505,7 @@ function(res) {
 
 }
 
-#* @assets ./pkg/docs /docs
+#* @assets ./docs /docs
 list()
 
 #* @plumber

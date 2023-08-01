@@ -12,6 +12,7 @@ COPY man /home/user/man
 COPY NAMESPACE /home/user/NAMESPACE
 COPY R /home/user/R
 COPY tests /home/user/tests
+COPY docs /home/user/docs
 
 RUN  R -e "renv::restore()" \
   && R -e 'remotes::install_local(dependencies = FALSE, upgrade = FALSE)' \
