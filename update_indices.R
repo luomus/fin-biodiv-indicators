@@ -241,7 +241,7 @@ res <- tryCatch(
 )
 
 httr::GET(
-  paste0(Sys.getenv("APP_HOSTNAME"), ":", Sys.getenv("APP_PORT")),
+  paste0("http://", Sys.getenv("APP_HOSTNAME"), ":", Sys.getenv("APP_PORT")),
   path = "job",
   query = list(status = res, secret = Sys.getenv("JOB_SECRET"))
 )
