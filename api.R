@@ -492,7 +492,7 @@ function(
 
 }
 
-#* @assets ./var/status /status
+#* @assets ./status /status
 list()
 
 #* @assets /usr/local/lib/R/site-library/finbif/help/figures
