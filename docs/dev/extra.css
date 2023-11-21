@@ -11,7 +11,7 @@ body {
 }
 
 .navbar-dark .navbar-nav .active > .nav-link {
-  background-color: #2691D9;
+  background-color: #55AAE2;
 }
 
 .ref-description img {
@@ -19,17 +19,16 @@ body {
 }
 
 .navbar-dark input[type="search"] {
-  background-color: #2691D9;
+  background-color: #55AAE2;
   padding-left: 0.5rem;
 }
 
-.figure {
+.float {
   width: 100%;
   text-align: center;
   font-style: italic;
   font-size: smaller;
   text-indent: 0;
-  border: thin silver solid;
   margin: 0.5em;
   padding: 0.5em;
 }
