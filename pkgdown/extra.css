@@ -36,3 +36,7 @@ body {
 img {
   margin-bottom: 1.5em;
 }
+
+.text-muted {
+  text-shadow: 1px 1px 3px #000;
+}
