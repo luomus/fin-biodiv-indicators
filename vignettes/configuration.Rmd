@@ -1,0 +1,268 @@
+---
+title: "Configuration"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Configuration}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+url <- paste0(
+  "https://raw.githubusercontent.com/luomus/fin-biodiv-indicators/%s",
+  "/config.yml"
+)
+
+fb_rel <- "https://luomus.github.io/finbif/"
+fb_dev <- "https://finbif-docs-dev.netlify.app/"
+```
+
+The FinBIF Biodiversity Indicators Service (FBI) is configured using a
+[`YAML`](https://yaml.org/spec/1.2.2/ "YAML Spec 1.2.2") file. The config
+file can be accessed and edited
+[here](`r sprintf(url, "main")`){.pkgdown-release}[here
+](`r sprintf(url, "dev")`){.pkgdown-devel} and is stored in the FBI
+code repository. The FBI service uses the "live" editable version of the config
+file. But, the source version should be kept up to date as possible and
+treated as a backup. When the service application is initialised, the source
+version of the config file is used as a starting configuration.
+
+Each multi-taxon indicator has its own object in the configuration file. For
+example, the Farmland Breeding Bird indicator, and the single-taxon indicators
+that belong to it, are configured using the parameters outlined below,
+where the top-level key, `flb`, is the short-code of the indicator.
+
+<details closed>
+<summary>
+<span title=''>Click to show/hide example configuration</span>
+</summary>
+```yaml
+flb:
+  name: Farmland birds
+  taxa:
+  - code: MX.27328
+    binomial: Crex crex
+    start_year: 2006
+  - code: MX.27527
+    binomial: Vanellus vanellus
+  - code: MX.27613
+    binomial: Numenius arquata
+  - code: MX.32065
+    binomial: Alauda arvensis
+  - code: MX.32132
+    binomial: Hirundo rustica
+  - code: MX.32163
+    binomial: Delichon urbicum
+  - code: MX.32213
+    binomial: Anthus pratensis
+  - code: MX.32949
+    binomial: Saxicola rubetra
+  - code: MX.33117
+    binomial: Turdus pilaris
+  - code: MX.33936
+    binomial: Sylvia communis
+  - code: MX.37142
+    binomial: Corvus monedula
+  - code: MX.36817
+    binomial: Sturnus vulgaris
+  - code: MX.36589
+    binomial: Passer montanus
+    start_year: 2006
+  - code: MX.35154
+    binomial: Emberiza hortulana
+  filters:
+    date_range_ymd:
+    - "1979-01-01"
+    - ""
+    location_tag: farmland
+    collection:
+    - HR.157
+    - HR.61
+  surveys:
+    selection:
+    - document_id
+    - location_id
+    - year
+    - month
+    - day
+    has_value:
+    - document_id
+    - location_id
+    - year
+    - month
+    - day
+  counts:
+    abundance: pair_abundance
+    selection:
+    - document_id
+    - pair_abundance
+    has_value:
+    - document_id
+    - pair_abundance
+  combine: geometric_mean
+  use_data_after: "10-01"
+  model:
+    trim:
+      base_year: 2000
+      surveys_process:
+      - pick_first_survey_in_year
+      - require_two_years
+      counts_process:
+      - zero_fill
+      - sum_by_event
+      - set_start_year
+      - remove_all_zero_locations
+```
+</details>
+
+## Defaults
+
+Default parameters that apply to all indicators can be specified in a special
+object with the top-level key, `default` (see below). Defaults can be
+overwritten by specifying different parameters value for the indicator objects.
+
+<details closed>
+
+<summary>[Click to show/hide example defaults]{title=""}</summary>
+
+``` yaml
+default:
+  surveys:
+    selection:
+    - document_id
+    - location_id
+    - year
+    - month
+    - day
+    has_value:
+    - document_id
+    - location_id
+    - year
+    - month
+    - day
+  counts:
+    abundance: abundance
+  use_data_after: "01-01"
+```
+
+</details>
+
+## Sections
+
+The following describes each section of the multi-taxon indicator objects in
+more detail.
+
+### Name
+
+A string giving the long-form name of a multi-taxon indicator.
+
+### Taxa
+
+An array defining the taxa that are included in the multi-taxon indicator and
+for which single-taxon indicators will be calculated.
+
+Each element of the array must include:
+
+- `code`: a string indicating a FinBIF taxon MX code (e.g, `MX.27328`).
+- `binomial`: a string indicating a scientific taxon name (e.g., `Crex crex`).
+
+And optionally include one or more of:
+
+- `extra_codes`: an array of FinBIF taxon MX codes to include along with the
+  nominal taxon declared with `code`.
+- `subtaxa`: a boolean indicating whether to include observations of the child
+  taxa of the taxa declared with `code` and `extra_codes`.
+- `start_year`: an integer indicating the year observation data of the taxa
+  should begin. Observation data from before this year will be excluded. Note
+  that if `start_year` is greater than `base_year` (see section
+  [Model](#model "Section model")) then `base_year` for the taxon will be set
+  to `start_year`.
+
+### Extra taxa
+
+An array defining the taxa that are not included in the parent multi-taxon
+indicator but for which single-taxon indicators will be calculated.
+
+Each element of the array is configured in the same way as
+[`taxa`](#taxa "Section taxa") above.
+
+### From
+
+Multi-taxon indicators can have no constituent single-taxon indicators. In this
+case, the `from` section indicates which other multi-taxon indicator (in the 
+form of a short-code) the input data comes from.
+
+### Filters
+
+The `filters` section is an object defining a list of filters to apply to the
+observation data from FinBIF. See the finbif R package 
+[documentation
+](`r fb_rel`reference/filters.html "finbif docs"){.pkgdown-release}[
+documentation
+](`r fb_dev`reference/filters.html "finbif docs"){.pkgdown-devel}
+for details.
+
+### Surveys
+
+The `surveys` section defines which fields are selected when getting survey data
+from FinBIF. Fields are selected with the key `selection` as an array (see the
+finbif R package [documentation
+](`r fb_rel`reference/variables.html "finbif docs"){.pkgdown-release}[
+documentation
+](`r fb_dev`reference/variables.html "finbif docs"){.pkgdown-devel}
+for available fields). Under a second key, `has_value`, an array indicates which
+fields must not have null values when filtering records.
+
+### Counts
+
+The `counts` section defines which fields are selected when accessing count data
+from FinBIF. This sections uses the `selection` and `has_value` key in the 
+same manner as [`above`](#Surveys "Section surveys").
+
+An additional key, `abundance`, is used to indicate which field is used as the
+abundance (counts) data.
+
+### Combine
+
+The section `combine` defines how single-taxon indicator data is combined to
+form a multi-taxon indicator. Options include:
+
+- `geometric_mean`: combines relative abundance as the geometric mean abundance.
+- `cti`: combine abundances as a community temperature index.
+- `overall_abundance`: combine abundance as total abundance for the taxon group.
+
+### Use data after
+
+The section `use_data_after` defines what calendar date (in the form `"MM-DD"`)
+data collected during the current year should start being included in the
+indicator.
+
+### Model
+
+The `model` section defines how single- or multi-taxon indicators are calculated
+from the survey and count data sourced from FinBIF. The section consists of one
+or more model objects where the object keys indicate the model being used.
+Models include:
+
+- `trim`: Trends and Indices for Monitoring data model (via
+  [rtrim](https://github.com/SNStatComp/rtrim "rtrim GitHub repository"))
+- `rbms`:  Generalised abundance indices for butterfly monitoring count data (
+  via [rbms](https://retoschmucki.github.io/rbms/ "rbms"))
+- `lmer`: Linear Mixed Effects Regression (via 
+  [lme4](https://github.com/lme4/lme4/ "lme4 GitHub repository"))
+
+Each element of the `model` section must include:
+
+- `surveys_process`: An array of survey data processing functions (see
+  [processing](../reference/index.html#processing-functions "Process functions")
+  )
+- `counts_process` An array of count data processing functions (see
+  [processing](../reference/index.html#processing-functions "Process functions")
+  )
+
+And optionally include:
+
+- `base_year`: an integer indicating the base year of the indicator.
+- `args`: additional arguments passed to the modelling function.

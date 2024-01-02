@@ -1,4 +1,4 @@
-tryCatch(
+res <- tryCatch(
 
   {
 
@@ -42,10 +42,6 @@ tryCatch(
     start_timer <- tictoc::tic()
 
     message(sprintf("INFO [%s] Update starting...", Sys.time()))
-
-    config_copy <- file.copy("var/config.yml", "config.yml", TRUE)
-
-    stopifnot("Copying config.yml failed" = config_copy)
 
     Sys.setenv(R_CONFIG_FILE = "config.yml")
 
@@ -242,9 +238,10 @@ tryCatch(
 
   }
 
-) |>
-cat(file = "var/status/success.txt")
+)
 
-cat(
-  format(Sys.time(), usetz = TRUE), file = "var/status/last-update.txt"
+httr::GET(
+  paste0("http://", Sys.getenv("APP_HOSTNAME"), ":", Sys.getenv("APP_PORT")),
+  path = "job",
+  query = list(status = res, secret = Sys.getenv("JOB_SECRET"))
 )

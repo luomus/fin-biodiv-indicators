@@ -1,6 +1,41 @@
 #* @apiTitle Finnish Biodiversity Indicators HTTP API
 #* @apiTOS https://laji.fi/en/about/845
 
+suppressPackageStartupMessages({
+
+  library(DBI, quietly = TRUE)
+  library(dplyr, quietly = TRUE)
+  library(fbi, quietly = TRUE)
+  library(pool, quietly = TRUE)
+  library(rapidoc, quietly = TRUE)
+  library(RPostgres, quietly = TRUE)
+
+})
+
+Sys.setenv(R_CONFIG_FILE = "config.yml")
+
+options(
+  finbif_rate_limit = Inf,
+  finbif_use_cache = FALSE,
+  finbif_use_cache_metadata = TRUE,
+  finbif_api_url = Sys.getenv("FINBIF_API"),
+  finbif_warehouse_query = Sys.getenv("FINBIF_WAREHOUSE_QUERY"),
+  finbif_email = Sys.getenv("FINBIF_EMAIL")
+)
+
+pool <- dbPool(Postgres())
+
+tryCatch(
+  {
+    if (!"tablefunc" %in% pull(tbl(pool, "pg_extension"), extname)) {
+
+      dbExecute(pool, "CREATE EXTENSION tablefunc")
+
+    }
+  },
+  error = function(e) message(e[["message"]])
+)
+
 #* @filter cors
 cors <- function(req, res) {
 
@@ -23,6 +58,39 @@ cors <- function(req, res) {
     plumber::forward()
 
   }
+
+}
+
+#* @filter secret
+function(req, res) {
+
+  secret <- identical(req[["argsQuery"]][["secret"]], Sys.getenv("JOB_SECRET"))
+
+  if (grepl("job", req[["PATH_INFO"]]) && !secret) {
+
+    res[["status"]] <- 401
+    list(error = "Access token required")
+
+  } else {
+
+    forward()
+
+  }
+
+}
+
+#* Register result of job
+#* @tag status
+#* @get /job
+#* @response 200 A json object response
+#* @serializer unboxedJSON
+function(status) {
+
+  cat(status, file = "status/success.txt")
+
+  cat(format(Sys.time(), usetz = TRUE), file = "status/last-update.txt")
+
+  "success"
 
 }
 
@@ -424,7 +492,7 @@ function(
 
 }
 
-#* @assets ./var/status /status
+#* @assets ./status /status
 list()
 
 #* @assets /usr/local/lib/R/site-library/finbif/help/figures
@@ -470,7 +538,7 @@ function(res) {
 
 }
 
-#* @assets ./fbi/docs /docs
+#* @assets ./docs /docs
 list()
 
 #* @plumber
@@ -519,6 +587,7 @@ function(pr) {
       )
 
       spec$paths$`/healthz` <- NULL
+      spec$paths$`/job` <- NULL
       spec$paths$`/favicon.ico` <- NULL
       spec$paths$`/robots.txt` <- NULL
       spec$paths$`/` <- NULL
@@ -1176,9 +1245,9 @@ function(pr) {
 
   pr$setDocs(
     "rapidoc",
-    bg_color = "#2691d9",
-    text_color = "#ffffff",
-    primary_color = "#2c3e50",
+    bg_color = "#141B15",
+    text_color = "#FFFFFF",
+    primary_color = "#55AAE2",
     render_style = "read",
     slots = paste0(
       '<img ',

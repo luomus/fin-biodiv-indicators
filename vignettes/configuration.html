@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Configuration</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Configuration</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#defaults" id="toc-defaults">Defaults</a></li>
+<li><a href="#sections" id="toc-sections">Sections</a>
+<ul>
+<li><a href="#name" id="toc-name">Name</a></li>
+<li><a href="#taxa" id="toc-taxa">Taxa</a></li>
+<li><a href="#extra-taxa" id="toc-extra-taxa">Extra taxa</a></li>
+<li><a href="#from" id="toc-from">From</a></li>
+<li><a href="#filters" id="toc-filters">Filters</a></li>
+<li><a href="#surveys" id="toc-surveys">Surveys</a></li>
+<li><a href="#counts" id="toc-counts">Counts</a></li>
+<li><a href="#combine" id="toc-combine">Combine</a></li>
+<li><a href="#use-data-after" id="toc-use-data-after">Use data
+after</a></li>
+<li><a href="#model" id="toc-model">Model</a></li>
+</ul></li>
+</ul>
+</div>
+
+<p>The FinBIF Biodiversity Indicators Service (FBI) is configured using
+a <a href="https://yaml.org/spec/1.2.2/" title="YAML Spec 1.2.2"><code>YAML</code></a> file. The config file can
+be accessed and edited <a href="https://raw.githubusercontent.com/luomus/fin-biodiv-indicators/main/config.yml" class="pkgdown-release">here</a><a href="https://raw.githubusercontent.com/luomus/fin-biodiv-indicators/dev/config.yml" class="pkgdown-devel">here</a> and is stored in the FBI code repository.
+The FBI service uses the “live” editable version of the config file.
+But, the source version should be kept up to date as possible and
+treated as a backup. When the service application is initialised, the
+source version of the config file is used as a starting
+configuration.</p>
+<p>Each multi-taxon indicator has its own object in the configuration
+file. For example, the Farmland Breeding Bird indicator, and the
+single-taxon indicators that belong to it, are configured using the
+parameters outlined below, where the top-level key, <code>flb</code>, is
+the short-code of the indicator.</p>
+<details closed>
+<summary>
+<span title>Click to show/hide example configuration</span>
+</summary>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">flb</span><span class="kw">:</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="at">  </span><span class="fu">name</span><span class="kw">:</span><span class="at"> Farmland birds</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="at">  </span><span class="fu">taxa</span><span class="kw">:</span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MX.27328</span></span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="at">    </span><span class="fu">binomial</span><span class="kw">:</span><span class="at"> Crex crex</span></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="at">    </span><span class="fu">start_year</span><span class="kw">:</span><span class="at"> </span><span class="dv">2006</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MX.27527</span></span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="at">    </span><span class="fu">binomial</span><span class="kw">:</span><span class="at"> Vanellus vanellus</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MX.27613</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="at">    </span><span class="fu">binomial</span><span class="kw">:</span><span class="at"> Numenius arquata</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MX.32065</span></span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="at">    </span><span class="fu">binomial</span><span class="kw">:</span><span class="at"> Alauda arvensis</span></span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MX.32132</span></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="at">    </span><span class="fu">binomial</span><span class="kw">:</span><span class="at"> Hirundo rustica</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MX.32163</span></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="at">    </span><span class="fu">binomial</span><span class="kw">:</span><span class="at"> Delichon urbicum</span></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MX.32213</span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="at">    </span><span class="fu">binomial</span><span class="kw">:</span><span class="at"> Anthus pratensis</span></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MX.32949</span></span>
+<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="at">    </span><span class="fu">binomial</span><span class="kw">:</span><span class="at"> Saxicola rubetra</span></span>
+<span id="cb1-21"><a href="#cb1-21" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MX.33117</span></span>
+<span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a><span class="at">    </span><span class="fu">binomial</span><span class="kw">:</span><span class="at"> Turdus pilaris</span></span>
+<span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MX.33936</span></span>
+<span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a><span class="at">    </span><span class="fu">binomial</span><span class="kw">:</span><span class="at"> Sylvia communis</span></span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MX.37142</span></span>
+<span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a><span class="at">    </span><span class="fu">binomial</span><span class="kw">:</span><span class="at"> Corvus monedula</span></span>
+<span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MX.36817</span></span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a><span class="at">    </span><span class="fu">binomial</span><span class="kw">:</span><span class="at"> Sturnus vulgaris</span></span>
+<span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MX.36589</span></span>
+<span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a><span class="at">    </span><span class="fu">binomial</span><span class="kw">:</span><span class="at"> Passer montanus</span></span>
+<span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a><span class="at">    </span><span class="fu">start_year</span><span class="kw">:</span><span class="at"> </span><span class="dv">2006</span></span>
+<span id="cb1-32"><a href="#cb1-32" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">code</span><span class="kw">:</span><span class="at"> MX.35154</span></span>
+<span id="cb1-33"><a href="#cb1-33" tabindex="-1"></a><span class="at">    </span><span class="fu">binomial</span><span class="kw">:</span><span class="at"> Emberiza hortulana</span></span>
+<span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a><span class="at">  </span><span class="fu">filters</span><span class="kw">:</span></span>
+<span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a><span class="at">    </span><span class="fu">date_range_ymd</span><span class="kw">:</span></span>
+<span id="cb1-36"><a href="#cb1-36" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;1979-01-01&quot;</span></span>
+<span id="cb1-37"><a href="#cb1-37" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">&quot;&quot;</span></span>
+<span id="cb1-38"><a href="#cb1-38" tabindex="-1"></a><span class="at">    </span><span class="fu">location_tag</span><span class="kw">:</span><span class="at"> farmland</span></span>
+<span id="cb1-39"><a href="#cb1-39" tabindex="-1"></a><span class="at">    </span><span class="fu">collection</span><span class="kw">:</span></span>
+<span id="cb1-40"><a href="#cb1-40" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> HR.157</span></span>
+<span id="cb1-41"><a href="#cb1-41" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> HR.61</span></span>
+<span id="cb1-42"><a href="#cb1-42" tabindex="-1"></a><span class="at">  </span><span class="fu">surveys</span><span class="kw">:</span></span>
+<span id="cb1-43"><a href="#cb1-43" tabindex="-1"></a><span class="at">    </span><span class="fu">selection</span><span class="kw">:</span></span>
+<span id="cb1-44"><a href="#cb1-44" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> document_id</span></span>
+<span id="cb1-45"><a href="#cb1-45" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> location_id</span></span>
+<span id="cb1-46"><a href="#cb1-46" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> year</span></span>
+<span id="cb1-47"><a href="#cb1-47" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> month</span></span>
+<span id="cb1-48"><a href="#cb1-48" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> day</span></span>
+<span id="cb1-49"><a href="#cb1-49" tabindex="-1"></a><span class="at">    </span><span class="fu">has_value</span><span class="kw">:</span></span>
+<span id="cb1-50"><a href="#cb1-50" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> document_id</span></span>
+<span id="cb1-51"><a href="#cb1-51" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> location_id</span></span>
+<span id="cb1-52"><a href="#cb1-52" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> year</span></span>
+<span id="cb1-53"><a href="#cb1-53" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> month</span></span>
+<span id="cb1-54"><a href="#cb1-54" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> day</span></span>
+<span id="cb1-55"><a href="#cb1-55" tabindex="-1"></a><span class="at">  </span><span class="fu">counts</span><span class="kw">:</span></span>
+<span id="cb1-56"><a href="#cb1-56" tabindex="-1"></a><span class="at">    </span><span class="fu">abundance</span><span class="kw">:</span><span class="at"> pair_abundance</span></span>
+<span id="cb1-57"><a href="#cb1-57" tabindex="-1"></a><span class="at">    </span><span class="fu">selection</span><span class="kw">:</span></span>
+<span id="cb1-58"><a href="#cb1-58" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> document_id</span></span>
+<span id="cb1-59"><a href="#cb1-59" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> pair_abundance</span></span>
+<span id="cb1-60"><a href="#cb1-60" tabindex="-1"></a><span class="at">    </span><span class="fu">has_value</span><span class="kw">:</span></span>
+<span id="cb1-61"><a href="#cb1-61" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> document_id</span></span>
+<span id="cb1-62"><a href="#cb1-62" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> pair_abundance</span></span>
+<span id="cb1-63"><a href="#cb1-63" tabindex="-1"></a><span class="at">  </span><span class="fu">combine</span><span class="kw">:</span><span class="at"> geometric_mean</span></span>
+<span id="cb1-64"><a href="#cb1-64" tabindex="-1"></a><span class="at">  </span><span class="fu">use_data_after</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;10-01&quot;</span></span>
+<span id="cb1-65"><a href="#cb1-65" tabindex="-1"></a><span class="at">  </span><span class="fu">model</span><span class="kw">:</span></span>
+<span id="cb1-66"><a href="#cb1-66" tabindex="-1"></a><span class="at">    </span><span class="fu">trim</span><span class="kw">:</span></span>
+<span id="cb1-67"><a href="#cb1-67" tabindex="-1"></a><span class="at">      </span><span class="fu">base_year</span><span class="kw">:</span><span class="at"> </span><span class="dv">2000</span></span>
+<span id="cb1-68"><a href="#cb1-68" tabindex="-1"></a><span class="at">      </span><span class="fu">surveys_process</span><span class="kw">:</span></span>
+<span id="cb1-69"><a href="#cb1-69" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> pick_first_survey_in_year</span></span>
+<span id="cb1-70"><a href="#cb1-70" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> require_two_years</span></span>
+<span id="cb1-71"><a href="#cb1-71" tabindex="-1"></a><span class="at">      </span><span class="fu">counts_process</span><span class="kw">:</span></span>
+<span id="cb1-72"><a href="#cb1-72" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> zero_fill</span></span>
+<span id="cb1-73"><a href="#cb1-73" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> sum_by_event</span></span>
+<span id="cb1-74"><a href="#cb1-74" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> set_start_year</span></span>
+<span id="cb1-75"><a href="#cb1-75" tabindex="-1"></a><span class="at">      </span><span class="kw">-</span><span class="at"> remove_all_zero_locations</span></span></code></pre></div>
+</details>
+<div id="defaults" class="section level2">
+<h2>Defaults</h2>
+<p>Default parameters that apply to all indicators can be specified in a
+special object with the top-level key, <code>default</code> (see below).
+Defaults can be overwritten by specifying different parameters value for
+the indicator objects.</p>
+<details closed>
+<summary>
+<span title>Click to show/hide example defaults</span>
+</summary>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">default</span><span class="kw">:</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="at">  </span><span class="fu">surveys</span><span class="kw">:</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="at">    </span><span class="fu">selection</span><span class="kw">:</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> document_id</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> location_id</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> year</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> month</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> day</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="at">    </span><span class="fu">has_value</span><span class="kw">:</span></span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> document_id</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> location_id</span></span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> year</span></span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> month</span></span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> day</span></span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a><span class="at">  </span><span class="fu">counts</span><span class="kw">:</span></span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a><span class="at">    </span><span class="fu">abundance</span><span class="kw">:</span><span class="at"> abundance</span></span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a><span class="at">  </span><span class="fu">use_data_after</span><span class="kw">:</span><span class="at"> </span><span class="st">&quot;01-01&quot;</span></span></code></pre></div>
+</details>
+</div>
+<div id="sections" class="section level2">
+<h2>Sections</h2>
+<p>The following describes each section of the multi-taxon indicator
+objects in more detail.</p>
+<div id="name" class="section level3">
+<h3>Name</h3>
+<p>A string giving the long-form name of a multi-taxon indicator.</p>
+</div>
+<div id="taxa" class="section level3">
+<h3>Taxa</h3>
+<p>An array defining the taxa that are included in the multi-taxon
+indicator and for which single-taxon indicators will be calculated.</p>
+<p>Each element of the array must include:</p>
+<ul>
+<li><code>code</code>: a string indicating a FinBIF taxon MX code (e.g,
+<code>MX.27328</code>).</li>
+<li><code>binomial</code>: a string indicating a scientific taxon name
+(e.g., <code>Crex crex</code>).</li>
+</ul>
+<p>And optionally include one or more of:</p>
+<ul>
+<li><code>extra_codes</code>: an array of FinBIF taxon MX codes to
+include along with the nominal taxon declared with
+<code>code</code>.</li>
+<li><code>subtaxa</code>: a boolean indicating whether to include
+observations of the child taxa of the taxa declared with
+<code>code</code> and <code>extra_codes</code>.</li>
+<li><code>start_year</code>: an integer indicating the year observation
+data of the taxa should begin. Observation data from before this year
+will be excluded. Note that if <code>start_year</code> is greater than
+<code>base_year</code> (see section <a href="#model" title="Section model">Model</a>) then <code>base_year</code> for the
+taxon will be set to <code>start_year</code>.</li>
+</ul>
+</div>
+<div id="extra-taxa" class="section level3">
+<h3>Extra taxa</h3>
+<p>An array defining the taxa that are not included in the parent
+multi-taxon indicator but for which single-taxon indicators will be
+calculated.</p>
+<p>Each element of the array is configured in the same way as <a href="#taxa" title="Section taxa"><code>taxa</code></a> above.</p>
+</div>
+<div id="from" class="section level3">
+<h3>From</h3>
+<p>Multi-taxon indicators can have no constituent single-taxon
+indicators. In this case, the <code>from</code> section indicates which
+other multi-taxon indicator (in the form of a short-code) the input data
+comes from.</p>
+</div>
+<div id="filters" class="section level3">
+<h3>Filters</h3>
+<p>The <code>filters</code> section is an object defining a list of
+filters to apply to the observation data from FinBIF. See the finbif R
+package <a href="https://luomus.github.io/finbif/reference/filters.html" class="pkgdown-release" title="finbif docs">documentation</a><a href="https://finbif-docs-dev.netlify.app/reference/filters.html" class="pkgdown-devel" title="finbif docs">documentation</a> for
+details.</p>
+</div>
+<div id="surveys" class="section level3">
+<h3>Surveys</h3>
+<p>The <code>surveys</code> section defines which fields are selected
+when getting survey data from FinBIF. Fields are selected with the key
+<code>selection</code> as an array (see the finbif R package <a href="https://luomus.github.io/finbif/reference/variables.html" class="pkgdown-release" title="finbif docs">documentation</a><a href="https://finbif-docs-dev.netlify.app/reference/variables.html" class="pkgdown-devel" title="finbif docs">documentation</a> for
+available fields). Under a second key, <code>has_value</code>, an array
+indicates which fields must not have null values when filtering
+records.</p>
+</div>
+<div id="counts" class="section level3">
+<h3>Counts</h3>
+<p>The <code>counts</code> section defines which fields are selected
+when accessing count data from FinBIF. This sections uses the
+<code>selection</code> and <code>has_value</code> key in the same manner
+as <a href="#Surveys" title="Section surveys"><code>above</code></a>.</p>
+<p>An additional key, <code>abundance</code>, is used to indicate which
+field is used as the abundance (counts) data.</p>
+</div>
+<div id="combine" class="section level3">
+<h3>Combine</h3>
+<p>The section <code>combine</code> defines how single-taxon indicator
+data is combined to form a multi-taxon indicator. Options include:</p>
+<ul>
+<li><code>geometric_mean</code>: combines relative abundance as the
+geometric mean abundance.</li>
+<li><code>cti</code>: combine abundances as a community temperature
+index.</li>
+<li><code>overall_abundance</code>: combine abundance as total abundance
+for the taxon group.</li>
+</ul>
+</div>
+<div id="use-data-after" class="section level3">
+<h3>Use data after</h3>
+<p>The section <code>use_data_after</code> defines what calendar date
+(in the form <code>&quot;MM-DD&quot;</code>) data collected during the current
+year should start being included in the indicator.</p>
+</div>
+<div id="model" class="section level3">
+<h3>Model</h3>
+<p>The <code>model</code> section defines how single- or multi-taxon
+indicators are calculated from the survey and count data sourced from
+FinBIF. The section consists of one or more model objects where the
+object keys indicate the model being used. Models include:</p>
+<ul>
+<li><code>trim</code>: Trends and Indices for Monitoring data model (via
+<a href="https://github.com/SNStatComp/rtrim" title="rtrim GitHub repository">rtrim</a>)</li>
+<li><code>rbms</code>: Generalised abundance indices for butterfly
+monitoring count data ( via <a href="https://retoschmucki.github.io/rbms/" title="rbms">rbms</a>)</li>
+<li><code>lmer</code>: Linear Mixed Effects Regression (via <a href="https://github.com/lme4/lme4/" title="lme4 GitHub repository">lme4</a>)</li>
+</ul>
+<p>Each element of the <code>model</code> section must include:</p>
+<ul>
+<li><code>surveys_process</code>: An array of survey data processing
+functions (see <a href="../reference/index.html#processing-functions" title="Process functions">processing</a> )</li>
+<li><code>counts_process</code> An array of count data processing
+functions (see <a href="../reference/index.html#processing-functions" title="Process functions">processing</a> )</li>
+</ul>
+<p>And optionally include:</p>
+<ul>
+<li><code>base_year</code>: an integer indicating the base year of the
+indicator.</li>
+<li><code>args</code>: additional arguments passed to the modelling
+function.</li>
+</ul>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

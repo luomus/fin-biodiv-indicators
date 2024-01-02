@@ -1,0 +1,12 @@
+docs/
+man/
+inst/tinytest/cache
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.env
+cov/
+sandbox/
+doc/
+/Meta/

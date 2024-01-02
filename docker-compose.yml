@@ -1,9 +1,7 @@
 version: "3.2"
 services:
   postgres:
-    build:
-      context: "./postgres"
-      dockerfile: "Dockerfile"
+    image: "crunchydata/crunchy-postgres:centos8-13.6-4.7.5"
     env_file:
     - ".env"
     environment:
@@ -27,27 +25,16 @@ services:
     - ".env"
     environment:
     - "PAGE_TITLE='Finnish Biodiversity Indicators'"
-    - "FINBIF_ACCESS_TOKEN=${DEV_FINBIF_ACCESS_TOKEN}"
-    - "FINBIF_API=${DEV_FINBIF_API}"
-    - "FINBIF_WAREHOUSE_QUERY=${DEV_FINBIF_WAREHOUSE_QUERY}"
+    - "FINBIF_ACCESS_TOKEN=${FINBIF_ACCESS_TOKEN}"
+    - "FINBIF_API=${FINBIF_API}"
+    - "FINBIF_WAREHOUSE_QUERY=${FINBIF_WAREHOUSE_QUERY}"
     - "FINBIF_EMAIL=${FINBIF_EMAIL}"
     - "PGUSER=postgres"
     - "PGPASSWORD=${DEV_DB_PASSWORD}"
     - "PGHOST=postgres"
     tmpfs:
     - "/home/user/tmp"
-    volumes:
-    - "logs:/home/user/logs"
     ports:
     - "8000:8000"
-  monitor:
-    image: "ghcr.io/luomus/log-monitor"
-    environment:
-    - "PAGE_TITLE='Finnish Biodiversity Indicators'"
-    ports:
-    - "3838:3838"
-    volumes:
-    - "logs:/home/user/logs"
 volumes:
   postgres:
-  logs:
