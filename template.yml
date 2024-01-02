@@ -57,9 +57,6 @@ parameters:
   - name: DB_MODE
     required: true
     value: primary
-  - name: CONF
-    required: true
-    value: config
   - name: JOB_CMD
     required: true
     value: '["Rscript", "--vanilla", "update_indices.R"]'
@@ -335,22 +332,6 @@ objects:
       kind: Service
       name: ${APP}-${BRANCH}
     wildcardPolicy: None
-- kind: Route
-  apiVersion: v1
-  metadata:
-    name: ${CONF}
-    labels:
-      app: ${APP}
-  spec:
-    host: ${CONF_SUBDOMAIN}.${CONF_HOST}
-    port:
-      targetPort: ${SHINY_PORT}
-    tls:
-      termination: edge
-    to:
-      kind: Service
-      name: ${CONF}
-    wildcardPolicy: None
 - kind: CronJob
   apiVersion: batch/v1beta1
   metadata:
@@ -371,9 +352,6 @@ objects:
             - name: ${APP}-${BRANCH}
               image: ${APP}-${BRANCH}:latest
               command: ${{JOB_CMD}}
-              volumeMounts:
-              - mountPath: ${HOME}/${VAR}
-                name: ${VAR}
               env:
               - name: FINBIF_ACCESS_TOKEN
                 value: ${FINBIF_ACCESS_TOKEN}
