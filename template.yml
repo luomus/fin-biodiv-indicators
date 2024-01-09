@@ -1,4 +1,3 @@
-# Deploy: oc process -f openshift-template.yml --param-file=.env | oc create -f -
 kind: Template
 apiVersion: template.openshift.io/v1
 parameters:
@@ -372,7 +371,7 @@ objects:
               - name: JOB_SECRET
                 value: ${JOB_SECRET}
               - name: APP_HOSTNAME
-                value: ${BRANCH}-${APP}.${APP}.svc
+                value: ${APP}-${BRANCH}
               - name: APP_PORT
                 value: ${APP_PORT}
             restartPolicy: Never
