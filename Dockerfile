@@ -1,6 +1,9 @@
-FROM ghcr.io/luomus/base-r-image@sha256:aa2caca64a234e63f7c1ba06cb06b04d18603d2b0a66be62cc8587ebe0ac876d
+FROM ghcr.io/luomus/base-r-image@sha256:0f9cc984724cfc5a268ecc9bfea057fc8f6ef2251f7dcf96baa173de4579e711
 
 COPY renv.lock /home/user/renv.lock
+
+RUN R -s -e "renv::restore()"
+
 COPY update_indices.R /home/user/update_indices.R
 COPY api.R /home/user/api.R
 COPY api.md /home/user/api.md
@@ -15,6 +18,5 @@ COPY tests /home/user/tests
 COPY docs /home/user/docs
 COPY .Rbuildignore /home/user/.Rbuildignore
 
-RUN  R -e "renv::restore()" \
-  && R -e 'remotes::install_local(dependencies = FALSE, upgrade = FALSE)' \
-  && permissions.sh
+RUN R CMD INSTALL .
+RUN permissions.sh
