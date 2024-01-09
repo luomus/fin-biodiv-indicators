@@ -1,5 +1,7 @@
 FROM ghcr.io/luomus/base-r-image@sha256:0f9cc984724cfc5a268ecc9bfea057fc8f6ef2251f7dcf96baa173de4579e711
 
+ENV FINBIF_USER_AGENT=https://github.com/luomus/fin-biodiv-indicators
+
 COPY renv.lock /home/user/renv.lock
 
 RUN R -s -e "renv::restore()"
