@@ -94,6 +94,24 @@ function(status) {
 
 }
 
+#* Register log of job
+#* @tag status
+#* @post /job-logs
+#* @param file:file Log file.
+#* @response 200 A json object response
+#* @serializer unboxedJSON
+function(file = "") {
+
+  log_file <- paste0("var/logs/", names(file)[[1L]])
+
+  writeBin(file[[1L]], log_file)
+
+  file.copy(log_file, "var/logs/update-latest.txt", TRUE)
+
+  "Job logged"
+
+}
+
 #* Check the liveness of the API
 #* @tag status
 #* @head /healthz
@@ -492,6 +510,9 @@ function(
 
 }
 
+#* @assets ./var/logs /logs
+list()
+
 #* @assets ./status /status
 list()
 
@@ -588,6 +609,7 @@ function(pr) {
 
       spec$paths$`/healthz` <- NULL
       spec$paths$`/job` <- NULL
+      spec$paths$`/logs` <- NULL
       spec$paths$`/favicon.ico` <- NULL
       spec$paths$`/robots.txt` <- NULL
       spec$paths$`/` <- NULL

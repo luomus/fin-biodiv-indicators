@@ -1,3 +1,11 @@
+log_file_name <- sprintf("var/logs/update-%s.txt", Sys.Date())
+
+log_file <- file(log_file_name, open = "wt")
+
+sink(log_file)
+
+sink(log_file, type = "message")
+
 res <- tryCatch(
 
   {
@@ -238,6 +246,17 @@ res <- tryCatch(
 
   }
 
+)
+
+sink(type = "message")
+
+sink()
+
+httr::POST(
+  paste0("http://", Sys.getenv("APP_HOSTNAME"), ":", Sys.getenv("APP_PORT")),
+  path = "job-logs",
+  query = list(secret = Sys.getenv("JOB_SECRET")),
+  body = httr::upload_file("log_file_name")
 )
 
 httr::GET(
