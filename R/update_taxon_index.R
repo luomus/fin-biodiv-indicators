@@ -139,7 +139,7 @@ err_msg <- function(x) {
   message(
     sprintf(
       "ERROR [%s] %s",
-      Sys.time(),
+      format(Sys.time()),
       gsub("\n|\r|\r\n", "; ", x[["message"]])
     )
   )
@@ -153,7 +153,7 @@ warn_msg <- function(x) {
   message(
     sprintf(
       "WARNING [%s] %s",
-      Sys.time(),
+      format(Sys.time()),
       gsub("\n|\r|\r\n", "; ", x[["message"]])
     )
   )

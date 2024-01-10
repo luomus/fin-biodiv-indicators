@@ -2,7 +2,10 @@ run_model <- function(index, taxon, surveys, counts, model) {
 
   message(
     sprintf(
-      "INFO [%s] Calculating %s %s index for %s", Sys.time(), index, model,
+      "INFO [%s] Calculating %s %s index for %s",
+      format(Sys.time()),
+      index,
+      model,
       taxon[["code"]]
     )
   )

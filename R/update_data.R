@@ -41,7 +41,10 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
 
     message(
       sprintf(
-        "INFO [%s] Fetching %s data for %s from FinBIF", Sys.time(), type, index
+        "INFO [%s] Fetching %s data for %s from FinBIF",
+        format(Sys.time()),
+        type,
+        index
       )
     )
 
@@ -56,7 +59,9 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
 
     message(
       sprintf(
-        "INFO [%s] Fetched %s %s for %s", Sys.time(), attr(data, "nrec_dnld"),
+        "INFO [%s] Fetched %s %s for %s",
+        format(Sys.time()),
+        attr(data, "nrec_dnld"),
         type, index
       )
     )

@@ -84,7 +84,7 @@ res <- tryCatch(
         message(
           sprintf(
             "INFO [%s] Updating %s for %s index...",
-            Sys.time(),
+            format(Sys.time()),
             taxon[["binomial"]],
             index
           )
@@ -109,7 +109,7 @@ res <- tryCatch(
               message(
                 sprintf(
                   "INFO [%s] Updating %s model for %s (%s index)...",
-                  Sys.time(),
+                  format(Sys.time()),
                   model,
                   taxon[["binomial"]],
                   i
@@ -134,7 +134,8 @@ res <- tryCatch(
 
           message(
             sprintf(
-              "INFO [%s] Reached time limit. Taxon update exiting", Sys.time()
+              "INFO [%s] Reached time limit. Taxon update exiting",
+              format(Sys.time())
             )
           )
 
@@ -153,7 +154,7 @@ res <- tryCatch(
             message(
               sprintf(
                 "INFO [%s] Updating combined %s model for %s index...",
-                Sys.time(),
+                format(Sys.time()),
                 model,
                 paste0(index, i)
               )
@@ -203,7 +204,8 @@ res <- tryCatch(
 
             message(
               sprintf(
-                "INFO [%s] Reached time limit. Index update exiting", Sys.time()
+                "INFO [%s] Reached time limit. Index update exiting",
+                format(Sys.time())
               )
             )
 
@@ -222,7 +224,9 @@ res <- tryCatch(
       if (stop_timer[["toc"]] - start_timer > timeout_in_secs) {
 
         message(
-          sprintf("INFO [%s] Reached time limit. Job exiting", Sys.time())
+          sprintf(
+            "INFO [%s] Reached time limit. Job exiting", format(Sys.time())
+          )
         )
 
         break
@@ -233,14 +237,14 @@ res <- tryCatch(
 
     pool::poolClose(pool)
 
-    message(sprintf("INFO [%s] Update complete", Sys.time()))
+    message(sprintf("INFO [%s] Update complete", format(Sys.time())))
 
     "true"
 
   },
   error = function(e) {
 
-    message(sprintf("ERROR [%s] %s", Sys.time(), e[["message"]]))
+    message(sprintf("ERROR [%s] %s", format(Sys.time()), e[["message"]]))
 
     "false"
 

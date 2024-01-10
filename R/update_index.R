@@ -133,7 +133,7 @@ cti <- function(index, cti, model, db) {
   message(
     sprintf(
       "INFO [%s] Calculating %s combined index",
-      Sys.time(),
+      format(Sys.time()),
       paste(cti, model, sep = "_")
     )
   )
@@ -344,7 +344,7 @@ geometric_mean <- function(index, model, db) {
   message(
     sprintf(
       "INFO [%s] Calculating %s combined index",
-      Sys.time(),
+      format(Sys.time()),
       paste(index, model, sep = "_")
     )
   )
@@ -408,7 +408,7 @@ overall_abundance <- function(index, oa, model, db) {
   message(
     sprintf(
       "INFO [%s] Calculating %s combined index",
-      Sys.time(),
+      format(Sys.time()),
       paste(oa, model, sep = "_")
     )
   )
