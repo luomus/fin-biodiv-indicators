@@ -50,7 +50,7 @@ cache_outputs <- function(index, df, db) {
       ymax = df[["upper"]]
     ) +
     ggplot2::geom_ribbon(alpha = .2) +
-    ggplot2::geom_line() +
+    ggplot2::geom_line(na.rm = TRUE) +
     ggplot2::ylab(NULL) +
     ggplot2::xlab(NULL) +
     ggplot2::theme_minimal() +
