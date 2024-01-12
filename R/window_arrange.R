@@ -7,12 +7,14 @@ window_arrange <- function(x, ...) {
 
 }
 
+#' @export
 window_arrange.default <- function(x, ...) {
 
   dplyr::arrange(x, ..., by_group = TRUE)
 
 }
 
+#' @export
 window_arrange.tbl_lazy <- function(x, ...) {
 
   dbplyr::window_order(x, ...)
