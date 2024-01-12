@@ -371,7 +371,7 @@ objects:
               - name: JOB_SECRET
                 value: ${JOB_SECRET}
               - name: APP_HOSTNAME
-                value: ${APP}-${BRANCH}
+                value: ${APP}-${BRANCH}.${APP}.svc
               - name: APP_PORT
                 value: ${APP_PORT}
             restartPolicy: Never
