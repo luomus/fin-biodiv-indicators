@@ -262,7 +262,7 @@ httr::POST(
   paste0("http://", Sys.getenv("APP_HOSTNAME"), ":", Sys.getenv("APP_PORT")),
   path = "job-logs",
   query = list(secret = Sys.getenv("JOB_SECRET")),
-  body = httr::upload_file("log_file_name")
+  body = httr::upload_file(log_file_name)
 )
 
 httr::GET(
