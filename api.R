@@ -609,6 +609,7 @@ function(pr) {
 
       spec$paths$`/healthz` <- NULL
       spec$paths$`/job` <- NULL
+      spec$paths$`/job-logs` <- NULL
       spec$paths$`/logs` <- NULL
       spec$paths$`/favicon.ico` <- NULL
       spec$paths$`/robots.txt` <- NULL
