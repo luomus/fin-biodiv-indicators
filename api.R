@@ -36,6 +36,8 @@ tryCatch(
   error = function(e) message(e[["message"]])
 )
 
+dir.create("var/logs", showWarnings = FALSE)
+
 #* @filter cors
 cors <- function(req, res) {
 
