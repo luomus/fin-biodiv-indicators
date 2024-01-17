@@ -285,7 +285,7 @@ require_minimum_gaps <- function(surveys, ...) {
   surveys <- dplyr::filter(
     surveys,
     sum(.data[["gap"]], na.rm = TRUE) <= 21L &
-    max(.data[["gap"]], na.rm = TRUE) <= 7L
+      max(.data[["gap"]], na.rm = TRUE) <= 7L
   )
 
   surveys <- dplyr::select(surveys, -dplyr::any_of("gap"))

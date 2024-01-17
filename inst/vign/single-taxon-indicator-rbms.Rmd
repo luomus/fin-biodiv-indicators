@@ -96,7 +96,7 @@ from FinBIF.
 counts <- finbif_occurrence(
   taxa = "Aglais urticae",
   filter = filter,
-  select = select ,
+  select = select,
   n = "all",
   quiet = TRUE
 )
@@ -255,10 +255,10 @@ index <- mutate(index, lower = mean - sd, upper = mean + sd)
 ```{r plot-single-taxon-rbms}
 #| fig.cap: Relative abundance of Small tortoiseshell on Farms in Finland (calculated using RBMS)
 ggplot(index) +
-aes(x = parse_date_time(time, "Y"), y = mean, ymin = lower, ymax = upper) +
-geom_ribbon(alpha = .2) +
-geom_line() +
-ylab(NULL) +
-xlab(NULL) +
-theme_minimal()
+  aes(x = parse_date_time(time, "Y"), y = mean, ymin = lower, ymax = upper) +
+  geom_ribbon(alpha = .2) +
+  geom_line() +
+  ylab(NULL) +
+  xlab(NULL) +
+  theme_minimal()
 ```

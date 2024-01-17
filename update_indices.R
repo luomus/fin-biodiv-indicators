@@ -186,7 +186,7 @@ res <- tryCatch(
 
               needs_update <-
                 !isFALSE(last_mod_src > last_mod_index) ||
-                  do_update(paste0(index, i), "output")
+                do_update(paste0(index, i), "output")
 
             }
 

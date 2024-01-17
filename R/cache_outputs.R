@@ -45,18 +45,18 @@ cache_outputs <- function(index, df, db) {
     tryCatch(
       {
         ggplot2::ggplot() +
-        ggplot2::aes(
-          x = lubridate::parse_date_time(df[["time"]], "Y"),
-          y = df[["mean"]],
-          ymin = df[["lower"]],
-          ymax = df[["upper"]]
-        ) +
-        ggplot2::geom_ribbon(alpha = .2) +
-        ggplot2::geom_line(na.rm = TRUE) +
-        ggplot2::ylab(NULL) +
-        ggplot2::xlab(NULL) +
-        ggplot2::theme_minimal() +
-        ggplot2::theme(plot.margin = ggplot2::unit(c(1L, 1L, 1L, 1L), "cm"))
+          ggplot2::aes(
+            x = lubridate::parse_date_time(df[["time"]], "Y"),
+            y = df[["mean"]],
+            ymin = df[["lower"]],
+            ymax = df[["upper"]]
+          ) +
+          ggplot2::geom_ribbon(alpha = .2) +
+          ggplot2::geom_line(na.rm = TRUE) +
+          ggplot2::ylab(NULL) +
+          ggplot2::xlab(NULL) +
+          ggplot2::theme_minimal() +
+          ggplot2::theme(plot.margin = ggplot2::unit(c(1L, 1L, 1L, 1L), "cm"))
       },
       error = err_msg
     ),

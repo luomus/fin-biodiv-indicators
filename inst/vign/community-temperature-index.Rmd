@@ -49,7 +49,7 @@ have no missing data.
 filter <- list(
   collection = "Winter Bird Census",
   date_range_ymd = c("1958-12-01", ""),
-  date_range_md= c("12-01", "01-31"),
+  date_range_md = c("12-01", "01-31"),
   has_value = select
 )
 ```
@@ -150,15 +150,15 @@ names(cti) <- c("index", "se", "time")
 ```{r plot-cti}
 #| fig.cap: Community Temperature Index for Winter Birds in Finland
 ggplot(cti) +
-aes(
-  x = parse_date_time(time, "Y"),
-  y = index,
-  ymin = index - se,
-  ymax = index + se
-) +
-geom_ribbon(alpha = .2) +
-geom_line() +
-ylab(NULL) +
-xlab(NULL) +
-theme_minimal()
+  aes(
+    x = parse_date_time(time, "Y"),
+    y = index,
+    ymin = index - se,
+    ymax = index + se
+  ) +
+  geom_ribbon(alpha = .2) +
+  geom_line() +
+  ylab(NULL) +
+  xlab(NULL) +
+  theme_minimal()
 ```

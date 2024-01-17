@@ -3,12 +3,13 @@
 
 suppressPackageStartupMessages({
 
-  library(DBI, quietly = TRUE)
-  library(dplyr, quietly = TRUE)
-  library(fbi, quietly = TRUE)
-  library(pool, quietly = TRUE)
-  library(rapidoc, quietly = TRUE)
-  library(RPostgres, quietly = TRUE)
+  library(DBI, warn.conflicts = FALSE, quietly = TRUE)
+  library(dplyr, warn.conflicts = FALSE, quietly = TRUE)
+  library(fbi, warn.conflicts = FALSE, quietly = TRUE)
+  library(plumber, warn.conflicts = FALSE, quietly = TRUE)
+  library(pool, warn.conflicts = FALSE, quietly = TRUE)
+  library(rapidoc, warn.conflicts = FALSE, quietly = TRUE)
+  library(RPostgres, warn.conflicts = FALSE, quietly = TRUE)
 
 })
 
@@ -50,7 +51,7 @@ function(req, res) {
 
   } else {
 
-    forward()
+    plumber::forward()
 
   }
 
@@ -374,17 +375,17 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 
   if (taxon == "all") {
 
-     taxa <- config::get("taxa", config = index)
+    taxa <- config::get("taxa", config = index)
 
-     taxa <- vapply(taxa, getElement, "", "code")
+    taxa <- vapply(taxa, getElement, "", "code")
 
-     state <- vapply(
-       taxa,
-       \(x) get_output("model_state", index, model, x, region, pool),
-       ""
-     )
+    state <- vapply(
+      taxa,
+      \(x) get_output("model_state", index, model, x, region, pool),
+      ""
+    )
 
-     ans <- data.frame(taxon = as.vector(taxa), state = as.vector(state))
+    ans <- data.frame(taxon = as.vector(taxa), state = as.vector(state))
 
   } else if (taxon == "extra") {
 
@@ -1250,10 +1251,10 @@ function(pr) {
     primary_color = "#55AAE2",
     render_style = "read",
     slots = paste0(
-      '<img ',
-      'slot="logo" ',
-      'src="../public/logo.png" ',
-      'width=36px style=\"margin-left:7px\"/>'
+      "<img ",
+      "slot=\"logo\" ",
+      "src=\"../public/logo.png\" ",
+      "width=36px style=\"margin-left:7px\"/>"
     ),
     heading_text = paste("FBI", version),
     regular_font = "Roboto, Helvetica Neue, Helvetica, Arial, sans-serif",

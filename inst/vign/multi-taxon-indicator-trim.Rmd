@@ -139,7 +139,7 @@ taxon.
 
 ```{r model}
 model <- lapply(
-  counts, trim, count_col ="abundance", site_col = "location_id",
+  counts, trim, count_col = "abundance", site_col = "location_id",
   year_col = "year"
 )
 ```
@@ -241,15 +241,15 @@ index <- summarise(
 ```{r plot-multi-taxon-trim}
 #| fig.cap: Geometric mean of relative abundance for Farmland Breeding Birds in Finland (calculated using rTRIM)
 ggplot(index) +
-aes(
-  x = parse_date_time(time, "Y"),
-  y = index,
-  ymin = index - se,
-  ymax = index + se
-) +
-geom_ribbon(alpha = .2) +
-geom_line() +
-ylab(NULL) +
-xlab(NULL) +
-theme_minimal()
+  aes(
+    x = parse_date_time(time, "Y"),
+    y = index,
+    ymin = index - se,
+    ymax = index + se
+  ) +
+  geom_ribbon(alpha = .2) +
+  geom_line() +
+  ylab(NULL) +
+  xlab(NULL) +
+  theme_minimal()
 ```

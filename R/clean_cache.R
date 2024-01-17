@@ -11,7 +11,7 @@
 
 clean_cache <- function(db) {
 
-  pg_tables <-c(
+  pg_tables <- c(
     "pg_stat_statements",
     "primarytable"
   )

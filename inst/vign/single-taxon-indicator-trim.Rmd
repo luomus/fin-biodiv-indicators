@@ -142,13 +142,13 @@ index <- index(model, base = 2000)
 #| fig.cap: Relative abundance of Meadow pipit breeding pairs on Farmland in Finland (calculated using rTRIM)
 
 ggplot(index) +
-aes(
-  x = parse_date_time(time, "Y"), y = imputed,
-  ymin = imputed - se_imp, ymax = imputed + se_imp
-) +
-geom_ribbon(alpha = .2) +
-geom_line() +
-ylab(NULL) +
-xlab(NULL) +
-theme_minimal()
+  aes(
+    x = parse_date_time(time, "Y"), y = imputed,
+    ymin = imputed - se_imp, ymax = imputed + se_imp
+  ) +
+  geom_ribbon(alpha = .2) +
+  geom_line() +
+  ylab(NULL) +
+  xlab(NULL) +
+  theme_minimal()
 ```
