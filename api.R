@@ -38,31 +38,6 @@ tryCatch(
 
 dir.create("var/logs", showWarnings = FALSE)
 
-#* @filter cors
-cors <- function(req, res) {
-
-  res[["setHeader"]]("Access-Control-Allow-Origin", "*")
-
-  if (req[["REQUEST_METHOD"]] == "OPTIONS") {
-
-    res[["setHeader"]]("Access-Control-Allow-Methods", "*")
-
-    res[["setHeader"]](
-      "Access-Control-Allow-Headers", req$HTTP_ACCESS_CONTROL_REQUEST_HEADERS
-    )
-
-    res[["status"]] <- 200L
-
-    return(list())
-
-  } else {
-
-    plumber::forward()
-
-  }
-
-}
-
 #* @filter secret
 function(req, res) {
 
