@@ -68,7 +68,8 @@ update_taxon_index <- function(index, model, taxon, db) {
       run_model(index_base, taxon, surveys, counts, model),
       error = err_msg
     ),
-    warning = warn_msg
+    warning = warn_msg,
+    message = msg_msg
   )
 
   cond <- !inherits(model_data, "error")
@@ -159,5 +160,19 @@ warn_msg <- function(x) {
   )
 
   tryInvokeRestart("muffleWarning")
+
+}
+
+msg_msg <- function(x) {
+
+  writeLines(
+    sprintf(
+      "WARN [%s] %s",
+      format(Sys.time()),
+      gsub("\n|\r|\r\n", "; ", x[["message"]])
+    )
+  )
+
+  tryInvokeRestart("muffleMessage")
 
 }

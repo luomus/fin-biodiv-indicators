@@ -277,6 +277,19 @@ res <- withCallingHandlers(
 
     tryInvokeRestart("muffleWarning")
 
+  },
+  messsage = function(m) {
+
+    writeLines(
+      sprintf(
+        "WARN [%s] %s",
+        format(Sys.time()),
+        gsub("\n|\r|\r\n", "; ", m[["message"]])
+      )
+    )
+
+    tryInvokeRestart("muffleMessage")
+
   }
 
 )

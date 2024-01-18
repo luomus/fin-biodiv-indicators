@@ -60,7 +60,8 @@ cache_outputs <- function(index, df, db) {
       },
       error = err_msg
     ),
-    warning = warn_msg
+    warning = warn_msg,
+    message = msg_msg
   )
 
   tmp <- tempfile(fileext = ".svgz")

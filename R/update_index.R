@@ -28,7 +28,8 @@ update_index <- function(index, model, region, db) {
       ),
       error = err_msg
     ),
-    warning = warn_msg
+    warning = warn_msg,
+    message = msg_msg
   )
 
   index_model <- paste(index, model, sep = "_")
