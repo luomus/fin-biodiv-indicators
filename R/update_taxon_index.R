@@ -152,7 +152,7 @@ warn_msg <- function(x) {
 
   message(
     sprintf(
-      "WARNING [%s] %s",
+      "WARN [%s] %s",
       format(Sys.time()),
       gsub("\n|\r|\r\n", "; ", x[["message"]])
     )
