@@ -6,7 +6,7 @@ log_file <- file(log_file_name, open = "wt")
 
 sink(log_file, split = TRUE)
 
-sink(log_file, type = "message", split = TRUE)
+sink(log_file, type = "message")
 
 res <- withCallingHandlers(
   tryCatch(
