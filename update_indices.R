@@ -4,9 +4,9 @@ log_file_name <- sprintf("var/logs/update-%s.txt", Sys.Date())
 
 log_file <- file(log_file_name, open = "wt")
 
-sink(log_file)
+sink(log_file, split = TRUE)
 
-sink(log_file, type = "message")
+sink(log_file, type = "message", split = TRUE)
 
 res <- withCallingHandlers(
   tryCatch(
