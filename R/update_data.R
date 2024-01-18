@@ -39,7 +39,7 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
 
     aggregate <- switch(type, surveys = "events", "none")
 
-    message(
+    writeLines(
       sprintf(
         "INFO [%s] Fetching %s data for %s from FinBIF",
         format(Sys.time()),
@@ -57,7 +57,7 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
       quiet = TRUE, aggregate_counts = FALSE
     )
 
-    message(
+    writeLines(
       sprintf(
         "INFO [%s] Fetched %s %s for %s",
         format(Sys.time()),

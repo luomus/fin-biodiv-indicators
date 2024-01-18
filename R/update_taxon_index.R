@@ -136,7 +136,7 @@ apply_process <- function(
 
 err_msg <- function(x) {
 
-  message(
+  writeLines(
     sprintf(
       "ERROR [%s] %s",
       format(Sys.time()),
@@ -150,7 +150,7 @@ err_msg <- function(x) {
 
 warn_msg <- function(x) {
 
-  message(
+  writeLines(
     sprintf(
       "WARN [%s] %s",
       format(Sys.time()),
@@ -158,6 +158,6 @@ warn_msg <- function(x) {
     )
   )
 
-  invokeRestart("muffleWarning")
+  tryInvokeRestart("muffleWarning")
 
 }

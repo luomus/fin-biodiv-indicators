@@ -130,7 +130,7 @@ cti <- function(index, cti, model, db) {
     .groups = "drop"
   )
 
-  message(
+  writeLines(
     sprintf(
       "INFO [%s] Calculating %s combined index",
       format(Sys.time()),
@@ -341,7 +341,7 @@ geometric_mean <- function(index, model, db) {
 
   df <- dplyr::arrange(df, .data[["time"]])
 
-  message(
+  writeLines(
     sprintf(
       "INFO [%s] Calculating %s combined index",
       format(Sys.time()),
@@ -405,7 +405,7 @@ overall_abundance <- function(index, oa, model, db) {
     .groups = "drop"
   )
 
-  message(
+  writeLines(
     sprintf(
       "INFO [%s] Calculating %s combined index",
       format(Sys.time()),

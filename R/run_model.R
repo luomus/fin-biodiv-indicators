@@ -1,6 +1,6 @@
 run_model <- function(index, taxon, surveys, counts, model) {
 
-  message(
+  writeLines(
     sprintf(
       "INFO [%s] Calculating %s %s index for %s",
       format(Sys.time()),

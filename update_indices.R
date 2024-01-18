@@ -52,7 +52,7 @@ res <- withCallingHandlers(
 
       start_timer <- tictoc::tic()
 
-      message(sprintf("INFO [%s] Update starting...", format(Sys.time())))
+      writeLines(sprintf("INFO [%s] Update starting...", format(Sys.time())))
 
       Sys.setenv(R_CONFIG_FILE = "config.yml")
 
@@ -60,7 +60,7 @@ res <- withCallingHandlers(
 
       for (index in sample(indices)) {
 
-        message(
+        writeLines(
           sprintf("INFO [%s] Updating %s index...", format(Sys.time()), index)
         )
 
@@ -94,7 +94,7 @@ res <- withCallingHandlers(
 
         for (taxon in sample(c(taxa, extra_taxa))) {
 
-          message(
+          writeLines(
             sprintf(
               "INFO [%s] Updating %s for %s index...",
               format(Sys.time()),
@@ -119,7 +119,7 @@ res <- withCallingHandlers(
 
               for (i in paste0(index, c("", "_north", "_south"))) {
 
-                message(
+                writeLines(
                   sprintf(
                     "INFO [%s] Updating %s model for %s (%s index)...",
                     format(Sys.time()),
@@ -145,7 +145,7 @@ res <- withCallingHandlers(
 
           if (stop_timer[["toc"]] - start_timer > timeout_in_secs) {
 
-            message(
+            writeLines(
               sprintf(
                 "INFO [%s] Reached time limit. Taxon update exiting",
                 format(Sys.time())
@@ -164,7 +164,7 @@ res <- withCallingHandlers(
 
             for (i in list(NULL, "north", "south")) {
 
-              message(
+              writeLines(
                 sprintf(
                   "INFO [%s] Updating combined %s model for %s index...",
                   format(Sys.time()),
@@ -216,7 +216,7 @@ res <- withCallingHandlers(
 
             if (stop_timer[["toc"]] - start_timer > timeout_in_secs) {
 
-              message(
+              writeLines(
                 sprintf(
                   "INFO [%s] Reached time limit. Index update exiting",
                   format(Sys.time())
@@ -237,7 +237,7 @@ res <- withCallingHandlers(
 
         if (stop_timer[["toc"]] - start_timer > timeout_in_secs) {
 
-          message(
+          writeLines(
             sprintf(
               "INFO [%s] Reached time limit. Job exiting", format(Sys.time())
             )
@@ -251,14 +251,14 @@ res <- withCallingHandlers(
 
       pool::poolClose(pool)
 
-      message(sprintf("INFO [%s] Update complete", format(Sys.time())))
+      writeLines(sprintf("INFO [%s] Update complete", format(Sys.time())))
 
       "true"
 
     },
     error = function(e) {
 
-      message(sprintf("ERROR [%s] %s", format(Sys.time()), e[["message"]]))
+      writeLines(sprintf("ERROR [%s] %s", format(Sys.time()), e[["message"]]))
 
       "false"
 
@@ -267,7 +267,7 @@ res <- withCallingHandlers(
   ),
   warning = function(w) {
 
-    message(
+    writeLines(
       sprintf(
         "WARN [%s] %s",
         format(Sys.time()),
@@ -275,9 +275,10 @@ res <- withCallingHandlers(
       )
     )
 
-    invokeRestart("muffleWarning")
+    tryInvokeRestart("muffleWarning")
 
   }
+
 )
 
 sink(type = "message")
