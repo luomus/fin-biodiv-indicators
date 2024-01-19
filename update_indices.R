@@ -298,6 +298,8 @@ sink(type = "message")
 
 sink()
 
+close(log_file)
+
 httr::POST(
   paste0("http://", Sys.getenv("APP_HOSTNAME"), ":", Sys.getenv("APP_PORT")),
   path = "job-logs",
