@@ -1078,7 +1078,7 @@
     },
     "pool": {
       "Package": "pool",
-      "Version": "1.0.1",
+      "Version": "1.0.2",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
@@ -1087,10 +1087,9 @@
         "R6",
         "later",
         "methods",
-        "rlang",
-        "withr"
+        "rlang"
       ],
-      "Hash": "52d086ff1a2ccccbae6d462cb0773835"
+      "Hash": "b1b9ed1ae7c4b93b7be712e0cedfab67"
     },
     "praise": {
       "Package": "praise",
@@ -1513,14 +1512,14 @@
     },
     "timechange": {
       "Package": "timechange",
-      "Version": "0.2.0",
+      "Version": "0.3.0",
       "Source": "Repository",
       "Repository": "CRAN",
       "Requirements": [
         "R",
         "cpp11"
       ],
-      "Hash": "8548b44f79a35ba1791308b61e6012d7"
+      "Hash": "c5f3c201b931cd6474d17d8700ccb1c8"
     },
     "tinytest": {
       "Package": "tinytest",
