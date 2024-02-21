@@ -872,6 +872,7 @@ ftb:
     date_range_ymd:
     - "1979-01-01"
     - ""
+    country: Finland
     collection:
     - HR.157
     - HR.61
