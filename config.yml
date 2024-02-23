@@ -36,8 +36,6 @@ flb:
     binomial: Anthus pratensis
   - code: MX.32949
     binomial: Saxicola rubetra
-  - code: MX.33117
-    binomial: Turdus pilaris
   - code: MX.33936
     binomial: Sylvia communis
   - code: MX.37142
@@ -210,6 +208,14 @@ mtb:
 ftb:
   name: Forest birds
   taxa:
+  - code: MX.26639
+    binomial: Accipiter nisus
+    sti: 11.92
+    start_year: 2005
+  - code: MX.36308
+    binomial: Carduelis flammea
+    sti: 8.19
+    start_year: 1980
   - code: MX.36287
     binomial: Carduelis spinus
     sti: 10.24
@@ -219,6 +225,10 @@ ftb:
   - code: MX.32801
     binomial: Erithacus rubecula
     sti: 12.0
+  - code: MX.34029
+    binomial: Ficedula parva
+    sti: 11.6
+    start_year: 2006
   - code: MX.36237
     binomial: Fringilla coelebs
     sti: 12.3
@@ -228,10 +238,8 @@ ftb:
   - code: MX.34553
     binomial: Lophophanes cristatus
     sti: 11.71
-  - code: MX.36358
-    extra_codes: MX.36355
-    subtaxa: false
-    binomial: Loxia curvirostra
+  - code: MX.36355
+    binomial: Loxia
     sti: 10.49
   - code: MX.33989
     binomial: Muscicapa striata
@@ -239,6 +247,10 @@ ftb:
   - code: MX.34549
     binomial: Periparus ater
     sti: 11.9
+  - code: MX.37095
+    binomial: Perisoreus infaustus
+    sti: 5.77
+    start_year: 2006
   - code: MX.32895
     binomial: Phoenicurus phoenicurus
     sti: 11.31
@@ -251,49 +263,48 @@ ftb:
   - code: MX.33891
     binomial: Phylloscopus trochiloides
     sti: 9.76
-  - code: MX.34535
-    binomial: Poecile montanus
-    sti: 10.2
-  - code: MX.33954
-    binomial: Regulus regulus
-    sti: 10.81
-  - code: MX.33934
-    binomial: Sylvia atricapilla
-    sti: 12.62
-  - code: MX.26931
-    binomial: Tetrastes bonasia
-    sti: 9.74
-  - code: MX.33119
-    binomial: Turdus philomelos
-    sti: 11.4
-  - code: MX.26639
-    binomial: Accipiter nisus
-    sti: 11.92
-    start_year: 2005
-  - code: MX.26701
-    binomial: Buteo buteo
-    sti: 12.7
-    start_year: 1984
-  - code: MX.34029
-    binomial: Ficedula parva
-    sti: 11.6
+  - code: MX.30453
+    binomial: Picoides tridactylus
+    sti: 7.98
     start_year: 2006
-  - code: MX.37095
-    binomial: Perisoreus infaustus
-    sti: 5.77
+  - code: MX.36351
+    binomial: Pinicola enucleator
+    sti: 5.01
     start_year: 2006
   - code: MX.34542
     binomial: Poecile cinctus
     sti: 4.47
     start_year: 2006
+  - code: MX.34535
+    binomial: Poecile montanus
+    sti: 10.2
+  - code: MX.36366
+    binomial: Pyrrhula pyrrhula
+    sti: 10.76
+  - code: MX.33954
+    binomial: Regulus regulus
+    sti: 10.81
+  - code: MX.27649
+    binomial: Scolopax rusticola
+    sti: 10.6
+  - code: MX.26931
+    binomial: Tetrastes bonasia
+    sti: 9.74
   - code: MX.26928
     binomial: Tetrao urogallus
     sti: 8.74
-    start_year: 1983
+    start_year: 1984
   - code: MX.32696
     binomial: Troglodytes troglodytes
     sti: 12.24
-    start_year: 1983
+    start_year: 1984
+  - code: MX.33119
+    binomial: Turdus philomelos
+    sti: 11.4
+  - code: MX.33121
+    binomial: Turdus viscivorus
+    sti: 11.91
+    start_year: 1984
   extra_taxa:
   - code: MX.33651
     binomial: Acrocephalus arundinaceus
@@ -403,6 +414,10 @@ ftb:
   - code: MX.26435
     binomial: Bucephala clangula
     sti: 8.47
+  - code: MX.26701
+    binomial: Buteo buteo
+    sti: 12.7
+    start_year: 1984
   - code: MX.35185
     binomial: Calcarius lapponicus
     sti: 4.06
@@ -427,9 +442,6 @@ ftb:
   - code: MX.36283
     binomial: Carduelis chloris
     sti: 12.6
-  - code: MX.36308
-    binomial: Carduelis flammea
-    sti: 8.19
   - code: MX.36309
     binomial: Carduelis flavirostris
     sti: 6.95
@@ -628,12 +640,6 @@ ftb:
   - code: MX.33630
     binomial: Locustella naevia
     sti: 11.77
-  - code: MX.36359
-    binomial: Loxia leucoptera
-    sti: 6.04
-  - code: MX.36356
-    binomial: Loxia pytyopsittacus
-    sti: 7.22
   - code: MX.32063
     binomial: Lullula arborea
     sti: 13.47
@@ -721,15 +727,9 @@ ftb:
   - code: MX.37122
     binomial: Pica pica
     sti: 12.16
-  - code: MX.30453
-    binomial: Picoides tridactylus
-    sti: 7.98
   - code: MX.30530
     binomial: Picus canus
     sti: 12.06
-  - code: MX.36351
-    binomial: Pinicola enucleator
-    sti: 5.01
   - code: MX.35189
     binomial: Plectrophenax nivalis
     sti: 4.04
@@ -760,9 +760,6 @@ ftb:
   - code: MX.32772
     binomial: Prunella modularis
     sti: 10.91
-  - code: MX.36366
-    binomial: Pyrrhula pyrrhula
-    sti: 10.76
   - code: MX.27276
     binomial: Rallus aquaticus
     sti: 13.32
@@ -778,9 +775,6 @@ ftb:
   - code: MX.32953
     binomial: Saxicola rubicola
     sti: 13.99
-  - code: MX.27649
-    binomial: Scolopax rusticola
-    sti: 10.6
   - code: MX.36242
     binomial: Serinus serinus
     sti: 13.88
@@ -814,6 +808,9 @@ ftb:
   - code: MX.29008
     binomial: Surnia ulula
     sti: 5.8
+  - code: MX.33934
+    binomial: Sylvia atricapilla
+    sti: 12.62
   - code: MX.33935
     binomial: Sylvia borin
     sti: 11.32
@@ -862,9 +859,6 @@ ftb:
   - code: MX.33104
     binomial: Turdus torquatus
     sti: 9.03
-  - code: MX.33121
-    binomial: Turdus viscivorus
-    sti: 11.91
   - code: MX.27527
     binomial: Vanellus vanellus
     sti: 11.53
