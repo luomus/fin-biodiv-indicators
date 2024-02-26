@@ -177,7 +177,16 @@ geometric_mean <- function(index, model, db) {
 
   taxa <- config::get("taxa", config = index_base)
 
+  taxa_region <- lapply(taxa, getElement, "region")
+
   taxa <- vapply(taxa, getElement, "", "code")
+
+  taxa <- switch(
+    sub(paste0(index_base, "_"), "", index),
+    south = taxa[!vapply(taxa_region, identical, NA, "north")],
+    north = taxa[!vapply(taxa_region, identical, NA, "south")],
+    taxa
+  )
 
   df <- dplyr::tbl(db, "model_output")
 

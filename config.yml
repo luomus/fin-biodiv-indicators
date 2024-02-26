@@ -212,10 +212,12 @@ ftb:
     binomial: Accipiter nisus
     sti: 11.92
     start_year: 2005
+    region: south
   - code: MX.36308
     binomial: Carduelis flammea
     sti: 8.19
     start_year: 1980
+    region: north
   - code: MX.36287
     binomial: Carduelis spinus
     sti: 10.24
@@ -229,15 +231,18 @@ ftb:
     binomial: Ficedula parva
     sti: 11.6
     start_year: 2006
+    region: south
   - code: MX.36237
     binomial: Fringilla coelebs
     sti: 12.3
   - code: MX.36239
     binomial: Fringilla montifringilla
     sti: 7.03
+    region: north
   - code: MX.34553
     binomial: Lophophanes cristatus
     sti: 11.71
+    region: south
   - code: MX.36355
     binomial: Loxia
     sti: 10.49
@@ -247,10 +252,12 @@ ftb:
   - code: MX.34549
     binomial: Periparus ater
     sti: 11.9
+    region: south
   - code: MX.37095
     binomial: Perisoreus infaustus
     sti: 5.77
     start_year: 2006
+    region: north
   - code: MX.32895
     binomial: Phoenicurus phoenicurus
     sti: 11.31
@@ -260,21 +267,26 @@ ftb:
   - code: MX.33878
     binomial: Phylloscopus sibilatrix
     sti: 11.38
+    region: south
   - code: MX.33891
     binomial: Phylloscopus trochiloides
     sti: 9.76
+    region: south
   - code: MX.30453
     binomial: Picoides tridactylus
     sti: 7.98
     start_year: 2006
+    region: north
   - code: MX.36351
     binomial: Pinicola enucleator
     sti: 5.01
     start_year: 2006
+    region: north
   - code: MX.34542
     binomial: Poecile cinctus
     sti: 4.47
     start_year: 2006
+    region: north
   - code: MX.34535
     binomial: Poecile montanus
     sti: 10.2
@@ -287,6 +299,7 @@ ftb:
   - code: MX.27649
     binomial: Scolopax rusticola
     sti: 10.6
+    region: south
   - code: MX.26931
     binomial: Tetrastes bonasia
     sti: 9.74
@@ -298,6 +311,7 @@ ftb:
     binomial: Troglodytes troglodytes
     sti: 12.24
     start_year: 1984
+    region: south
   - code: MX.33119
     binomial: Turdus philomelos
     sti: 11.4
