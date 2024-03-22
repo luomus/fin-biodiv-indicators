@@ -1,6 +1,6 @@
 Package: fbi
 Title: Finnish Biodiversity Indicators
-Version: 0.11.7.9000
+Version: 0.11.7.9001
 Authors@R: c(
     person(given = "Finnish Museum of Natural History - Luomus",
            role = "cph"),
@@ -46,4 +46,4 @@ VignetteBuilder:
 BugReports: https://github.com/luomus/fin-biodiv-indicators/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.0
+RoxygenNote: 7.3.1
