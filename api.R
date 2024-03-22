@@ -9,6 +9,7 @@ suppressPackageStartupMessages({
   library(plumber, warn.conflicts = FALSE, quietly = TRUE)
   library(pool, warn.conflicts = FALSE, quietly = TRUE)
   library(rapidoc, warn.conflicts = FALSE, quietly = TRUE)
+  library(readr, warn.conflicts = FALSE, quietly = TRUE)
   library(RPostgres, warn.conflicts = FALSE, quietly = TRUE)
 
 })
