@@ -163,7 +163,7 @@ cti <- function(index, cti, model, db) {
 
 #' @importFrom config get
 #' @importFrom dplyr all_of arrange .data desc collect count distinct group_by
-#' @importFrom dplyr filter full_join inner_join lag lead mutate pull right_join
+#' @importFrom dplyr filter cross_join inner_join lag lead mutate pull right_join
 #' @importFrom dplyr row_number summarise sql tbl ungroup
 
 geometric_mean <- function(index, model, db) {
@@ -241,7 +241,7 @@ geometric_mean <- function(index, model, db) {
 
   rand <- dplyr::mutate(rand, i = dplyr::row_number())
 
-  df <- dplyr::full_join(df, seq_n, by = character())
+  df <- dplyr::cross_join(df, seq_n)
 
   df <- dplyr::mutate(df, i = dplyr::row_number())
 
