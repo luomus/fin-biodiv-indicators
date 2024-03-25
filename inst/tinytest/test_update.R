@@ -15,6 +15,8 @@ if (dbCanConnect(RPostgres::Postgres(), dbname = "postgres")) {
 
   dbExecute(con, "CREATE EXTENSION tablefunc")
 
+  Sys.setenv(DEBUG = "true")
+
   expect_true(update_data("counts", "bf", list(code = "MX.60914"), con))
 
   expect_false(update_data("counts", "bf", list(code = "MX.60914"), con))
@@ -29,15 +31,17 @@ if (dbCanConnect(RPostgres::Postgres(), dbname = "postgres")) {
 
   expect_null(update_taxon_index("bf", "trim", list(code = "MX.60914"), con))
 
-  expect_null(update_taxon_index("bf", "trim", list(code = "MX.MISSING"), con))
-
   expect_null(update_index("bf", "trim", NULL, con))
-
-  expect_null(update_index("bf_south", "trim", NULL, con))
 
   expect_null(update_index("bfcti", "lmer", NULL, con))
 
   expect_null(update_index("bfoa", "trim", NULL, con))
+
+  Sys.unsetenv("DEBUG")
+
+  expect_null(update_taxon_index("bf", "trim", list(code = "MX.MISSING"), con))
+
+  expect_null(update_index("bf_south", "trim", NULL, con))
 
   dbWriteTable(con, "redundant", data.frame(index = character()))
 

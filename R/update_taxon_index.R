@@ -145,6 +145,12 @@ err_msg <- function(x) {
     )
   )
 
+  if (identical(Sys.getenv("DEBUG"), "true")) {
+
+    stop()
+
+  }
+
   x
 
 }
