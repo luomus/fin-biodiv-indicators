@@ -517,7 +517,7 @@ function() {
 #* @get /
 function(res) {
 
-  path <- "/docs/"
+  path <- "/docs/index.html"
 
   if (length(unlist(packageVersion("fbi"))) > 3L) {
 
@@ -535,6 +535,38 @@ function(res) {
 
   res[["status"]] <- 303L
   res[["setHeader"]]("Location", "/__docs__/#overview")
+
+}
+
+#* @get /docs/articles
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/docs/articles/index.html")
+
+}
+
+#* @get /docs/dev/articles
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/docs/dev/articles/index.html")
+
+}
+
+#* @get /docs/reference
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/docs/reference/index.html")
+
+}
+
+#* @get /docs/dev/reference
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/docs/dev/reference/index.html")
 
 }
 
