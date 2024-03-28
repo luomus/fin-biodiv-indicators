@@ -217,6 +217,8 @@ objects:
             value: ${FINBIF_EMAIL}
           - name: JOB_SECRET
             value: ${JOB_SECRET}
+          - name: BRANCH
+            value: ${BRANCH}
           - name: SMTP_SERVER
             value: ${SMTP_SERVER}
           - name: SMTP_PORT
