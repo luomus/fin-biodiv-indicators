@@ -1,5 +1,5 @@
-pandoc: 3.1.1
-pkgdown: 2.0.7
+pandoc: 3.1.11
+pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
   alpine-birds: alpine-birds.html
@@ -18,8 +18,7 @@ articles:
   single-taxon-indicator-rbms: single-taxon-indicator-rbms.html
   single-taxon-indicator-trim: single-taxon-indicator-trim.html
   winter-birds: winter-birds.html
-last_built: 2024-03-28T10:13Z
+last_built: 2024-07-08T11:13Z
 urls:
   reference: https://indicators-dev.laji.fi/docs/dev/reference
   article: https://indicators-dev.laji.fi/docs/dev/articles
-
