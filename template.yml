@@ -427,7 +427,7 @@ objects:
                     name: ${APP}-${BRANCH}
                     key: job_secret
               - name: APP_HOSTNAME
-                value: ${APP}-${BRANCH}
+                value: ${APP}-${BRANCH}.${APP}.svc.cluster.local
               - name: APP_PORT
                 value: ${APP_PORT}
               - name: BRANCH
