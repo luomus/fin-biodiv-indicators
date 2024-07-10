@@ -136,6 +136,7 @@ objects:
         labels:
           app: ${APP}
           branch: ${BRANCH}
+          port: ${APP_PORT}
       spec:
         containers:
         - image: ghcr.io/luomus/${APP}:${BRANCH}
@@ -427,7 +428,7 @@ objects:
                     name: ${APP}-${BRANCH}
                     key: job_secret
               - name: APP_HOSTNAME
-                value: ${APP}-${BRANCH}.${APP}.svc.cluster.local
+                value: ${APP}-${BRANCH}
               - name: APP_PORT
                 value: ${APP_PORT}
               - name: BRANCH
