@@ -626,6 +626,10 @@ function(pr) {
       spec$paths$`/robots.txt` <- NULL
       spec$paths$`/` <- NULL
       spec$paths$`/docs/__docs__` <- NULL
+      spec$paths$`/docs/articles` <- NULL
+      spec$paths$`/docs/dev/articles` <- NULL
+      spec$paths$`/docs/reference` <- NULL
+      spec$paths$`/docs/dev/reference` <- NULL
 
       set_description <- function(spec, path, description) {
         spec$paths[[path]]$get$description <- description
