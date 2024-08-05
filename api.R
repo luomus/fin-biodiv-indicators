@@ -382,7 +382,7 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 
     state <- vapply(
       taxa,
-      \(x) get_output("model_state", index, model, x, region, pool),
+      \(x) get_output("model_state", index, model, x, region, pool)[[1L]],
       ""
     )
 
@@ -396,7 +396,7 @@ function(index, model = "default", taxon = "none", region = "none", res) {
 
     state <- vapply(
       taxa,
-      \(x) get_output("model_state", index, model, x, region, pool),
+      \(x) get_output("model_state", index, model, x, region, pool)[[1L]],
       ""
     )
 
