@@ -27,7 +27,10 @@ res <- withCallingHandlers(
         finbif_use_cache = FALSE,
         finbif_api_url = Sys.getenv("FINBIF_API"),
         finbif_warehouse_query = Sys.getenv("FINBIF_WAREHOUSE_QUERY"),
-        finbif_email = Sys.getenv("FINBIF_EMAIL")
+        finbif_email = Sys.getenv("FINBIF_EMAIL"),
+        finbif_retry_times = 10,
+        finbif_retry_pause_base = 2,
+        finbif_retry_pause_cap = 5e3
       )
 
       pool <- pool::dbPool(RPostgres::Postgres())
