@@ -80,6 +80,8 @@ parameters:
     required: true
   - name: JOB_SECRET
     required: true
+  - name: MEMORY
+    required: true
 metadata:
   name: ${APP}
 objects:
@@ -439,5 +441,5 @@ objects:
               resources:
                 limits:
                   cpu: "500m"
-                  memory: "2Gi"
+                  memory: ${MEMORY}
             restartPolicy: Never
