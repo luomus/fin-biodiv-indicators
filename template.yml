@@ -368,6 +368,8 @@ objects:
     failedJobsHistoryLimit: 7
     jobTemplate:
       spec:
+        activeDeadlineSeconds: 36000
+        backoffLimit: 0
         template:
           metadata:
             labels:
