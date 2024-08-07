@@ -64,8 +64,6 @@ parameters:
     required: true
   - name: FINBIF_EMAIL
     required: true
-  - name: TIMEOUT_IN_HOURS
-    required: true
   - name: SMTP_SERVER
     required: true
   - name: SMTP_PORT
@@ -81,6 +79,8 @@ parameters:
   - name: JOB_SECRET
     required: true
   - name: MEMORY
+    required: true
+  - name: SCHEDULE
     required: true
 metadata:
   name: ${APP}
@@ -362,13 +362,13 @@ objects:
   metadata:
     name: ${APP}-${BRANCH}
   spec:
-    schedule: "0 20 * * *"
+    schedule: ${SCHEDULE}
     concurrencyPolicy: Forbid
-    successfulJobsHistoryLimit: 7
-    failedJobsHistoryLimit: 7
+    successfulJobsHistoryLimit: 10
+    failedJobsHistoryLimit: 10
     jobTemplate:
       spec:
-        activeDeadlineSeconds: 36000
+        activeDeadlineSeconds: 7200
         backoffLimit: 0
         template:
           metadata:
@@ -424,8 +424,6 @@ objects:
                   configMapKeyRef:
                     name: ${APP}-${BRANCH}
                     key: db_host
-              - name: TIMEOUT_IN_HOURS
-                value: ${TIMEOUT_IN_HOURS}
               - name: JOB_SECRET
                 valueFrom:
                   secretKeyRef:

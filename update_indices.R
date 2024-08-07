@@ -1,6 +1,6 @@
 dir.create("var/logs", showWarnings = FALSE)
 
-log_file_name <- sprintf("var/logs/update-%s.txt", Sys.Date())
+log_file_name <- sprintf("var/logs/update-%s.txt", format(Sys.time(), "%F-%H"))
 
 log_file <- file(log_file_name, open = "wt")
 
@@ -51,7 +51,7 @@ res <- withCallingHandlers(
 
       }
 
-      timeout_in_secs <- as.integer(Sys.getenv("TIMEOUT_IN_HOURS")) * 60L * 60L
+      timeout_in_secs <- 6600L
 
       start_timer <- tictoc::tic()
 
