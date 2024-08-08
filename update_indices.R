@@ -85,14 +85,6 @@ res <- withCallingHandlers(
 
         extra_taxa <- config::get("extra_taxa", config = index)
 
-        if (Sys.getenv("BRANCH") != "main") {
-
-          taxa <- taxa[seq_len(min(10, length(taxa)))]
-
-          extra_taxa <- taxa[seq_len(min(10, length(extra_taxa)))]
-
-        }
-
         models <- names(config::get("model", config = index))
 
         for (taxon in sample(c(taxa, extra_taxa))) {
