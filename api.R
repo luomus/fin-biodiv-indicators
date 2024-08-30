@@ -737,7 +737,7 @@ function(pr) {
       spec$paths$`/docs/dev/__docs__` <- NULL
       spec$paths$`/docs/dev/__docs__/` <- NULL
       spec$paths$`/docs/dev/articles/` <- NULL
-      spec$paths$`/docs/dev/reference/`  <- NULL
+      spec$paths$`/docs/dev/reference/` <- NULL
       spec$paths$`/docs/reference/` <- NULL
 
       set_description <- function(spec, path, description) {
