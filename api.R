@@ -530,11 +530,75 @@ function(res) {
 
 }
 
+#* @get /__docs__
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/__docs__/")
+
+}
+
 #* @get /docs/__docs__
 function(res) {
 
   res[["status"]] <- 303L
-  res[["setHeader"]]("Location", "/__docs__/#overview")
+  res[["setHeader"]]("Location", "/__docs__/")
+
+}
+
+#* @get /docs/__docs__/
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/__docs__/")
+
+}
+
+#* @get /docs/dev/__docs__
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/__docs__/")
+
+}
+
+#* @get /docs/dev/__docs__/
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/__docs__/")
+
+}
+
+#* @get /docs
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/docs/index.html")
+
+}
+
+#* @get /docs/
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/docs/index.html")
+
+}
+
+#* @get /docs/dev
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/docs/dev/index.html")
+
+}
+
+#* @get /docs/dev/
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/docs/dev/index.html")
 
 }
 
@@ -554,6 +618,22 @@ function(res) {
 
 }
 
+#* @get /docs/articles/
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/docs/articles/index.html")
+
+}
+
+#* @get /docs/dev/articles/
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/docs/dev/articles/index.html")
+
+}
+
 #* @get /docs/reference
 function(res) {
 
@@ -563,6 +643,23 @@ function(res) {
 }
 
 #* @get /docs/dev/reference
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/docs/dev/reference/index.html")
+
+}
+
+
+#* @get /docs/reference/
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/docs/reference/index.html")
+
+}
+
+#* @get /docs/dev/reference/
 function(res) {
 
   res[["status"]] <- 303L
