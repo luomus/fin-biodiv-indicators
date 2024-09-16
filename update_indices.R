@@ -13,7 +13,7 @@ res <- withCallingHandlers(
 
     {
 
-      source("run_update.R")
+      source("run_update.R", echo = FALSE)
 
       "true"
 
