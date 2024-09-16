@@ -6,6 +6,7 @@ COPY renv.lock /home/user/renv.lock
 RUN R -s -e "renv::restore()"
 
 COPY update_indices.R /home/user/update_indices.R
+COPY run_update.R /home/user/run_update.R
 COPY api.R /home/user/api.R
 COPY api.md /home/user/api.md
 COPY favicon.ico /home/user/favicon.ico
