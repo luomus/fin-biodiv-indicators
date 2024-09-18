@@ -9,7 +9,8 @@ for (pkg in pkgs) {
 }
 
 options(
-  finbif_use_cache = c(FALSE, TRUE),
+  finbif_use_cache = TRUE,
+  finbif_use_cache_metadata = TRUE,
   finbif_api_url = Sys.getenv("FINBIF_API"),
   finbif_warehouse_query = Sys.getenv("FINBIF_WAREHOUSE_QUERY"),
   finbif_email = Sys.getenv("FINBIF_EMAIL"),
