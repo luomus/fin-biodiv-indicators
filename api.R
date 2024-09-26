@@ -225,7 +225,7 @@ function(index, res) {
 
   }
 
-  ans
+  unclass(ans)
 
 }
 
