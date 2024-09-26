@@ -40,6 +40,32 @@ tryCatch(
 
 dir.create("var/logs", showWarnings = FALSE)
 
+#* @filter cors
+cors <- function(req, res) {
+
+  res[["setHeader"]]("Access-Control-Allow-Origin", "*")
+
+  if (req[["REQUEST_METHOD"]] == "OPTIONS") {
+
+    res[["setHeader"]]("Access-Control-Allow-Methods", "*")
+
+    res[["setHeader"]](
+      "Access-Control-Allow-Headers",
+      req[["HTTP_ACCESS_CONTROL_REQUEST_HEADERS"]]
+    )
+
+    res[["status"]] <- 200L
+
+    return(list())
+
+  } else {
+
+    plumber::forward()
+
+  }
+
+}
+
 #* @filter secret
 function(req, res) {
 
@@ -199,7 +225,7 @@ function(index, res) {
 
   }
 
-  ans
+  unclass(ans)
 
 }
 
@@ -530,6 +556,22 @@ function(res) {
 
 }
 
+#* @get /sitemap.xml
+function(res) {
+
+  path <- "/docs/sitemap.xml"
+
+  if (length(unlist(packageVersion("fbi"))) > 3L) {
+
+    path <- "/docs/dev/sitemap.xml"
+
+  }
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", path)
+
+}
+
 #* @get /__docs__
 function(res) {
 
@@ -650,7 +692,6 @@ function(res) {
 
 }
 
-
 #* @get /docs/reference/
 function(res) {
 
@@ -722,6 +763,7 @@ function(pr) {
       spec$paths$`/favicon.ico` <- NULL
       spec$paths$`/robots.txt` <- NULL
       spec$paths$`/` <- NULL
+      spec$paths$`/sitemap.xml` <- NULL
       spec$paths$`/docs/__docs__` <- NULL
       spec$paths$`/docs/articles` <- NULL
       spec$paths$`/docs/dev/articles` <- NULL

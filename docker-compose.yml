@@ -1,40 +1,17 @@
 version: "3.2"
 services:
-  postgres:
-    image: "crunchydata/crunchy-postgres:centos8-13.6-4.7.5"
-    env_file:
-    - ".env"
-    environment:
-    - "MODE=postgres"
-    - "PG_DATABASE=postgres"
-    - "PG_PRIMARY_PORT=5432"
-    - "PG_MODE=primary"
-    - "PG_USER=postgres"
-    - "PG_PASSWORD=${DEV_DB_PASSWORD}"
-    - "PG_PRIMARY_USER=primary"
-    - "PG_PRIMARY_PASSWORD=${DEV_DB_PRIMARY_PASSWORD}"
-    - "PG_ROOT_PASSWORD=${DEV_DB_ROOT_PASSWORD}"
-    - "PGDATA_PATH_OVERRIDE=postgres"
-    volumes:
-    - "postgres:/pgdata"
   api:
     build:
-      context: "."
-      dockerfile: "Dockerfile"
-    env_file:
-    - ".env"
+      context: .
     environment:
-    - "PAGE_TITLE='Finnish Biodiversity Indicators'"
-    - "FINBIF_ACCESS_TOKEN=${FINBIF_ACCESS_TOKEN}"
-    - "FINBIF_API=${FINBIF_API}"
-    - "FINBIF_WAREHOUSE_QUERY=${FINBIF_WAREHOUSE_QUERY}"
-    - "FINBIF_EMAIL=${FINBIF_EMAIL}"
-    - "PGUSER=postgres"
-    - "PGPASSWORD=${DEV_DB_PASSWORD}"
     - "PGHOST=postgres"
-    tmpfs:
-    - "/home/user/tmp"
-    ports:
-    - "8000:8000"
-volumes:
+    - "PGUSER=postgres"
+    - "PGPASSWORD=1234"
+    - "FINBIF_ACCESS_TOKEN=dummy"
+    depends_on:
+    - postgres
   postgres:
+    image: postgres
+    environment:
+    - "POSTGRES_USER=postgres"
+    - "POSTGRES_PASSWORD=1234"
