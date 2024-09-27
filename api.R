@@ -572,6 +572,22 @@ function(res) {
 
 }
 
+#* @get /docs/api.html
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/__docs__/")
+
+}
+
+#* @get /docs/dev/api.html
+function(res) {
+
+  res[["status"]] <- 303L
+  res[["setHeader"]]("Location", "/__docs__/")
+
+}
+
 #* @get /__docs__
 function(res) {
 
@@ -781,6 +797,8 @@ function(pr) {
       spec$paths$`/docs/dev/articles/` <- NULL
       spec$paths$`/docs/dev/reference/` <- NULL
       spec$paths$`/docs/reference/` <- NULL
+      spec$paths$`/docs/api.html` <- NULL
+      spec$paths$`/docs/dev/api.html` <- NULL
 
       set_description <- function(spec, path, description) {
         spec$paths[[path]]$get$description <- description
