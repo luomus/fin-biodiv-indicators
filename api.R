@@ -576,11 +576,11 @@ function(res) {
 #* @serializer contentType list(type="text/yaml")
 function(res) {
 
-  path <- "/docs/pkgdown.yml"
+  path <- "docs/pkgdown.yml"
 
   if (length(unlist(packageVersion("fbi"))) > 3L) {
 
-    path <- "/docs/dev/pkgdown.yml"
+    path <- "docs/dev/pkgdown.yml"
 
   }
 
