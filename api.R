@@ -572,6 +572,22 @@ function(res) {
 
 }
 
+#* @get /pkgdown.yml
+#* @serializer contentType list(type="text/yaml")
+function(res) {
+
+  path <- "/docs/pkgdown.yml"
+
+  if (length(unlist(packageVersion("fbi"))) > 3L) {
+
+    path <- "/docs/dev/pkgdown.yml"
+
+  }
+
+  readBin(path, "raw", n = file.info(path)$size)
+
+}
+
 #* @get /docs/api.html
 function(res) {
 
@@ -799,6 +815,7 @@ function(pr) {
       spec$paths$`/docs/reference/` <- NULL
       spec$paths$`/docs/api.html` <- NULL
       spec$paths$`/docs/dev/api.html` <- NULL
+      spec$path$`/pkgdown.yml` <- NULL
 
       set_description <- function(spec, path, description) {
         spec$paths[[path]]$get$description <- description
