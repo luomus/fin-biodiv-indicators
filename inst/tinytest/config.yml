@@ -1734,6 +1734,9 @@ bf:
     sti: 9.14
   filters:
     collection: HR.3431
+    date_range_ymd:
+    - "2020-01-01"
+    - ""
   counts:
     selection:
     - document_id
@@ -1758,7 +1761,7 @@ bf:
       units: "Relative abundance"
       args:
         overdisp: true
-      base_year: 2000
+      base_year: 2022
       surveys_process:
       - require_seven_fortnights
       - require_two_years
