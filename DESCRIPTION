@@ -40,7 +40,7 @@ Suggests:
     DBI,
     RPostgres
 License: MIT + file LICENSE
-URL: https://github.com/luomus/fin-biodiv-indicators, https://indicators-dev.laji.fi/dev/docs
+URL: https://github.com/luomus/fin-biodiv-indicators, https://indicators-dev.laji.fi/docs/dev
 VignetteBuilder:
     knitr
 BugReports: https://github.com/luomus/fin-biodiv-indicators/issues
