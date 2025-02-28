@@ -7,8 +7,6 @@ template:
     fg: "#FFFFFF"
     primary: "#55AAE2"
     font-size-base: "1rem"
-    base_font:
-      google: "Roboto"
 url: !expr if (length(unlist(packageVersion("fbi"))) > 3L) "https://indicators-dev.laji.fi/docs/dev/" else "https://indicators.laji.fi/docs/"
 development:
   mode: auto
