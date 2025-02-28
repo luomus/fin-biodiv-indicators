@@ -1,6 +1,6 @@
 Package: fbi
 Title: Finnish Biodiversity Indicators
-Version: 0.11.26.9000
+Version: 0.11.26
 Authors@R: c(
     person(given = "Finnish Museum of Natural History - Luomus",
            role = "cph"),
@@ -40,7 +40,7 @@ Suggests:
     DBI,
     RPostgres
 License: MIT + file LICENSE
-URL: https://github.com/luomus/fin-biodiv-indicators, https://indicators-dev.laji.fi/docs/dev
+URL: https://github.com/luomus/fin-biodiv-indicators, https://indicators.laji.fi/docs/
 VignetteBuilder:
     knitr
 BugReports: https://github.com/luomus/fin-biodiv-indicators/issues
