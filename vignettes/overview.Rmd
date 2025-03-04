@@ -10,7 +10,7 @@ vignette: >
 ---
 
 Finnish biodiversity indicators (FBI) is an
-[R language](https://r-project.org "R") based service providing time series of 
+[R language](https://r-project.org/ "R") based service providing time series of 
 abundance indices and related metrics for Finland. The input data for the
 indices are provided by the
 [Finnish Biodiversity Information Facility](https://laji.fi/en/ "FinBIF").
