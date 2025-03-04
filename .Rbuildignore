@@ -26,6 +26,7 @@
 ^oc-process\.sh$
 ^template\.yml$
 ^update_indices\.R$
+^run_update\.R$
 ^\.renvignore$
 ^config\.yml$
 ^favicon.ico$
@@ -35,3 +36,5 @@
 ^logs$
 ^stage$
 ^tmp$
+^Makefile$
+^sentinels$
