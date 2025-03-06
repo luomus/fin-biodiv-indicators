@@ -53,8 +53,8 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
     names(select)[select == abundance] <- "abundance"
 
     data <- finbif::finbif_occurrence(
-      filter = filter, select = select, aggregate = aggregate, n = "all",
-      quiet = TRUE, aggregate_counts = FALSE
+      filter = filter, select = select, order_by = "document_id",
+      aggregate = aggregate, n = "all", quiet = TRUE, aggregate_counts = FALSE
     )
 
     writeLines(
