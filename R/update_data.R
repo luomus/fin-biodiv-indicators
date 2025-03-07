@@ -39,6 +39,8 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
 
     aggregate <- switch(type, surveys = "events", "none")
 
+    order_by <- switch(type, surveys = "document_id", "record_id")
+
     writeLines(
       sprintf(
         "INFO [%s] Fetching %s data for %s from FinBIF",
@@ -53,7 +55,7 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
     names(select)[select == abundance] <- "abundance"
 
     data <- finbif::finbif_occurrence(
-      filter = filter, select = select, order_by = "document_id",
+      filter = filter, select = select, order_by = order_by,
       aggregate = aggregate, n = "all", quiet = TRUE, aggregate_counts = FALSE
     )
 
