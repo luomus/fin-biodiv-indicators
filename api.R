@@ -16,15 +16,6 @@ suppressPackageStartupMessages({
 
 Sys.setenv(R_CONFIG_FILE = "config.yml")
 
-options(
-  finbif_rate_limit = Inf,
-  finbif_use_cache = FALSE,
-  finbif_use_cache_metadata = TRUE,
-  finbif_api_url = Sys.getenv("FINBIF_API"),
-  finbif_warehouse_query = Sys.getenv("FINBIF_WAREHOUSE_QUERY"),
-  finbif_email = Sys.getenv("FINBIF_EMAIL")
-)
-
 pool <- dbPool(Postgres())
 
 tryCatch(
