@@ -33,15 +33,13 @@ dev_deps:
 
 sentinels/check: sentinels/pkgdown $(shell find inst/tinytest -type f)
 > cd ..;\
-> R CMD build $(PKGSRC);\
-> R CMD INSTALL $(PKGNM)_$(PKGVERS).tar.gz;\
 > R CMD check $(PKGNM)_$(PKGVERS).tar.gz;\
 > cd $(PKGSRC);\
 > mkdir -p $(@D);\
 > touch $@
 
-sentinels/pkgdown: README.md LICENSE sentinels/doc \
-  _pkgdown.yml $(shell find pkgdown -type f)
+sentinels/pkgdown: sentinels/build README.md LICENSE _pkgdown.yml \
+  $(shell find pkgdown -type f)
 > ${RSCRIPT} -e "options(yaml.eval.expr = TRUE); pkgdown::build_site()";\
 > rm -rf docs/reference/Rplot001.png docs/deps/bootstrap-*/font*;\
 > sed -i 's/@import url("font.css");//g' \
@@ -50,6 +48,14 @@ sentinels/pkgdown: README.md LICENSE sentinels/doc \
 > sed -i 's/@import url("font.css");//g' \
 >   docs/dev/deps/bootstrap-*/bootstrap.min.css;\
 > sed -i 's|dev/dev|dev|g' docs/dev/search.json docs/dev/sitemap.xml;\
+> mkdir -p $(@D);\
+> touch $@
+
+sentinels/build: sentinels/doc
+> cd ..;\
+> R CMD build $(PKGSRC);\
+> R CMD INSTALL $(PKGNM)_$(PKGVERS).tar.gz;\
+> cd $(PKGSRC);\
 > mkdir -p $(@D);\
 > touch $@
 
