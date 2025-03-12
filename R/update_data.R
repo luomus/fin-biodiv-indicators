@@ -27,7 +27,7 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
 
   select <- config::get(type, config = index)[["selection"]]
 
-  select <- switch(type, surveys = c(select, "municipality"), select)
+  select <- switch(type, surveys = c(select, "finnish_municipality"), select)
 
   abundance <- config::get("counts", config = index)[["abundance"]]
 
@@ -78,9 +78,11 @@ update_data <- function(type, index, taxon, db, do_update = FALSE) {
 
     data[["index"]] <- index_data
 
-    regions <- switch(type, surveys = to_region(data[["municipality"]]), NULL)
+    regions <- switch(
+      type, surveys = to_region(data[["finnish_municipality"]]), NULL
+    )
 
-    data[["municipality"]] <- NULL
+    data[["finnish_municipality"]] <- NULL
 
     set_cache(index, type, data, db)
 
