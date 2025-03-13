@@ -164,7 +164,7 @@ cti <- function(index, cti, model, db) {
 #' @importFrom config get
 #' @importFrom dplyr all_of arrange .data desc collect count distinct group_by
 #' @importFrom dplyr filter cross_join inner_join lag lead mutate pull right_join
-#' @importFrom dplyr row_number summarise sql tbl ungroup
+#' @importFrom dplyr row_number summarise sql tbl
 
 geometric_mean <- function(index, model, db) {
 
@@ -309,11 +309,11 @@ geometric_mean <- function(index, model, db) {
     .groups = "keep"
   )
 
-  df <- dplyr::ungroup(df, .data[["time"]])
+  df <- dplyr::group_by(df, .data[["j"]])
 
   df <- window_arrange(df, .data[["time"]])
 
-  df <- dplyr::mutate(df, mcf = dplyr::lead(.data[["mcf"]], base - 1L))
+  df <- dplyr::mutate(df, mcf = dplyr::lead(.data[["mcf"]], !!(base - 1L)))
 
   double_zero <- dplyr::sql("cast(0 AS DOUBLE PRECISION)")
 
@@ -323,7 +323,7 @@ geometric_mean <- function(index, model, db) {
 
   df <- window_arrange(df, desc(.data[["time"]]))
 
-  df <- dplyr::mutate(df, mcb = dplyr::lead(.data[["mcb"]], nyears - base))
+  df <- dplyr::mutate(df, mcb = dplyr::lead(.data[["mcb"]], !!(nyears - base)))
 
   df <- dplyr::mutate(df, mcb = dplyr::lag(.data[["mcb"]], esab, double_zero))
 
