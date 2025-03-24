@@ -78,9 +78,9 @@ parameters:
     required: true
   - name: JOB_SECRET
     required: true
-  - name: MEMORY
-    required: true
   - name: SCHEDULE
+    required: true
+  - name: TIMEOUT
     required: true
 metadata:
   name: ${APP}
@@ -438,8 +438,10 @@ objects:
                   configMapKeyRef:
                     name: ${APP}-${BRANCH}
                     key: branch
+              - name: TIMEOUT
+                value: ${TIMEOUT}
               resources:
                 limits:
                   cpu: "700m"
-                  memory: ${MEMORY}
+                  memory: "1.5Gi"
             restartPolicy: Never

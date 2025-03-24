@@ -38,7 +38,7 @@ do_update <- function(index, type = c("input", "output")) {
 
 }
 
-timeout_in_secs <- 6600L
+timeout_in_secs <- as.integer(Sys.getenv("TIMEOUT", 6600))
 
 start_timer <- tictoc::tic()
 
