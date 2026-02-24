@@ -1,0 +1,247 @@
+# Multi-taxon indicator (trim)
+
+This documents outlines how a multi-taxon indicator (Farmland Breeding
+Birds) can be calculated in R using the TRIM method.
+
+### Load packages
+
+The following packages are required. All packages are available on
+[CRAN](https://cran.r-project.org/) apart from
+[fbi](https://github.com/luomus/fin-biodiv-indicators) which can be
+installed from GitHub.
+
+``` r
+library(dplyr)
+library(fbi)
+library(finbif)
+library(ggplot2)
+library(lubridate)
+library(rtrim)
+```
+
+### Survey data
+
+These five fields are required for the survey data.
+
+``` r
+select <- c("document_id", "location_id", "year", "month", "day")
+```
+
+These filters restrict the survey data to the “Point count” and “Line
+transect” bird monitoring datasets from 1979 onwards at sites labelled
+“farmland” and where the selected data fields have no missing data.
+
+``` r
+filter <- list(
+  location_tag = "farmland",
+  collection = c(
+    "Point counts of breeding terrestrial birds",
+    "Line transect censuses of breeding birds"
+  ),
+  date_range_ymd = c("1979-01-01", ""),
+  has_value = select
+)
+```
+
+The survey data can now downloaded from FinBIF.
+
+``` r
+surveys <- finbif_occurrence(
+  filter = filter,
+  select = select,
+  aggregate = "events",
+  aggregate_counts = FALSE,
+  n = "all",
+  quiet = TRUE
+)
+```
+
+Two processing functions are applied to the survey data to first limit
+each site to the first survey of the year and then limit the surveys to
+sites where at least two years have been surveyed.
+
+``` r
+surveys <- pick_first_survey_in_year(surveys)
+
+surveys <- require_two_years(surveys)
+```
+
+### Count data
+
+Count data only requires two fields to be selected: the survey
+identifier (`document_id`) and the measure of abundance (in this case
+the number of breeding pairs: `pair_abundance`).
+
+``` r
+select <- c("document_id", abundance = "pair_abundance")
+```
+
+The count data requires the same filters as the survey data (though the
+filter `has_value` needs to be redefined).
+
+``` r
+filter[["has_value"]] <- select
+```
+
+A set of taxa contributing to the multi-taxon indicator is selected.
+
+``` r
+taxa <- c(
+  "Vanellus vanellus", "Numenius arquata", "Alauda arvensis", "Hirundo rustica",
+  "Delichon urbicum", "Anthus pratensis", "Saxicola rubetra", "Turdus pilaris",
+  "Sylvia communis", "Corvus monedula", "Sturnus vulgaris"
+)
+```
+
+The count data for these taxa can now be downloaded from FinBIF.
+
+``` r
+counts <- lapply(
+  taxa,
+  finbif_occurrence,
+  filter = filter,
+  select = c("scientific_name", "document_id", abundance = "pair_abundance"),
+  n = "all",
+  quiet = TRUE
+)
+```
+
+Three processing functions are applied to the count data to: infill the
+count data with zero occurrences using the survey data; sum over the
+counts for each site-year combination; and remove all sites where the
+number of breeding pairs was zero on every occasion.
+
+``` r
+counts <- lapply(counts, zero_fill, surveys)
+
+counts <- lapply(counts, sum_by_event)
+
+counts <- lapply(counts, remove_all_zero_locations)
+```
+
+## Fit TRIM Models
+
+A TRIM model is used to estimate the change in abundance over time for
+each taxon.
+
+``` r
+model <- lapply(
+  counts, trim, count_col ="abundance", site_col = "location_id",
+  year_col = "year"
+)
+```
+
+## Create Index
+
+An index of change in relative abundance is created for each taxon by
+setting the base year to the year 2000. The indices are then combined
+into a single table
+
+``` r
+indices <- lapply(model, index, base = 2000)
+
+indices <- mapply(mutate, indices, sp = taxa, SIMPLIFY = FALSE)
+
+indices <- do.call(rbind, indices)
+```
+
+The geometric mean of relative abundance and its associated uncertainty
+can be calculated via a Monte Carlo simulation method (see
+[here](https://www.cbs.nl/en-gb/society/nature-and-environment/indices-and-trends--trim--/msi-tool)
+for details).
+
+``` r
+n <- 1000
+max_cv <- 3
+imputed_min <- .01
+truncfac <- 10
+base <- 1
+nyrs <- 44
+
+indices <- mutate(
+  indices, cv = ifelse(imputed >= .1 & se_imp > 0, se_imp / imputed, NA_real_)
+)
+
+indices <- group_by(indices, sp)
+
+indices <- mutate(indices, cv = mean(cv, na.rm = TRUE))
+
+indices <- filter(indices, cv < max_cv)
+
+indices <- mutate(indices, imputed = pmax(imputed, imputed_min))
+
+indices <- mutate(indices, se_imp = if_else(imputed > imputed_min, se_imp, 0))
+
+indices <- mutate(indices, se_imp = se_imp / imputed)
+
+indices <- mutate(indices, imputed = log(imputed))
+
+indices <- group_by(indices, time, sp)
+
+indices <- summarise(
+  indices, mc = rnorm(n, imputed, se_imp), i = seq(n), .groups = "keep"
+)
+
+indices <- mutate(indices, mc = pmax(mc, log(imputed_min)))
+
+indices <- group_by(indices, sp, i)
+
+indices <- arrange(indices, time)
+
+indices <- mutate(
+  indices, mcf = pmax(pmin(lead(mc) - mc, log(truncfac)), log(1 / truncfac))
+)
+
+indices <- arrange(indices, -time)
+
+indices <- mutate(
+  indices, mcb = pmax(pmin(lead(mc) - mc, log(truncfac)), log(1 / truncfac))
+)
+
+indices <- group_by(indices, i, time)
+
+index <- summarise(
+  indices,
+  mcf = mean(mcf, na.rm = TRUE), mcb = mean(mcb, na.rm = TRUE),
+  .groups = "drop_last"
+)
+
+index <- arrange(index, time)
+
+index <- mutate(index, mcf = cumsum(lag(lead(mcf, base - 1), base, 0)))
+
+index <- arrange(index, -time)
+
+index <- mutate(
+  index, mcb = cumsum(lag(lead(mcb, nyrs - base), nyrs - base + 1, 0))
+)
+
+index <- group_by(index, time)
+
+index <- summarise(
+  index,
+  index = exp(mean(mcf)) * exp(mean(mcb)),
+  se = sd(mcf) * exp(mean(mcf)) + sd(mcb) * exp(mean(mcb))
+)
+```
+
+``` r
+ggplot(index) +
+aes(
+  x = parse_date_time(time, "Y"),
+  y = index,
+  ymin = index - se,
+  ymax = index + se
+) +
+geom_ribbon(alpha = .2) +
+geom_line() +
+ylab(NULL) +
+xlab(NULL) +
+theme_minimal()
+```
+
+![Geometric mean of relative abundance of Farmland Breeding Birds in
+Finland (calculated using rTRIM)](figure/plot-multi-taxon-trim-1.png)
+
+Geometric mean of relative abundance of Farmland Breeding Birds in
+Finland (calculated using rTRIM)

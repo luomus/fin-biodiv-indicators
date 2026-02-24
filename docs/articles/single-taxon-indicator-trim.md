@@ -1,0 +1,145 @@
+# Single-taxon indicator (trim)
+
+This documents outlines how a single-taxon indicator (*Anthus pratensis*
+breeding on farmland) can be calculated in R using the TRIM method.
+
+### Load packages
+
+The following packages are required. All packages are available on
+[CRAN](https://cran.r-project.org/) apart from
+[fbi](https://github.com/luomus/fin-biodiv-indicators) which can be
+installed from GitHub.
+
+``` r
+library(fbi)
+library(finbif)
+library(ggplot2)
+library(lubridate)
+library(rtrim)
+```
+
+### Survey data
+
+These five fields are required for the survey data.
+
+``` r
+select <- c("document_id", "location_id", "year", "month", "day")
+```
+
+These filters restrict the survey data to the “Point count” and “Line
+transect” bird monitoring datasets from 1979 onwards at sites labelled
+“farmland” and where the selected data fields have no missing data.
+
+``` r
+filter <- list(
+  location_tag = "farmland",
+  collection = c(
+    "Point counts of breeding terrestrial birds",
+    "Line transect censuses of breeding birds"
+  ),
+  date_range_ymd = c("1979-01-01", ""),
+  has_value = select
+)
+```
+
+The survey data can now downloaded from FinBIF.
+
+``` r
+surveys <- finbif_occurrence(
+  filter = filter,
+  select = select,
+  aggregate = "events",
+  aggregate_counts = FALSE,
+  n = "all",
+  quiet = TRUE
+)
+```
+
+Two processing functions are applied to the survey data to first limit
+each site to the first survey of the year and then limit the surveys to
+sites where at least two years have been surveyed.
+
+``` r
+surveys <- pick_first_survey_in_year(surveys)
+
+surveys <- require_two_years(surveys)
+```
+
+### Count data
+
+Count data only requires two fields to be selected: the survey
+identifier (`document_id`) and the measure of abundance (in this case
+the number of breeding pairs: `pair_abundance`).
+
+``` r
+select <- c("document_id", abundance = "pair_abundance")
+```
+
+The count data requires the same filters as the survey data (though the
+filter `has_value` needs to be redefined).
+
+``` r
+filter[["has_value"]] <- select
+```
+
+The count data for *Anthus pratensis* (Meadow pipit) can now be
+downloaded from FinBIF.
+
+``` r
+counts <- finbif_occurrence(
+  taxa = "Anthus pratensis",
+  filter = filter,
+  select = select,
+  n = "all",
+  quiet = TRUE
+)
+```
+
+Three processing functions are applied to the count data to: infill the
+count data with zero occurrences using the survey data; sum over the
+counts for each site-year combination; and remove all sites where the
+number of breeding pairs was zero on every occasion.
+
+``` r
+counts <- zero_fill(counts, surveys)
+
+counts <- sum_by_event(counts)
+
+counts <- remove_all_zero_locations(counts)
+```
+
+## Fit TRIM Model
+
+A TRIM model is used to estimate the change in abundance over time.
+
+``` r
+model <- trim(abundance ~ location_id + year, counts)
+```
+
+## Create Index
+
+An index of change in relative abundance is created by setting the base
+year to the year 2000.
+
+``` r
+index <- index(model, base = 2000)
+```
+
+``` r
+ggplot(index) +
+aes(
+  x = parse_date_time(time, "Y"), y = imputed,
+  ymin = imputed - se_imp, ymax = imputed + se_imp
+) +
+geom_ribbon(alpha = .2) +
+geom_line() +
+ylab(NULL) +
+xlab(NULL) +
+theme_minimal()
+```
+
+![Relative abundance of Meadow pipit breeding pairs on Farmland in
+Finland (calculated using rTRIM)](figure/plot-single-taxon-trim-1.png)
+
+Relative abundance of Meadow pipit breeding pairs on Farmland in Finland
+(calculated using rTRIM)

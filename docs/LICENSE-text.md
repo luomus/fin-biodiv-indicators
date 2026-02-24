@@ -1,0 +1,4 @@
+# License
+
+    YEAR: 2021-2026
+    COPYRIGHT HOLDER: LUOMUS - Finnish Museum of Natural History
