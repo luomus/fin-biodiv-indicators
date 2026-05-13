@@ -38,3 +38,5 @@
 ^tmp$
 ^Makefile$
 ^sentinels$
+^\.positai$
+^\.claude$
