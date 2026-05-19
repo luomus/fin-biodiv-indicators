@@ -11,6 +11,7 @@ The following packages are required. All packages are available on
 installed from GitHub.
 
 ``` r
+
 library(dplyr)
 library(fbi)
 library(finbif)
@@ -25,6 +26,7 @@ library(arm)
 These five fields are required for the survey data.
 
 ``` r
+
 select <- c("document_id", "location_id", "year", "month", "day")
 ```
 
@@ -33,6 +35,7 @@ Census” monitoring dataset from December 1958 onwards where the selected
 data fields have no missing data.
 
 ``` r
+
 filter <- list(
   collection = "Winter Bird Census",
   date_range_ymd = c("1958-12-01", ""),
@@ -44,6 +47,7 @@ filter <- list(
 The survey data can now downloaded from FinBIF.
 
 ``` r
+
 surveys <- finbif_occurrence(
   filter = filter,
   select = select,
@@ -58,6 +62,7 @@ A single processing function is applied to the survey data to limit each
 site to the first survey of the year (where year is the period Dec-Jan).
 
 ``` r
+
 surveys <- pick_first_survey_in_winter(surveys)
 ```
 
@@ -67,6 +72,7 @@ Count data requires two fields to be selected: the survey identifier
 (`document_id`) and the measure of abundance (`abundance_interpreted`).
 
 ``` r
+
 select <- c("document_id", abundance = "abundance_interpreted")
 ```
 
@@ -74,12 +80,14 @@ The count data requires the same filters as the survey data (though the
 filter `has_value` needs to be redefined).
 
 ``` r
+
 filter[["has_value"]] <- select
 ```
 
 A set of taxa and their species temperature index values is defined.
 
 ``` r
+
 sti <- c(
   "Poecile montanus" = -7.51,
   "Regulus regulus" = -4.23,
@@ -91,6 +99,7 @@ sti <- c(
 The count data for these taxa can now be downloaded from FinBIF.
 
 ``` r
+
 counts <- lapply(
   names(sti),
   finbif_occurrence,
@@ -105,6 +114,7 @@ The count data is then combined with the survey data and the species
 temperature indices.
 
 ``` r
+
 counts <- lapply(counts, combine_with_surveys, surveys)
 
 counts <- mapply(mutate, counts, sp = names(sti), SIMPLIFY = FALSE)
@@ -120,6 +130,7 @@ A community temperature index for each year is created by fitting a
 linear mixed effects regression model to the combined data.
 
 ``` r
+
 cti_data <- summarise(
   group_by(counts, location_id, year),
   cti = sum(abundance * sti) / sum(abundance), .groups = "drop"
@@ -135,6 +146,7 @@ names(cti) <- c("index", "se", "time")
 ```
 
 ``` r
+
 ggplot(cti) +
 aes(
   x = parse_date_time(time, "Y"),
