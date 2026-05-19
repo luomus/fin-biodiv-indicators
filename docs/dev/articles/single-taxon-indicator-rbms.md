@@ -12,6 +12,7 @@ The following packages are required. All packages are available on
 GitHub.
 
 ``` r
+
 library(dplyr)
 library(fbi)
 library(finbif)
@@ -25,6 +26,7 @@ library(rbms)
 These five fields are required for the survey data.
 
 ``` r
+
 select <- c("document_id", "location_id", "year", "month", "day")
 ```
 
@@ -33,6 +35,7 @@ agricultural landscapes” dataset with the selected data fields have no
 missing data.
 
 ``` r
+
 filter <- list(
   collection = "Butterflies in Finnish agricultural landscapes",
   has_value = select
@@ -42,6 +45,7 @@ filter <- list(
 The survey data can now downloaded from FinBIF.
 
 ``` r
+
 surveys <- finbif_occurrence(
   filter = filter,
   select = select,
@@ -56,6 +60,7 @@ A single processing function is applied to the survey data to convert
 the year month and day fields into a single date field.
 
 ``` r
+
 surveys <- format_date(surveys)
 ```
 
@@ -66,6 +71,7 @@ Count data requires three fields to be selected: the survey identifier
 abundance (`abundance_interpreted`).
 
 ``` r
+
 select <- c("document_id", "section", abundance = "abundance_interpreted")
 ```
 
@@ -73,6 +79,7 @@ The count data requires the same filters as the survey data (though the
 filter `has_value` needs to be redefined).
 
 ``` r
+
 filter[["has_value"]] <- select
 ```
 
@@ -80,6 +87,7 @@ The count data for *Aglais urticae* (Small tortoiseshell) can now be
 downloaded from FinBIF.
 
 ``` r
+
 counts <- finbif_occurrence(
   taxa = "Aglais urticae",
   filter = filter,
@@ -94,6 +102,7 @@ counts over the survey site sections; and combine the count and survey
 data together.
 
 ``` r
+
 counts <- sum_over_sections(counts, surveys)
 
 counts <- combine_with_surveys(counts, surveys)
@@ -107,6 +116,7 @@ documentation](https://retoschmucki.github.io/rbms/articles/Get_Started_2.html)
 for details) with uncertainty estimated via bootstrapping.
 
 ``` r
+
 StartMonth <- 4
 EndMonth <- 9
 StartDay <- 1
@@ -200,6 +210,7 @@ the bootstrapped estimates can be created by setting the base year to
 the year 2000.
 
 ``` r
+
 base <- which(sort(unique(surveys[["year"]])) == 2000)
 
 index_mc <- lapply(index_mc, getElement, "col_index")
@@ -242,6 +253,7 @@ index <- mutate(index, lower = mean - sd, upper = mean + sd)
 ```
 
 ``` r
+
 ggplot(index) +
 aes(x = parse_date_time(time, "Y"), y = mean, ymin = lower, ymax = upper) +
 geom_ribbon(alpha = .2) +

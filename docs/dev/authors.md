@@ -13,12 +13,12 @@ Source:
 [`DESCRIPTION`](https://github.com/luomus/fin-biodiv-indicators/blob/dev/DESCRIPTION)
 
 Morris W (2026). *fbi: Finnish Biodiversity Indicators*. R package
-version 0.11.38.9000, <https://github.com/luomus/fin-biodiv-indicators>.
+version 0.11.39.9000, <https://github.com/luomus/fin-biodiv-indicators>.
 
     @Manual{,
       title = {fbi: Finnish Biodiversity Indicators},
       author = {William K. Morris},
       year = {2026},
-      note = {R package version 0.11.38.9000},
+      note = {R package version 0.11.39.9000},
       url = {https://github.com/luomus/fin-biodiv-indicators},
     }

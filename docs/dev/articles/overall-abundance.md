@@ -11,6 +11,7 @@ The following packages are required. All packages are available on
 installed from GitHub.
 
 ``` r
+
 library(dplyr)
 library(fbi)
 library(finbif)
@@ -24,6 +25,7 @@ library(rtrim)
 These five fields are required for the survey data.
 
 ``` r
+
 select <- c("document_id", "location_id", "year", "month", "day")
 ```
 
@@ -32,6 +34,7 @@ agricultural landscapes” dataset with the selected data fields have no
 missing data.
 
 ``` r
+
 filter <- list(
   collection = "Butterflies in Finnish agricultural landscapes",
   has_value = select
@@ -41,6 +44,7 @@ filter <- list(
 The survey data can now downloaded from FinBIF.
 
 ``` r
+
 surveys <- finbif_occurrence(
   filter = filter,
   select = select,
@@ -56,6 +60,7 @@ the surveys to sites where at least seven fortnights have been surveyed
 and limit each site’s surveys to the first survey in each fortnight.
 
 ``` r
+
 surveys <- require_seven_fortnights(surveys)
 
 surveys <- pick_first_survey_in_fortnight(surveys)
@@ -68,6 +73,7 @@ Count data requires three fields to be selected: the survey identifier
 abundance (`abundance_interpreted`).
 
 ``` r
+
 select <- c("document_id", "section", abundance = "abundance_interpreted")
 ```
 
@@ -75,12 +81,14 @@ The count data requires the same filters as the survey data (though the
 filter `has_value` needs to be redefined).
 
 ``` r
+
 filter[["has_value"]] <- select
 ```
 
 A set of taxa contributing to the total abundance is selected.
 
 ``` r
+
 taxa <- c(
   "Aglais urticae",
   "Boloria euphrosyne",
@@ -92,6 +100,7 @@ taxa <- c(
 The count data for these taxa can now be downloaded from FinBIF.
 
 ``` r
+
 counts <- lapply(
   taxa,
   finbif_occurrence,
@@ -107,6 +116,7 @@ counts over the survey site sections; combine the count and survey data
 together; amd sum over the counts for each site-year combination.
 
 ``` r
+
 counts <- lapply(counts, sum_over_sections)
 
 counts <- lapply(counts, combine_with_surveys, surveys)
@@ -117,6 +127,7 @@ counts <- lapply(counts, sum_by_event)
 The count data can then be summed across the taxa.
 
 ``` r
+
 counts <- mapply(mutate, counts, sp = taxa, SIMPLIFY = FALSE)
 
 counts <- do.call(rbind, counts)
@@ -132,12 +143,14 @@ An index of total abundance for each year is created by fitting a TRIM
 model to the combined data and setting the base year to the year 2000.
 
 ``` r
+
 model <- trim(abundance ~ location_id + year, counts)
 
 index <- index(model, base = 2000)
 ```
 
 ``` r
+
 ggplot(index) +
 aes(
   x = parse_date_time(time, "Y"), y = imputed,

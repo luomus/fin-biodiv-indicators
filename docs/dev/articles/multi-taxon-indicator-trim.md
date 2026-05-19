@@ -11,6 +11,7 @@ The following packages are required. All packages are available on
 installed from GitHub.
 
 ``` r
+
 library(dplyr)
 library(fbi)
 library(finbif)
@@ -24,6 +25,7 @@ library(rtrim)
 These five fields are required for the survey data.
 
 ``` r
+
 select <- c("document_id", "location_id", "year", "month", "day")
 ```
 
@@ -32,6 +34,7 @@ transect” bird monitoring datasets from 1979 onwards at sites labelled
 “farmland” and where the selected data fields have no missing data.
 
 ``` r
+
 filter <- list(
   location_tag = "farmland",
   collection = c(
@@ -46,6 +49,7 @@ filter <- list(
 The survey data can now downloaded from FinBIF.
 
 ``` r
+
 surveys <- finbif_occurrence(
   filter = filter,
   select = select,
@@ -61,6 +65,7 @@ each site to the first survey of the year and then limit the surveys to
 sites where at least two years have been surveyed.
 
 ``` r
+
 surveys <- pick_first_survey_in_year(surveys)
 
 surveys <- require_two_years(surveys)
@@ -73,6 +78,7 @@ identifier (`document_id`) and the measure of abundance (in this case
 the number of breeding pairs: `pair_abundance`).
 
 ``` r
+
 select <- c("document_id", abundance = "pair_abundance")
 ```
 
@@ -80,12 +86,14 @@ The count data requires the same filters as the survey data (though the
 filter `has_value` needs to be redefined).
 
 ``` r
+
 filter[["has_value"]] <- select
 ```
 
 A set of taxa contributing to the multi-taxon indicator is selected.
 
 ``` r
+
 taxa <- c(
   "Vanellus vanellus", "Numenius arquata", "Alauda arvensis", "Hirundo rustica",
   "Delichon urbicum", "Anthus pratensis", "Saxicola rubetra", "Turdus pilaris",
@@ -96,6 +104,7 @@ taxa <- c(
 The count data for these taxa can now be downloaded from FinBIF.
 
 ``` r
+
 counts <- lapply(
   taxa,
   finbif_occurrence,
@@ -112,6 +121,7 @@ counts for each site-year combination; and remove all sites where the
 number of breeding pairs was zero on every occasion.
 
 ``` r
+
 counts <- lapply(counts, zero_fill, surveys)
 
 counts <- lapply(counts, sum_by_event)
@@ -125,6 +135,7 @@ A TRIM model is used to estimate the change in abundance over time for
 each taxon.
 
 ``` r
+
 model <- lapply(
   counts, trim, count_col ="abundance", site_col = "location_id",
   year_col = "year"
@@ -138,6 +149,7 @@ setting the base year to the year 2000. The indices are then combined
 into a single table
 
 ``` r
+
 indices <- lapply(model, index, base = 2000)
 
 indices <- mapply(mutate, indices, sp = taxa, SIMPLIFY = FALSE)
@@ -151,6 +163,7 @@ can be calculated via a Monte Carlo simulation method (see
 for details).
 
 ``` r
+
 n <- 1000
 max_cv <- 3
 imputed_min <- .01
@@ -226,6 +239,7 @@ index <- summarise(
 ```
 
 ``` r
+
 ggplot(index) +
 aes(
   x = parse_date_time(time, "Y"),
